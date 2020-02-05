@@ -1,0 +1,11 @@
+{
+  "extend": ["prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier / prettier": ["error"],
+    "space-before-function-paren": [
+      false,
+      { "anonymous": "always", "named": "never", "asyncArrow": "always" }
+    ]
+  }
+}

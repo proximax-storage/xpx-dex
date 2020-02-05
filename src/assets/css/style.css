@@ -1,0 +1,37 @@
+/* ---------- GLOBAL ----------
+
+/* Fonts */
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+/** VUETIFY THEME **/
+.v-application,
+html,
+body {
+  font-family: 'Open Sans', sans-serif !important;
+}
+
+.smallfont {
+  font-size: 10px !important;
+  letter-spacing: normal;
+}
+
+/* background color */
+
+/* .background-yellow {
+  background: #FFB80C !important;
+}
+ */
+
+
+/* text-color */
+
+/* .color-green-text {
+  color: #0cff5d !important;
+} */
+
+/* text-size */
+/*
+.text-1-5rem {
+  font-size: 1.5rem !important;
+} */
+
+
