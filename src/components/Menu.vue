@@ -109,7 +109,7 @@ export default {
       }
     },
     sebd () {
-      console.log('key')
+      console.log('keys')
     }
   },
   beforeMount () {
