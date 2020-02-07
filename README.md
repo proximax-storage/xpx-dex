@@ -1,4 +1,4 @@
-# sports-bet
+# xpx-Dex
 
 ## Project setup
 ```

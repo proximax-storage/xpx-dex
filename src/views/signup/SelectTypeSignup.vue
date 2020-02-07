@@ -2,11 +2,11 @@
   <div>
     <v-row justify="center" align="center">
       <v-col cols="8" justify="center" align="center" class="pt-12">
-        <span class="leve--text font-italic font-weight-bold display-3">Sports</span>
-        <span class="primary--text font-italic font-weight-bold display-3">Bet</span>
+        <span class="font-italic font-weight-bold display-3">Sports</span>
+        <span class="font-italic font-weight-bold display-3">Bet</span>
       </v-col>
       <v-col cols="10" sm="8" md="7" lg="7" justify="center" align="center">
-        <v-card elevation="10">
+        <v-card elevation="10" class="elevation-2">
           <v-row>
             <template v-for="(item, key) of items">
               <v-col :key="key" cols="10" sm="6" md="6" lg="6" class="text-center mx-auto pb-12">
@@ -20,12 +20,12 @@
                   ></v-img>
                 </div>
                 <div class="text-center pb-1">
-                  <span class="leve--text subtitle-1">{{item.title}}</span>
+                  <span class="subtitle-1">{{item.title}}</span>
                 </div>
                 <v-btn
                   rounded
                   color="primary"
-                  class="pl-8 pr-8 body-2 darkness--text"
+                  class="pl-8 pr-8 body-2 sky white--text"
                   router
                   :to="item.route"
                 >{{item.nameButton}}</v-btn>
@@ -36,7 +36,7 @@
             <v-row class="darkness--text">
               <v-col class="d-flex justify-start ma-2">I'm already have a account</v-col>
               <v-col class="d-flex justify-end">
-                <v-chip small link class="darkness primary--text pt-1 pb-1 ma-2 mr-10">Sign In</v-chip>
+                <v-chip small link class="sky white--text pt-1 pb-1 ma-2 mr-10">Sign In</v-chip>
               </v-col>
             </v-row>
           </v-card-actions>

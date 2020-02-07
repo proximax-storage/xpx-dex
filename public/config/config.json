@@ -1,7 +1,7 @@
 {
   "version": "PUBLIC_TEST",
-  "nameApp": "ProximaX Sirius Wallet",
-  "pseudonymApp": "ProximaX Sirius Wallet",
+  "nameApp": "ProximaX Dex Wallet",
+  "pseudonymApp": "ProximaX Dex Wallet",
   "environment": {
     "PUBLICTEST": {
       "coin": "xpx",
