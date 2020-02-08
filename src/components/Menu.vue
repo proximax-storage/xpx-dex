@@ -1,19 +1,8 @@
 <template>
   <v-app id="sandbox">
-    <v-navigation-drawer
-      v-model="primaryDrawer.model"
-      app
-      floating
-      persistent
-      mobile-break-point="980"
-      width="260"
-      overflow
-    />
+    <core-Drawer :drawerModal="primaryDrawer.model"></core-Drawer>
     <v-app-bar :clipped-left="primaryDrawer.clipped" id="core-toolbar" app flat>
-      <v-app-bar-nav-icon
-        v-if="responsive"
-        @click.stop="primaryDrawer.model = !primaryDrawer.model"
-      />
+      <v-app-bar-nav-icon v-if="responsive" @click.stop="onClickBtn" />
       <v-toolbar-title>{{ title }}</v-toolbar-title>
       <v-spacer></v-spacer>
 
@@ -44,20 +33,18 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   data: () => ({
-    drawers: ['Default (no property)', 'Permanent', 'Temporary'],
     primaryDrawer: {
       model: null,
-      type: 'default (no property)',
-      clipped: false,
-      floating: false,
-      mini: false
+      clipped: false
     },
     title: null,
     responsive: false
   }),
   components: {
+    'core-Drawer': () => import('@/components/core/Drawer'),
     'core-view': () => import('@/components/core/View'),
     'core-footer': () => import('@/components/core/Footer')
   },
@@ -80,6 +67,11 @@ export default {
       } else {
         this.responsive = false
       }
+    },
+    ...mapMutations('appCoreStore', ['SET_DRAWER']),
+    onClickBtn () {
+      console.log('SET_DRAWER', !this.$store.state.appCoreStore.drawer)
+      this.SET_DRAWER(!this.$store.state.appCoreStore.drawer)
     }
   }
 }
