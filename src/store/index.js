@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { accountStore } from './modules/account-store'
 import { walletStore } from './modules/wallet-store'
-
+import { appCoreStore } from './modules/app-core-store'
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
@@ -33,6 +33,7 @@ export default new Vuex.Store({
   actions: {},
   modules: {
     accountStore,
-    walletStore
+    walletStore,
+    appCoreStore
   }
 })

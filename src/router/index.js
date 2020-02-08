@@ -15,7 +15,7 @@ const routes = [
   },
   {
     path: '/create-new-signup',
-    name: 'create-new-signup',
+    name: 'New Signup',
     component: () =>
       import(/* webpackChunkName: "CreateNewSignup.vue" */ '../views/signup/CreateNewSignup.vue'),
     meta: {
