@@ -1,5 +1,23 @@
 export default {
   methods: {
+    doCopy (itemName, text) {
+      this.$copyText(text).then(
+        e => {
+          this.$store.dispatch('showMSG', {
+            snackbar: true,
+            text: `${itemName} copied`,
+            color: 'success'
+          })
+        },
+        e => {
+          this.$store.dispatch('showMSG', {
+            snackbar: true,
+            text: `Can not copy`,
+            color: 'error'
+          })
+        }
+      )
+    },
     getConfigForm () {
       return {
         amount: {
@@ -62,7 +80,7 @@ export default {
           key: 'clear',
           action: 'clear',
           disabled: false,
-          color: 'leve',
+          color: 'sky',
           loading: false,
           text: 'Clear'
         },
@@ -70,7 +88,7 @@ export default {
           key: 'create',
           action: 'create',
           disabled: false,
-          color: 'primary',
+          color: 'sky',
           loading: false,
           text: 'Create'
         }
@@ -88,6 +106,5 @@ export default {
         }
       ]
     }
-
   }
 }

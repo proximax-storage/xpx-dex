@@ -28,9 +28,19 @@ export default new Vuex.Store({
     },
     SHOW_MENU (state, value) {
       state.showMenu = value
+    },
+    SHOW_SNACKBAR (state, data) {
+      const { snackbar, text, color } = data
+      state.snackbar.snackbar = snackbar
+      state.snackbar.text = text
+      state.snackbar.color = color
     }
   },
-  actions: {},
+  actions: {
+    showMSG ({ commit }, data) {
+      commit('SHOW_SNACKBAR', data)
+    }
+  },
   modules: {
     accountStore,
     walletStore,

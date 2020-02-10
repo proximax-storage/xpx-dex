@@ -6,7 +6,7 @@
         :disabled="item.disabled"
         :key="key"
         :color="item.color"
-        class="pl-8 pr-8 mt-2 mr-3 sky body-2 write--text"
+        class="pl-8 pr-8 mt-2 mr-3  body-2 white--text"
         rounded
         @click="triggerClick(item.action)"
       >{{item.text}}</v-btn>

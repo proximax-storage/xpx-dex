@@ -8,9 +8,10 @@ import { GeneralService } from './services/general'
 import { BlockchainProvider } from './services/blockchain-provider'
 import { StorageService } from './services/storage'
 import axios from 'axios'
+import VueClipboard from 'vue-clipboard2'
 Vue.config.productionTip = false
 // Vue.use(axios)
-
+Vue.use(VueClipboard)
 // Define prototype
 Vue.prototype.$generalService = new GeneralService()
 Vue.prototype.$storage = new StorageService(localStorage)

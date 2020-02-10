@@ -25,7 +25,7 @@ const routes = [
   },
   {
     path: '/select-signup-type',
-    name: 'select-signup-type',
+    name: 'Signup Type',
     component: () =>
       import(/* webpackChunkName: "SelectTypeSignup" */ '../views/signup/SelectTypeSignup.vue'),
     meta: {

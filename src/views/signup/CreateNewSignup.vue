@@ -1,14 +1,12 @@
 <template>
-  <div>
+  <v-container class="fill-height">
     <template v-if="!dataWalletCreated">
-      <big-title></big-title>
+      <!-- <big-title></big-title> -->
       <v-row justify="center" align="center">
         <v-col cols="8" justify="center" align="center">
           <v-card elevation="10" class="pb-10">
             <v-form v-model="valid" ref="form">
-              <v-card-title class="title font-italic font-weight-medium primary--text">{{
-                title
-              }}</v-card-title>
+              <v-card-title class="title font-italic font-weight-medium">{{ title }}</v-card-title>
               <v-row>
                 <v-col cols="11" class="mx-auto pt-0">
                   <v-row>
@@ -83,7 +81,7 @@
     <template v-if="dataWalletCreated">
       <wallet-create :walletInfo="dataWalletCreated"></wallet-create>
     </template>
-  </div>
+  </v-container>
 </template>
 <script>
 import { mapMutations } from 'vuex'
@@ -115,12 +113,12 @@ export default {
     }
   },
   components: {
-    'big-title': () => import('@/components/shared/BigTitle'),
+    // 'big-title': () => import('@/components/shared/BigTitle'),
     'custom-buttons': () => import('@/components/shared/Buttons'),
     'wallet-create': () => import('@/components/wallet/WalletCreate')
   },
   methods: {
-    ...mapMutations(['SHOW_LOADING']),
+    ...mapMutations(['SHOW_LOADING', 'SHOW_SNACKBAR']),
     action (action) {
       if (action === 'create') {
         this.sendForm()
@@ -134,6 +132,9 @@ export default {
       this.sendingForm = false
       this.$refs.form.reset()
     },
+    enableDisableBtn (status) {
+      this.arrayBtn.create.disabled = status
+    },
     sendForm () {
       if (this.valid && !this.sendingForm) {
         this.sendingForm = true
@@ -146,11 +147,21 @@ export default {
           network: this.networkSelected.value,
           password: this.passwords.password
         })
-
+        const snackbars = {
+          snackbar: true,
+          text: response.msg,
+          color: 'error'
+        }
+        if (!response.status) {
+          this.SHOW_LOADING(false)
+          this.sendingForm = false
+          return this.SHOW_SNACKBAR(snackbars)
+        }
         setTimeout(() => {
           this.clear()
           this.sendingForm = false
           this.SHOW_LOADING(false)
+          console.log('response', response)
           if (response.status) {
             this.dataWalletCreated = response
           }

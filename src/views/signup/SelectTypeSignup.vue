@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <v-row justify="center" align="center">
-      <v-col cols="8" justify="center" align="center" class="pt-12">
-        <span class="font-italic font-weight-bold display-3">Sports</span>
-        <span class="font-italic font-weight-bold display-3">Bet</span>
-      </v-col>
-      <v-col cols="10" sm="8" md="7" lg="7" justify="center" align="center">
+  <v-container class="fill-height">
+    <v-row align="center" justify="center">
+      <v-col cols="10" sm="8" md="7" lg="7">
         <v-card elevation="10" class="elevation-2">
           <v-row>
             <template v-for="(item, key) of items">
@@ -20,7 +16,7 @@
                   ></v-img>
                 </div>
                 <div class="text-center pb-1">
-                  <span class="subtitle-1">{{item.title}}</span>
+                  <span class="subtitle-1">{{ item.title }}</span>
                 </div>
                 <v-btn
                   rounded
@@ -28,13 +24,14 @@
                   class="pl-8 pr-8 body-2 sky white--text"
                   router
                   :to="item.route"
-                >{{item.nameButton}}</v-btn>
+                  >{{ item.nameButton }}</v-btn
+                >
               </v-col>
             </template>
           </v-row>
           <v-card-actions class="leve pt-0 pb-0">
             <v-row class="darkness--text">
-              <v-col class="d-flex justify-start ma-2">I'm already have a account</v-col>
+              <v-col  class="d-flex justify-start ma-2">I'm already have a account</v-col>
               <v-col class="d-flex justify-end">
                 <v-chip small link class="sky white--text pt-1 pb-1 ma-2 mr-10">Sign In</v-chip>
               </v-col>
@@ -50,14 +47,14 @@
       </a>
     </v-col>
     </v-row>-->
-  </div>
+  </v-container>
 </template>
 <script>
 export default {
   data: () => {
     return {
       title: 'Select Wallet Creation Type',
-      theme: 'dark',
+      theme: 'light',
       items: [
         {
           title: 'New',
