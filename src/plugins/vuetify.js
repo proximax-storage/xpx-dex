@@ -26,7 +26,8 @@ export default new Vuetify({
         dim: '#00B938',
         sky: '007DB9',
         leve: '#E9E9E9',
-        leveint: 'DDDDDD'
+        leveint: 'DDDDDD',
+        inputStyle: '00B0FF'
       },
       dark: {
         primary: '#0CFF5D',

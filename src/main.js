@@ -9,8 +9,11 @@ import { BlockchainProvider } from './services/blockchain-provider'
 import { StorageService } from './services/storage'
 import axios from 'axios'
 import VueClipboard from 'vue-clipboard2'
+import VueLodash from 'vue-lodash'
 Vue.config.productionTip = false
 // Vue.use(axios)
+const options = { name: 'lodash' } // customize the way you want to call it
+Vue.use(VueLodash, options)
 Vue.use(VueClipboard)
 // Define prototype
 Vue.prototype.$generalService = new GeneralService()

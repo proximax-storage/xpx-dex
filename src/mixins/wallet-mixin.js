@@ -1,7 +1,6 @@
 export default {
   methods: {
     createWallet (data) {
-      console.log('data', data)
       const existWallet = this.getWalletByName(data.walletName, data.network)
       if (existWallet === undefined || existWallet === null) {
         let walletCreated = null

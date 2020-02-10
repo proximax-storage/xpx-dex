@@ -1,7 +1,6 @@
 <template>
   <v-container class="fill-height">
     <template v-if="!dataWalletCreated">
-      <!-- <big-title></big-title> -->
       <v-row justify="center" align="center">
         <v-col cols="8" justify="center" align="center">
           <v-card elevation="10" class="pb-10">
@@ -29,9 +28,59 @@
                         ]"
                       ></v-text-field>
                     </v-col>
+                    <!-- Private Key -->
+                    <v-col cols="12" class="pb-0 pt-0">
+                      <v-text-field
+                        v-model="privateKey"
+                        :append-icon="configForm.privateKey.show ? 'mdi-eye' : 'mdi-eye-off'"
+                        :minlength="configForm.privateKey.min"
+                        :maxlength="configForm.privateKey.max"
+                        :counter="configForm.privateKey.max"
+                        :color="inputStyle"
+                        :rules="[
+                          configForm.privateKey.rules.required,
+                          configForm.privateKey.rules.min,
+                          configForm.privateKey.rules.max,
+                          configForm.privateKey.rules.isHex
+                        ]"
+                        :label="configForm.privateKey.label"
+                        :type="configForm.privateKey.show ? 'text' : 'password'"
+                        name="privateKey"
+                        hint
+                        @click:append="configForm.privateKey.show = !configForm.privateKey.show"
+                      >
+                        <!-- <template v-slot:prepend-inner>
+                          <v-img
+                            class="pr-2 mt-1"
+                            alt="logo"
+                            height="20"
+                            width="20"
+                            :src="require(`@/assets/img/${configForm.privateKey.icon}`)"
+                          ></v-img>
+                        </template> -->
 
+                        <!--<template v-slot:append-outer>
+                        <v-btn
+                          title="Only images containing QR CODE"
+                          @click="openInputFile"
+                          color="primary"
+                          fab
+                          x-small
+                          dark
+                        >
+                          <v-icon>mdi-qrcode-scan</v-icon>
+                        </v-btn>
+
+                        <qrcode-capture
+                          v-show="false"
+                          id="scanPrivateKey"
+                          @detect="onDetect"
+                        />
+                      </template> -->
+                      </v-text-field>
+                    </v-col>
                     <!-- Password -->
-                    <v-col cols="12" sm="12" md="6" lg="6">
+                    <v-col cols="12" sm="6" md="6" lg="6">
                       <v-text-field
                         v-model="passwords.password"
                         :append-icon="configForm.password.show ? 'mdi-eye' : 'mdi-eye-off'"
@@ -53,7 +102,7 @@
                     </v-col>
 
                     <!-- Password confirm-->
-                    <v-col cols="12" sm="12" md="6" lg="6">
+                    <v-col cols="12" sm="6" md="6" lg="6">
                       <v-text-field
                         v-model="passwords.confirmPassword"
                         :append-icon="configForm.password.show ? 'mdi-eye' : 'mdi-eye-off'"
@@ -88,6 +137,7 @@
     </template>
   </v-container>
 </template>
+
 <script>
 import { mapMutations } from 'vuex'
 import generalMixins from '../../mixins/general-mixin'
@@ -97,16 +147,17 @@ export default {
   data: () => {
     return {
       accountName: '',
-      title: 'New account',
       valid: false,
       configForm: null,
-      walletIsRepeat: true,
+      dataWalletCreated: null,
       passwords: { password: '', confirmPassword: '' },
-      searchingWalletName: false,
+      title: 'New account from a existing private key',
       sendingForm: false,
       arrayBtn: null,
-      dataWalletCreated: null,
+      searchingWalletName: false,
       networkSelected: null,
+      privateKey: '',
+      walletIsRepeat: true,
       inputStyle: 'inputStyle'
     }
   },
@@ -139,40 +190,38 @@ export default {
       this.sendingForm = false
       this.$refs.form.reset()
     },
-    enableDisableBtn (status) {
-      this.arrayBtn.create.disabled = status
-    },
     sendForm () {
-      if (this.valid && !this.sendingForm) {
-        this.sendingForm = true
-        this.SHOW_LOADING(true)
-        const response = this.createWallet({
-          default: true,
-          firstAccount: true,
-          isMultisign: null,
-          walletName: this.accountName,
-          network: this.networkSelected.value,
-          password: this.passwords.password
-        })
-        const snackbars = {
+      try {
+        if (this.valid && !this.sendingForm) {
+          this.sendingForm = true
+          this.SHOW_LOADING(true)
+          const walletCreated = this.createWallet({
+            default: true,
+            firstAccount: true,
+            isMultisign: null,
+            walletName: this.accountName,
+            network: this.networkSelected.value,
+            password: this.passwords.password,
+            privateKey: this.privateKey
+          })
+          setTimeout(() => {
+            this.clear()
+            this.sendingForm = false
+            this.SHOW_LOADING(false)
+            if (walletCreated.status) {
+              this.dataWalletCreated = walletCreated
+            }
+          }, 500)
+        }
+      } catch (error) {
+        this.SHOW_LOADING(false)
+        this.clear()
+        this.sendingForm = false
+        this.$store.commit('SHOW_SNACKBAR', {
           snackbar: true,
-          text: response.msg,
-          color: 'error'
-        }
-        if (!response.status) {
-          this.SHOW_LOADING(false)
-          this.sendingForm = false
-          return this.SHOW_SNACKBAR(snackbars)
-        }
-        setTimeout(() => {
-          this.clear()
-          this.sendingForm = false
-          this.SHOW_LOADING(false)
-          console.log('response', response)
-          if (response.status) {
-            this.dataWalletCreated = response
-          }
-        }, 500)
+          text: 'An error has occurred, try again',
+          color: 'warning'
+        })
       }
     },
     validateWalletName () {
@@ -203,6 +252,7 @@ export default {
   beforeMount () {
     const networks = this.$blockchainProvider.getNetworkTypes()
     this.networkSelected = networks.testnet
+    console.log('networkSelected', this.networkSelected)
     this.debouncedValidateWalletName = this.lodash.debounce(this.validateWalletName, 500)
     this.configForm = this.getConfigForm()
     this.arrayBtn = {

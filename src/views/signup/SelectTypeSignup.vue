@@ -66,7 +66,7 @@ export default {
           title: 'From a Private Key',
           nameButton: 'Create',
           icon: 'icon-private-key.svg',
-          route: '/create-from-private-key'
+          route: '/create-from-privateKey'
         }
       ]
     }

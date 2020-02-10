@@ -34,6 +34,16 @@ const routes = [
     }
   },
   {
+    path: '/create-from-privateKey',
+    name: 'Create from private key',
+    component: () =>
+      import(/* webpackChunkName: "SelectTypeSignup" */ '../views/signup/CreateFromPrivateKey.vue'),
+    meta: {
+      requiresNotAuth: true,
+      hideMenu: true
+    }
+  },
+  {
     path: '*',
     redirect: '/'
   }

@@ -2,7 +2,7 @@ export const appCoreStore = {
   namespaced: true,
   state: {
     drawer: null,
-    color: 'success',
+    color: null,
     image:
       'https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-2.32103624.jpg'
   },
@@ -15,6 +15,7 @@ export const appCoreStore = {
       state.drawer = data
     },
     SET_COLOR (state, data) {
+      console.log('COLORRRRR', data)
       state.color = data
     }
   }
