@@ -4,7 +4,7 @@
       <!-- <big-title></big-title> -->
       <v-row justify="center" align="center">
         <v-col cols="8" justify="center" align="center">
-          <v-card elevation="10" class="pb-10">
+          <!-- <v-card elevation="1" class="pb-10"> -->
             <v-form v-model="valid" ref="form">
               <v-card-title class="title font-italic font-weight-medium">{{ title }}</v-card-title>
               <v-row>
@@ -79,7 +79,7 @@
               <!-- Buttons -->
               <custom-buttons @action="action" :arrayBtn="getArrayBtn"></custom-buttons>
             </v-form>
-          </v-card>
+          <!-- </v-card> -->
         </v-col>
       </v-row>
     </template>
@@ -149,7 +149,6 @@ export default {
         const response = this.createWallet({
           default: true,
           firstAccount: true,
-          isMultisign: null,
           walletName: this.accountName,
           network: this.networkSelected.value,
           password: this.passwords.password

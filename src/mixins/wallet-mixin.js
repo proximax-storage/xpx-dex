@@ -1,45 +1,55 @@
 export default {
+  data: () => {
+    return {
+      pseudonymApp: null
+    }
+  },
+  beforeMount () {
+    this.pseudonymApp = this.$store.state.configInfo.pseudonymApp
+  },
   methods: {
+    auth (password, wallet) {
+      return this.decrypt(wallet.accounts[0].simpleWallet, password)
+    },
     createWallet (data) {
       const existWallet = this.getWalletByName(data.walletName, data.network)
       if (existWallet === undefined || existWallet === null) {
         let walletCreated = null
-        let prefix = null
         if (data.privateKey) {
-          const prefixAndPvk = this.$blockchainProvider.getPrefixAndPrivateKey(data.privateKey)
-          prefix = prefixAndPvk.pref
-          walletCreated = this.$blockchainProvider.createSimpleWalletFromPrivateKey(data.walletName, data.password, prefixAndPvk.pvk, data.network)
+          walletCreated = this.$blockchainProvider.createSimpleWalletFromPrivateKey(
+            data.walletName,
+            data.password,
+            data.network
+          )
         } else {
-          walletCreated = this.$blockchainProvider.createSimpleWallet(data.walletName, data.password, data.network)
+          walletCreated = this.$blockchainProvider.createSimpleWallet(
+            data.walletName,
+            data.password,
+            data.network
+          )
         }
-
         const decrypted = this.decrypt(walletCreated, data.password)
         if (decrypted.privateKey) {
-          const account = this.$blockchainProvider.getAccountFromPrivateKey(decrypted.privateKey, walletCreated.network)
+          const account = this.$blockchainProvider.getAccountFromPrivateKey(
+            decrypted.privateKey,
+            walletCreated.network
+          )
           const accountBuilded = {
-            algo: 'pass:bip32',
-            address: walletCreated.address,
-            brain: true,
-            creationDate: walletCreated.creationDate,
             default: data.default,
-            encryptedPrivateKey: walletCreated.encryptedPrivateKey,
             firstAccount: data.firstAccount,
-            isMultisign: data.isMultisign,
             name: 'Primary',
-            network: walletCreated.network,
-            prefixKeyNis1: prefix,
-            publicKey: account.publicAccount.publicKey,
-            schema: walletCreated.schema
+            simpleWallet: walletCreated,
+            publicKey: account.publicAccount.publicKey
           }
 
           const walletBuilded = {
-            name: data.walletName,
+            username: data.walletName,
             accounts: [accountBuilded]
           }
 
-          const wallets = this.getWallets(walletCreated.network)
+          const wallets = this.getWallets()
           wallets.push(walletBuilded)
-          this.$storage.set(`wallets-${walletCreated.network}`, wallets)
+          this.$storage.set(`wallets-${this.pseudonymApp}`, wallets)
           this.$store.commit('walletStore/SET_CURRENT_WALLET', walletBuilded)
           return { status: true, data: walletBuilded, pvk: decrypted.privateKey }
         }
@@ -57,27 +67,34 @@ export default {
         encrypted: account.encryptedPrivateKey.encryptedKey,
         iv: account.encryptedPrivateKey.iv
       }
+      console.log('toDecrypt', toDecrypt)
 
       const decrypt = this.$blockchainProvider.decrypt(common, toDecrypt, account.network)
       if (decrypt && decrypt.status) {
         return common
       }
-
-      return decrypt
+      if (!decrypt.status) {
+        this.$store.dispatch('showMSG', {
+          snackbar: true,
+          text: decrypt.msg,
+          color: 'error'
+        })
+        return decrypt.status
+      }
     },
-    getWalletByName (name, network) {
-      const wallets = this.getWallets(network)
+    getWalletByName (name) {
+      const wallets = this.getWallets()
       if (wallets && wallets.length > 0) {
-        return wallets.find(x => x.name === name)
+        return wallets.find(x => x.username === name)
       }
 
       return null
     },
-    getWallets (network) {
-      if (network) {
-        const wallets = this.$storage.get(`wallets-${network}`)
+    getWallets () {
+      if (this.pseudonymApp) {
+        const wallets = this.$storage.get(`wallets-${this.pseudonymApp}`)
         if (!wallets) {
-          this.$storage.set(`wallets-${network}`, [])
+          this.$storage.set(`wallets-${this.pseudonymApp}`, [])
           return []
         }
 

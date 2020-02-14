@@ -1,7 +1,7 @@
 {
   "version": "PUBLIC_TEST",
   "nameApp": "ProximaX Dex Wallet",
-  "pseudonymApp": "ProximaX Dex Wallet",
+  "pseudonymApp": "dex-wallet",
   "environment": {
     "PUBLICTEST": {
       "coin": "xpx",
@@ -12,16 +12,6 @@
       "namespace": {
         "id": "bffb42a19116bdf6",
         "name": "prx.xpx"
-      },
-      "nis1Config": {
-        "url": "https://bctestnetswap.xpxsirius.io:7890",
-        "urlExplorer": "http://testnet-explorer.nemtool.com/#/s_tx?hash=",
-        "networkType": "TEST_NET",
-        "burnAddress": "TBF4LAZUEJMBIOC6J24D6ZGGXE5W775TX555CTTN",
-        "nodes": [
-          { "protocol": "https", "domain": "bctestnetswap.xpxsirius.io", "port": 7890 }
-        ],
-        "timeOutTransaction": 20000
       },
       "connectionNodes": {
         "networkType": "PUBLIC_TEST",
@@ -56,16 +46,6 @@
       "namespace": {
         "id": "bffb42a19116bdf6",
         "name": "prx.xpx"
-      },
-      "nis1Config": {
-        "url": "https://swap.brimstone.xpxsirius.io:7890",
-        "urlExplorer": "http://explorer.nemtool.com/#/s_tx?hash=",
-        "networkType": "MAIN_NET",
-        "burnAddress": "ND7WVWPWNTJR75CYC3D73LSVP7WIL7BL77QNT7NZ",
-        "nodes": [
-          { "protocol": "https", "domain": "swap.brimstone.xpxsirius.io", "port": 7890 }
-        ],
-        "timeOutTransaction": 20000
       },
       "connectionNodes": {
         "networkType": "MAIN_NET",

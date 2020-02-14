@@ -141,9 +141,9 @@ export default {
   },
   beforeMount () {
     const walletInfo = this.walletInfo.data
-    this.address = walletInfo.accounts[0].address.pretty()
+    this.address = walletInfo.accounts[0].simpleWallet.address.pretty()
     this.privateKey = this.walletInfo.pvk
-    this.walletName = walletInfo.name
+    this.walletName = walletInfo.username
   }
 }
 </script>

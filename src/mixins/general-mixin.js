@@ -71,6 +71,41 @@ export default {
             isHex: v =>
               this.$blockchainProvider.isValidPrivateKey(v) || 'Private key must be Hexadecimal'
           }
+        },
+        wallet: {
+          label: 'Wallet',
+          icon: 'icon-private-key-green-16h-proximax-sirius-wallet.svg',
+          min: 3,
+          max: 30,
+          show: false,
+          rules: {
+            required: value => !!value || 'Wallet is required',
+            min: v => (v && v.length >= 3) || 'Wallet must be less than 3 characters',
+            max: v => (v && v.length <= 30) || 'Wallet must be a maximum of 30 characters'
+          }
+        }
+      }
+    },
+    typeButtonsLogin () {
+      return {
+        login: {
+          key: 'login',
+          action: 'login',
+          disabled: false,
+          color: 'primary',
+          textColor: 'white--text',
+
+          loading: false,
+          text: 'Log In'
+        },
+        letsgo: {
+          key: 'letgo',
+          action: 'letgo',
+          disabled: false,
+          color: 'primary',
+          textColor: 'white--text',
+          loading: false,
+          text: `Let's Go`
         }
       }
     },
@@ -80,7 +115,8 @@ export default {
           key: 'clear',
           action: 'clear',
           disabled: false,
-          color: 'sky',
+          color: 'primary',
+          textColor: 'white--text',
           loading: false,
           text: 'Clear'
         },
@@ -88,7 +124,8 @@ export default {
           key: 'create',
           action: 'create',
           disabled: false,
-          color: 'sky',
+          color: 'primary',
+          textColor: 'white--text',
           loading: false,
           text: 'Create'
         }

@@ -13,7 +13,7 @@ export const accountStore = {
   },
   mutations: {
     LOGIN (state, data) {
-      if (data && data.username && data.simpleWallet) {
+      if (data && data.username && data.accounts) {
         state.isLogged = true
       } else {
         state.isLogged = false

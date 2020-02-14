@@ -6,27 +6,27 @@
       floating
       persistent
       mobile-break-point="980"
-      width="260"
+      width="230"
       overflow
+      color="sky"
       class="elevation-2"
-      src="https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-2.32103624.jpg"
     >
       <v-list nav dense class="pt-0">
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title align="center">
+            <v-list-item-title  align="center">
               <img
-                :src="require('@/assets/img/logo-proximax-sirius-wallet-beta.svg')"
+                :src="require('@/assets/img/logo-dex-blanco.svg')"
                 alt="logo"
-                height="45"
+                height="55"
               />
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-divider class="mt-1 mr-4 ml-4" />
+        <v-divider class="mt-1 mr-4 ml-4 white" />
         <v-list-item-group v-model="primaryDrawer.modal" color="sky" class="pt-1">
           <v-list-item
-            v-for="(item, i) in items"
+            v-for="(item, i) in getItemsDrawer"
             :key="i"
             :active-class="color"
             :to="item.router"
@@ -53,8 +53,8 @@ export default {
       model: null,
       item: null
     },
-    color: 'sky',
-    items: [
+    color: 'primary',
+    itemsDrawer: [
       {
         icon: ' mdi-home',
         title: 'home',
@@ -68,11 +68,19 @@ export default {
         router: '',
         viewLogged: false,
         sublinks: []
+      },
+      {
+        icon: ' mdi-home',
+        title: 'item logueado',
+        router: '',
+        viewLogged: true,
+        sublinks: []
       }
     ]
   }),
   beforeMount () {},
   computed: {
+    ...mapGetters('accountStore', ['isLogged']),
     ...mapGetters('appCoreStore', ['drawer']),
     inputValue: {
       get () {
@@ -81,10 +89,23 @@ export default {
       set (val) {
         this.SET_DRAWER(val)
       }
+    },
+    getItemsDrawer () {
+      return this.buildItemsDrawer()
     }
   },
   methods: {
-    ...mapMutations('appCoreStore', ['SET_DRAWER'])
+    ...mapMutations('appCoreStore', ['SET_DRAWER']),
+    buildItemsDrawer () {
+      const itemDrawer = []
+      const login = this.isLogged
+      for (let item of this.itemsDrawer) {
+        if (login === item.viewLogged) {
+          itemDrawer.push(item)
+        }
+      }
+      return itemDrawer
+    }
   }
 }
 </script>

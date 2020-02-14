@@ -1,39 +1,29 @@
 <template>
   <v-app id="sandbox">
     <core-Drawer :drawerModal="primaryDrawer.model"></core-Drawer>
-    <v-app-bar :clipped-left="primaryDrawer.clipped" id="core-toolbar" app flat>
+    <v-app-bar :clipped-left="primaryDrawer.clipped" id="core-toolbar" app flat color="leve">
       <v-app-bar-nav-icon v-if="responsive" @click.stop="onClickBtn" />
-      <v-toolbar-title>{{ title }}</v-toolbar-title>
+      <v-toolbar-title class="leveint--text">{{ title }}</v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <div>
-        <v-chip link class="ma-2 primary sky--text" router :to="'/select-signup-type'"
-          >Sign Up</v-chip
-        >
+      <div v-for="(item, i) in getItemNav" :key="i">
+        <div  :key="item.title"  v-if="item.chip">
+          <v-chip
+            v-text="item.title"
+            class="ma-2"
+            :class="item.class"
+            @click="actions(item.action)"
+          >
+          </v-chip>
+        </div>
       </div>
-      <div>
-        <v-chip link class="ma-2 sky primary--text">Sign In</v-chip>
-      </div>
-      <!-- <v-btn icon large>
-        <v-icon>mdi-apps</v-icon>
-        login
-      </v-btn>
-      <v-btn icon>
-        <v-icon>mdi-notifications</v-icon>
-      </v-btn>
-      <v-btn icon large>
-        <v-avatar size="32px" item>
-          <v-img src="https://cdn.vuetifyjs.com/images/logos/logo.svg" alt="Vuetify"> </v-img
-        ></v-avatar>
-      </v-btn> -->
     </v-app-bar>
     <core-view></core-view>
     <core-footer></core-footer>
   </v-app>
 </template>
-
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 export default {
   data: () => ({
     primaryDrawer: {
@@ -41,7 +31,34 @@ export default {
       clipped: false
     },
     title: null,
-    responsive: false
+    responsive: false,
+    itemNav: [
+      {
+        icon: '',
+        chip: true,
+        title: 'Sign Up',
+        class: 'primary white-text',
+        action: 'select-signup-type',
+        viewLogged: false
+      },
+      {
+        icon: '',
+        chip: true,
+        title: 'Log In',
+        class: 'primary white-text',
+        action: 'login',
+        viewLogged: false
+      },
+      {
+        icon: '',
+        chip: true,
+        title: 'Log out',
+        class: 'primary white-text',
+        action: 'logout',
+        viewLogged: true,
+        sublinks: []
+      }
+    ]
   }),
   components: {
     'core-Drawer': () => import('@/components/core/Drawer'),
@@ -60,7 +77,40 @@ export default {
   beforeDestroy () {
     window.removeEventListener('resize', this.onResponsiveInverted)
   },
+  computed: {
+    ...mapGetters('accountStore', ['isLogged']),
+    getItemNav () {
+      return this.buildItemNav()
+    }
+  },
   methods: {
+    ...mapMutations('accountStore', ['LOGIN']),
+    actions (action) {
+      switch (action) {
+        case 'login':
+          this.$router.push(`${action}`).catch(e => {})
+          //  /login
+          break
+        case 'select-signup-type':
+          this.$router.push(`${action}`).catch(e => {})
+          // /select-signup-type
+          break
+        case 'logout':
+          this.LOGIN(false)
+          this.$router.push('/login').catch(e => {})
+          break
+      }
+    },
+    buildItemNav () {
+      const itemDrawer = []
+      const login = this.isLogged
+      for (let item of this.itemNav) {
+        if (login === item.viewLogged) {
+          itemDrawer.push(item)
+        }
+      }
+      return itemDrawer
+    },
     onResponsiveInverted () {
       if (window.innerWidth < 991) {
         this.responsive = true

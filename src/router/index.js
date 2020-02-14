@@ -20,7 +20,7 @@ const routes = [
       import(/* webpackChunkName: "CreateNewSignup.vue" */ '../views/signup/CreateNewSignup.vue'),
     meta: {
       requiresNotAuth: true,
-      hideMenu: true
+      hideMenu: false
     }
   },
   {
@@ -30,7 +30,7 @@ const routes = [
       import(/* webpackChunkName: "SelectTypeSignup" */ '../views/signup/SelectTypeSignup.vue'),
     meta: {
       requiresNotAuth: true,
-      hideMenu: true
+      hideMenu: false
     }
   },
   {
@@ -40,7 +40,25 @@ const routes = [
       import(/* webpackChunkName: "SelectTypeSignup" */ '../views/signup/CreateFromPrivateKey.vue'),
     meta: {
       requiresNotAuth: true,
-      hideMenu: true
+      hideMenu: false
+    }
+  },
+  {
+    path: '/login',
+    name: 'Log In',
+    component: () => import(/* webpackChunkName: "SelectTypeSignup" */ '../views/login/LogIn.vue'),
+    meta: {
+      requiresNotAuth: true,
+      hideMenu: false
+    }
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: () => import(/* webpackChunkName: "SelectTypeSignup" */ '../views/dashboard/dashboard.vue'),
+    meta: {
+      requiresAuth: true,
+      hideMenu: false
     }
   },
   {
@@ -63,10 +81,9 @@ router.beforeEach(async (to, from, next) => {
   } else {
     store.commit('SHOW_MENU', true)
   }
-  const isLogged = false
-  if (requiresAuth && !isLogged) {
+  if (requiresAuth && !store.getters['accountStore/isLogged']) {
     next('/')
-  } else if (requiresNotAuth && isLogged) {
+  } else if (requiresNotAuth && store.getters['accountStore/isLogged']) {
     next('/home')
   } else {
     next()

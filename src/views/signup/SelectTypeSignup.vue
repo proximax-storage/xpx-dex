@@ -2,7 +2,7 @@
   <v-container class="fill-height">
     <v-row align="center" justify="center">
       <v-col cols="10" sm="8" md="7" lg="7">
-        <v-card elevation="10" class="elevation-2">
+        <!-- <v-card elevation="1" class="elevation-2"> -->
           <v-row>
             <template v-for="(item, key) of items">
               <v-col :key="key" cols="10" sm="6" md="6" lg="6" class="text-center mx-auto pb-12">
@@ -21,7 +21,7 @@
                 <v-btn
                   rounded
                   color="primary"
-                  class="pl-8 pr-8 body-2 sky white--text"
+                  class="pl-8 pr-8 body-2  white--text"
                   router
                   :to="item.route"
                   >{{ item.nameButton }}</v-btn
@@ -29,15 +29,15 @@
               </v-col>
             </template>
           </v-row>
-          <v-card-actions class="leve pt-0 pb-0">
-            <v-row class="darkness--text">
+          <!-- <v-row class="leve pt-0 pb-0"> -->
+            <!-- <v-row class="darkness--text  pt-0 pb-0">
               <v-col  class="d-flex justify-start ma-2">I'm already have a account</v-col>
               <v-col class="d-flex justify-end">
-                <v-chip small link class="sky white--text pt-1 pb-1 ma-2 mr-10">Sign In</v-chip>
+                <v-chip small link class="primary white--text pt-1 pb-1 ma-2 mr-10">Sign In</v-chip>
               </v-col>
-            </v-row>
-          </v-card-actions>
-        </v-card>
+            </v-row> -->
+          <!-- </v-row> -->
+        <!-- </v-card> -->
       </v-col>
     </v-row>
     <!-- <v-row >
