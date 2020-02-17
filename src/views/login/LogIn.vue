@@ -6,76 +6,76 @@
           <v-row class="mx-auto">
             <v-col cols="6 pr-0 ">
               <!-- <v-card class="pb-10" utlined height="320"> -->
-                <v-form v-model="valid" ref="form">
-                  <!-- <v-card-title class=" font-italic font-weight-medium pb-0"> -->
-                    <v-col cols="12" class="font-italic font-weight-medium pb-0">
-                      <span class="title sky--text">Welcome back </span>
-                      <br />
-                      <span class="subtitle-1">Ready to be?</span>
-                    </v-col>
-                  <!-- </v-card-title> -->
-                  <!-- <v-card-text> -->
-                    <!-- Account -->
-                    <v-col cols="12">
-                      <v-select
-                        v-model="wallet"
-                        :items="wallets"
-                        item-text="username"
-                        item-value="username"
-                        attach
-                        dense
-                        :rules="[
-                          configForm.wallet.rules.required,
-                          configForm.wallet.rules.min,
-                          configForm.wallet.rules.max
-                        ]"
-                        :color="inputStyle"
-                        label="Select your account"
-                      ></v-select>
-                    </v-col>
-                    <!-- Password -->
-                    <v-col cols="12">
-                      <v-text-field
-                        dense
-                        v-model="password"
-                        :append-icon="configForm.password.show ? 'mdi-eye' : 'mdi-eye-off'"
-                        :minlength="configForm.password.min"
-                        :maxlength="configForm.password.max"
-                        :counter="configForm.password.max"
-                        :color="inputStyle"
-                        :rules="[
-                          configForm.password.rules.required,
-                          configForm.password.rules.min,
-                          configForm.password.rules.max
-                        ]"
-                        :label="configForm.password.label"
-                        :type="configForm.password.show ? 'text' : 'password'"
-                        name="password"
-                        hint
-                        @click:append="configForm.password.show = !configForm.password.show"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <!-- Buttons -->
-                      <custom-buttons @action="action" :arrayBtn="getArrayBtn[0]"></custom-buttons>
-                    </v-col>
-                  <!-- </v-card-text> -->
-                </v-form>
+              <v-form v-model="valid" ref="form">
+                <!-- <v-card-title class=" font-italic font-weight-medium pb-0"> -->
+                <v-col cols="12" class="font-italic font-weight-medium pb-0">
+                  <span class="title sky--text">Welcome back </span>
+                  <br />
+                  <span class="subtitle-1">Ready to be?</span>
+                </v-col>
+                <!-- </v-card-title> -->
+                <!-- <v-card-text> -->
+                <!-- Account -->
+                <v-col cols="12">
+                  <v-select
+                    v-model="wallet"
+                    :items="wallets"
+                    item-text="username"
+                    item-value="username"
+                    attach
+                    dense
+                    :rules="[
+                      configForm.wallet.rules.required,
+                      configForm.wallet.rules.min,
+                      configForm.wallet.rules.max
+                    ]"
+                    :color="inputStyle"
+                    label="Select your account"
+                  ></v-select>
+                </v-col>
+                <!-- Password -->
+                <v-col cols="12">
+                  <v-text-field
+                    dense
+                    v-model="password"
+                    :append-icon="configForm.password.show ? 'mdi-eye' : 'mdi-eye-off'"
+                    :minlength="configForm.password.min"
+                    :maxlength="configForm.password.max"
+                    :counter="configForm.password.max"
+                    :color="inputStyle"
+                    :rules="[
+                      configForm.password.rules.required,
+                      configForm.password.rules.min,
+                      configForm.password.rules.max
+                    ]"
+                    :label="configForm.password.label"
+                    :type="configForm.password.show ? 'text' : 'password'"
+                    name="password"
+                    hint
+                    @click:append="configForm.password.show = !configForm.password.show"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <!-- Buttons -->
+                  <custom-buttons @action="action" :arrayBtn="getArrayBtn[0]"></custom-buttons>
+                </v-col>
+                <!-- </v-card-text> -->
+              </v-form>
               <!-- </v-card> -->
             </v-col>
             <v-col cols="6 pl-0 sky">
               <!-- <v-card utlined class="pb-10 sky " height="320"> -->
-                <v-col cols="12" class="font-italic font-weight-medium pb-0">
-                  <div>
-                    <span class="title white--text">Create your Account, </span>
-                    <br />
-                    <span class="subtitle-1">is very easy.</span>
-                  </div>
-                </v-col>
-                <v-col cols="12" >
-                  <!-- Buttons -->
-                  <custom-buttons @action="action" :arrayBtn="getArrayBtn[1]"></custom-buttons>
-                </v-col>
+              <v-col cols="12" class="font-italic font-weight-medium pb-0">
+                <div>
+                  <span class="title white--text">Create your Account, </span>
+                  <br />
+                  <span class="subtitle-1">is very easy.</span>
+                </div>
+              </v-col>
+              <v-col cols="12">
+                <!-- Buttons -->
+                <custom-buttons @action="action" :arrayBtn="getArrayBtn[1]"></custom-buttons>
+              </v-col>
               <!-- </v-card> -->
             </v-col>
           </v-row>
@@ -136,7 +136,6 @@ export default {
         this.sendingForm = true
         this.SHOW_LOADING(true)
         const wallet = this.getWalletByName(this.wallet)
-        console.log('asdasdasdsdasdsad', wallet)
         const auth = this.auth(this.password, wallet)
         console.log('auth', auth)
         if (auth) {
@@ -146,15 +145,12 @@ export default {
             this.SHOW_LOADING(false)
             this.LOGIN(wallet)
             this.$router.push('dashboard')
-            // if (response.status) {
-            //   this.dataWalletCreated = response
-            // }
           }, 500)
+        } else {
+          this.clear()
+          this.sendingForm = false
+          this.SHOW_LOADING(false)
         }
-        // const decry = this.decrypt(wallet.accounts[0], this.password)
-        // if (decry) {
-        //   console.log('decry', decry)
-        // }
       }
     },
     clear () {

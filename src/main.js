@@ -44,11 +44,14 @@ const configIntegration = async function () {
 const getEnvironment = function (configInfo) {
   let environment = null
   switch (configInfo.version) {
-    case 'PUBLIC_TEST':
-      environment = configInfo.environment.PUBLICTEST
+    case 'TEST_NET':
+      environment = configInfo.environment.TESTNET
       break
     case 'MAIN_NET':
       environment = configInfo.environment.MAINNET
+      break
+    case 'PRIVATE':
+      environment = configInfo.environment.PRIVATE
       break
   }
   return environment

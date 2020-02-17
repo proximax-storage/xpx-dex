@@ -123,7 +123,7 @@ export default {
           //   this.SET_SWAP_DATA(this.infoOwnedSwap)
           //   this.$router.push('/swap-account-nis1-found').catch(e => {})
           // } else {
-          this.$router.push('/').catch(e => {})
+          this.$router.push('login').catch(e => {})
           // }
           break
       }

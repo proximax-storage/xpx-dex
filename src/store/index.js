@@ -3,6 +3,9 @@ import Vuex from 'vuex'
 import { accountStore } from './modules/account-store'
 import { walletStore } from './modules/wallet-store'
 import { appCoreStore } from './modules/app-core-store'
+import { namespaceStore } from './modules/namespace-store'
+import { nodeStore } from './modules/node-store'
+import { mosaicStore } from './modules/mosaic-store'
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
@@ -44,6 +47,9 @@ export default new Vuex.Store({
   modules: {
     accountStore,
     walletStore,
-    appCoreStore
+    appCoreStore,
+    nodeStore,
+    namespaceStore,
+    mosaicStore
   }
 })

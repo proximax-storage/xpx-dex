@@ -6,7 +6,9 @@
           <!-- <v-card elevation="1" class="pb-10"> -->
           <v-form v-model="valid" ref="form">
             <v-row>
-              <v-col cols="11" class="title font-italic font-weight-medium text-left" >{{ title }} </v-col></v-row
+              <v-col cols="11" class="title font-italic font-weight-medium text-left"
+                >{{ title }}
+              </v-col></v-row
             >
             <v-row>
               <v-col cols="11" class="mx-auto pt-0">
@@ -200,7 +202,6 @@ export default {
           const walletCreated = this.createWallet({
             default: true,
             firstAccount: true,
-            isMultisign: null,
             walletName: this.accountName,
             network: this.networkSelected.value,
             password: this.passwords.password,

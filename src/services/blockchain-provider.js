@@ -13,7 +13,9 @@ import {
   MetadataHttp,
   NetworkType,
   Address,
-  PublicAccount
+  PublicAccount,
+  NamespaceId,
+  MosaicId
 } from 'tsjs-xpx-chain-sdk'
 
 import { GeneralService } from './general'
@@ -127,7 +129,9 @@ class BlockchainProvider {
    * @memberof BlockchainProvider
    */
   checkAddress (privateKey, network, address) {
-    return (privateKey && privateKey !== '') ? Account.createFromPrivateKey(privateKey, network).address.plain() === address : null
+    return privateKey && privateKey !== ''
+      ? Account.createFromPrivateKey(privateKey, network).address.plain() === address
+      : null
   }
 
   /**
@@ -150,7 +154,10 @@ class BlockchainProvider {
           return { status: false, msg: 'Invalid password' }
         }
 
-        if (!this.isValidPrivateKey(common.privateKey) || !this.checkAddress(common.privateKey, network, account.address)) {
+        if (
+          !this.isValidPrivateKey(common.privateKey) ||
+          !this.checkAddress(common.privateKey, network, account.address)
+        ) {
           return { status: false, msg: 'Invalid password' }
         }
 
@@ -171,7 +178,7 @@ class BlockchainProvider {
    * @memberof BlockchainProvider
    */
   isValidPrivateKey (privateKey) {
-    if (privateKey && (privateKey.length !== 64 && privateKey.length !== 66)) {
+    if (privateKey && privateKey.length !== 64 && privateKey.length !== 66) {
       // console.error('Private key length must be 64 or 66 characters !')
       return false
     } else if (privateKey && !this.generalService.isHexadecimal(privateKey)) {
@@ -194,7 +201,87 @@ class BlockchainProvider {
   getAccountFromPrivateKey (privateKey, network) {
     return Account.createFromPrivateKey(privateKey, network)
   }
+  /**
+   *
+   *
+   * @param {*} address
+   * @returns
+   * @memberof BlockchainProvider
+   */
+  getAccountInfo (address) {
+    const adss = Address.createFromRawAddress(address)
+    console.log('adssadssadss', adss)
+    return this.accountHttp.getAccountInfo(adss)
+  }
 
+  /**
+   *
+   *
+   * @param {Address} address
+   * @memberof BlockchainProvider
+   */
+  getNamespaceFromAccount (address) {
+    return this.namespaceHttp.getNamespacesFromAccount(address)
+  }
+  /**
+   *
+   *
+   * @param {NamespaceInfo} namespaceInfo
+   * @memberof BlockchainProvider
+   */
+
+  getNamespacesName (namespaceIds) {
+    return this.namespaceHttp.getNamespacesName(namespaceIds)
+  }
+  /**
+   * Get namespace id
+   *
+   * @param {any} id
+   * @returns
+   * @memberof BlockchainProvider
+   */
+  getNamespaceId (id) {
+    return new NamespaceId(id)
+  }
+  /**
+   *
+   *
+   * @param {MosaicId[]} mosaicIsd
+   * @memberof BlockchainProvider
+   */
+  getMosaics (mosaicIsd) {
+    return this.mosaicHttp.getMosaics(mosaicIsd)
+  }
+
+  /**
+   *
+   *
+   * @param {MosaicId[]} mosaicIsd
+   * @memberof BlockchainProvider
+   */
+  getMosaicsName (mosaicsId) {
+    return this.mosaicHttp.getMosaicsNames(mosaicsId).toPromise()
+  }
+  /**
+   *
+   *
+   * @param {(string | number[])} id
+   * @returns {MosaicId}
+   * @memberof BlockchainProvider
+   */
+  getMosaicId (id) {
+    return new MosaicId(id)
+  }
+
+  /**
+   *
+   *
+   * @param {NamespaceId} namespace
+   * @memberof BlockchainProvider
+   */
+  getLinkedMosaicId (namespace) {
+    return this.namespaceHttp.getLinkedMosaicId(namespace)
+  }
   /**
    *
    *
