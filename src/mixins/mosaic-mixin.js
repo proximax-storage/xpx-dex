@@ -116,7 +116,6 @@ export default {
       if (mosaicsTosaved) {
         // let mosaicsStorage this.getMosaicsFromStorage();
         let mosaicsStorage = this.$store.getters['mosaicStore/mosaics']
-        console.log(mosaicsStorage)
         for (const element of mosaicsTosaved) {
           if (mosaicsStorage.length > 0) {
             const mosaicIdToSaved = this.$blockchainProvider.getMosaicId(element.idMosaic).toHex()
@@ -149,7 +148,6 @@ export default {
         }
 
         this.$store.commit('mosaicStore/SET_MOSAICS', mosaicsStorage)
-        console.log('mosaicStore', this.$store.getters['mosaicStore/mosaics'])
         // localStorage.setItem(this.getItemMosaicStorage(), JSON.stringify(mosaicsStorage));
         // this.setMosaicChanged();
       }

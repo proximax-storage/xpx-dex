@@ -10,7 +10,8 @@
       "coin": "xpx",
       "mosaic": {
         "id": "13bfc518e40549d7",
-        "name": "xpx"
+        "name": "xpx",
+        "divisibility": 6
       },
       "namespace": {
         "id": "bffb42a19116bdf6",
@@ -47,7 +48,8 @@
       "coin": "xpx",
       "mosaic": {
         "id": "13bfc518e40549d7",
-        "name": "xpx"
+        "name": "xpx",
+        "divisibility": 6
       },
       "namespace": {
         "id": "bffb42a19116bdf6",
@@ -91,7 +93,8 @@
       "coin": "xpx",
       "mosaic": {
         "id": "13bfc518e40549d7",
-        "name": "xpx"
+        "name": "xpx",
+        "divisibility": 6
       },
       "namespace": {
         "id": "bffb42a19116bdf6",

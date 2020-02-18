@@ -24,7 +24,6 @@ export default {
           const publicsAccounts = []
           // this.walletService.validateMultisigAccount(accounts);
           accounts.forEach(x => {
-            console.log('xxxxxx', x)
             publicsAccounts.push(
               this.$blockchainProvider.createPublicAccount(x.publicKey, x.network)
             )
@@ -47,8 +46,7 @@ export default {
               }
             }
           })
-          // this.updateBalance()
-          console.log('mosaicIDDDD', data.mosaicsId)
+          this.updateBalance()
           if (data.mosaicsId && data.mosaicsId.length > 0) {
             this.searchInfoMosaics(data.mosaicsId)
           }
@@ -135,7 +133,22 @@ export default {
       } else {
         accountsInfoNext = accountsInfo
       }
+      // this.$store.dispatch('accountStore/SET_INFO_ACCOUNT', accountsInfoNext)
       this.$store.commit('accountStore/SET_INFO_ACCOUNT', accountsInfoNext)
+    },
+    updateBalance () {
+      const currentAccount = this.$store.getters['accountStore/currentAccount']
+      const mosaicsId = this.$environment.mosaic.id
+      const accountInfoGet = this.$store.getters['accountStore/accountsInfo']
+      const dataBalance = accountInfoGet.find(next => next.name === currentAccount.name)
+      let balance = 0.0
+      if (dataBalance && dataBalance.accountInfo) {
+        const x = dataBalance.accountInfo.mosaics.find(next => next.id.toHex() === mosaicsId)
+        if (x) {
+          balance = x.amount.compact()
+        }
+      }
+      this.$store.commit('accountStore/SET_BALANCE_CURRENT_ACCOUNT', balance)
     }
   }
 }

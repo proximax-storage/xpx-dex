@@ -20,7 +20,6 @@ export const namespaceStore = {
   },
   mutations: {
     SET_NAMESPACES (state, data) {
-      console.log('SET_NAMESPACES', data)
       state.namespaces = data
     }
   }

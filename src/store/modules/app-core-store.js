@@ -15,7 +15,6 @@ export const appCoreStore = {
       state.drawer = data
     },
     SET_COLOR (state, data) {
-      console.log('COLORRRRR', data)
       state.color = data
     }
   }

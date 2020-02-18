@@ -14,16 +14,13 @@
       <v-list nav dense class="pt-0">
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title  align="center">
-              <img
-                :src="require('@/assets/img/logo-dex-blanco.svg')"
-                alt="logo"
-                height="55"
-              />
+            <v-list-item-title align="center">
+              <img :src="require('@/assets/img/logo-dex-blanco.svg')" alt="logo" height="55" />
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-divider class="mt-1 mr-4 ml-4 white" />
+        <user-content v-if="isLogged" ></user-content>
         <v-list-item-group v-model="primaryDrawer.modal" color="sky" class="pt-1">
           <v-list-item
             v-for="(item, i) in getItemsDrawer"
@@ -79,6 +76,9 @@ export default {
     ]
   }),
   beforeMount () {},
+  components: {
+    'user-content': () => import('@/components/core/UserContent')
+  },
   computed: {
     ...mapGetters('accountStore', ['isLogged']),
     ...mapGetters('appCoreStore', ['drawer']),

@@ -101,10 +101,8 @@ export default {
           this.$store.commit('walletStore/SET_CURRENT_WALLET', walletBuilded)
           return { status: true, data: walletBuilded, pvk: decrypted.privateKey }
         }
-
         return { status: false, msg: 'Error to decrypt wallet' }
       }
-
       return { status: false, msg: 'Wallet name already exists, try another name' }
     },
     decrypt (account, password) {
@@ -115,7 +113,6 @@ export default {
         encrypted: account.encryptedPrivateKey.encryptedKey,
         iv: account.encryptedPrivateKey.iv
       }
-      console.log('toDecrypt', toDecrypt)
 
       const decrypt = this.$blockchainProvider.decrypt(common, toDecrypt, account.network)
       if (decrypt && decrypt.status) {

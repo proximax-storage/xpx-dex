@@ -19,7 +19,6 @@ export default {
         } catch (error) {
           console.error('----Search namespaces from accoun ts error----', error)
         }
-        console.log('allNamespaces', allNamespaces)
         this.saveNamespace(allNamespaces)
       }
     },

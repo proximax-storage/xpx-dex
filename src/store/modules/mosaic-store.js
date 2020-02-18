@@ -16,7 +16,6 @@ export const mosaicStore = {
   },
   mutations: {
     SET_MOSAICS (state, data) {
-      console.log('SET_MOSAICS', data)
       state.mosaics = data
     }
   }

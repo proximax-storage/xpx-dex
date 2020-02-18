@@ -5,7 +5,7 @@ export const accountStore = {
   state: {
     accountsInfo: null,
     currentAccount: null,
-    balanceAccount: null,
+    balanceCurrentAccount: null,
     totalBalance: null,
     dataUser: null,
     isLogged: false
@@ -16,7 +16,24 @@ export const accountStore = {
     isLogged: state => state.isLogged,
     currentAccount: state => state.currentAccount,
     balanceAccount: state => state.balanceAccount,
-    totalBalance: state => state.totalBalance,
+    totalBalance: state => idFilter => {
+      let amountTotal = 0.0
+      if (state.accountsInfo && state.accountsInfo.length > 0) {
+        for (const element of state.accountsInfo) {
+          if (element && element.accountInfo) {
+            if (element.accountInfo.mosaics && element.accountInfo.mosaics.length > 0) {
+              const mosaicXpx = element.accountInfo.mosaics.find(
+                mosaic => mosaic.id.toHex() === idFilter
+              )
+              if (mosaicXpx) {
+                amountTotal = amountTotal + mosaicXpx.amount.compact()
+              }
+            }
+          }
+        }
+      }
+      return amountTotal
+    },
     address: state => state.dataUser.simpleWallet.address['address']
   },
   mutations: {
@@ -32,12 +49,11 @@ export const accountStore = {
       console.log('SET_INFO_ACCOUNT', data)
       state.accountsInfo = data
     },
-    SET_BALANCE_ACCOUNT (state, data) {
-      console.log('SET_BALANCE_ACCOUNT', data)
-      state.balanceAccount = data
+    SET_BALANCE_CURRENT_ACCOUNT (state, data) {
+      console.log('SET_BALANCE_CURRENT_ACCOUNT', data)
+      state.balanceCurrentAccount = data
     },
     SET_CURRENT_ACCOUNT (state, data) {
-      console.log('SET_CURRENT_ACCOUNT', data)
       state.currentAccount = data
     },
     SET_TOTAL_BALANCE (state, data) {
