@@ -9,20 +9,16 @@ export default {
   },
   methods: {
     initNode () {
-      console.log('initNode')
       if (this.getAllNodes() === null) {
         this.setArrayNode([])
       }
       const constSelectedStorage = this.getNodeSelected()
-      console.log('listNodes', this.listNodes)
-      console.log('constSelectedStorage', constSelectedStorage)
       const nodeSelected =
         constSelectedStorage === null ||
         constSelectedStorage === '' ||
         constSelectedStorage.length === 0
           ? this.listNodes[Math.floor(Math.random() * this.listNodes.length)]
           : constSelectedStorage
-      console.log('nodeSelected', nodeSelected)
       this.setSelectedNodeStorage(nodeSelected)
     },
     getAllNodes () {

@@ -124,7 +124,6 @@ export default {
     ...mapMutations('accountStore', ['LOGIN']),
     ...mapMutations(['SHOW_LOADING', 'SHOW_SNACKBAR']),
     action (action) {
-      console.log('action', action)
       if (action === 'login') {
         this.sendForm()
       } else {
@@ -137,7 +136,6 @@ export default {
         this.SHOW_LOADING(true)
         const wallet = this.getWalletByName(this.wallet)
         const auth = this.auth(this.password, wallet)
-        console.log('auth', auth)
         if (auth) {
           setTimeout(() => {
             this.clear()
@@ -171,11 +169,8 @@ export default {
     'custom-buttons': () => import('@/components/shared/Buttons')
   },
   beforeMount () {
-    const networks = this.$blockchainProvider.getNetworkTypes()
-    console.log('networks', networks)
     this.configForm = this.getConfigForm()
     this.wallets = this.getWallets()
-    console.log(this.wallets)
     this.arrayBtn = [
       {
         login: this.typeButtonsLogin().login

@@ -120,7 +120,6 @@ export default {
     },
     ...mapMutations('appCoreStore', ['SET_DRAWER']),
     onClickBtn () {
-      console.log('SET_DRAWER', !this.$store.state.appCoreStore.drawer)
       this.SET_DRAWER(!this.$store.state.appCoreStore.drawer)
     }
   }

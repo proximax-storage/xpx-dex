@@ -1,4 +1,5 @@
 import { crypto } from 'js-xpx-chain-library'
+import axios from 'axios'
 import {
   Account,
   BlockHttp,
@@ -21,7 +22,8 @@ import {
 import { GeneralService } from './general'
 
 class BlockchainProvider {
-  constructor (node, protocol, typeNetwork) {
+  constructor (node, protocol, typeNetwork, coingecko) {
+    this.urlCoingecko = coingecko
     this.url = this.buildURL(node, protocol)
     this.typeNetwork = NetworkType[typeNetwork]
     this.accountHttp = new AccountHttp(this.url)
@@ -210,7 +212,6 @@ class BlockchainProvider {
    */
   getAccountInfo (address) {
     const adss = Address.createFromRawAddress(address)
-    console.log('adssadssadss', adss)
     return this.accountHttp.getAccountInfo(adss)
   }
 
@@ -302,7 +303,16 @@ class BlockchainProvider {
       pvk: newPrivateKey
     }
   }
-
+  /**
+   *
+   *
+   * @param {string} coinId
+   * @returns
+   * @memberof ProximaxProvider
+   */
+  coingecko (coinId) {
+    return axios.get(`${this.urlCoingecko.url}${coinId}`)
+  }
   /**
    *
    *

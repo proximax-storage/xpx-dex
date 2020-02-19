@@ -15,13 +15,23 @@ Vue.config.productionTip = false
 const options = { name: 'lodash' } // customize the way you want to call it
 Vue.use(VueLodash, options)
 Vue.use(VueClipboard)
+Vue.filter('toCurrency', function (value) {
+  if (typeof value !== 'number') {
+    return value
+  }
+  var formatter = new Intl.NumberFormat('en-US', {
+    style: 'decimal',
+    currency: 'USD',
+    minimumFractionDigits: 6
+  })
+  return formatter.format(value)
+})
 // Define prototype
 Vue.prototype.$generalService = new GeneralService()
 Vue.prototype.$storage = new StorageService(localStorage)
 const configIntegration = async function () {
   try {
     const configInfo = await axios.get('../config/config.json')
-    console.log('configInfo', configInfo)
     store.commit('ADD_CONFIG_INFO', configInfo.data)
     const environment = getEnvironment(configInfo.data)
     Vue.prototype.$configInfo = configInfo
@@ -29,7 +39,8 @@ const configIntegration = async function () {
     Vue.prototype.$blockchainProvider = new BlockchainProvider(
       environment.connectionNodes.nodes[0],
       environment.connectionNodes.protocol,
-      environment.connectionNodes.networkType
+      environment.connectionNodes.networkType,
+      environment.coingecko
     )
     new Vue({
       router,

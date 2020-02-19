@@ -167,7 +167,6 @@ export default {
           this.clear()
           this.sendingForm = false
           this.SHOW_LOADING(false)
-          console.log('response', response)
           if (response.status) {
             this.dataWalletCreated = response
           }

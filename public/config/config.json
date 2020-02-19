@@ -7,6 +7,9 @@
       "keyLocalStore": {
         "nodeStorage": "dex-nodes"
       },
+      "coingecko": {
+        "url": "https://api.coingecko.com/api/v3/coins/"
+      },
       "coin": "xpx",
       "mosaic": {
         "id": "13bfc518e40549d7",
@@ -44,6 +47,9 @@
     "MAINNET": {
       "keyLocalStore": {
         "nodeStorage": "dex-nodes"
+      },
+      "coingecko": {
+        "url": "https://api.coingecko.com/api/v3/coins/"
       },
       "coin": "xpx",
       "mosaic": {
@@ -89,6 +95,9 @@
     "PRIVATE": {
       "keyLocalStore": {
         "nodeStorage": "dex-nodes"
+      },
+      "coingecko": {
+        "url": "https://api.coingecko.com/api/v3/coins/"
       },
       "coin": "xpx",
       "mosaic": {
