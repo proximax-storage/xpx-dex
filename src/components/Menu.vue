@@ -1,20 +1,85 @@
 <template>
   <v-app id="sandbox">
-    <core-Drawer :drawerModal="primaryDrawer.model"></core-Drawer>
+    <!-- <core-Drawer :drawerModal="primaryDrawer.model"></core-Drawer> -->
     <v-app-bar :clipped-left="primaryDrawer.clipped" id="core-toolbar" app flat color="leve">
-      <v-app-bar-nav-icon v-if="responsive" @click.stop="onClickBtn" />
-      <v-toolbar-title class="leveint--text">{{ title }}</v-toolbar-title>
+      <!-- <v-app-bar-nav-icon v-if="responsive" @click.stop="onClickBtn" /> -->
+      <!-- <v-app-bar-nav-icon v-if="responsive" @click.stop="onClickBtn" /> -->
+      <v-toolbar-title class=""
+        ><img :src="require('@/assets/img/logo-dex-color.svg')" alt="logo" height="35"
+      /></v-toolbar-title>
       <v-spacer></v-spacer>
 
       <div v-for="(item, i) in getItemNav" :key="i">
-        <div  :key="item.title"  v-if="item.chip">
+        <div :key="item.title">
           <v-chip
+            v-if="item.type === 'chip'"
             v-text="item.title"
             class="ma-2"
             :class="item.class"
             @click="actions(item.action)"
           >
           </v-chip>
+          <v-btn-toggle
+            v-model="activeBtn"
+            tile
+            color="sky accent-3"
+            group
+            v-if="item.type === 'icon-group'"
+          >
+            <v-btn text small :value="item.action" @click="actions(item.action)">
+              <div v-if="!responsive" class="font-weight-bold text-capitalize">
+                {{ item.title }}
+              </div>
+              <div v-if="responsive">
+                <v-icon> {{ item.icon }}</v-icon>
+              </div>
+            </v-btn>
+          </v-btn-toggle>
+
+          <div v-if="item.type === 'menu'">
+            <v-menu transition="slide-y-transition" bottom right offset-y max-width="200">
+              <template v-slot:activator="{ on }">
+                <v-btn text small color="sky" v-on="on">
+                  <div v-if="loadingInfoWallet.show">
+                    <v-progress-circular indeterminate color="grey">
+                      <v-icon> {{ item.icon }}</v-icon></v-progress-circular
+                    >
+                  </div>
+                  <div v-if="!loadingInfoWallet.show">
+                    <v-icon> {{ item.icon }}</v-icon>
+                  </div>
+                  <!-- <div v-if="!responsive" class="font-weight-bold text-capitalize">
+                    {{ item.title }}
+                  </div> -->
+                  <!-- <div v-if="responsive"> -->
+                  <!-- <v-icon> {{ item.icon }}</v-icon> -->
+                  <!-- </div> -->
+                </v-btn>
+              </template>
+
+              <v-list dense>
+                <user-content v-if="isLogged"></user-content>
+                <v-divider class="mt-1 mr-4 ml-4" />
+                <v-list-item
+                  v-for="(sublinks, i) in item.sublinks"
+                  :key="i"
+                  @click="actions(sublinks.action)"
+                >
+                  <!-- <v-list-item-title>{{ sublinks.title }}</v-list-item-title> -->
+
+                  <v-list-item-icon class="mr-1">
+                    <v-icon v-text="sublinks.icon"></v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title v-text="sublinks.title"></v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </div>
+          <!-- <v-btn  icon @click="actions(item.action)">
+            <v-icon v-text="item.icon"></v-icon>
+          </v-btn> -->
         </div>
       </div>
     </v-app-bar>
@@ -23,7 +88,7 @@
   </v-app>
 </template>
 <script>
-import { mapMutations, mapGetters } from 'vuex'
+import { mapMutations, mapGetters, mapState } from 'vuex'
 export default {
   data: () => ({
     primaryDrawer: {
@@ -34,36 +99,95 @@ export default {
     responsive: false,
     itemNav: [
       {
-        icon: '',
-        chip: true,
+        icon: 'mdi-account-edit',
+        type: 'icon-group',
         title: 'Sign Up',
         class: 'primary white-text',
         action: 'select-signup-type',
-        viewLogged: false
+        viewLogged: false,
+        sublinks: [],
+        orderby: 0
       },
       {
-        icon: '',
-        chip: true,
+        icon: 'mdi-login',
+        type: 'icon-group',
         title: 'Log In',
         class: 'primary white-text',
         action: 'login',
-        viewLogged: false
+        viewLogged: false,
+        sublinks: [],
+        orderby: 2
+      },
+
+      {
+        icon: 'mdi-view-dashboard',
+        type: 'icon-group',
+        title: 'Dashboard',
+        class: 'primary white-text',
+        action: 'dashboard',
+        viewLogged: true,
+        sublinks: [],
+        orderby: 2
       },
       {
-        icon: '',
-        chip: true,
+        icon: 'mdi-storefront',
+        type: 'icon-group',
+        title: 'Offers',
+        class: 'primary white-text',
+        action: 'offers',
+        viewLogged: true,
+        sublinks: [],
+        orderby: 3
+      },
+      {
+        icon: 'mdi-storefront',
+        type: 'icon-group',
+        title: 'Orders',
+        class: 'primary white-text',
+        action: 'orders',
+        viewLogged: true,
+        sublinks: [],
+        orderby: 4
+      },
+      {
+        icon: 'mdi-wallet',
+        type: 'icon-group',
+        title: 'My wallet',
+        class: 'primary white-text',
+        action: 'myWallet',
+        viewLogged: true,
+        sublinks: [],
+        orderby: 5
+      },
+      {
+        icon: 'mdi-account-circle',
+        type: 'menu',
         title: 'Log out',
         class: 'primary white-text',
         action: 'logout',
         viewLogged: true,
-        sublinks: []
+        sublinks: [
+          {
+            icon: 'mdi-logout',
+            type: 'icon',
+            title: 'Log out',
+            class: 'primary white-text',
+            action: 'logout',
+            viewLogged: true,
+            sublinks: [],
+            orderby: 5
+          }
+        ],
+        orderby: 6
       }
-    ]
+    ],
+    activeBtn: 'dashboard'
   }),
   components: {
-    'core-Drawer': () => import('@/components/core/Drawer'),
+    // 'core-Drawer': () => import('@/components/core/Drawer'),
     'core-view': () => import('@/components/core/View'),
-    'core-footer': () => import('@/components/core/Footer')
+    'core-footer': () => import('@/components/core/Footer'),
+    'user-content': () => import('@/components/core/UserContent')
   },
   watch: {
     $route (val) {
@@ -79,6 +203,7 @@ export default {
   },
   computed: {
     ...mapGetters('accountStore', ['isLogged']),
+    ...mapState(['loadingInfoWallet']),
     getItemNav () {
       return this.buildItemNav()
     }
@@ -86,6 +211,7 @@ export default {
   methods: {
     ...mapMutations('accountStore', ['LOGIN']),
     actions (action) {
+      console.log('action::', action)
       switch (action) {
         case 'login':
           this.$router.push(`${action}`).catch(e => {})
@@ -109,10 +235,12 @@ export default {
           itemDrawer.push(item)
         }
       }
-      return itemDrawer
+      return itemDrawer.sort(function (a, b) {
+        return a.orderby - b.orderby
+      })
     },
     onResponsiveInverted () {
-      if (window.innerWidth < 991) {
+      if (window.innerWidth < 600) {
         this.responsive = true
       } else {
         this.responsive = false
