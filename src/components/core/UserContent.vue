@@ -37,25 +37,6 @@
         </v-progress-linear>
       </v-list-item-content>
     </v-list-item>
-    <!-- <v-sheet color="sky" class="px-3 pt-3 pb-3">
-      <v-boilerplate class="mb-6" type="article, actions"></v-boilerplate>
-      <v-skeleton-loader
-        color="sky"
-        tile="true"
-        class="mx-auto"
-        max-width="300"
-        type="list-item-three-line"
-      ></v-skeleton-loader>
-    </v-sheet> -->
-    <!-- <v-sheet color="sky">
-      <v-skeleton-loader
-        ref="skeleton"
-        type="list-item-three-line"
-        tile="true"
-        class="mx-auto"
-        color="grey sky"
-      ></v-skeleton-loader>
-    </v-sheet> -->
     <v-divider class="mt-1 mr-4 ml-4 white" />
   </div>
 </template>
