@@ -12,7 +12,16 @@ export const mosaicStore = {
     // ]
   },
   getters: {
-    mosaics: state => state.mosaics
+    mosaics: state => state.mosaics,
+    othersMosaics: state => idFilter => {
+      console.log('idFilter', idFilter)
+      let othersMosaics = []
+      if (state.mosaics && state.mosaics.length > 0) {
+        othersMosaics = state.mosaics.filter(item => item.mosaicInfo.mosaicId.toHex() !== idFilter)
+      }
+      console.log('othersMosaics', othersMosaics)
+      return othersMosaics
+    }
   },
   mutations: {
     SET_MOSAICS (state, data) {

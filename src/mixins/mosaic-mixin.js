@@ -1,6 +1,11 @@
 export default {
   methods: {
     async searchInfoMosaics (mosaicsId) {
+      this.$store.dispatch('showLIW', {
+        show: true,
+        text: `Mosaics info`,
+        type: 'mosaicsInfo'
+      })
       try {
         const mosaicsTosaved = []
         if (mosaicsId.length > 0) {
@@ -113,6 +118,7 @@ export default {
       return mosaicsTosaved
     },
     async saveMosaicStorage (mosaicsTosaved) {
+      console.log('Mosaicos para guardar', mosaicsTosaved)
       if (mosaicsTosaved) {
         // let mosaicsStorage this.getMosaicsFromStorage();
         let mosaicsStorage = this.$store.getters['mosaicStore/mosaics']
@@ -146,7 +152,11 @@ export default {
           }
           mosaicsStorage.push(element)
         }
-
+        this.$store.dispatch('showLIW', {
+          show: false,
+          text: `Mosaics info`,
+          type: null
+        })
         this.$store.commit('mosaicStore/SET_MOSAICS', mosaicsStorage)
         // localStorage.setItem(this.getItemMosaicStorage(), JSON.stringify(mosaicsStorage));
         // this.setMosaicChanged();

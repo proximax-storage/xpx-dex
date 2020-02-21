@@ -57,6 +57,11 @@ export default {
       this.$store.commit('accountStore/SET_CURRENT_ACCOUNT', account)
     },
     async searchAccountsInfo (accounts) {
+      this.$store.dispatch('showLIW', {
+        show: true,
+        text: `Accounts info`,
+        type: 'accountInfo'
+      })
       let counter = 0
       const mosaicsIds = []
       const accountsInfo = []
@@ -135,6 +140,11 @@ export default {
       }
       // this.$store.dispatch('accountStore/SET_INFO_ACCOUNT', accountsInfoNext)
       this.$store.commit('accountStore/SET_INFO_ACCOUNT', accountsInfoNext)
+      this.$store.dispatch('showLIW', {
+        show: false,
+        text: `Accounts info`,
+        type: null
+      })
     },
     updateBalance () {
       const currentAccount = this.$store.getters['accountStore/currentAccount']

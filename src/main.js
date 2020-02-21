@@ -20,9 +20,10 @@ Vue.filter('toCurrency', function (value) {
     return value
   }
   var formatter = new Intl.NumberFormat('en-US', {
-    style: 'decimal',
+    style: 'currency',
     currency: 'USD',
-    minimumFractionDigits: 6
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 6
   })
   return formatter.format(value)
 })

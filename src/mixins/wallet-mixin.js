@@ -53,6 +53,7 @@ export default {
         })
         return false
       }
+      this.$store.commit('mosaicStore/SET_MOSAICS', [])
       this.searchNamespacesFromAccounts(wallet.accounts)
       this.set_searchAccountsInfo(wallet.accounts)
       return true

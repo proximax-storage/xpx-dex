@@ -12,6 +12,11 @@ export default new Vuex.Store({
     configInfo: null,
     showMenu: true,
     overlay: false,
+    loadingInfoWallet: {
+      show: false,
+      text: '',
+      type: null
+    },
     snackbar: {
       color: '',
       mode: '',
@@ -32,6 +37,13 @@ export default new Vuex.Store({
     SHOW_MENU (state, value) {
       state.showMenu = value
     },
+    SHOW_LOADING_INFO_WALLET (state, data) {
+      console.log('SHOW_LOADING_INFO_WALLET', data)
+      const { show, text, type } = data
+      state.loadingInfoWallet.show = show
+      state.loadingInfoWallet.text = text
+      state.loadingInfoWallet.type = type
+    },
     SHOW_SNACKBAR (state, data) {
       const { snackbar, text, color } = data
       state.snackbar.snackbar = snackbar
@@ -42,6 +54,9 @@ export default new Vuex.Store({
   actions: {
     showMSG ({ commit }, data) {
       commit('SHOW_SNACKBAR', data)
+    },
+    showLIW ({ commit }, data) {
+      commit('SHOW_LOADING_INFO_WALLET', data)
     }
   },
   modules: {

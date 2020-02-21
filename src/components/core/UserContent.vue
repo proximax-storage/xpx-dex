@@ -20,27 +20,61 @@
             alt="logo"
             class="pr-1"
             height="20"
-          />
-          {{ getMosaicsListLength }} Mosaics
+            v-bind:title="getMosaicsListLength"
+          />{{ mosaicLength.length}}
         </v-list-item-subtitle>
+        <v-progress-linear
+          class="mt-1"
+          :active="loadingInfoWallet.show"
+          :indeterminate="loadingInfoWallet.show"
+          botton
+          color="white"
+          rounded
+          height="9"
+          ><strong class="caption font-italic font-weight-bold white--text">{{
+            loadingInfoWallet.text
+          }}</strong>
+        </v-progress-linear>
       </v-list-item-content>
     </v-list-item>
+    <!-- <v-sheet color="sky" class="px-3 pt-3 pb-3">
+      <v-boilerplate class="mb-6" type="article, actions"></v-boilerplate>
+      <v-skeleton-loader
+        color="sky"
+        tile="true"
+        class="mx-auto"
+        max-width="300"
+        type="list-item-three-line"
+      ></v-skeleton-loader>
+    </v-sheet> -->
+    <!-- <v-sheet color="sky">
+      <v-skeleton-loader
+        ref="skeleton"
+        type="list-item-three-line"
+        tile="true"
+        class="mx-auto"
+        color="grey sky"
+      ></v-skeleton-loader>
+    </v-sheet> -->
     <v-divider class="mt-1 mr-4 ml-4 white" />
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 export default {
   data: () => {
     return {
       theme: 'light',
       nameMosaic: '',
+      mosaicLength: [],
       usd: null,
-      usdValue: ''
+      usdValue: '',
+      loading: true
     }
   },
   computed: {
     ...mapGetters('walletStore', ['nameCurrentWallet']),
+    ...mapState(['loadingInfoWallet']),
     getTotalBalance () {
       const vestedBalance = this.$generalService.getDataPart(
         this.totalBalance(),
@@ -53,7 +87,7 @@ export default {
       return this.usdValue
     },
     getMosaicsListLength () {
-      return this.$store.getters['mosaicStore/mosaics'].length
+      return `Others Mosaics: ${this.mosaicLengthFunc()}`
     }
   },
   methods: {
@@ -74,6 +108,10 @@ export default {
         this.usdValue = 0
       }
       return this.usdValue
+    },
+    mosaicLengthFunc () {
+      this.mosaicLength = this.$store.getters['mosaicStore/othersMosaics'](this.$environment.mosaic.id)
+      return this.mosaicLength.length
     }
   },
   beforeMount () {
