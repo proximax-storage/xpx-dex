@@ -6,6 +6,7 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import { GeneralService } from './services/general'
 import { BlockchainProvider } from './services/blockchain-provider'
+import { DataBaseProvider } from './services/dataBase-provider'
 import { StorageService } from './services/storage'
 import axios from 'axios'
 import VueClipboard from 'vue-clipboard2'
@@ -42,6 +43,10 @@ const configIntegration = async function () {
       environment.connectionNodes.protocol,
       environment.connectionNodes.networkType,
       environment.coingecko
+    )
+    Vue.prototype.$dataBaseProvider = new DataBaseProvider(
+      environment.dataBase.host,
+      environment.dataBase.port
     )
     new Vue({
       router,

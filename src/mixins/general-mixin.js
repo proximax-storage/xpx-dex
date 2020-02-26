@@ -72,6 +72,17 @@ export default {
               this.$blockchainProvider.isValidPrivateKey(v) || 'Private key must be Hexadecimal'
           }
         },
+        asset: {
+          label: 'Asset',
+          icon: 'icon-amount-green-16h-proximax-sirius-wallet.svg',
+          min: 3,
+          max: 18,
+          rules: {
+            required: v => !!v || 'Asset is required',
+            min: v => (v && v.length >= 3) || 'Asset must be less than 3 characters',
+            max: v => (v && v.length <= 18) || 'Asset must be a maximum of 18 characters'
+          }
+        },
         wallet: {
           label: 'Wallet',
           icon: 'icon-private-key-green-16h-proximax-sirius-wallet.svg',

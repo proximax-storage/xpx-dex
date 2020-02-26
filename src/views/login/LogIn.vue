@@ -142,7 +142,7 @@ export default {
             this.sendingForm = false
             this.SHOW_LOADING(false)
             this.LOGIN(wallet)
-            this.$router.push('dashboard')
+            this.$router.push('searchOfferts')
           }, 500)
         } else {
           this.clear()

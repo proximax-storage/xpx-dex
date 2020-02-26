@@ -25,7 +25,7 @@ export default new Vuetify({
         pin: '604CC0', //
         dim: '#00B938',
         sky: '062B39',
-        leve: '#F4F4F4', // antes  F4F4F4
+        leve: '#F4F4F4', // antes  F4F4F4  #00B938
         leveint: 'FFF',
         leveif: 'EEEEEE',
         inputStyle: '1C82A9'

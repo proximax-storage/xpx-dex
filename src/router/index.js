@@ -7,6 +7,22 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
+    name: 'Search Offerts ',
+    component: () =>
+      import(/* webpackChunkName: "searchOfferts" */ '../views/searchOffers/TypeSearchOffers.vue'),
+    meta: {
+    }
+  },
+  {
+    path: '/searchOfferts',
+    name: 'Search Offerts ',
+    component: () =>
+      import(/* webpackChunkName: "searchOfferts" */ '../views/searchOffers/TypeSearchOffers.vue'),
+    meta: {
+    }
+  },
+  {
+    path: '/home',
     name: 'home',
     component: () => import(/* webpackChunkName: "Home" */ '../views/Home.vue'),
     meta: {
@@ -55,7 +71,8 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: () => import(/* webpackChunkName: "SelectTypeSignup" */ '../views/dashboard/dashboard.vue'),
+    component: () =>
+      import(/* webpackChunkName: "SelectTypeSignup" */ '../views/dashboard/dashboard.vue'),
     meta: {
       requiresAuth: true,
       hideMenu: false

@@ -4,6 +4,12 @@
   "pseudonymApp": "dex-wallet",
   "environment": {
     "TESTNET": {
+      "dataBase": {
+        "name":"dex-wallet-db",
+        "password":"qazwsxedc",
+        "host":"localhost",
+        "port":28015
+      },
       "keyLocalStore": {
         "nodeStorage": "dex-nodes"
       },
@@ -43,6 +49,12 @@
       "version": "0.4.13"
     },
     "MAINNET": {
+      "dataBase": {
+        "name":"dex-wallet-db",
+        "password":"qazwsxedc",
+        "host":"192.168.3.242",
+        "port":"32773"
+      },
       "keyLocalStore": {
         "nodeStorage": "dex-nodes"
       },
@@ -91,6 +103,12 @@
       "version": "0.0.1"
     },
     "PRIVATE": {
+      "dataBase": {
+        "name":"dex-wallet-db",
+        "password":"qazwsxedc",
+        "host":"192.168.3.242",
+        "port":"32773"
+      },
       "keyLocalStore": {
         "nodeStorage": "dex-nodes"
       },
