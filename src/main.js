@@ -6,16 +6,33 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import { GeneralService } from './services/general'
 import { BlockchainProvider } from './services/blockchain-provider'
-import { DataBaseProvider } from './services/dataBase-provider'
+// import { DataBaseProvider } from './services/dataBase-provider'
 import { StorageService } from './services/storage'
 import axios from 'axios'
 import VueClipboard from 'vue-clipboard2'
 import VueLodash from 'vue-lodash'
+import VueSocketIO from 'vue-socket.io'
+// import VueSSE from 'vue-sse'
 Vue.config.productionTip = false
 // Vue.use(axios)
 const options = { name: 'lodash' } // customize the way you want to call it
-Vue.use(VueLodash, options)
 Vue.use(VueClipboard)
+Vue.use(VueLodash, options)
+Vue.use(
+  new VueSocketIO({
+    debug: true,
+    connection: 'http://localhost:3700',
+    vuex: {
+      store,
+      actionPrefix: 'SOCKET_',
+      mutationPrefix: 'SOCKET_'
+    },
+    options: {
+      path: ''
+    } // Optional options
+  })
+)
+// Vue.use(VueSSE)
 Vue.filter('toCurrency', function (value) {
   if (typeof value !== 'number') {
     return value
@@ -44,10 +61,10 @@ const configIntegration = async function () {
       environment.connectionNodes.networkType,
       environment.coingecko
     )
-    Vue.prototype.$dataBaseProvider = new DataBaseProvider(
-      environment.dataBase.host,
-      environment.dataBase.port
-    )
+    // Vue.prototype.$dataBaseProvider = new DataBaseProvider(
+    //   environment.dataBase.host,
+    //   environment.dataBase.port
+    // )
     new Vue({
       router,
       store,

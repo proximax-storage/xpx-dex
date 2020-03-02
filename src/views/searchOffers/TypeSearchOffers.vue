@@ -108,12 +108,75 @@ export default {
     active: null,
     configForm: null,
     asset: null,
-    inputStyle: 'inputStyle'
+    inputStyle: 'inputStyle',
+    msgServer: null
   }),
+  sockets: {
+    connect: function () {
+      console.log('socket connected')
+      this.sockets.subscribe('chat_message', data => {
+        console.log('data', data)
+        this.msg = data.message
+      })
+    },
+    disconnect: function () {
+      console.log('server disconnected')
+      this.sockets.unsubscribe('chat_message')
+    },
+    customEmit: function (data) {
+      console.log(
+        'this method was fired by the socket server. eg: io.emit("customEmit", data)'
+      )
+    }
+  },
   methods: {
     send () {
       console.log('active', this.active)
     }
+  },
+  // mounted () {
+  //   // this.$sse('/your-events-endpoint', { withCredentials: true })
+  //   this.$sse('http://localhost:3500/offertTx', { format: 'json' }) // or { format: 'plain' }
+  //     .then(sse => {
+  //       // Store SSE object at a higher scope
+  //       this.msgServer = sse
+  //       // Catch any errors (ie. lost connections, etc.)
+  //       sse.onError(e => {
+  //         console.error('lost connection; giving up!', e)
+  //         // This is purely for example; EventSource will automatically
+  //         // attempt to reconnect indefinitely, with no action needed
+  //         // on your part to resubscribe to events once (if) reconnected
+  //         sse.close()
+  //       })
+  //       // Listen for messages based on their event (in this case, "chat")
+  //       sse.subscribe('message', (message, rawEvent) => {
+  //         console.log('message', message)
+  //       })
+
+  //       // Unsubscribes from event-less messages after 7 seconds
+  //       // setTimeout(() => {
+  //       //   sse.unsubscribe('message')
+
+  //       //   console.log('Stopped listening to event-less messages!')
+  //       // }, 7000)
+
+  //       // Unsubscribes from chat messages after 7 seconds
+  //       // setTimeout(() => {
+  //       //   sse.unsubscribe('chat')
+
+  //       //   console.log('Stopped listening to chat messages!')
+  //       // }, 14000)
+  //     })
+  //     .catch(err => {
+  //       // When this error is caught, it means the initial connection to the
+  //       // events server failed.  No automatic attempts to reconnect will be made.
+  //       console.error('Failed to connect to server', err)
+  //     })
+  // },
+  beforeDestroy () {
+    // Make sure to close the connection with the events server
+    // when the component is destroyed, or we'll have ghost connections!
+    this.msgServer.close()
   },
   beforeMount () {
     this.configForm = this.getConfigForm()
