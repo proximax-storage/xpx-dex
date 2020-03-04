@@ -7,25 +7,24 @@ const app = express()
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 
-// connect rethinkdb module
+// Connect rethinkdb module
 DB.connect().then(successMessage => {
-  // getAllOffertTx()
   changesTable()
 })
-// connect socket and channel
-io.on('connection', socket => {
-  // get change
 
+// Connect socket and channel
+io.on('connection', socket => {
+  // CHANNELS
   Log.info(`   >> socket user connected`)
   socket.on('disconnect', () => {
     Log.info(`   >> socket user disconnected'`)
   })
-  // CHANNELS
   socket.on('getOffertsTx', msg => {
     getAllOffertTx()
   })
 })
-// listen http
+
+// Listen http
 app.use(express.static(path.join(__dirname, '../public'))) // use static dir
 app.set('port', process.env.PORT || 3500) // set port
 http.listen(app.get('port'), () => {
@@ -33,18 +32,17 @@ http.listen(app.get('port'), () => {
 })
 
 // ################ queries rethinkdb #############
-
 function changesTable () {
   queries.changesTable(null).then(cursor => {
     cursor.each((err, change) => {
       if (err) throw err
       if (change['new_val'] && change['old_val'] === null) {
-        //   // INSERT
+        // INSERT
         console.log('==> Isert')
         io.emit('SET_NEW_OFFERS', change['new_val'])
       } else if (change['old_val'] && change['new_val'] === null) {
         // DELETE
-        console.log('   ==> Delete')
+        console.log('==> Delete')
         io.emit('SET_DELETE_OFFERS', change['old_val'])
       } else if (change['old_val'] && change['ne&&w_val']) {
         // UPDATE
@@ -59,7 +57,6 @@ function getAllOffertTx () {
     console.log('==> get all offert tx')
     cursor.toArray((err, result) => {
       if (err) throw err
-      // console.log('==> get all offert result', JSON.stringify(result))
       io.emit('SET_OFFERS', result)
     })
   })

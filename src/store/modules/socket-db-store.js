@@ -9,7 +9,7 @@ export const socketDbStore = {
       state.offersTx = data
     },
     SOCKET_SET_NEW_OFFERS (state, data) {
-      console.log('SOCKET_SET_NEW_OFFERS', data)
+      state.offersTx.push(data)
     }
   },
   getters: { offersTx: state => state.offersTx },
