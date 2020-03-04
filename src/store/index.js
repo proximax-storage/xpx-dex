@@ -6,9 +6,11 @@ import { appCoreStore } from './modules/app-core-store'
 import { namespaceStore } from './modules/namespace-store'
 import { nodeStore } from './modules/node-store'
 import { mosaicStore } from './modules/mosaic-store'
+import { socketDbStore } from './modules/socket-db-store'
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
+    count: null,
     configInfo: null,
     showMenu: true,
     overlay: false,
@@ -52,6 +54,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    SOCKET_decrement: ({ commit, state }, params) => {
+      params.io.emit('decrement', params.data)
+    },
     showMSG ({ commit }, data) {
       commit('SHOW_SNACKBAR', data)
     },
@@ -65,6 +70,7 @@ export default new Vuex.Store({
     appCoreStore,
     nodeStore,
     namespaceStore,
-    mosaicStore
+    mosaicStore,
+    socketDbStore
   }
 })

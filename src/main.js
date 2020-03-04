@@ -20,16 +20,18 @@ Vue.use(VueClipboard)
 Vue.use(VueLodash, options)
 Vue.use(
   new VueSocketIO({
-    debug: true,
-    connection: 'http://localhost:3700',
+    debug: false,
+    connection: 'http://localhost:3500',
     vuex: {
       store,
       actionPrefix: 'SOCKET_',
       mutationPrefix: 'SOCKET_'
     },
     options: {
-      path: ''
-    } // Optional options
+      path: '',
+      transports: ['websocket']
+    },
+    transports: ['websocket']
   })
 )
 // Vue.use(VueSSE)

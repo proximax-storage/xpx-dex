@@ -93,8 +93,13 @@
               ]"
             ></v-text-field>
           </v-col>
-          <v-col cols="4">hola 2 </v-col>
-          <v-col cols="4">hola 3 </v-col></v-row
+          <v-col cols="4">
+            <div id="app">
+              <input type="text" v-model="myVar" />
+              <button @click="clickButton('hola vale')">Ping Server</button>
+            </div>
+          </v-col>
+          <v-col cols="4">{{getOffers}} </v-col></v-row
         >
       </v-col>
     </v-row>
@@ -105,6 +110,7 @@ import generalMixins from '../../mixins/general-mixin'
 export default {
   mixins: [generalMixins],
   data: () => ({
+    myVar: '',
     active: null,
     configForm: null,
     asset: null,
@@ -112,71 +118,30 @@ export default {
     msgServer: null
   }),
   sockets: {
-    connect: function () {
-      console.log('socket connected')
-      this.sockets.subscribe('chat_message', data => {
-        console.log('data', data)
-        this.msg = data.message
-      })
-    },
+    connect: function () {},
     disconnect: function () {
-      console.log('server disconnected')
-      this.sockets.unsubscribe('chat_message')
-    },
-    customEmit: function (data) {
-      console.log(
-        'this method was fired by the socket server. eg: io.emit("customEmit", data)'
-      )
+      this.$socket.close()
+    }
+  },
+  computed: {
+    getOffers () {
+      return this.$store.getters['socketDbStore/offersTx']
     }
   },
   methods: {
     send () {
       console.log('active', this.active)
+    },
+    clickButton: function (data) {
+      this.$store.dispatch('socketDbStore/emiterlik', { io: this.$socket, data: null })
     }
   },
-  // mounted () {
-  //   // this.$sse('/your-events-endpoint', { withCredentials: true })
-  //   this.$sse('http://localhost:3500/offertTx', { format: 'json' }) // or { format: 'plain' }
-  //     .then(sse => {
-  //       // Store SSE object at a higher scope
-  //       this.msgServer = sse
-  //       // Catch any errors (ie. lost connections, etc.)
-  //       sse.onError(e => {
-  //         console.error('lost connection; giving up!', e)
-  //         // This is purely for example; EventSource will automatically
-  //         // attempt to reconnect indefinitely, with no action needed
-  //         // on your part to resubscribe to events once (if) reconnected
-  //         sse.close()
-  //       })
-  //       // Listen for messages based on their event (in this case, "chat")
-  //       sse.subscribe('message', (message, rawEvent) => {
-  //         console.log('message', message)
-  //       })
-
-  //       // Unsubscribes from event-less messages after 7 seconds
-  //       // setTimeout(() => {
-  //       //   sse.unsubscribe('message')
-
-  //       //   console.log('Stopped listening to event-less messages!')
-  //       // }, 7000)
-
-  //       // Unsubscribes from chat messages after 7 seconds
-  //       // setTimeout(() => {
-  //       //   sse.unsubscribe('chat')
-
-  //       //   console.log('Stopped listening to chat messages!')
-  //       // }, 14000)
-  //     })
-  //     .catch(err => {
-  //       // When this error is caught, it means the initial connection to the
-  //       // events server failed.  No automatic attempts to reconnect will be made.
-  //       console.error('Failed to connect to server', err)
-  //     })
-  // },
   beforeDestroy () {
-    // Make sure to close the connection with the events server
-    // when the component is destroyed, or we'll have ghost connections!
-    this.msgServer.close()
+    this.socket.close()
+    this.sockets.unsubscribe('getOffertsTx')
+  },
+  mounted () {
+    this.$store.dispatch('socketDbStore/getOffertsTx', { io: this.$socket, data: null })
   },
   beforeMount () {
     this.configForm = this.getConfigForm()
