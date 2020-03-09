@@ -6,7 +6,8 @@ const Log = require('./lib/log')
 const app = express()
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
-
+const BlockchainProvider = require('./lib/blockchain-provider')
+const bl = new BlockchainProvider()
 // Connect rethinkdb module
 DB.connect().then(successMessage => {
   changesTable()
@@ -22,15 +23,16 @@ io.on('connection', socket => {
   socket.on('getOffertsTx', msg => {
     getAllOffertTx()
   })
+  socket.on('getMoisaicsInfo', msg => {
+    getMosaicInfo()
+  })
+  socket.on('insertNewOffers', data => {
+    insertOffert(data)
+  })
+  socket.on('insertMoisaicsInfo', data => {
+    insertMoisaicsInfo(data)
+  })
 })
-
-// Listen http
-app.use(express.static(path.join(__dirname, '../public'))) // use static dir
-app.set('port', process.env.PORT || 3500) // set port
-http.listen(app.get('port'), () => {
-  Log.info(`   >> listening on port ${app.get('port')}`)
-})
-
 // ################ queries rethinkdb #############
 function changesTable () {
   queries.changesTable(null).then(cursor => {
@@ -38,7 +40,7 @@ function changesTable () {
       if (err) throw err
       if (change['new_val'] && change['old_val'] === null) {
         // INSERT
-        console.log('==> Isert')
+        console.log('==> Insert')
         io.emit('SET_NEW_OFFERS', change['new_val'])
       } else if (change['old_val'] && change['new_val'] === null) {
         // DELETE
@@ -61,3 +63,47 @@ function getAllOffertTx () {
     })
   })
 }
+function getMosaicInfo () {
+  queries.getMosaicInfo(null).then(cursor => {
+    console.log('==> get mosaic info')
+    cursor.toArray((err, result) => {
+      if (err) throw err
+      io.emit('SET_MOSAIC_INFO', result)
+    })
+  })
+}
+function insertOffert (data) {
+  queries.insertOffert([data]).then(result => {
+    const dataMosaics = []
+    if (result['errors'] > 0) throw result['first_error']
+    if (result['inserted'] > 0) {
+      for (let index = 0; index < result['inserted']; index++) {
+        const element = result['changes'][index]
+        if (element['new_val']) {
+          for (let items of element['new_val'].offers) {
+            console.log('HEX', bl.getMosaicId(items.mosaicId).toHex())
+            dataMosaics.push({
+              mosaicId: bl.getMosaicId(items.mosaicId),
+              mosaicIdHex: bl.getMosaicId(items.mosaicId).toHex()
+            })
+            insertMoisaicsInfo(dataMosaics)
+          }
+        }
+      }
+    }
+    io.emit('RETURN_INSERT_OFFERT', result)
+  })
+}
+function insertMoisaicsInfo (data) {
+  queries.insertMoisaicsInfo(data).then(result => {
+    if (result['errors'] > 0) throw result['first_error']
+    io.emit('RETURN_INSERT_MOSAIC_INFO', result)
+  })
+}
+
+// Listen http
+app.use(express.static(path.join(__dirname, '../public'))) // use static dir
+app.set('port', process.env.PORT || 3500) // set port
+http.listen(app.get('port'), () => {
+  Log.info(`   >> listening on port ${app.get('port')}`)
+})

@@ -40,12 +40,12 @@
             <v-menu transition="slide-y-transition" bottom right offset-y max-width="200">
               <template v-slot:activator="{ on }">
                 <v-btn text small color="sky" v-on="on">
-                  <div v-if="loadingInfoWallet.show">
+                  <div v-if="loadingInfo">
                     <v-progress-circular indeterminate color="grey">
                       <v-icon> {{ item.icon }}</v-icon></v-progress-circular
                     >
                   </div>
-                  <div v-if="!loadingInfoWallet.show">
+                  <div v-if="!loadingInfo">
                     <v-icon> {{ item.icon }}</v-icon>
                   </div>
                   <!-- <div v-if="!responsive" class="font-weight-bold text-capitalize">
@@ -206,6 +206,11 @@ export default {
     ...mapState(['loadingInfoWallet']),
     getItemNav () {
       return this.buildItemNav()
+    },
+    loadingInfo () {
+      const value = this.loadingInfoWallet.type === 'mosaicsInfo' ? this.loadingInfoWallet.show : false
+      console.log('value', value)
+      return value
     }
   },
   methods: {

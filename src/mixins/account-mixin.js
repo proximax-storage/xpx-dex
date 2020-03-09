@@ -48,6 +48,7 @@ export default {
           })
           this.updateBalance()
           if (data.mosaicsId && data.mosaicsId.length > 0) {
+            console.log('mosaicde ', data.mosaicsId)
             this.searchInfoMosaics(data.mosaicsId)
           }
         })

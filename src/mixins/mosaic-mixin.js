@@ -1,10 +1,15 @@
+import { mapState } from 'vuex'
 export default {
+  computed: {
+    ...mapState('socketDbStore', ['newOffersTx'])
+  },
   methods: {
-    async searchInfoMosaics (mosaicsId) {
+    async searchInfoMosaics (mosaicsId, mosaicsInfOffer = false) {
+      const type = !mosaicsInfOffer ? 'mosaicsInfo' : 'mosaicsInfOffer'
       this.$store.dispatch('showLIW', {
         show: true,
         text: `Mosaics info`,
-        type: 'mosaicsInfo'
+        type: type
       })
       try {
         const mosaicsTosaved = []
@@ -24,7 +29,6 @@ export default {
           if (findMosaicsByNamespace.length > 0) {
             // busca los namespaceId de los mosaicos que no fueron encontrados
             const otherMosaics = await this.searchMosaicFromNamespace(findMosaicsByNamespace)
-            // console.log('otherMosaics', otherMosaics);
             otherMosaics.forEach(element => {
               mosaicsTosaved.push(element)
             })
@@ -53,12 +57,12 @@ export default {
               }
             })
           }
-
-          this.saveMosaicStorage(mosaicsTosaved)
+          if (!mosaicsInfOffer) this.saveMosaicStorage(mosaicsTosaved)
           return mosaicsTosaved
         }
       } catch (error) {
         console.error('Has ocurred a error with search mosaics', error)
+        return null
       }
     },
     async searchMosaicFromNamespace (findMosaicsByNamespace) {
@@ -118,7 +122,6 @@ export default {
       return mosaicsTosaved
     },
     async saveMosaicStorage (mosaicsTosaved) {
-      console.log('Mosaicos para guardar', mosaicsTosaved)
       if (mosaicsTosaved) {
         // let mosaicsStorage this.getMosaicsFromStorage();
         let mosaicsStorage = this.$store.getters['mosaicStore/mosaics']
@@ -144,7 +147,6 @@ export default {
                 } catch (error) {}
               }
             }
-
             // reemplazo la información del mosaico
             mosaicsStorage = mosaicsStorage.filter(
               x => this.$blockchainProvider.getMosaicId(x.idMosaic).toHex() !== mosaicIdToSaved

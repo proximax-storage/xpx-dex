@@ -54,9 +54,6 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    SOCKET_decrement: ({ commit, state }, params) => {
-      params.io.emit('decrement', params.data)
-    },
     showMSG ({ commit }, data) {
       commit('SHOW_SNACKBAR', data)
     },
