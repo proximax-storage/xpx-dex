@@ -1,34 +1,4 @@
 <template>
-  <!-- <v-tabs>
-    <v-tab>Item One</v-tab>
-    <v-tab>Item Two</v-tab>
-    <v-tab>Item Three</v-tab>
-  </v-tabs> -->
-  <!-- <v-container class="fill-height"> -->
-  <!-- <v-row justify="center" align="center">
-      <v-col cols="12">
-        <v-tabs grow  >
-          <v-tab color="red">
-            <v-col cols="6">
-              <v-row class="mx-auto">
-                <v-col justify="center" align="center">
-                  <span class="font-italic font-weight-bold headline">Buy</span>
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-tab>
-          <v-tab>
-            <v-col cols="6">
-              <v-row class="mx-auto">
-                <v-col justify="center" align="center">
-                  <span class="font-italic font-weight-bold headline">Sell</span></v-col
-                >
-              </v-row>
-            </v-col>
-          </v-tab>
-        </v-tabs>
-      </v-col>
-    </v-row> -->
   <v-container class="fill-height">
     <v-row justify="center" align="center">
       <v-col cols="12" class="mb-0  pb-0">
@@ -46,7 +16,6 @@
                     <v-scroll-y-transition>
                       <v-sheet height="4" tile :color="active ? 'dim' : 'grey lighten-2'">
                       </v-sheet>
-                      <!-- <v-divider :color="active ? 'primary' : ''" class="pt-1" /> -->
                     </v-scroll-y-transition>
                   </v-col>
                 </v-row>
@@ -62,60 +31,88 @@
                       </span></v-btn
                     >
                     <v-scroll-y-transition>
-                      <!-- <div :background-color="active ? 'primary' : 'pin'" > -->
-                      <!-- <v-divider :color="active ? 'primary' : ''" class="pt-1" /> -->
                       <v-sheet height="4" tile :color="active ? 'pin' : 'grey lighten-2'">
                       </v-sheet>
                       <!-- </div> -->
                     </v-scroll-y-transition>
                   </v-col>
                 </v-row>
-                <!-- <v-divider   :color="active ? 'primary' : 'grey lighten-4'" class="pt-1" /> -->
               </v-item>
             </v-col>
           </v-row>
         </v-item-group>
       </v-col>
       <v-col cols="10" class="pt-0 mt-0">
-        <v-row class="mx-auto">
-          <v-col class="pt-0 mt-0" cols="4">
-            {{ asset }}
-            <v-select
-              v-model="asset"
-              :items="assets"
-              item-text="text"
-              item-value="mosaicIdHex"
-              attach
-              dense
-              :rules="[
-                configForm.assets.rules.required,
-                configForm.assets.rules.min,
-                configForm.assets.rules.max
-              ]"
-              :color="inputStyle"
-              label="Select assets"
-            ></v-select>
-            <!-- <v-text-field
-              v-model.trim="assets"
-              :label="configForm.asset.label"
-              :minlength="configForm.asset.min"
-              :maxlength="configForm.asset.max"
-              :counter="configForm.asset.max"
-              :color="inputStyle"
-              :rules="[
-                configForm.asset.rules.required,
-                configForm.asset.rules.min,
-                configForm.asset.rules.max
-              ]"
-            ></v-text-field> -->
-          </v-col>
-          <v-col cols="4">
-            <div id="app">
-              <button @click="clickButton()">Insert data</button>
-            </div>
-          </v-col>
-          <v-col cols="4">{{ assets.text }}</v-col>
-        </v-row>
+        <v-form v-model="valid" ref="form">
+          <v-row class="mx-auto">
+            <v-col class="pt-0 mt-0" cols="4">
+              <v-select
+                class="pt-1"
+                v-model="form.asset"
+                :items="assets"
+                @change="changeAssetId($event)"
+                item-text="text"
+                item-value="mosaicIdHex"
+                attach
+                dense
+                :loading="searchAssets"
+                :rules="[
+                  configForm.assets.rules.required,
+                  configForm.assets.rules.min,
+                  configForm.assets.rules.max
+                ]"
+                :color="inputStyle"
+                label="Select assets"
+              ></v-select>
+            </v-col>
+            <v-col class="pt-0 mt-0" cols="4">
+              <v-text-field
+                class="pt-0 text-right"
+                reverse
+                @keyup="validateQuantityAmount()"
+                v-model="form.amount"
+                v-money="configMoneyAsset"
+                :label="configForm.amount.label"
+                :minlength="configForm.amount.min"
+                :maxlength="configForm.amount.max"
+                :counter="configForm.amount.max"
+                :color="inputStyle"
+                :rules="[
+                  configForm.amount.rules.required,
+                  configForm.amount.rules.min,
+                  configForm.amount.rules.max,
+                  isValidateQuantityAmount
+                ]"
+              ></v-text-field>
+            </v-col>
+            <v-col class="pt-0 mt-0" cols="4">
+              <v-text-field
+                class="pt-0 text-align-field-right"
+                reverse
+                @keyup="validateQuantityBidPrice()"
+                v-model="form.bidPrice"
+                v-money="configMoney"
+                :label="configForm.bidPrice.label"
+                :minlength="configForm.bidPrice.min"
+                :maxlength="configForm.bidPrice.max"
+                :counter="configForm.bidPrice.max"
+                :color="inputStyle"
+                :rules="[
+                  configForm.bidPrice.rules.required,
+                  configForm.bidPrice.rules.min,
+                  configForm.bidPrice.rules.max,
+                  isValidateQuantityBidPrice
+                ]"
+              ></v-text-field>
+              -->
+              <!-- <pre><pre>data: {{$data | json 2}}</pre></p> -->
+            </v-col>
+          </v-row>
+        </v-form>
+      </v-col>
+      <v-col cols="10">
+        <!-- Buttons -->
+        <custom-buttons @action="send" :arrayBtn="getArrayBtn[0]"></custom-buttons>
       </v-col>
     </v-row>
   </v-container>
@@ -127,12 +124,26 @@ import { mapState, mapGetters } from 'vuex'
 export default {
   mixins: [generalMixins, mosaicMixins],
   data: () => ({
-    myVar: '',
+    form: {
+      asset: null,
+      amount: null,
+      bidPrice: null
+    },
+    arrayBtn: null,
+    // amount: null,
     active: null,
     configForm: null,
-    asset: null,
+    configMoney: null,
+    configMoneyAsset: null,
+    // asset: null,
+    bidPrice: null,
     inputStyle: 'inputStyle',
-    msgServer: null
+    idHex: null,
+    searchAssets: true,
+    sendingForm: false,
+    valid: false,
+    isValidateQuantityBidPrice: true,
+    isValidateQuantityAmount: true
   }),
   sockets: {
     connect: function () {},
@@ -140,9 +151,9 @@ export default {
       this.$socket.close()
     }
   },
-  // watch: {
-
-  // },
+  components: {
+    'custom-buttons': () => import('@/components/shared/Buttons')
+  },
   computed: {
     ...mapState('socketDbStore', ['offersTx']),
     ...mapGetters('socketDbStore', ['mosaicsInfOffer']),
@@ -153,6 +164,15 @@ export default {
       set (value) {
         this.$store.commit('socketDbStore/EVENT_SET_MOSAIC_INFO', value)
       }
+    },
+    getArrayBtn () {
+      const arrayBtn = this.arrayBtn
+      arrayBtn[0]['lookForOffers'].disabled =
+        !this.valid ||
+        this.sendingForm ||
+        !this.validateZero([this.form.amount, this.form.bidPrice])
+      arrayBtn[0]['lookForOffers'].loading = this.sendingForm
+      return arrayBtn
     }
   },
   watch: {
@@ -162,9 +182,29 @@ export default {
   },
   methods: {
     send () {
-      console.log('active', this.offers)
+      console.log('active')
+      this.$router.push({ name: 'Offer Board', params: { form: this.form } })
 
       // this.SOCKET_SET_NEW_OFFERS({ nuevo: 'nuevo' })
+    },
+    changeAssetId (event) {
+      this.idHex = event
+      if (this.idHex) {
+        const data = this.$store.getters['socketDbStore/mosaicsInfOfferFromIdHex'](this.idHex)
+        this.configOtherMoneyAsset(data)
+      }
+    },
+    configOtherMoneyAsset (data) {
+      this.form.name = this.configMoneyAsset = data[0].mosaicInfo
+        ? {
+          decimal: '.',
+          thousands: ',',
+          prefix: '',
+          suffix: '',
+          precision: data[0].mosaicInfo[0].mosaicInfo.properties.divisibility,
+          masked: false
+        }
+        : this.getConfigMoney()
     },
     clickButton: function (data) {
       const valor = {
@@ -177,9 +217,8 @@ export default {
             cost: [100000, 0],
             duration: [500, 0],
             mosaicAmount: [4000000, 0],
-            // mosaicId: [3680968789, 666303677],
-            mosaicId: [2091572862, 1893890316],
-            // mosaicId: [1173232007, 1792145974],
+            mosaicId: [576066984, 189902527],
+            // mosaicId: [3212122209, 311218131],
             type: 0
           }
         ],
@@ -191,33 +230,13 @@ export default {
       }
       this.$store.dispatch('socketDbStore/insertNewOffers', { io: this.$socket, data: valor })
     },
-    async getInfoAssets (data) {
-      let cont = 0
-      if (data.length > 0) {
-        for (let item of data) {
-          if (item.mosaicsInfo === undefined) {
-            cont = cont + 1
-            const mosaicId = this.$blockchainProvider.getMosaicId(item.mosaicIdHex)
-            try {
-              item.mosaicsInfo = await this.searchInfoMosaics([mosaicId], true)
-            } catch (error) {
-              item.mosaicsInfo = ''
-            }
-          }
-        }
-        if (cont > 0) {
-          this.assets = JSON.parse(JSON.stringify(data))
-        }
-      }
-    },
     filtersAssets (data) {
       let valor = []
-      console.log('poll::', JSON.parse(JSON.stringify(data)))
       if (JSON.parse(JSON.stringify(data)).length > 0) {
         valor = data.map(item => {
-          if (item.mosaicsInfo !== null && item.mosaicsInfo !== undefined) {
-            if (item.mosaicsInfo[0].mosaicNames.names.length > 0) {
-              item.text = item.mosaicsInfo[0].mosaicNames.names[0].name
+          if (item.mosaicInfo !== null && item.mosaicInfo !== undefined) {
+            if (item.mosaicInfo[0].mosaicNames.names.length > 0) {
+              item.text = item.mosaicInfo[0].mosaicNames.names[0].name
             } else {
               item.text = item.mosaicIdHex
             }
@@ -227,7 +246,71 @@ export default {
           return item
         })
       }
+      this.changeAssetId(this.idHex)
       return valor
+    },
+    async getInfoAssets (data) {
+      let cont = 0
+      if (data.length > 0) {
+        for (let item of data) {
+          if (item.mosaicInfo === undefined) {
+            cont = cont + 1
+            const mosaicId = this.$blockchainProvider.getMosaicId(item.mosaicIdHex)
+            try {
+              item.mosaicInfo = await this.searchInfoMosaics([mosaicId], true)
+            } catch (error) {
+              item.mosaicInfo = ''
+            }
+          }
+        }
+        if (cont > 0) {
+          this.searchAssets = false
+          this.assets = JSON.parse(JSON.stringify(data))
+        }
+      }
+    },
+    validateQuantityAmount () {
+      let amount = null
+      try {
+        amount = parseFloat(this.form.amount.split(',').join(''))
+      } catch (error) {
+        amount = Number(this.form.amount)
+      }
+      if (amount === 0) {
+        this.isValidateQuantityAmount = 'Cannot enter amount zero'
+      } else {
+        this.isValidateQuantityAmount = true
+      }
+    },
+    validateQuantityBidPrice () {
+      let amount = null
+      try {
+        amount = parseFloat(this.form.bidPrice.split(',').join(''))
+      } catch (error) {
+        amount = Number(this.form.bidPrice)
+      }
+      if (amount === 0) {
+        this.isValidateQuantityBidPrice = 'Cannot enter amount zero'
+      } else {
+        this.isValidateQuantityBidPrice = true
+      }
+    },
+    validateZero (value = []) {
+      let valueR = true
+      for (let index = 0; index < value.length; index++) {
+        const item = value[index]
+        let amount = null
+        try {
+          amount = parseFloat(item.split(',').join(''))
+        } catch (error) {
+          amount = Number(item)
+        }
+        if (amount === 0) {
+          valueR = false
+          break
+        }
+      }
+      return valueR
     }
   },
   beforeDestroy () {
@@ -238,6 +321,13 @@ export default {
   },
   beforeMount () {
     this.configForm = this.getConfigForm()
+    this.configMoney = this.getConfigMoney()
+    this.configMoneyAsset = this.getConfigMoney()
+    this.arrayBtn = [
+      {
+        lookForOffers: this.typeButtons().lookForOffers
+      }
+    ]
   }
 }
 </script>

@@ -51,7 +51,10 @@ export const socketDbStore = {
       }
       return offers
     },
-    mosaicsInfOffer: state => state.mosaicsInfOffer
+    mosaicsInfOffer: state => state.mosaicsInfOffer,
+    mosaicsInfOfferFromIdHex: state => iDhex => {
+      return state.mosaicsInfOffer.filter(next => next.mosaicIdHex === iDhex)
+    }
   },
   actions: {
     getOffertsTx: ({ commit, state }, params) => {

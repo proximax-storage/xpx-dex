@@ -50,6 +50,16 @@ const routes = [
     }
   },
   {
+    path: '/offer-board',
+    name: 'Offer Board',
+    component: () =>
+      import(/* webpackChunkName: "SelectTypeSignup" */ '../views/offerBoard/OfferBoard.vue'),
+    meta: {
+      requiresNotAuth: true,
+      hideMenu: false
+    }
+  },
+  {
     path: '/create-from-privateKey',
     name: 'Create from private key',
     component: () =>

@@ -24,11 +24,22 @@ export default {
           label: 'Amount',
           icon: 'icon-amount-green-16h-proximax-sirius-wallet.svg',
           min: 3,
-          max: 30,
+          max: 20,
           rules: {
             required: v => !!v || 'Amount is required',
             min: v => (v && v.length >= 3) || 'Amount must be less than 3 characters',
-            max: v => (v && v.length <= 30) || 'Amount must be a maximum of 30 characters'
+            max: v => (v && v.length <= 20) || 'Amount must be a maximum of 20 characters'
+          }
+        },
+        bidPrice: {
+          label: 'BID Price (XPX)',
+          icon: 'icon-amount-green-16h-proximax-sirius-wallet.svg',
+          min: 3,
+          max: 20,
+          rules: {
+            required: v => !!v || 'Amount is required',
+            min: v => (v && v.length >= 3) || 'Amount must be less than 3 characters',
+            max: v => (v && v.length <= 20) || 'Amount must be a maximum of 20 characters'
           }
         },
         generalRules: {
@@ -122,6 +133,15 @@ export default {
     },
     typeButtons () {
       return {
+        lookForOffers: {
+          key: 'lookForOffers',
+          action: 'lookOffers',
+          disabled: false,
+          color: 'primary',
+          textColor: 'white--text',
+          loading: false,
+          text: 'Look for offers'
+        },
         clear: {
           key: 'clear',
           action: 'clear',
@@ -153,6 +173,17 @@ export default {
           class: 'primary--text'
         }
       ]
+    },
+    getConfigMoney (value = null) {
+      const money = {
+        decimal: '.',
+        thousands: ',',
+        prefix: '',
+        suffix: '',
+        precision: 6,
+        masked: false
+      }
+      return value || money
     }
   }
 }

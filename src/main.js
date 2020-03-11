@@ -12,7 +12,7 @@ import axios from 'axios'
 import VueClipboard from 'vue-clipboard2'
 import VueLodash from 'vue-lodash'
 import VueSocketIO from 'vue-socket.io'
-// import VueSSE from 'vue-sse'
+import money from 'v-money'
 Vue.config.productionTip = false
 // Vue.use(axios)
 const options = { name: 'lodash' } // customize the way you want to call it
@@ -34,7 +34,7 @@ Vue.use(
     transports: ['websocket']
   })
 )
-// Vue.use(VueSSE)
+Vue.use(money)
 Vue.filter('toCurrency', function (value) {
   if (typeof value !== 'number') {
     return value
