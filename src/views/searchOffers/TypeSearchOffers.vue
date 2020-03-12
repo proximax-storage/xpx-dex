@@ -2,7 +2,7 @@
   <v-container class="fill-height">
     <v-row justify="center" align="center">
       <v-col cols="12" class="mb-0  pb-0">
-        <v-item-group mandatory v-model="active">
+        <v-item-group mandatory v-model="form.active">
           <v-row>
             <v-col cols="6" class="mr-0 pr-0">
               <v-item v-slot:default="{ active, toggle }" value="buy">
@@ -33,7 +33,6 @@
                     <v-scroll-y-transition>
                       <v-sheet height="4" tile :color="active ? 'pin' : 'grey lighten-2'">
                       </v-sheet>
-                      <!-- </div> -->
                     </v-scroll-y-transition>
                   </v-col>
                 </v-row>
@@ -104,13 +103,12 @@
                   isValidateQuantityBidPrice
                 ]"
               ></v-text-field>
-              -->
-              <!-- <pre><pre>data: {{$data | json 2}}</pre></p> -->
             </v-col>
           </v-row>
         </v-form>
       </v-col>
       <v-col cols="10">
+        <!-- <button @click="clickButton('l')"> enviar </button> -->
         <!-- Buttons -->
         <custom-buttons @action="send" :arrayBtn="getArrayBtn[0]"></custom-buttons>
       </v-col>
@@ -127,15 +125,13 @@ export default {
     form: {
       asset: null,
       amount: null,
-      bidPrice: null
+      bidPrice: null,
+      active: null
     },
     arrayBtn: null,
-    // amount: null,
-    active: null,
     configForm: null,
     configMoney: null,
     configMoneyAsset: null,
-    // asset: null,
     bidPrice: null,
     inputStyle: 'inputStyle',
     idHex: null,
@@ -172,6 +168,7 @@ export default {
         this.sendingForm ||
         !this.validateZero([this.form.amount, this.form.bidPrice])
       arrayBtn[0]['lookForOffers'].loading = this.sendingForm
+      arrayBtn.align = 'center'
       return arrayBtn
     }
   },
@@ -182,9 +179,7 @@ export default {
   },
   methods: {
     send () {
-      console.log('active')
       this.$router.push({ name: 'Offer Board', params: { form: this.form } })
-
       // this.SOCKET_SET_NEW_OFFERS({ nuevo: 'nuevo' })
     },
     changeAssetId (event) {
@@ -195,7 +190,7 @@ export default {
       }
     },
     configOtherMoneyAsset (data) {
-      this.form.name = this.configMoneyAsset = data[0].mosaicInfo
+      this.configMoneyAsset = data[0].mosaicInfo
         ? {
           decimal: '.',
           thousands: ',',
@@ -294,23 +289,6 @@ export default {
       } else {
         this.isValidateQuantityBidPrice = true
       }
-    },
-    validateZero (value = []) {
-      let valueR = true
-      for (let index = 0; index < value.length; index++) {
-        const item = value[index]
-        let amount = null
-        try {
-          amount = parseFloat(item.split(',').join(''))
-        } catch (error) {
-          amount = Number(item)
-        }
-        if (amount === 0) {
-          valueR = false
-          break
-        }
-      }
-      return valueR
     }
   },
   beforeDestroy () {

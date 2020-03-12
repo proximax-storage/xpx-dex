@@ -1,5 +1,5 @@
 <template>
-  <v-row class="d-flex justify-center">
+  <v-row :class="`d-flex justify-${align}`">
     <template v-for="(item, key) of arrayBtn">
       <v-btn
         :loading="item.loading"
@@ -10,14 +10,15 @@
         :class="item.textColor"
         rounded
         @click="triggerClick(item.action)"
-      >{{item.text}}</v-btn>
+        >{{ item.text }}</v-btn
+      >
     </template>
   </v-row>
 </template>
 
 <script>
 export default {
-  props: ['arrayBtn'],
+  props: ['arrayBtn', 'align'],
   methods: {
     triggerClick (action) {
       this.$emit('action', action)
