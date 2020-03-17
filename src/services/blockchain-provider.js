@@ -18,7 +18,7 @@ import {
   NamespaceId,
   MosaicId
 } from 'tsjs-xpx-chain-sdk'
-
+import { ExchangeHttp } from 'tsjs-xpx-chain-sdk/dist/src/infrastructure/ExchangeHttp'
 import { GeneralService } from './general'
 
 class BlockchainProvider {
@@ -34,6 +34,7 @@ class BlockchainProvider {
     this.mosaicHttp = new MosaicHttp(this.url)
     this.namespaceHttp = new NamespaceHttp(this.url)
     this.transactionHttp = new TransactionHttp(this.url)
+    this.exchangeHttp = new ExchangeHttp(this.url)
     this.generalService = new GeneralService()
   }
 
@@ -213,6 +214,19 @@ class BlockchainProvider {
   getAccountInfo (address) {
     const adss = Address.createFromRawAddress(address)
     return this.accountHttp.getAccountInfo(adss)
+  }
+  /**
+   *
+   *
+   * @param {*} Idmosaic
+   * @param {*} type
+   * @returns
+   * @memberof BlockchainProvider
+   */
+  getExchangeOffersfromId (Idmosaic, type) {
+    console.log('tipe:', type)
+    const id = new MosaicId(Idmosaic)
+    return this.exchangeHttp.getExchangeOffers(type, id)
   }
 
   /**

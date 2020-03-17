@@ -6,7 +6,7 @@ const DB = {
   async connect () {
     try {
       Log.info('   >> Connecting to RethinkDB...')
-      const host = process.env.db_host || '192.168.3.242 ' // 192.168.3.242
+      const host = process.env.db_host || '192.168.1.69' // 192.168.3.242
       const port = process.env.db_port || 32769
       const db = process.env.db_name || 'dexWallet'
       const user = process.env.db_user || undefined

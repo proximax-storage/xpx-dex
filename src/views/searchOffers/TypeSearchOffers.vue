@@ -252,6 +252,7 @@ export default {
             cont = cont + 1
             const mosaicId = this.$blockchainProvider.getMosaicId(item.mosaicIdHex)
             try {
+              console.log('mosaicId', mosaicId)
               item.mosaicInfo = await this.searchInfoMosaics([mosaicId], true)
             } catch (error) {
               item.mosaicInfo = ''

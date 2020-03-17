@@ -28,6 +28,19 @@ class GeneralService {
     }
     return realAmount
   }
+  addZerosquantity (cant, amount = '0') {
+    const x = '0'
+    if (amount === '0') {
+      for (let index = 0; index < cant - 1; index++) {
+        amount += x
+      }
+    } else {
+      for (let index = 0; index < cant; index++) {
+        amount += x
+      }
+    }
+    return amount
+  }
 
   /**
    *
@@ -61,6 +74,9 @@ class GeneralService {
    * @memberof GeneralService
    */
   amountFormatter (amountParam, mosaic, manualDivisibility = 0) {
+    console.log('amountParam', amountParam)
+    console.log('mosaic', mosaic)
+    console.log('manualDivisibility', manualDivisibility)
     const divisibility =
       manualDivisibility === 0 ? mosaic.properties.divisibility : manualDivisibility
     const amountDivisibility = Number(amountParam / Math.pow(10, divisibility))
@@ -174,6 +190,36 @@ class GeneralService {
       part1: data.slice(0, data.length - cantPart),
       part2: data.slice(-cantPart)
     }
+  }
+  /**
+   *
+   *
+   * @param {string} quantity
+   * @returns
+   * @memberof GeneralService
+   */
+  quantityStringToInt (quantity, divisibility = 6) {
+    console.log('quantity', quantity)
+
+    let rQuantity = null
+    if (quantity !== '' && quantity !== null && Number(quantity) !== 0) {
+      const arrCifraQuantity = quantity
+        .toString()
+        .replace(/,/g, '')
+        .split('.')
+      let decimal = null
+      console.log('arrCifraQuantity:', arrCifraQuantity)
+      if (arrCifraQuantity.length < 2) {
+        decimal = this.addZerosquantity(divisibility)
+      } else {
+        const arrDecimals = arrCifraQuantity[1].split('')
+        console.log('arrDecimals')
+        decimal = this.addZerosquantity(divisibility - arrDecimals.length, arrCifraQuantity[1])
+      }
+      console.log('decimal:', decimal)
+      rQuantity = `${arrCifraQuantity[0]}${decimal}`
+    }
+    return Number(rQuantity)
   }
 }
 

@@ -17,7 +17,8 @@
       </v-col>
       <v-col clos="6"> Grafic</v-col>
     </v-row>
-    <search-filter :dataForm="dataAssets" />
+    <!-- <search-filter @action="lookAgain" :dataForm="dataAssets" /> -->
+    <data-table :dataAssets="dataAssets" />
   </div>
 </template>
 <script>
@@ -40,6 +41,7 @@ export default {
       let nameMosaics = null
       if (this.$route.params['form']) {
         const mosaic = this.mosaicsInfOfferFromIdHex(this.$route.params['form'].asset)
+        console.log('mosaicTex::', mosaic[0])
         if (mosaic[0].mosaicInfo !== null && mosaic[0].mosaicInfo !== undefined) {
           nameMosaics =
             mosaic[0].mosaicInfo[0].mosaicNames.names.length > 0
@@ -53,7 +55,8 @@ export default {
     }
   },
   components: {
-    'search-filter': () => import('@/components/offerBoard/SearchFilter')
+    // 'search-filter': () => import('@/components/offerBoard/SearchFilter'),
+    'data-table': () => import('@/components/offerBoard/dataTable')
   },
   methods: {
     configOtherMoneyAsset (data) {
