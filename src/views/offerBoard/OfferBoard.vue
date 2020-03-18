@@ -1,24 +1,11 @@
 <template>
   <div class="pa-3">
+    <info-Mosaic :name="nameMosaicInfo" />
+    <search-filter @lookAgainf="lookAgainf" :dataForm="dataAssets" />
     <v-row>
-      <v-col cols="6">
-        <div class="headline font-weight-regular  text-left primary--text">
-          <img
-            style="vertical-align: middle"
-            :src="require(`@/assets/img/${theme}/icon-mosaic.svg`)"
-            width="25"
-            height="25"
-          />
-          {{ nameMosaicInfo }}
-        </div>
-        <div class="font-weight-regular pt-1" style="font-size: 0.7rem;">
-          Avg Price: 0.00032 pxp
-        </div>
-      </v-col>
-      <v-col clos="6"> Grafic</v-col>
+      <data-table :dataAssets="dataAssets" />
+      <card-newOffert :dataAssets="dataAssets"/>
     </v-row>
-    <!-- <search-filter @action="lookAgain" :dataForm="dataAssets" /> -->
-    <data-table :dataAssets="dataAssets" />
   </div>
 </template>
 <script>
@@ -26,8 +13,8 @@ import { mapGetters } from 'vuex'
 export default {
   data: () => {
     return {
-      theme: 'light',
-      dataAssets: null
+      dataAssets: null,
+      mosaic: null
     }
   },
   computed: {
@@ -38,27 +25,31 @@ export default {
       }
     },
     nameMosaicInfo () {
-      let nameMosaics = null
-      if (this.$route.params['form']) {
-        const mosaic = this.mosaicsInfOfferFromIdHex(this.$route.params['form'].asset)
-        console.log('mosaicTex::', mosaic[0])
-        if (mosaic[0].mosaicInfo !== null && mosaic[0].mosaicInfo !== undefined) {
-          nameMosaics =
-            mosaic[0].mosaicInfo[0].mosaicNames.names.length > 0
-              ? mosaic[0].mosaicInfo[0].mosaicNames.names[0].name
-              : mosaic[0].text
-        }
-
-        this.setSearch(this.$route.params['form'], mosaic)
-      }
-      return nameMosaics
+      return this.nameMosaic(this.$route.params['form'])
     }
   },
   components: {
-    // 'search-filter': () => import('@/components/offerBoard/SearchFilter'),
+    'info-Mosaic': () => import('@/components/offerBoard/InfoMosaic'),
+    'search-filter': () => import('@/components/offerBoard/SearchFilter'),
+    'card-newOffert': () => import('@/components/shared/CardNewOffert'),
     'data-table': () => import('@/components/offerBoard/dataTable')
   },
   methods: {
+    nameMosaic (form) {
+      let nameMosaics = null
+      if (form) {
+        this.mosaic = this.mosaicsInfOfferFromIdHex(this.$route.params['form'].asset)
+        if (this.mosaic[0].mosaicInfo !== null && this.mosaic[0].mosaicInfo !== undefined) {
+          nameMosaics =
+            this.mosaic[0].mosaicInfo[0].mosaicNames.names.length > 0
+              ? this.mosaic[0].mosaicInfo[0].mosaicNames.names[0].name
+              : this.mosaic[0].text
+        }
+
+        this.setSearch(form, this.mosaic)
+      }
+      return nameMosaics
+    },
     configOtherMoneyAsset (data) {
       const configMoney = {
         decimal: '.',
@@ -80,6 +71,11 @@ export default {
       } else {
         this.$router.push({ path: '/searchOfferts' })
       }
+    },
+    lookAgainf (value) {
+      const form = this.$route.params['form']
+      form.amount = value.amount
+      this.setSearch(form, this.mosaic)
     }
   }
 }

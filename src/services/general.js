@@ -74,9 +74,6 @@ class GeneralService {
    * @memberof GeneralService
    */
   amountFormatter (amountParam, mosaic, manualDivisibility = 0) {
-    console.log('amountParam', amountParam)
-    console.log('mosaic', mosaic)
-    console.log('manualDivisibility', manualDivisibility)
     const divisibility =
       manualDivisibility === 0 ? mosaic.properties.divisibility : manualDivisibility
     const amountDivisibility = Number(amountParam / Math.pow(10, divisibility))
@@ -199,8 +196,6 @@ class GeneralService {
    * @memberof GeneralService
    */
   quantityStringToInt (quantity, divisibility = 6) {
-    console.log('quantity', quantity)
-
     let rQuantity = null
     if (quantity !== '' && quantity !== null && Number(quantity) !== 0) {
       const arrCifraQuantity = quantity
@@ -208,15 +203,12 @@ class GeneralService {
         .replace(/,/g, '')
         .split('.')
       let decimal = null
-      console.log('arrCifraQuantity:', arrCifraQuantity)
       if (arrCifraQuantity.length < 2) {
         decimal = this.addZerosquantity(divisibility)
       } else {
         const arrDecimals = arrCifraQuantity[1].split('')
-        console.log('arrDecimals')
         decimal = this.addZerosquantity(divisibility - arrDecimals.length, arrCifraQuantity[1])
       }
-      console.log('decimal:', decimal)
       rQuantity = `${arrCifraQuantity[0]}${decimal}`
     }
     return Number(rQuantity)

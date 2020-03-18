@@ -62,13 +62,6 @@
             </tr>
           </tbody>
         </template>
-        <div
-          v-if="
-            commentsToShow < resultsOfferFilter.length || resultsOfferFilter.length > commentsToShow
-          "
-        >
-          <v-chip @click="commentsToShow += 1">show more resultsOfferFilter</v-chip>
-        </div>
       </v-simple-table>
     </v-col>
     <v-col cols="12" class="d-flex justify-center align-center "
@@ -77,7 +70,7 @@
         v-if="
           commentsToShow < resultsOfferFilter.length || resultsOfferFilter.length > commentsToShow
         "
-        @click="commentsToShow += 1"
+        @click="commentsToShow += 4"
       >
         Load more</a
       >
@@ -89,12 +82,11 @@ export default {
   props: ['resultsOfferFilter', 'divisibility', 'type'],
   data: () => ({
     typeOfferColor: null,
-    commentsToShow: 1
+    commentsToShow: 4
   }),
   watch: {
     resultsOfferFilter: function (newExrDay) {
-      console.log('estoy aqui vale ')
-      this.commentsToShow = 1
+      this.commentsToShow = 4
     }
   },
   created () {
