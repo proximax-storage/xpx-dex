@@ -5,28 +5,19 @@
         <template v-slot:default>
           <thead>
             <tr style="border:0">
-              <th style="border:0" class="text-left subtitle-1 font-weight-bold">Amount</th>
               <th style="border:0" class="text-left subtitle-1 font-weight-bold">
                 Initial amount
               </th>
+              <th style="border:0" class="text-left subtitle-1 font-weight-bold">Amount</th>
+              <th style="border:0" class="text-left subtitle-1 font-weight-bold">price</th>
               <th style="border:0" class="text-left subtitle-1 font-weight-bold">
                 Total (XPX)
               </th>
-              <th style="border:0" class="text-left subtitle-1 font-weight-bold">price</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(n, commentIndex) in commentsToShow" :key="commentIndex">
               <template v-if="commentIndex < resultsOfferFilter.length">
-                <td class="pr-3 pl-3" style="border:0">
-                  {{
-                    $generalService.amountFormatter(
-                      resultsOfferFilter[commentIndex].amount.compact(),
-                      '',
-                      divisibility
-                    )
-                  }}
-                </td>
                 <td class="pr-3 pl-3" style="border:0">
                   {{
                     $generalService.amountFormatter(
@@ -39,15 +30,25 @@
                 <td class="pr-3 pl-3" style="border:0">
                   {{
                     $generalService.amountFormatter(
-                      resultsOfferFilter[commentIndex].initialCost.compact(),
+                      resultsOfferFilter[commentIndex].amount.compact(),
                       '',
-                      6
+                      divisibility
                     )
                   }}
                 </td>
                 <td class="pr-3 pl-3" style="border:0">
                   {{ resultsOfferFilter[commentIndex].price }}
                 </td>
+                <td class="pr-3 pl-3" style="border:0">
+                  {{
+                    $generalService.amountFormatter(
+                      resultsOfferFilter[commentIndex].priceForAmount,
+                      '',
+                      6
+                    )
+                  }}
+                </td>
+
                 <td class="pr-3" align="center" style="border:0">
                   <v-chip
                     :color="typeOfferColor"

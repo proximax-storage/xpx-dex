@@ -7,6 +7,7 @@ import { namespaceStore } from './modules/namespace-store'
 import { nodeStore } from './modules/node-store'
 import { mosaicStore } from './modules/mosaic-store'
 import { socketDbStore } from './modules/socket-db-store'
+import { mosaicExchange } from './modules/mosaic-exchange'
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
@@ -68,6 +69,7 @@ export default new Vuex.Store({
     nodeStore,
     namespaceStore,
     mosaicStore,
-    socketDbStore
+    socketDbStore,
+    mosaicExchange
   }
 })

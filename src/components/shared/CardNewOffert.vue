@@ -1,27 +1,32 @@
 <template>
-  <v-col cols="4" class="">
-    <v-row>
-      <v-col cols="12">
-        <v-card elevation="0" color="leve">
-          <v-card-title class="headline">None of these offers is useful for you?</v-card-title>
+  <v-row>
+    <v-col cols="12">
+      <v-card elevation="0" color="leve">
+        <v-card-title style="position: relative" class="title d-flex justify-center align-center"
+          >None of these offers is useful for you?</v-card-title
+        >
+
+        <v-card-actions class="d-flex justify-center align-center">
           <custom-buttons
-            class="pb-4"
+            style="position: absolute;"
+            class="pl-5"
             @action="ownOffer"
             :align="'center'"
             :arrayBtn="buttons"
           ></custom-buttons>
-          <!-- </v-card-actions> -->
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-col>
+        </v-card-actions>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 <script>
 import generalMixins from '../../mixins/general-mixin'
 export default {
   mixins: [generalMixins],
   props: ['dataAssets'],
-  data: () => ({}),
+  data: () => ({
+    btn: null
+  }),
   components: {
     'custom-buttons': () => import('@/components/shared/Buttons')
   },

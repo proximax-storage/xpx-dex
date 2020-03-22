@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="12">
+    <v-col cols="12" class="pb-0 pt-0">
       <v-form v-model="valid" ref="form">
         <v-card elevation="0" class="mb-3 d-flex" color="leve">
           <v-card-text class="pt-1 pb-1">

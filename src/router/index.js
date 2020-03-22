@@ -10,16 +10,14 @@ const routes = [
     name: 'Search Offerts ',
     component: () =>
       import(/* webpackChunkName: "searchOfferts" */ '../views/searchOffers/TypeSearchOffers.vue'),
-    meta: {
-    }
+    meta: {}
   },
   {
     path: '/searchOfferts',
     name: 'Search Offerts ',
     component: () =>
       import(/* webpackChunkName: "searchOfferts" */ '../views/searchOffers/TypeSearchOffers.vue'),
-    meta: {
-    }
+    meta: {}
   },
   {
     path: '/home',
@@ -50,12 +48,24 @@ const routes = [
     }
   },
   {
+    path: '/take-offers',
+    name: 'take offers',
+    component: () =>
+      import(/* webpackChunkName: "SelectTypeSignup" */ '../views/takeOffers/TakeOffers.vue'),
+    meta: {
+      // requiresAuth: true,
+      requiresNotAuth: true,
+      hideMenu: false
+    }
+  },
+  {
     path: '/offer-board',
     name: 'Offer Board',
     component: () =>
       import(/* webpackChunkName: "SelectTypeSignup" */ '../views/offerBoard/OfferBoard.vue'),
     meta: {
       requiresNotAuth: true,
+      requiresAuth: true,
       hideMenu: false
     }
   },
@@ -108,11 +118,17 @@ router.beforeEach(async (to, from, next) => {
   } else {
     store.commit('SHOW_MENU', true)
   }
+  if (requiresAuth && requiresNotAuth) {
+    next()
+    return
+  }
   if (requiresAuth && !store.getters['accountStore/isLogged']) {
     next('/')
   } else if (requiresNotAuth && store.getters['accountStore/isLogged']) {
+    console.log('2')
     next('/home')
   } else {
+    console.log('4')
     next()
   }
 })

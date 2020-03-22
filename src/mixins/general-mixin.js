@@ -177,6 +177,15 @@ export default {
           textColor: 'white--text',
           loading: false,
           text: 'Pleace your own offer'
+        },
+        viewAllassets: {
+          key: 'ownoffer',
+          action: 'ownoffer',
+          disabled: false,
+          color: 'primary',
+          textColor: 'white--text',
+          loading: false,
+          text: 'view All'
         }
       }
     },

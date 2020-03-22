@@ -1,5 +1,5 @@
 <template>
-  <v-col cols="8">
+  <v-col cols="12">
     <v-row>
       <v-progress-linear v-if="progress" indeterminate color="primary"></v-progress-linear>
       <v-col v-if="dataAssets && resultsOfferFilter.length > 0" cols="12"
@@ -26,7 +26,7 @@
           :resultsOfferFilter="otheResultsOfferFilter"
           :divisibility="dataAssets.configMoney.precision"
           :type="dataAssets.form.active"
-          @action="sendOffer"
+          @sendOffer="sendOffer"
         >
         </simple-table> </v-col
     ></v-row>
@@ -51,7 +51,21 @@ export default {
   },
   methods: {
     sendOffer (value) {
-      console.log('alarm:', value)
+      this.$store.commit('mosaicExchange/SET_EXCHANGE', value)
+      this.$store.commit('mosaicExchange/SET_DATA_ASSETS', this.dataAssets)
+      this.$router.push({ path: '/take-offers' })
+      // this.$router.push({
+      //   name: 'take offers',
+      //   params: { Exchange: value, dataAsset: this.dataAssets }
+      // })
+      // if (this.$store.getters['accountStore/isLogged']) {
+      //   this.$router.push({
+      //     name: 'take offers',
+      //     params: { Exchange: value, dataAsset: this.dataAssets }
+      //   })
+      // } else {
+      //   this.$router.push({ path: '/searchOfferts' })
+      // }
     },
     lookAgainf (value) {
       this.getExchangeOffersfromId(value)
@@ -64,6 +78,7 @@ export default {
       this.resultsOfferFilter = []
       this.otheResultsOfferFilter = []
       for (let item of data) {
+        item.priceForAmount = item.amount.compact() * item.price
         const range = (amount * this.porcetRange) / 100
         const quantitySum = range + amount
         const quantityRes = amount - range

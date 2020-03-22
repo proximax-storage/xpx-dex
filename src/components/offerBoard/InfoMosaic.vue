@@ -14,7 +14,18 @@
         Avg Price: 0.00032 pxp
       </div>
     </v-col>
-    <v-col clos="6"> Grafic</v-col>
+    <v-col clos="6">
+      <sparkline :value="value" :height="height" />
+      <!-- <v-sparkline
+        :fill="fill"
+        :value="value"
+        line-width="3"
+        padding="1"
+        height="25"
+        auto-draw
+        :gradient="gradient"
+      ></v-sparkline> -->
+    </v-col>
   </v-row>
 </template>
 <script>
@@ -22,8 +33,13 @@ export default {
   props: ['name'],
   data: () => {
     return {
-      theme: 'light'
+      theme: 'light',
+      value: [24, 150, 675, 320, 500, 200, 170, 250, 700],
+      height: 25
     }
+  },
+  components: {
+    'sparkline': () => import('@/components/shared/Sparkline')
   }
 }
 </script>

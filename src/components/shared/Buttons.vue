@@ -6,7 +6,7 @@
         :disabled="item.disabled"
         :key="key"
         :color="item.color"
-        class="pl-8 pr-8 mt-2 mr-3  body-2"
+        class="pl-8 pr-8 mt-2   body-2"
         :class="item.textColor"
         rounded
         @click="triggerClick(item.action)"
