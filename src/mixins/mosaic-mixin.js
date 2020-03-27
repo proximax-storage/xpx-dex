@@ -2,6 +2,10 @@ import { mapState } from 'vuex'
 export default {
   computed: {
     ...mapState('socketDbStore', ['newOffersTx'])
+    // ...mapGetters('mosaicStore', ['mosaics']),
+    // mosaicsList () {
+    //   return this.mosaics
+    // }
   },
   methods: {
     async searchInfoMosaics (mosaicsId, mosaicsInfOffer = false) {
@@ -138,7 +142,7 @@ export default {
                 try {
                   const mosaicIdLinked = await this.$blockchainProvider
                     .getLinkedMosaicId(
-                      this.proximaxProvider.getNamespaceId(elementStorage.isNamespace)
+                      this.$blockchainProvider.getNamespaceId(elementStorage.isNamespace)
                     )
                     .toPromise()
                   if (mosaicIdLinked && mosaicIdLinked.toHex() === mosaicIdToSaved) {
@@ -162,6 +166,79 @@ export default {
         this.$store.commit('mosaicStore/SET_MOSAICS', mosaicsStorage)
         // localStorage.setItem(this.getItemMosaicStorage(), JSON.stringify(mosaicsStorage));
         // this.setMosaicChanged();
+      }
+    },
+    filterMosaicToReturn (infoMosaics) {
+      const returned = []
+      if (infoMosaics && infoMosaics.length > 0) {
+        infoMosaics.forEach(element => {
+          if (returned.length > 0) {
+            const existByNamespace = returned.find(x =>
+              x.isNamespace && element.isNamespace
+                ? this.$blockchainProvider.getMosaicId(x.isNamespace).toHex() ===
+                  this.$blockchainProvider.getMosaicId(element.isNamespace).toHex()
+                : undefined
+            )
+
+            // search by mosaic
+            if (!existByNamespace) {
+              const existByMosaic = returned.find(
+                x =>
+                  this.$blockchainProvider.getMosaicId(x.idMosaic).toHex() ===
+                  this.$blockchainProvider.getMosaicId(element.idMosaic).toHex()
+              )
+
+              if (!existByMosaic) {
+                returned.push(element)
+              }
+            }
+          } else {
+            returned.push(element)
+          }
+        })
+      }
+      return returned
+    },
+    async filterMosaics (mosaicsId = null, byAccount = '') {
+      if (mosaicsId) {
+        let mosaicsFromStore = this.$store.getters['mosaicStore/mosaics']
+        if (mosaicsFromStore.length > 0) {
+          const dataReturn = []
+          const toSearch = []
+          // mosaicsId.forEach(element => {
+          for (let element of mosaicsId) {
+            const existMosaic = mosaicsFromStore.find(
+              x => this.$blockchainProvider.getMosaicId(x.idMosaic).toHex() === element.toHex()
+            )
+            if (existMosaic) {
+              dataReturn.push(existMosaic)
+            } else {
+              // tslint:disable-next-line: no-shadowed-variable
+              const existMosaic = mosaicsFromStore.find(x =>
+                x.isNamespace
+                  ? this.$blockchainProvider.getMosaicId(x.isNamespace).toHex() === element.toHex()
+                  : undefined
+              )
+              if (existMosaic) {
+                dataReturn.push(existMosaic)
+              } else {
+                toSearch.push(element)
+              }
+            }
+          }
+          if (toSearch.length > 0) {
+            const mosaicsSearched = await this.searchInfoMosaics(toSearch)
+            if (mosaicsSearched && mosaicsSearched.length > 0) {
+              mosaicsSearched.forEach(element => {
+                dataReturn.push(element)
+              })
+            }
+          }
+          return this.filterMosaicToReturn(dataReturn)
+        } else {
+          const infoMosaics = await this.searchInfoMosaics(mosaicsId)
+          return this.filterMosaicToReturn(infoMosaics)
+        }
       }
     }
   }

@@ -11,8 +11,16 @@ export const mosaicStore = {
     //   }
     // ]
   },
+  mutations: {
+    SET_MOSAICS (state, data) {
+      console.log('SET_MOSAICS', data)
+      state.mosaics = data
+    }
+  },
   getters: {
-    mosaics: state => state.mosaics,
+    mosaics: state => {
+      return state.mosaics
+    },
     othersMosaics: state => idFilter => {
       console.log('idFilter', idFilter)
       let othersMosaics = []
@@ -21,11 +29,6 @@ export const mosaicStore = {
       }
       console.log('othersMosaics', othersMosaics)
       return othersMosaics
-    }
-  },
-  mutations: {
-    SET_MOSAICS (state, data) {
-      state.mosaics = data
     }
   }
 }

@@ -20,6 +20,15 @@ const routes = [
     meta: {}
   },
   {
+    path: '/newOffer',
+    name: 'new Offer ',
+    component: () =>
+      import(/* webpackChunkName: "searchOfferts" */ '../views/newOffer/createNewOffer.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/home',
     name: 'home',
     component: () => import(/* webpackChunkName: "Home" */ '../views/Home.vue'),
@@ -53,8 +62,8 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "SelectTypeSignup" */ '../views/takeOffers/TakeOffers.vue'),
     meta: {
-      // requiresAuth: true,
-      requiresNotAuth: true,
+      requiresAuth: true,
+      // requiresNotAuth: true,
       hideMenu: false
     }
   },

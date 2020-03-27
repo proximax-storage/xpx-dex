@@ -39,7 +39,11 @@ export default {
   },
   methods: {
     ownOffer () {
-      console.log('ownOffer')
+      if (this.$store.getters['accountStore/isLogged']) {
+        this.$router.push({ path: '/newOffer' })
+      } else {
+        this.$router.push({ path: '/login' })
+      }
     }
   },
   beforeMount () {

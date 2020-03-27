@@ -213,6 +213,45 @@ class GeneralService {
     }
     return Number(rQuantity)
   }
+
+  /**
+   * Calculate duration based in blocks
+   *
+   * @param {UInt64} duration
+   * @returns
+   * @memberof GeneralService
+   */
+  calculateDuration (duration) {
+    let durationCompact = 0
+    console.log(typeof duration)
+    if (typeof duration === 'string') {
+      durationCompact = Number(duration)
+    } else if (typeof duration === 'number') {
+      durationCompact = duration
+    } else {
+      durationCompact = duration.compact()
+    }
+    let seconds = durationCompact * 15
+    const days = Math.floor(seconds / (3600 * 24))
+    seconds -= days * 3600 * 24
+    const hrs = Math.floor(seconds / 3600)
+    seconds -= hrs * 3600
+    const mnts = Math.floor(seconds / 60)
+    seconds -= mnts * 60
+    const response = days + ' days, ' + hrs + ' Hrs, ' + mnts + ' Minutes, ' + seconds + ' Seconds'
+    return response
+  }
+
+  /**
+   * Calculate duration based in days
+   *
+   * @param {number} duration
+   * @returns
+   * @memberof GeneralService
+   */
+  calculateDurationforDay (duration) {
+    return duration * 5760
+  }
 }
 
 export { GeneralService }

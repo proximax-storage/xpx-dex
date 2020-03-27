@@ -5,20 +5,21 @@
   "environment": {
     "TESTNET": {
       "dataBase": {
-        "name":"dex-wallet-db",
-        "password":"qazwsxedc",
-        "host":"localhost",
-        "port":28015
+        "name": "dex-wallet-db",
+        "password": "qazwsxedc",
+        "host": "localhost",
+        "port": 28015
       },
       "keyLocalStore": {
-        "nodeStorage": "dex-nodes"
+        "nodeStorage": "dex-nodes",
+        "selectedNode": "dex-selected-node"
       },
       "coingecko": {
         "url": "https://api.coingecko.com/api/v3/coins/"
       },
       "coin": "xpx",
       "mosaic": {
-        "id": "6ad1fa3645ee1987",
+        "id": "13bfc518e40549d7",
         "name": "xpx",
         "divisibility": 6
       },
@@ -30,9 +31,7 @@
         "networkType": "TEST_NET",
         "protocol": "https",
         "protocolWs": "wss",
-        "nodes": [
-          "bctestnet1.brimstone.xpxsirius.io"
-        ]
+        "nodes": ["bctestnet1.brimstone.xpxsirius.io"]
       },
       "rentalFeeSink": {
         "namespaceRentalFeeSink": {
@@ -50,13 +49,14 @@
     },
     "MAINNET": {
       "dataBase": {
-        "name":"dex-wallet-db",
-        "password":"qazwsxedc",
-        "host":"192.168.3.242",
-        "port":"32773"
+        "name": "dex-wallet-db",
+        "password": "qazwsxedc",
+        "host": "192.168.3.242",
+        "port": "32773"
       },
       "keyLocalStore": {
-        "nodeStorage": "dex-nodes"
+        "nodeStorage": "dex-nodes",
+        "selectedNode": "dex-selected-node"
       },
       "coingecko": {
         "url": "https://api.coingecko.com/api/v3/coins/"
@@ -104,13 +104,14 @@
     },
     "PRIVATE": {
       "dataBase": {
-        "name":"dex-wallet-db",
-        "password":"qazwsxedc",
-        "host":"192.168.3.242",
-        "port":"32773"
+        "name": "dex-wallet-db",
+        "password": "qazwsxedc",
+        "host": "192.168.3.242",
+        "port": "32773"
       },
       "keyLocalStore": {
-        "nodeStorage": "dex-nodes"
+        "nodeStorage": "dex-nodes",
+        "selectedNode": "dex-selected-node"
       },
       "coingecko": {
         "url": "https://api.coingecko.com/api/v3/coins/"

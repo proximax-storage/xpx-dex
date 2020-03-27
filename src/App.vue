@@ -27,8 +27,10 @@
 </template>
 
 <script>
+import getInfoAssetsMixin from './mixins/get-info-assets-mixin'
 import { mapState } from 'vuex'
 export default {
+  mixins: [getInfoAssetsMixin],
   name: 'App',
   data: () => ({}),
   components: {
@@ -37,6 +39,9 @@ export default {
   computed: {
     ...mapState(['overlay', 'snackbar']),
     ...mapState(['showMenu'])
+  },
+  mounted () {
+    this.$store.dispatch('socketDbStore/getMoisaicsInfo', { io: this.$socket, data: null })
   }
 }
 </script>

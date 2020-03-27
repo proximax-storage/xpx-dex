@@ -26,6 +26,10 @@ io.on('connection', socket => {
   socket.on('getMoisaicsInfo', msg => {
     getMosaicInfo()
   })
+
+  socket.on('insertExecuteOffers', data => {
+    insertExecuteOffers(data)
+  })
   socket.on('insertNewOffers', data => {
     insertOffert(data)
   })
@@ -98,6 +102,12 @@ function insertMoisaicsInfo (data) {
   queries.insertMoisaicsInfo(data).then(result => {
     if (result['errors'] > 0) throw result['first_error']
     io.emit('RETURN_INSERT_MOSAIC_INFO', result)
+  })
+}
+function insertExecuteOffers (data) {
+  queries.insertExecuteOffers(data).then(result => {
+    if (result['errors'] > 0) throw result['first_error']
+    io.emit('RETURN_INSERT_EXECUTE_OFFERS', result)
   })
 }
 

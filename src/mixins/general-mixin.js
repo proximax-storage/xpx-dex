@@ -31,6 +31,17 @@ export default {
             max: v => (v && v.length <= 20) || 'Amount must be a maximum of 20 characters'
           }
         },
+        durationOffer: {
+          label: 'Duration (number of days)',
+          icon: 'icon-amount-green-16h-proximax-sirius-wallet.svg',
+          min: 1,
+          max: 365,
+          rules: {
+            required: v => !!v || 'Duration is required',
+            min: v => (v && v.length >= 1) || 'Duration must be less than 1 characters',
+            max: v => (v && v.length <= 365) || 'Duration must be a maximum of 365 characters'
+          }
+        },
         bidPrice: {
           label: 'BID Price (XPX)',
           icon: 'icon-amount-green-16h-proximax-sirius-wallet.svg',
@@ -133,6 +144,42 @@ export default {
     },
     typeButtons () {
       return {
+        print: {
+          key: 'print',
+          action: 'print',
+          disabled: false,
+          color: 'white',
+          textColor: 'primary--text',
+          loading: false,
+          text: 'Print'
+        },
+        viewOnExplorer: {
+          key: 'viewOnExplorer',
+          action: 'viewOnExplorer',
+          disabled: false,
+          color: 'leve',
+          textColor: 'white--text',
+          loading: false,
+          text: 'view on explorer'
+        },
+        cancel: {
+          key: 'cancel',
+          action: 'cancel',
+          disabled: false,
+          color: 'primary',
+          textColor: 'white--text',
+          loading: false,
+          text: 'Cancel'
+        },
+        buy: {
+          key: 'buy',
+          action: 'buy',
+          disabled: false,
+          color: 'primary',
+          textColor: 'white--text',
+          loading: false,
+          text: 'Buy'
+        },
         lookForOffers: {
           key: 'lookForOffers',
           action: 'lookOffers',
@@ -146,7 +193,7 @@ export default {
           key: 'lookAgain',
           action: 'lookAgain',
           disabled: false,
-          color: 'leveint',
+          color: 'leve',
           textColor: 'primary--text',
           loading: false,
           text: 'Look Again'
@@ -182,8 +229,8 @@ export default {
           key: 'ownoffer',
           action: 'ownoffer',
           disabled: false,
-          color: 'primary',
-          textColor: 'white--text',
+          color: 'leve',
+          textColor: 'primary--text',
           loading: false,
           text: 'view All'
         }

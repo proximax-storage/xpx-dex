@@ -1,9 +1,10 @@
 import nodeMixins from './node-mixin'
 import accountMixins from './account-mixin'
+import socketMixins from './socket-mixin'
 import namespacesMixins from './namespaces-mixin'
 import { NetworkType } from 'tsjs-xpx-chain-sdk'
 export default {
-  mixins: [nodeMixins, accountMixins, namespacesMixins],
+  mixins: [nodeMixins, accountMixins, namespacesMixins, socketMixins],
   data: () => {
     return {
       pseudonymApp: null
@@ -54,6 +55,8 @@ export default {
         return false
       }
       this.$store.commit('mosaicStore/SET_MOSAICS', [])
+      this.closeConection()
+      this.connectnWs()
       this.searchNamespacesFromAccounts(wallet.accounts)
       this.set_searchAccountsInfo(wallet.accounts)
       return true

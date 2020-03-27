@@ -16,7 +16,11 @@ import {
   Address,
   PublicAccount,
   NamespaceId,
-  MosaicId
+  MosaicId,
+  ExchangeOffer,
+  ExchangeOfferTransaction,
+  UInt64,
+  Deadline
 } from 'tsjs-xpx-chain-sdk'
 import { ExchangeHttp } from 'tsjs-xpx-chain-sdk/dist/src/infrastructure/ExchangeHttp'
 import { GeneralService } from './general'
@@ -36,6 +40,7 @@ class BlockchainProvider {
     this.transactionHttp = new TransactionHttp(this.url)
     this.exchangeHttp = new ExchangeHttp(this.url)
     this.generalService = new GeneralService()
+    this.generationHash = '56D112C98F7A7E34D1AEDC4BD01BC06CA2276DD546A93E36690B785E82439CA9'
   }
 
   /**
@@ -328,6 +333,58 @@ class BlockchainProvider {
     return axios.get(`${this.urlCoingecko.url}${coinId}`)
   }
   /**
+   * @param {Transaction} transaction
+   * @param {PrivateKey} privateKey
+   * @returns {SignedTransaction}
+   * @memberof ProximaxProvider
+   */
+  signedTransaction (privateKey, transaction) {
+    console.log('privateKey', privateKey)
+    const account = Account.createFromPrivateKey(privateKey, this.typeNetwork)
+    return account.sign(transaction, this.generationHash)
+  }
+  /**
+   * @param {SignedTransaction} signedTransaction
+   * @returns
+   * @memberof ProximaxProvider
+   */
+  announceTx (signedTransaction) {
+    return this.transactionHttp.announce(signedTransaction)
+  }
+
+  /**
+   * @param {MosaicId} mosaicId MosaicId
+   * @param {Number} mosaicAmount
+   * @param {Number} cost
+   * @param {Int} type
+   * @param {PublicAccount} publicAccount
+   * @returns
+   * @memberof ProximaxProvider
+   */
+  exchangeOffer (mosaicId, mosaicAmount, costValue, type, publicAccount) {
+    const amount = UInt64.fromUint(mosaicAmount)
+    const cost = UInt64.fromUint(costValue)
+    return ExchangeOfferTransaction.create(
+      Deadline.create(10),
+      [new ExchangeOffer(mosaicId, amount, cost, type, publicAccount)],
+      this.typeNetwork
+    )
+  }
+  /**
+   * @param {MosaicId} mosaicId MosaicId
+   * @param {Number} mosaicAmount
+   * @param {Number} cost
+   * @param {Int} type
+   * @param {PublicAccount} publicAccount
+   * @returns
+   * @memberof ProximaxProvider
+   */
+  exchangeOfferDb (mosaicId, mosaicAmount, costValue, type, publicAccount) {
+    const amount = UInt64.fromUint(mosaicAmount)
+    const cost = UInt64.fromUint(costValue)
+    return new ExchangeOffer(mosaicId, amount, cost, type, publicAccount)
+  }
+  /**
    *
    *
    * @returns
@@ -344,6 +401,10 @@ class BlockchainProvider {
         value: NetworkType.MAIN_NET
       }
     }
+  }
+
+  uInt64 (value) {
+    return new UInt64(value)
   }
 }
 

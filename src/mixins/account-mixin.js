@@ -160,6 +160,84 @@ export default {
         }
       }
       this.$store.commit('accountStore/SET_BALANCE_CURRENT_ACCOUNT', balance)
+    },
+    async buildCurrentAccountInfo (accountInfo) {
+      const mosaicsSelect = []
+      if (accountInfo !== undefined && accountInfo !== null) {
+        if (accountInfo.mosaics.length > 0) {
+          const mosaics = await this.filterMosaics(accountInfo.mosaics.map(n => n.id))
+          if (mosaics.length > 0) {
+            for (const mosaic of mosaics) {
+              const configInput = {
+                prefix: '',
+                thousands: ',',
+                decimal: '.',
+                precision: '0'
+              }
+
+              const currentMosaic = accountInfo.mosaics.find(
+                element =>
+                  element.id.toHex() ===
+                  this.$blockchainProvider.getMosaicId(mosaic.idMosaic).toHex()
+              )
+              let amount = ''
+              let expired = false
+              let nameExpired = ''
+              let balanceValidate = 0
+              if ('mosaicInfo' in mosaic) {
+                amount = this.$generalService.amountFormatter(
+                  currentMosaic.amount.compact(),
+                  mosaic.mosaicInfo
+                )
+                balanceValidate = currentMosaic.amount.compact()
+                const durationMosaic = this.$blockchainProvider.uInt64([
+                  mosaic.mosaicInfo['properties']['duration']['lower'],
+                  mosaic.mosaicInfo['properties']['duration']['higher']
+                ])
+                configInput.precision = mosaic.mosaicInfo['properties']['divisibility']
+
+                const createdBlock = this.$blockchainProvider.uInt64([
+                  mosaic.mosaicInfo.height.lower,
+                  mosaic.mosaicInfo.height.higher
+                ])
+                if (durationMosaic.compact() > 0) {
+                  // console.log(durationMosaic.compact());
+                  if (this.currentBlock >= durationMosaic.compact() + createdBlock.compact()) {
+                    expired = true
+                    nameExpired = ' - Expired'
+                  }
+                }
+              } else {
+                balanceValidate = currentMosaic.amount.compact()
+                amount = this.$generalService.amountFormatter(currentMosaic.amount.compact(), 6)
+                nameExpired = ' - Expired'
+                expired = true
+              }
+              const x =
+                this.$blockchainProvider.getMosaicId(mosaic.idMosaic).id.toHex() !==
+                this.$environment.mosaic.id
+              if (x) {
+                const nameMosaic =
+                  mosaic.mosaicNames.names.length > 0
+                    ? mosaic.mosaicNames.names[0].name
+                    : this.$blockchainProvider.getMosaicId(mosaic.idMosaic).toHex()
+                mosaicsSelect.push({
+                  text: `${nameMosaic}${nameExpired} > Balance: ${amount}`,
+                  mosaic: mosaic.idMosaic,
+                  mosaicIdHex: this.$blockchainProvider.getMosaicId(mosaic.idMosaic).id.toHex(),
+                  balance: amount,
+                  balanceValidate: balanceValidate,
+                  expired: false,
+                  selected: false,
+                  disabled: expired,
+                  config: configInput
+                })
+              }
+            }
+          }
+        }
+      }
+      this.$store.commit('accountStore/SET_BUILD_CURRENT_ACCOUNT_MOSAIC', mosaicsSelect)
     }
   }
 }

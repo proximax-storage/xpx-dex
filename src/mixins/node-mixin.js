@@ -25,14 +25,14 @@ export default {
       return JSON.parse(localStorage.getItem(this.$environment.keyLocalStore.nodeStorage))
     },
     getNodeSelected () {
-      return JSON.parse(localStorage.getItem(this.$environment.keyLocalStore.nodeStorage))
+      return JSON.parse(localStorage.getItem(this.$environment.keyLocalStore.selectedNode))
     },
     setArrayNode (nodes) {
       localStorage.setItem(this.$environment.keyLocalStore.nodeStorage, JSON.stringify(nodes))
     },
     setSelectedNodeStorage (node) {
       this.$store.commit('nodeStore/SET_NODE_SELECT', node)
-      localStorage.setItem(this.$environment.keyLocalStore.nodeStorage, JSON.stringify(node))
+      localStorage.setItem(this.$environment.keyLocalStore.selectedNode, JSON.stringify(node))
     }
   }
 }

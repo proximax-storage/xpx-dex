@@ -54,7 +54,7 @@
                 item-value="mosaicIdHex"
                 attach
                 dense
-                :loading="searchAssets"
+                :loading="loadingInfo"
                 :rules="[
                   configForm.assets.rules.required,
                   configForm.assets.rules.min,
@@ -72,6 +72,7 @@
                 v-model="form.amount"
                 v-money="configMoneyAsset"
                 :label="configForm.amount.label"
+                :disabled="loadingInfo"
                 :minlength="configForm.amount.min"
                 :maxlength="configForm.amount.max"
                 :counter="configForm.amount.max"
@@ -108,7 +109,7 @@
         </v-form>
       </v-col>
       <v-col cols="10">
-        <button @click="clickButton('l')"> enviar </button>
+        <!-- <button @click="clickButton('l')"> enviar </button> -->
         <!-- Buttons -->
         <custom-buttons @action="send" :arrayBtn="getArrayBtn[0]"></custom-buttons>
       </v-col>
@@ -118,7 +119,7 @@
 <script>
 import generalMixins from '../../mixins/general-mixin'
 import mosaicMixins from '../../mixins/mosaic-mixin'
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   mixins: [generalMixins, mosaicMixins],
   data: () => ({
@@ -135,7 +136,6 @@ export default {
     bidPrice: null,
     inputStyle: 'inputStyle',
     idHex: null,
-    searchAssets: true,
     sendingForm: false,
     valid: false,
     isValidateQuantityBidPrice: true,
@@ -151,14 +151,15 @@ export default {
     'custom-buttons': () => import('@/components/shared/Buttons')
   },
   computed: {
-    ...mapState('socketDbStore', ['offersTx']),
-    ...mapGetters('socketDbStore', ['mosaicsInfOffer']),
+    ...mapGetters('socketDbStore', [
+      'mosaicsInfOffer',
+      'loadingInfo',
+      'mosaicsInfOfferFromIdHex',
+      'offersTx'
+    ]),
     assets: {
       get () {
-        return this.filtersAssets(this.$store.state.socketDbStore.mosaicsInfOffer)
-      },
-      set (value) {
-        this.$store.commit('socketDbStore/EVENT_SET_MOSAIC_INFO', value)
+        return this.filtersAssets(this.mosaicsInfOffer)
       }
     },
     getArrayBtn () {
@@ -172,20 +173,14 @@ export default {
       return arrayBtn
     }
   },
-  watch: {
-    assets (newValue) {
-      this.getInfoAssets(newValue)
-    }
-  },
   methods: {
     send () {
       this.$router.push({ name: 'Offer Board', params: { form: this.form } })
-      // this.SOCKET_SET_NEW_OFFERS({ nuevo: 'nuevo' })
     },
     changeAssetId (event) {
       this.idHex = event
       if (this.idHex) {
-        const data = this.$store.getters['socketDbStore/mosaicsInfOfferFromIdHex'](this.idHex)
+        const data = this.mosaicsInfOfferFromIdHex(this.idHex)
         this.configOtherMoneyAsset(data)
       }
     },
@@ -212,8 +207,8 @@ export default {
             cost: [100000, 0],
             duration: [500, 0],
             mosaicAmount: [4000000, 0],
-            // mosaicId: [576066984, 189902527],
-            mosaicId: [3212122209, 311218131],
+            mosaicId: [576066984, 189902527],
+            // mosaicId: [3212122209, 311218131],
             type: 0
           }
         ],
@@ -226,6 +221,7 @@ export default {
       this.$store.dispatch('socketDbStore/insertNewOffers', { io: this.$socket, data: valor })
     },
     filtersAssets (data) {
+      // 286ABCDE88E269AC899D872F2D9CC62E2B8B0126E1F04B49A97EDBE588949806
       let valor = []
       if (JSON.parse(JSON.stringify(data)).length > 0) {
         valor = data.map(item => {
@@ -243,26 +239,6 @@ export default {
       }
       this.changeAssetId(this.idHex)
       return valor
-    },
-    async getInfoAssets (data) {
-      let cont = 0
-      if (data.length > 0) {
-        for (let item of data) {
-          if (item.mosaicInfo === undefined) {
-            cont = cont + 1
-            const mosaicId = this.$blockchainProvider.getMosaicId(item.mosaicIdHex)
-            try {
-              item.mosaicInfo = await this.searchInfoMosaics([mosaicId], true)
-            } catch (error) {
-              item.mosaicInfo = ''
-            }
-          }
-        }
-        if (cont > 0) {
-          this.searchAssets = false
-          this.assets = JSON.parse(JSON.stringify(data))
-        }
-      }
     },
     validateQuantityAmount () {
       let amount = null
@@ -293,9 +269,6 @@ export default {
   },
   beforeDestroy () {
     this.sockets.unsubscribe('getMoisaicsInfo')
-  },
-  mounted () {
-    this.$store.dispatch('socketDbStore/getMoisaicsInfo', { io: this.$socket, data: null })
   },
   beforeMount () {
     this.configForm = this.getConfigForm()

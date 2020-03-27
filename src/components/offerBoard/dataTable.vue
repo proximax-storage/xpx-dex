@@ -53,19 +53,16 @@ export default {
     sendOffer (value) {
       this.$store.commit('mosaicExchange/SET_EXCHANGE', value)
       this.$store.commit('mosaicExchange/SET_DATA_ASSETS', this.dataAssets)
-      this.$router.push({ path: '/take-offers' })
+
       // this.$router.push({
       //   name: 'take offers',
       //   params: { Exchange: value, dataAsset: this.dataAssets }
       // })
-      // if (this.$store.getters['accountStore/isLogged']) {
-      //   this.$router.push({
-      //     name: 'take offers',
-      //     params: { Exchange: value, dataAsset: this.dataAssets }
-      //   })
-      // } else {
-      //   this.$router.push({ path: '/searchOfferts' })
-      // }
+      if (this.$store.getters['accountStore/isLogged']) {
+        this.$router.push({ path: '/take-offers' })
+      } else {
+        this.$router.push({ path: '/searchOfferts' })
+      }
     },
     lookAgainf (value) {
       this.getExchangeOffersfromId(value)
@@ -108,6 +105,7 @@ export default {
   created () {
     if (this.dataAssets) {
       this.getExchangeOffersfromId(this.dataAssets.form)
+      this.$store.commit('mosaicExchange/SET_DATA_ASSETS', this.dataAssets)
     }
   }
 }

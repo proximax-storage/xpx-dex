@@ -3,7 +3,8 @@ export const socketDbStore = {
   state: {
     offersTx: [],
     newOffersTx: null,
-    mosaicsInfOffer: []
+    mosaicsInfOffer: [],
+    loadingInfo: null
   },
   mutations: {
     SOCKET_SET_OFFERS (state, data) {
@@ -23,8 +24,15 @@ export const socketDbStore = {
       console.log('EVENT_SET_MOSAIC_INFO', data)
       state.mosaicsInfOffer = data
     },
+    EVENT_LOADING_MOSAIC_INFO (state, data) {
+      console.log('EVENT_LOADING_MOSAIC_INFO', data)
+      state.loadingInfo = data
+    },
     SOCKET_RETURN_INSERT_OFFERT (state, data) {
       console.log('SOCKET_RETURN_INSERT_OFFERT', data)
+    },
+    SOCKET_RETURN_INSERT_EXECUTE_OFFERS (state, data) {
+      console.log('RETURN_INSERT_EXECUTE_OFFERS', data)
     },
     SOCKET_RETURN_INSERT_MOSAIC_INFO (state, data) {
       // changes
@@ -54,17 +62,23 @@ export const socketDbStore = {
     mosaicsInfOffer: state => state.mosaicsInfOffer,
     mosaicsInfOfferFromIdHex: state => iDhex => {
       return state.mosaicsInfOffer.filter(next => next.mosaicIdHex === iDhex)
-    }
+    },
+    loadingInfo: state => state.loadingInfo
   },
   actions: {
     getOffertsTx: ({ commit, state }, params) => {
       params.io.emit('getOffertsTx', params.data)
     },
     getMoisaicsInfo: ({ commit, state }, params) => {
+      commit('EVENT_LOADING_MOSAIC_INFO', true)
       params.io.emit('getMoisaicsInfo', params.data)
     },
     insertNewOffers: ({ commit, state }, params) => {
       params.io.emit('insertNewOffers', params.data)
+    },
+    insertExecuteOffers: ({ commit, state }, params) => {
+      console.log('insertExecuteOffers params', params)
+      params.io.emit('insertExecuteOffers', params.data)
     },
     insertMoisaicsInfo: ({ commit, state }, params) => {
       params.io.emit('insertMoisaicsInfo', params.data)

@@ -8,13 +8,40 @@ export const accountStore = {
     balanceCurrentAccount: null,
     totalBalance: null,
     dataUser: null,
-    isLogged: false
+    isLogged: false,
+    mosaicBuild: []
   },
   getters: {
     accountsInfo: state => state.accountsInfo,
+    mosaicBuild: state => state.mosaicBuild,
+    accountInfoByNameAccount: state => nameAccount => {
+      if (state.accountsInfo && state.accountsInfo.length > 0) {
+        return state.accountsInfo.find(next => next.name === nameAccount)
+      } else {
+        return null
+      }
+    },
+    accountInfoByAdress: state => byAddress => {
+      if (state.accountsInfo && state.accountsInfo.length > 0) {
+        if (byAddress) {
+          let found = null
+          state.accountsInfo.forEach(element => {
+            if (element.accountInfo) {
+              if (element.accountInfo.address.pretty() === byAddress) {
+                found = element
+              }
+            }
+          })
+
+          // return this.accountsInfo.find(next => (next.accountInfo) ? next.accountInfo.address.pretty() === account : []);
+          return found
+        }
+      }
+    },
     userData: state => state.dataUser,
     isLogged: state => state.isLogged,
     currentAccount: state => state.currentAccount,
+    balanceCurrentAccount: state => state.balanceCurrentAccount,
     balanceAccount: state => state.balanceAccount,
     totalBalance: state => idFilter => {
       let amountTotal = 0.0
@@ -22,11 +49,11 @@ export const accountStore = {
         for (const element of state.accountsInfo) {
           if (element && element.accountInfo) {
             if (element.accountInfo.mosaics && element.accountInfo.mosaics.length > 0) {
-              const mosaicXpx = element.accountInfo.mosaics.find(
+              const mosaics = element.accountInfo.mosaics.find(
                 mosaic => mosaic.id.toHex() === idFilter
               )
-              if (mosaicXpx) {
-                amountTotal = amountTotal + mosaicXpx.amount.compact()
+              if (mosaics) {
+                amountTotal = amountTotal + mosaics.amount.compact()
               }
             }
           }
@@ -64,6 +91,9 @@ export const accountStore = {
     },
     CHANGE_NAME_USER (state, name) {
       state.dataUser.name = name
+    },
+    SET_BUILD_CURRENT_ACCOUNT_MOSAIC (state, data) {
+      state.mosaicBuild = data
     }
   },
   actions: {

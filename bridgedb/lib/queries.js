@@ -39,5 +39,11 @@ Queries.insertOffert = params => {
     .insert(params, { returnChanges: true })
     .run(DB.conn)
 }
+Queries.insertExecuteOffers = params => {
+  return r
+    .table('executeOffers')
+    .insert(params, { returnChanges: true })
+    .run(DB.conn)
+}
 
 module.exports = Queries

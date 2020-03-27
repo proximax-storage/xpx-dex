@@ -16,7 +16,7 @@
         <v-list-item-subtitle class="pt-1 body-2 font-regular">
           <img
             style="vertical-align: middle"
-            :src="require(`@/assets/img/${theme}/icon-mosaics.svg`)"
+            :src="require(`@/assets/img/${theme}/icon-mosaic.svg`)"
             alt="logo"
             class="pr-1"
             height="20"
