@@ -21,7 +21,7 @@ Vue.use(VueLodash, options)
 Vue.use(
   new VueSocketIO({
     debug: false,
-    connection: 'http://localhost:3500',
+    connection: 'http://localhost:3600',
     vuex: {
       store,
       actionPrefix: 'SOCKET_',
