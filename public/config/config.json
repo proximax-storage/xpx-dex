@@ -19,7 +19,7 @@
       },
       "coin": "xpx",
       "mosaic": {
-        "id": "13bfc518e40549d7",
+        "id": "6ad1fa3645ee1987",
         "name": "xpx",
         "divisibility": 6
       },
@@ -31,7 +31,7 @@
         "networkType": "TEST_NET",
         "protocol": "https",
         "protocolWs": "wss",
-        "nodes": ["bctestnet1.brimstone.xpxsirius.io"]
+        "nodes": ["bcstage1.xpxsirius.io"]
       },
       "rentalFeeSink": {
         "namespaceRentalFeeSink": {

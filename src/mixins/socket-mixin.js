@@ -1,8 +1,9 @@
 import nodeMixins from './node-mixin'
+import accountMixins from './account-mixin'
 import { Listener } from 'tsjs-xpx-chain-sdk'
 import { mapMutations } from 'vuex'
 export default {
-  mixins: [nodeMixins],
+  mixins: [nodeMixins, accountMixins],
   data: () => ({
     audio: HTMLAudioElement,
     audio2: HTMLAudioElement,
@@ -102,7 +103,7 @@ export default {
         },
         err => {
           console.error(err)
-          //   this.sharedService.showError('Error', err)
+          //   this.sharedService.showError('Eror', err)
         }
       )
     },
@@ -133,6 +134,9 @@ export default {
           type: 'confirmed',
           hash: confirmedTransaction.transactionInfo.hash
         })
+        const wallet = this.$store.getters['walletStore/currentWallet']
+        console.log('walles', wallet)
+        this.set_searchAccountsInfo(wallet.accounts)
       })
     },
     getUnConfirmedAddedSocket (connector, audio, address) {

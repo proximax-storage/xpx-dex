@@ -10,139 +10,211 @@
     </v-row>
     <v-row>
       <v-col sm="7" md="7" lg="9" col="9" class="pt-0">
-        <v-divider class="pb-2"></v-divider>
-        <v-row>
-          <v-col cols="12" class="pl-12">
-            <v-form v-model="valid" ref="form">
-              <v-row>
-                <v-col cols="12">
-                  <template v-if="assetsBuy">
-                    <v-select
-                      class="pt-1"
-                      v-model="form.asset"
-                      :items="assetsBuy"
-                      @change="changeAssetIdBuy($event)"
-                      item-text="text"
-                      item-value="mosaicIdHex"
-                      attach
-                      dense
-                      :loading="loadingInfo"
-                      :rules="[
-                        configForm.assets.rules.required,
-                        configForm.assets.rules.min,
-                        configForm.assets.rules.max
-                      ]"
-                      :color="inputStyle"
-                      label="Select assets"
-                    ></v-select>
-                  </template>
-                  <template v-if="assetsSell">
-                    <v-select
-                      class="pt-1"
-                      v-model="form.asset"
-                      :items="assetsSell"
-                      @change="changeAssetIdSell($event)"
-                      item-text="text"
-                      item-value="mosaicIdHex"
-                      attach
-                      dense
-                      :loading="loadingInfo"
-                      :rules="[
-                        configForm.assets.rules.required,
-                        configForm.assets.rules.min,
-                        configForm.assets.rules.max
-                      ]"
-                      :color="inputStyle"
-                      label="Select assets"
-                    ></v-select>
-                  </template>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12">
-                  <v-row>
-                    <v-col cols="4">
-                      <v-text-field
-                        name="amount"
-                        class="pt-0 text-right"
-                        @keyup="isValidateQuantityAmount = validateQuantity($event)"
-                        v-model="form.amount"
-                        v-money="configMoneyAsset"
-                        :disabled="loadingInfo"
-                        :label="configForm.amount.label"
-                        :minlength="configForm.amount.min"
-                        :maxlength="configForm.amount.max"
-                        :counter="configForm.amount.max"
-                        :color="inputStyle"
+        <template v-if="!dataTxOfferInfo">
+          <v-divider class="pb-2"></v-divider>
+          <v-form v-model="valid" ref="form">
+            <v-row>
+              <v-col cols="12" class="pl-12">
+                <v-row>
+                  <v-col cols="12">
+                    <template v-if="type === 'buy'">
+                      <v-select
+                        class="pt-1"
+                        v-model="form.asset"
+                        :items="assetsBuy"
+                        @change="changeAssetIdBuy($event)"
+                        item-text="text"
+                        item-value="mosaicIdHex"
+                        attach
+                        dense
+                        :loading="loadingInfo"
                         :rules="[
-                          configForm.amount.rules.required,
-                          configForm.amount.rules.min,
-                          configForm.amount.rules.max,
-                          isValidateQuantityAmount,
-                          isValidateAssets
+                          configForm.assets.rules.required,
+                          configForm.assets.rules.min,
+                          configForm.assets.rules.max
                         ]"
-                      ></v-text-field
-                    ></v-col>
-                    <v-col cols="4">
-                      <v-text-field
-                        class="pt-0 text-align-field-right"
-                        @keyup="isValidateQuantityBidPrice = validateQuantity($event)"
-                        v-model="form.bidPrice"
-                        v-money="configMoney"
-                        :label="configForm.bidPrice.label"
-                        :minlength="configForm.bidPrice.min"
-                        :maxlength="configForm.bidPrice.max"
-                        :counter="configForm.bidPrice.max"
                         :color="inputStyle"
+                        label="Select assets"
+                      ></v-select>
+                    </template>
+                    <template v-if="type === 'sell'">
+                      <v-select
+                        class="pt-1"
+                        v-model="form.asset"
+                        :items="assetsSell"
+                        @change="changeAssetIdSell($event)"
+                        item-text="text"
+                        item-value="mosaicIdHex"
+                        attach
+                        dense
+                        :loading="loadingInfo"
                         :rules="[
-                          configForm.bidPrice.rules.required,
-                          configForm.bidPrice.rules.min,
-                          configForm.bidPrice.rules.max,
-                          isValidateQuantityBidPrice
+                          configForm.assets.rules.required,
+                          configForm.assets.rules.min,
+                          configForm.assets.rules.max
                         ]"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col class="pa-0" cols="4"
-                      ><div class=" ml-7">
-                        <div class="caption font-italic font-weight-light">
-                          Total to receive from buyer
-                        </div>
-                        <div class="subtitle-1 font-weight-black ">
-                          {{ $generalService.amountFormatter(form.priceForAmount, '', 6) }} XPX
-                        </div>
-                        <!-- {{ isValidateBalance }} -->
-                        <div v-if="isValidateBalance" class="v-text-field__details">
-                          <div class="v-messages  error--text" role="alert">
-                            <div class="v-messages__wrapper">
-                              <div class="v-messages__message">{{ isValidateBalance }}</div>
+                        :color="inputStyle"
+                        label="Select your assets"
+                      ></v-select>
+                    </template>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12">
+                    <v-row>
+                      <v-col sm="12" md="4" col="4" lg="4">
+                        <v-text-field
+                          name="amount"
+                          class="pt-0 text-right"
+                          @keyup="isValidateQuantityAmount = validateQuantity($event)"
+                          v-model="form.amount"
+                          v-money="configMoneyAsset"
+                          :disabled="loadingInfo"
+                          :label="configForm.amount.label"
+                          :minlength="configForm.amount.min"
+                          :maxlength="configForm.amount.max"
+                          :counter="configForm.amount.max"
+                          :color="inputStyle"
+                          :rules="[
+                            configForm.amount.rules.required,
+                            configForm.amount.rules.min,
+                            configForm.amount.rules.max,
+                            isValidateQuantityAmount,
+                            isValidateAssets
+                          ]"
+                        ></v-text-field
+                      ></v-col>
+                      <v-col sm="12" md="4" col="4" lg="4">
+                        <v-text-field
+                          class="pt-0 text-align-field-right"
+                          @keyup="isValidateQuantityBidPrice = validateQuantity($event)"
+                          v-model="form.bidPrice"
+                          v-money="configMoney"
+                          :label="configForm.bidPrice.label"
+                          :minlength="configForm.bidPrice.min"
+                          :maxlength="configForm.bidPrice.max"
+                          :counter="configForm.bidPrice.max"
+                          :color="inputStyle"
+                          :rules="[
+                            configForm.bidPrice.rules.required,
+                            configForm.bidPrice.rules.min,
+                            configForm.bidPrice.rules.max,
+                            isValidateQuantityBidPrice
+                          ]"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col sm="12" md="4" col="4" lg="4" class="pa-0"
+                        ><div class=" ml-7">
+                          <div class="caption font-italic font-weight-light">
+                            <template v-if="type === 'sell'">
+                              Total to receive from buyer
+                            </template>
+                            <template v-if="type === 'buy'">
+                              Total to send to seller
+                            </template>
+                          </div>
+                          <div class="subtitle-1 font-weight-black ">
+                            {{ $generalService.amountFormatter(form.priceForAmount, '', 6) }} XPX
+                          </div>
+                          <!-- {{ isValidateBalance }} -->
+                          <div v-if="isValidateBalance" class="v-text-field__details">
+                            <div class="v-messages  error--text" role="alert">
+                              <div class="v-messages__wrapper">
+                                <div class="v-messages__message">{{ isValidateBalance }}</div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div></v-col
-                    >
-                  </v-row>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="6">
-                  <v-text-field
-                    name="duration"
-                    class="pt-0 text-right"
-                    @keyup="isValidateDuration = validateDuration($event)"
-                    v-model="form.duration"
-                    v-money="configDuration"
-                    :label="configForm.durationOffer.label"
-                    :color="inputStyle"
-                    :rules="[configForm.durationOffer.rules.required, isValidateDuration]"
-                  ></v-text-field>
-                </v-col>
-                {{ loadingInfo }}
-                {{ assetsBuy }}
-                {{ assetsSell }}
-              </v-row>
-            </v-form>
+                        </div></v-col
+                      >
+                    </v-row>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12">
+                    <v-text-field
+                      name="duration"
+                      class="pt-0 text-right"
+                      @keyup="isValidateDuration = validateDuration($event)"
+                      v-model="form.duration"
+                      v-money="configDuration"
+                      :label="configForm.durationOffer.label"
+                      :color="inputStyle"
+                      :rules="[configForm.durationOffer.rules.required, isValidateDuration]"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col
+                sm="10"
+                md="10"
+                col="10"
+                lg="10"
+                class="mx-auto caption d-flex justify-center align-center"
+              >
+                <p>
+                  Disclosure: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce quis
+                  varius mauris, non aliquet libero. Pellentesque est eros. pharetra non finibus et,
+                  fermentum sed felis. Duis portito. purus a suscipit consequat
+                </p>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="10" class="ma-0 mx-auto body-2 d-flex justify-center align-center">
+                This transaction will have a fee: 0.002020 XPX</v-col
+              >
+            </v-row>
+            <v-row>
+              <v-col cols="9" class="ma-0 pb-0 mx-auto caption d-flex justify-center align-center">
+                <v-text-field
+                  dense
+                  v-model="form.password"
+                  :append-icon="configForm.password.show ? 'mdi-eye' : 'mdi-eye-off'"
+                  :minlength="configForm.password.min"
+                  :maxlength="configForm.password.max"
+                  :counter="configForm.password.max"
+                  :color="inputStyle"
+                  :rules="[
+                    configForm.password.rules.required,
+                    configForm.password.rules.min,
+                    configForm.password.rules.max
+                  ]"
+                  :label="configForm.password.label"
+                  :type="configForm.password.show ? 'text' : 'password'"
+                  name="password"
+                  hint
+                  @click:append="configForm.password.show = !configForm.password.show"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12" class="ma-0 pa-0 mx-auto caption d-flex justify-center align-center">
+                <v-checkbox v-model="form.checkbox" class="pa-0"></v-checkbox>
+                Accept terms and conditions
+              </v-col>
+            </v-row>
+          </v-form>
+        </template>
+        <template v-if="dataTxOfferInfo">
+          <congratulations-offer
+            :colorText="typeOfferColorText"
+            :colorType="typeOfferColor"
+            :txOfferInfo="dataTxOfferInfo"
+          ></congratulations-offer>
+        </template>
+        <v-row v-if="!dataTxOfferInfo">
+          <v-col cols="5" class="ma-0 mx-auto caption d-flex justify-center align-center">
+            <custom-button
+              @action="action"
+              :align="'center'"
+              :arrayBtn="getArrayBtn[0]"
+            ></custom-button>
           </v-col>
         </v-row>
+      </v-col>
+        <v-col sm="5" md="5" lg="3" col="3" class="pt-0">
+        <card-assets-market :dataAssets="dataAssets" />
       </v-col>
     </v-row>
   </v-col>
@@ -152,18 +224,23 @@
 import generalMixins from '../../mixins/general-mixin'
 import mosaicMixins from '../../mixins/mosaic-mixin'
 import accountMixins from '../../mixins/account-mixin'
+import walletMixins from '../../mixins/wallet-mixin'
 import { mapGetters } from 'vuex'
 export default {
-  mixins: [generalMixins, mosaicMixins, accountMixins],
+  mixins: [generalMixins, mosaicMixins, accountMixins, walletMixins],
   data: () => {
     return {
+      dataTxOfferInfo: null,
       typeOfferColorText: 'dim--text',
       form: {
         asset: null,
         amount: 0,
         bidPrice: null,
-        priceForAmount: 0
+        priceForAmount: 0,
+        checkbox: false
       },
+      valid: null,
+      arrayBtn: null,
       configForm: null,
       configMoney: null,
       inputStyle: 'inputStyle',
@@ -172,18 +249,27 @@ export default {
       isValidateDuration: true,
       isValidateBalance: null,
       isValidateAssets: true,
-      valid: false,
-      balanceAssets: 20000,
+      balanceAssets: 0,
       configDuration: null,
       duration: 0,
       idHex: null,
       typeOffer: null,
-      configMoneyAsset: null
+      sendingForm: false,
+      configMoneyAsset: null,
+      addExchangeOffer: null,
+      dataMosaics: [],
+      hash: null
     }
+  },
+  components: {
+    'congratulations-offer': () => import('@/components/shared/CongratulationsOffer'),
+    'custom-button': () => import('@/components/shared/Buttons'),
+    'card-assets-market': () => import('@/components/shared/CardAssetsMarket')
   },
   computed: {
     ...mapGetters('socketDbStore', ['mosaicsInfOffer', 'loadingInfo', 'mosaicsInfOfferFromIdHex']),
     ...mapGetters('mosaicExchange', ['exchange', 'dataAssets']),
+    ...mapGetters('socketBcStore', ['statusTx']),
     ...mapGetters('accountStore', [
       'balanceCurrentAccount',
       'accountsInfo',
@@ -195,16 +281,24 @@ export default {
       const type = this.dataAssets ? this.dataAssets.form.active : null
       return type
     },
+    getArrayBtn () {
+      const arrayBtn = this.arrayBtn
+      arrayBtn[0]['place'].disabled = !this.valid || !this.form.checkbox
+      arrayBtn[0]['place'].loading = this.sendingForm
+      arrayBtn[0]['place'].color = this.type === null ? 'white' : this.typeOfferColor
+      arrayBtn[0]['place'].textColor = 'white--text'
+      arrayBtn[0]['place'].textColor = this.type === null ? 'primary--text' : 'white--text'
+      return arrayBtn
+    },
     assetsSell () {
-      return this.mosaicBuild
+      let asset = []
+      if (this.type === 'sell') {
+        asset = this.mosaicBuild
+      }
+      return asset
     },
     assetsBuy () {
-      // console.log('exchange', this.exchange)
-      // console.log('dataAssets', this.dataAssets)
-      // console.log('accountStore', this.balanceCurrentAccount)
-      // console.log('accountsInfo', this.acountsInfo)
-      let asset = null
-      // sell son los
+      let asset = []
       if (this.type === 'buy') {
         asset = this.filtersAssets(this.mosaicsInfOffer)
       }
@@ -212,12 +306,63 @@ export default {
     }
   },
   methods: {
+    action (action) {
+      switch (action) {
+        case 'place':
+          if (this.valid && !this.sendingForm) {
+            this.addExchangeOffer = null
+            const mosaicAmount = this.$generalService.quantityStringToInt(
+              this.form.amount,
+              this.configMoneyAsset.precision
+            )
+            const cost = this.form.priceForAmount
+            const id = this.$blockchainProvider.getMosaicId(this.idHex)
+            const duration = Number(this.form.duration)
+            const addExchangeOffer = this.$blockchainProvider.addExchangeOffer(
+              id,
+              mosaicAmount,
+              cost,
+              0,
+              duration,
+              this.typeOffer
+            )
+            this.dataMosaics.push({
+              mosaicId: this.$blockchainProvider.getMosaicId(this.idHex),
+              mosaicIdHex: this.idHex
+            })
+            let common = this.decrypt(this.currentAccount.simpleWallet, this.form.password)
+            if (common) {
+              const signedTransaction = this.$blockchainProvider.signedTransaction(
+                common.privateKey,
+                addExchangeOffer
+              )
+              this.hash = signedTransaction.hash
+              this.sendingForm = true
+              common = null
+              this.clear()
+              this.$blockchainProvider.announceTx(signedTransaction).subscribe(
+                x => {
+                  console.log(x)
+                },
+                err => {
+                  this.sendingForm = false
+                  console.error(err)
+                }
+              )
+            }
+          }
+      }
+    },
+    clear () {
+      this.$refs.form.reset('password')
+      // this.$refs['password'].reset()
+    },
     validateBalanceXpx (amount) {
       this.isValidateBalance = amount > this.balanceCurrentAccount ? 'Insufficient balance' : null
     },
     validateBalanceAssets (amount) {
       this.isValidateAssets =
-        this.$generalService.quantityStringToInt(amount, 4) > this.balanceAssets
+        this.$generalService.quantityStringToInt(amount, this.configMoneyAsset.precision) > this.balanceAssets
           ? 'Insufficient balance for this asset'
           : true
     },
@@ -252,8 +397,15 @@ export default {
     },
     changeAssetIdSell (event) {
       this.idHex = event
-      console.log('idHex', this.idHex)
-      console.log('this.mosaicBuild', this.mosaicBuild)
+      const mosaic = this.mosaicBuild.find(item => item.mosaicIdHex === this.idHex)
+      if (mosaic) {
+        this.balanceAssets = mosaic.balanceValidate
+        this.configMoneyAsset = mosaic.config
+      } else {
+        this.configMoneyAsset = this.getConfigMoney()
+      }
+      // this.balanceAssets = if(mosaic) mosaic
+      // this.configMoneyAsset = mosaic ? mosaic.config : this.getConfigMoney()
     },
     configOtherMoneyAsset (divisibility) {
       this.configMoneyAsset = divisibility
@@ -314,6 +466,33 @@ export default {
       this.typeOfferColorText = `${this.typeOfferColor}--text`
     }
   },
+  watch: {
+    statusTx (newstatusTx, old) {
+      this.sendingForm = false
+      if (this.hash) {
+        if (newstatusTx.hash === this.hash) {
+          if (newstatusTx.type === 'unconfirmed' || newstatusTx.type === 'confirmed') {
+            this.dataTxOfferInfo = { hash: this.hash }
+            this.hash = null
+            this.$store.dispatch('socketDbStore/insertMoisaicsInfo', {
+              io: this.$socket,
+              data: this.dataMosaics
+            })
+            // this.$store.dispatch('socketDbStore/insertExecuteOffers', {
+            //   io: this.$socket,
+            //   data: this.exchangeOfferDb
+            // })
+          }
+        }
+      }
+    },
+    accountsInfo (newAccountsInfo) {
+      if (this.type === 'sell') {
+        const accountFiltered = this.accountInfoByNameAccount(this.currentAccount.name)
+        this.buildCurrentAccountInfo(accountFiltered.accountInfo)
+      }
+    }
+  },
   beforeMount () {
     if (this.type === 'sell') {
       const accountFiltered = this.accountInfoByNameAccount(this.currentAccount.name)
@@ -330,6 +509,12 @@ export default {
       masked: true
     })
     this.configMoney = this.getConfigMoney()
+    this.arrayBtn = [
+      {
+        cancel: this.typeButtons().cancel,
+        place: this.typeButtons().place
+      }
+    ]
   }
 }
 </script>

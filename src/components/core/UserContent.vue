@@ -72,6 +72,7 @@ export default {
   },
   methods: {
     totalBalance () {
+      console.log('this.$environment.mosaic,', this.$environment.mosaic)
       const total = this.$generalService.amountFormatter(
         this.$store.getters['accountStore/totalBalance'](this.$environment.mosaic.id),
         this.$environment.mosaic.id,

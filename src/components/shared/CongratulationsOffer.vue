@@ -34,7 +34,7 @@
 import generalMixins from '../../mixins/general-mixin'
 export default {
   mixins: [generalMixins],
-  props: ['txOfferInfo', 'colorText'],
+  props: ['txOfferInfo', 'colorText', 'typeOfferColor'],
   data: () => {
     return {
       arrayBtn: null

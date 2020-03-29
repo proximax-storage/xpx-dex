@@ -153,11 +153,20 @@ export default {
           loading: false,
           text: 'Print'
         },
+        place: {
+          key: 'place',
+          action: 'place',
+          disabled: false,
+          color: 'white',
+          textColor: 'primary--text',
+          loading: false,
+          text: 'Place'
+        },
         viewOnExplorer: {
           key: 'viewOnExplorer',
           action: 'viewOnExplorer',
           disabled: false,
-          color: 'leve',
+          color: 'primary',
           textColor: 'white--text',
           loading: false,
           text: 'view on explorer'
@@ -166,8 +175,8 @@ export default {
           key: 'cancel',
           action: 'cancel',
           disabled: false,
-          color: 'primary',
-          textColor: 'white--text',
+          color: 'white',
+          textColor: 'error--text',
           loading: false,
           text: 'Cancel'
         },

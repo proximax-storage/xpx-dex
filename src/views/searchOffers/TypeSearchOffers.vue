@@ -109,7 +109,7 @@
         </v-form>
       </v-col>
       <v-col cols="10">
-        <!-- <button @click="clickButton('l')"> enviar </button> -->
+        <button @click="clickButton('l')">enviar</button>
         <!-- Buttons -->
         <custom-buttons @action="send" :arrayBtn="getArrayBtn[0]"></custom-buttons>
       </v-col>
@@ -197,28 +197,14 @@ export default {
         : this.getConfigMoney()
     },
     clickButton: function (data) {
-      const valor = {
-        deadline: [3534016864, 28],
-        hashTx: 'perrote',
-        maxFee: [39000, 0],
-        networkType: 168,
-        offers: [
-          {
-            cost: [100000, 0],
-            duration: [500, 0],
-            mosaicAmount: [4000000, 0],
-            mosaicId: [576066984, 189902527],
-            // mosaicId: [3212122209, 311218131],
-            type: 0
-          }
-        ],
-        signature:
-          'C3AC291137E3C09FD679E032BE65757EEE3A4CD12AF7E787E9A4543AC3CEA5B69453D567E5D39FCA428E4D920E92D49C17EA7B5276A4430C5B533AA86287880B',
-        signer: '5E01558EAA6531B2D3E22184C9842705B7958E537AE15D6247365A7E8C435058',
-        type: 16733,
-        version: -1476395007
-      }
-      this.$store.dispatch('socketDbStore/insertNewOffers', { io: this.$socket, data: valor })
+      const valor = [
+        {
+          mosaicId: { id: { lower: 1712039007, higher: 1694390835 } },
+          mosaicIdHex: '64fe5a33660ba45f'
+        }
+      ]
+
+      this.$store.dispatch('socketDbStore/insertMoisaicsInfo', { io: this.$socket, data: valor })
     },
     filtersAssets (data) {
       // 286ABCDE88E269AC899D872F2D9CC62E2B8B0126E1F04B49A97EDBE588949806
@@ -279,6 +265,7 @@ export default {
         lookForOffers: this.typeButtons().lookForOffers
       }
     ]
+    this.clickButton('')
   }
 }
 </script>

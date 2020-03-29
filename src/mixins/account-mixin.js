@@ -48,7 +48,6 @@ export default {
           })
           this.updateBalance()
           if (data.mosaicsId && data.mosaicsId.length > 0) {
-            console.log('mosaicde ', data.mosaicsId)
             this.searchInfoMosaics(data.mosaicsId)
           }
         })
@@ -201,7 +200,6 @@ export default {
                   mosaic.mosaicInfo.height.higher
                 ])
                 if (durationMosaic.compact() > 0) {
-                  // console.log(durationMosaic.compact());
                   if (this.currentBlock >= durationMosaic.compact() + createdBlock.compact()) {
                     expired = true
                     nameExpired = ' - Expired'

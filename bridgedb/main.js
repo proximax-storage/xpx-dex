@@ -100,8 +100,11 @@ function insertOffert (data) {
 }
 function insertMoisaicsInfo (data) {
   queries.insertMoisaicsInfo(data).then(result => {
+    console.log('result', result)
     if (result['errors'] > 0) throw result['first_error']
-    io.emit('RETURN_INSERT_MOSAIC_INFO', result)
+    if (result['inserted'] > 0) {
+      io.emit('RETURN_INSERT_MOSAIC_INFO', result)
+    }
   })
 }
 function insertExecuteOffers (data) {

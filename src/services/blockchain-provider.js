@@ -19,6 +19,8 @@ import {
   MosaicId,
   ExchangeOffer,
   ExchangeOfferTransaction,
+  AddExchangeOffer,
+  AddExchangeOfferTransaction,
   UInt64,
   Deadline
 } from 'tsjs-xpx-chain-sdk'
@@ -40,7 +42,7 @@ class BlockchainProvider {
     this.transactionHttp = new TransactionHttp(this.url)
     this.exchangeHttp = new ExchangeHttp(this.url)
     this.generalService = new GeneralService()
-    this.generationHash = '56D112C98F7A7E34D1AEDC4BD01BC06CA2276DD546A93E36690B785E82439CA9'
+    this.generationHash = 'B750FC8ADD9FAB8C71F0BB90B6409C66946844F07C5CADB51F27A9FAF219BFC7'
   }
 
   /**
@@ -350,6 +352,31 @@ class BlockchainProvider {
    */
   announceTx (signedTransaction) {
     return this.transactionHttp.announce(signedTransaction)
+  }
+  /**
+   * @param {MosaicId} mosaicId MosaicId
+   * @param {Number} mosaicAmount
+   * @param {Number} cost
+   * @param {Int} type
+   * @param {Number} duration
+   * @returns
+   * @memberof ProximaxProvider
+   */
+  addExchangeOffer (mosaicId, mosaicAmount, costValue, type, durationValue) {
+    const amount = UInt64.fromUint(mosaicAmount)
+    const cost = UInt64.fromUint(costValue)
+    const duration = UInt64.fromUint(durationValue)
+    return AddExchangeOfferTransaction.create(
+      Deadline.create(10),
+      [new AddExchangeOffer(mosaicId, amount, cost, type, duration)],
+      this.typeNetwork
+    )
+  }
+  addExchangeOfferDb (mosaicId, mosaicAmount, costValue, type, durationValue) {
+    const amount = UInt64.fromUint(mosaicAmount)
+    const cost = UInt64.fromUint(costValue)
+    const duration = UInt64.fromUint(durationValue)
+    return new AddExchangeOffer(mosaicId, amount, cost, type, duration)
   }
 
   /**
