@@ -1,9 +1,6 @@
 <template>
   <v-app id="sandbox">
-    <!-- <core-Drawer :drawerModal="primaryDrawer.model"></core-Drawer> -->
-    <v-app-bar :clipped-left="primaryDrawer.clipped" id="core-toolbar" app flat color="leve">
-      <!-- <v-app-bar-nav-icon v-if="responsive" @click.stop="onClickBtn" /> -->
-      <!-- <v-app-bar-nav-icon v-if="responsive" @click.stop="onClickBtn" /> -->
+    <v-app-bar :clipped-left="primaryDrawer.clipped" id="core-toolbar" app flat color="leveint">
       <v-toolbar-title class=""
         ><img :src="require('@/assets/img/logo-dex-color.svg')" alt="logo" height="35"
       /></v-toolbar-title>
@@ -37,7 +34,14 @@
           </v-btn-toggle>
 
           <div v-if="item.type === 'menu'">
-            <v-menu transition="slide-y-transition" bottom right offset-y max-width="200">
+            <v-menu class="hola"
+              transition="slide-y-transition"
+              bottom
+              right
+              offset-y
+              max-width="200"
+              z-index="0"
+            >
               <template v-slot:activator="{ on }">
                 <v-btn text small color="sky" v-on="on">
                   <div v-if="loadingInfo">
@@ -48,25 +52,17 @@
                   <div v-if="!loadingInfo">
                     <v-icon> {{ item.icon }}</v-icon>
                   </div>
-                  <!-- <div v-if="!responsive" class="font-weight-bold text-capitalize">
-                    {{ item.title }}
-                  </div> -->
-                  <!-- <div v-if="responsive"> -->
-                  <!-- <v-icon> {{ item.icon }}</v-icon> -->
-                  <!-- </div> -->
                 </v-btn>
               </template>
-
-              <v-list dense>
+              <v-list dense color="leve">
                 <user-content v-if="isLogged"></user-content>
                 <v-divider class="mt-1 mr-4 ml-4" />
                 <v-list-item
                   v-for="(sublinks, i) in item.sublinks"
                   :key="i"
                   @click="actions(sublinks.action)"
+                  class="ml-1"
                 >
-                  <!-- <v-list-item-title>{{ sublinks.title }}</v-list-item-title> -->
-
                   <v-list-item-icon class="mr-1">
                     <v-icon v-text="sublinks.icon"></v-icon>
                   </v-list-item-icon>
@@ -208,7 +204,8 @@ export default {
       return this.buildItemNav()
     },
     loadingInfo () {
-      const value = this.loadingInfoWallet.type === 'mosaicsInfo' ? this.loadingInfoWallet.show : false
+      const value =
+        this.loadingInfoWallet.type === 'mosaicsInfo' ? this.loadingInfoWallet.show : false
       console.log('value', value)
       return value
     }
@@ -259,6 +256,10 @@ export default {
 }
 </script>
 <style>
+/* .v-menu__content.menu {
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+} */
 /* #core-view {
   padding-bottom: 100px;
 } */

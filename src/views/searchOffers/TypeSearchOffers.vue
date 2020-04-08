@@ -109,7 +109,7 @@
         </v-form>
       </v-col>
       <v-col cols="10">
-        <button @click="clickButton('l')">enviar</button>
+        <!-- <button @click="clickButton('l')">enviar</button> -->
         <!-- Buttons -->
         <custom-buttons @action="send" :arrayBtn="getArrayBtn[0]"></custom-buttons>
       </v-col>

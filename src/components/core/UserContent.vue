@@ -1,19 +1,21 @@
 <template>
   <div>
-    <v-list-item class=" ">
+    <v-list-item class="pt-3 ">
       <v-list-item-content class="">
-        <v-list-item-title class="title pb-1">
+        <v-list-item-title class="subtitle-1 pb-1 ml-1">
           <span>{{ nameCurrentWallet }}</span>
         </v-list-item-title>
-        <v-list-item-subtitle>
-          <span class="body-2" v-text="getTotalBalance['part1']"></span>
-          <span class="caption mr-2" v-text="getTotalBalance['part2']"></span>
-          <span class="body-2 text-uppercase">{{ nameMosaic }}</span>
+        <v-divider class="mt-1" />
+        <v-list-item-subtitle class="ml-1 pt-3">
+          <span class="caption font-italic">Available balance</span> <br>
+          <span class="subtitle-1" v-text="getTotalBalance['part1']"></span>
+          <span class="caption mr-1" v-text="getTotalBalance['part2']"></span>
+          <span class="subtitle-1 text-uppercase">{{ nameMosaic }}</span>
         </v-list-item-subtitle>
-        <v-list-item-subtitle class="body-2">
+        <!-- <v-list-item-subtitle class="subtitle-2 ml-1">
           USD {{ getTotalUsd | toCurrency }}
-        </v-list-item-subtitle>
-        <v-list-item-subtitle class="pt-1 body-2 font-regular">
+        </v-list-item-subtitle> -->
+        <v-list-item-subtitle class="pt-1 subtitle-2  ml-1">
           <img
             style="vertical-align: middle"
             :src="require(`@/assets/img/${theme}/icon-mosaic.svg`)"
@@ -21,7 +23,7 @@
             class="pr-1"
             height="20"
             v-bind:title="getMosaicsListLength"
-          />{{ mosaicLength.length }}
+          />{{ mosaicLength.length }} mosaics
         </v-list-item-subtitle>
         <!-- <v-progress-linear
           class="mt-1"
