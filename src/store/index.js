@@ -42,7 +42,7 @@ export default new Vuex.Store({
       state.showMenu = value
     },
     SHOW_LOADING_INFO_WALLET (state, data) {
-      console.log('SHOW_LOADING_INFO_WALLET', data)
+      // console.log('SHOW_LOADING_INFO_WALLET', data)
       const { show, text, type } = data
       state.loadingInfoWallet.show = show
       state.loadingInfoWallet.text = text

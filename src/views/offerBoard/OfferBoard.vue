@@ -73,13 +73,13 @@ export default {
       const configMoney = this.configOtherMoneyAsset(mosaicInfo)
       if (form) {
         this.dataAssets = { form: form, mosaicInfo: mosaicInfo, configMoney: configMoney }
-        console.log('this.dataAssets', this.dataAssets)
+        // console.log('this.dataAssets', this.dataAssets)
       } else {
         this.$router.push({ path: '/searchOfferts' })
       }
     },
     lookAgainf (value) {
-      console.log('value', value)
+      // console.log('value', value)
       const form = this.$route.params['form']
       form.amount = value.amount
       this.setSearch(form, this.mosaic)

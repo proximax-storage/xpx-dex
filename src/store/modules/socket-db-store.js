@@ -8,31 +8,31 @@ export const socketDbStore = {
   },
   mutations: {
     SOCKET_SET_OFFERS (state, data) {
-      console.log('SOCKET_SET_OFFERS', data)
+      // console.log('SOCKET_SET_OFFERS', data)
       state.offersTx = data
     },
     SOCKET_SET_NEW_OFFERS (state, data) {
-      console.log('SET_NEW_OFFERS', data)
+      // console.log('SET_NEW_OFFERS', data)
       state.newOffersTx = data
       state.offersTx.push(data)
     },
     SOCKET_SET_MOSAIC_INFO (state, data) {
-      console.log('SOCKET_SET_MOSAIC_INFO', data)
+      // console.log('SOCKET_SET_MOSAIC_INFO', data)
       state.mosaicsInfOffer = data
     },
     EVENT_SET_MOSAIC_INFO (state, data) {
-      console.log('EVENT_SET_MOSAIC_INFO', data)
+      // console.log('EVENT_SET_MOSAIC_INFO', data)
       state.mosaicsInfOffer = data
     },
     EVENT_LOADING_MOSAIC_INFO (state, data) {
-      console.log('EVENT_LOADING_MOSAIC_INFO', data)
+      // console.log('EVENT_LOADING_MOSAIC_INFO', data)
       state.loadingInfo = data
     },
     SOCKET_RETURN_INSERT_OFFERT (state, data) {
-      console.log('SOCKET_RETURN_INSERT_OFFERT', data)
+      // console.log('SOCKET_RETURN_INSERT_OFFERT', data)
     },
     SOCKET_RETURN_INSERT_EXECUTE_OFFERS (state, data) {
-      console.log('RETURN_INSERT_EXECUTE_OFFERS', data)
+      // console.log('RETURN_INSERT_EXECUTE_OFFERS', data)
     },
     SOCKET_RETURN_INSERT_MOSAIC_INFO (state, data) {
       // changes
@@ -44,7 +44,7 @@ export const socketDbStore = {
           }
         }
       }
-      console.log('SOCKET_RETURN_INSERT_MOSAIC_INFO', data)
+      // console.log('SOCKET_RETURN_INSERT_MOSAIC_INFO', data)
     }
   },
   getters: {
@@ -77,7 +77,7 @@ export const socketDbStore = {
       params.io.emit('insertNewOffers', params.data)
     },
     insertExecuteOffers: ({ commit, state }, params) => {
-      console.log('insertExecuteOffers params', params)
+      // console.log('insertExecuteOffers params', params)
       params.io.emit('insertExecuteOffers', params.data)
     },
     insertMoisaicsInfo: ({ commit, state }, params) => {

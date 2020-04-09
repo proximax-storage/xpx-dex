@@ -73,11 +73,11 @@ export const accountStore = {
       state.dataUser = data
     },
     SET_INFO_ACCOUNT (state, data) {
-      console.log('SET_INFO_ACCOUNT', data)
+      // console.log('SET_INFO_ACCOUNT', data)
       state.accountsInfo = data
     },
     SET_BALANCE_CURRENT_ACCOUNT (state, data) {
-      console.log('SET_BALANCE_CURRENT_ACCOUNT', data)
+      // console.log('SET_BALANCE_CURRENT_ACCOUNT', data)
       state.balanceCurrentAccount = data
     },
     SET_CURRENT_ACCOUNT (state, data) {

@@ -134,10 +134,8 @@ router.beforeEach(async (to, from, next) => {
   if (requiresAuth && !store.getters['accountStore/isLogged']) {
     next('/')
   } else if (requiresNotAuth && store.getters['accountStore/isLogged']) {
-    console.log('2')
     next('/home')
   } else {
-    console.log('4')
     next()
   }
 })

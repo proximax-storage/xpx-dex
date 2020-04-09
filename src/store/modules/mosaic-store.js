@@ -13,7 +13,7 @@ export const mosaicStore = {
   },
   mutations: {
     SET_MOSAICS (state, data) {
-      console.log('SET_MOSAICS', data)
+      // console.log('SET_MOSAICS', data)
       state.mosaics = data
     }
   },
@@ -22,12 +22,12 @@ export const mosaicStore = {
       return state.mosaics
     },
     othersMosaics: state => idFilter => {
-      console.log('idFilter', idFilter)
+      // console.log('idFilter', idFilter)
       let othersMosaics = []
       if (state.mosaics && state.mosaics.length > 0) {
         othersMosaics = state.mosaics.filter(item => item.mosaicInfo.mosaicId.toHex() !== idFilter)
       }
-      console.log('othersMosaics', othersMosaics)
+      // console.log('othersMosaics', othersMosaics)
       return othersMosaics
     }
   }

@@ -94,7 +94,6 @@ export default {
           form.active === 'buy' ? 1 : 0
         )
         .subscribe(offer => {
-          console.log('offer', offer)
           this.progress = false
           if (offer && offer.length > 0) {
             this.resultsOffer(offer, form)

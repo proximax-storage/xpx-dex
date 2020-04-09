@@ -66,7 +66,7 @@ function insertExecuteOffers (data) {
 // UPDATE QUERIES
 
 // ################ Listen http#############
-app.use(express.static(path.join(__dirname))) // use static dir
+app.use('/dist', express.static(path.join(__dirname, '/dist'))) // use static dir
 app.set('port', process.env.PORT || 3600) // set port)
 http.listen(app.get('port'), () => {
   Log.info(`   >> listening on port ${app.get('port')}`)

@@ -206,14 +206,14 @@ export default {
     loadingInfo () {
       const value =
         this.loadingInfoWallet.type === 'mosaicsInfo' ? this.loadingInfoWallet.show : false
-      console.log('value', value)
+      // console.log('value', value)
       return value
     }
   },
   methods: {
     ...mapMutations('accountStore', ['LOGIN']),
     actions (action) {
-      console.log('action::', action)
+      // console.log('action::', action)
       switch (action) {
         case 'login':
           this.$router.push(`${action}`).catch(e => {})

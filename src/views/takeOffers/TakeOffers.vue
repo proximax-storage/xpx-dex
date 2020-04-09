@@ -3,33 +3,28 @@
     <v-row>
       <v-col
         cols="12"
-        class="headline font-weight-regular  text-left"
+        class="headline font-weight-regular text-left"
         v-bind:class="[typeOfferColorText]"
-        >Take this offer - {{ dataAssets.form.active }} transaction
-      </v-col>
+      >Take this offer - {{ dataAssets.form.active }} transaction</v-col>
     </v-row>
     <v-row>
-      <v-col sm="7"  md="7" lg="9" col="9" class="pt-0">
+      <v-col sm="7" md="7" lg="9" col="9" class="pt-0">
         <v-divider class="pb-5"></v-divider>
 
         <template v-if="!dataTxOfferInfo">
           <v-form v-model="valid" ref="form">
             <v-row>
-              <v-col cols="5" class="">
+              <v-col cols="5" class>
                 <v-row>
                   <v-col
                     cols="12"
-                    class="subtitle-1 pt-0 font-weight-regular  text-left primary--text"
-                  >
-                    My debit transaction</v-col
-                  >
+                    class="subtitle-1 pt-0 font-weight-regular text-left primary--text"
+                  >My debit transaction</v-col>
                   <div class="ma-2 ml-7 mx-auto">
-                    <div class="caption font-italic font-weight-light">
-                      Amount you will send to selle
-                    </div>
-                    <div class="caption font-weight-black ">
-                      {{ $generalService.amountFormatter(form.priceForAmount, '', 6) }} XPX
-                    </div>
+                    <div class="caption font-italic font-weight-light">Amount you will send to selle</div>
+                    <div
+                      class="caption font-weight-black"
+                    >{{ $generalService.amountFormatter(form.priceForAmount, '', 6) }} XPX</div>
                   </div>
                   <div class="ma-2 ml-7 mx-auto">
                     <div class="caption font-italic font-weight-light mx-auto">BID Price</div>
@@ -38,23 +33,21 @@
                 </v-row>
               </v-col>
               <v-divider class="mx-2" inset vertical></v-divider>
-              <v-col cols="5" class="">
+              <v-col cols="5" class>
                 <v-row>
                   <v-col
                     cols="12"
-                    class="subtitle-1 pt-0 font-weight-regular  text-left primary--text"
-                  >
-                    My credit transaction</v-col
-                  >
+                    class="subtitle-1 pt-0 font-weight-regular text-left primary--text"
+                  >My credit transaction</v-col>
                   <div class="ma-2 ml-7">
                     <div class="caption font-italic font-weight-light">Asset selectd</div>
-                    <div class="caption font-weight-black ">{{ nameMosaicInfo }}</div>
+                    <div class="caption font-weight-black">{{ nameMosaicInfo }}</div>
                   </div>
                   <div class="ma-2 ml-7">
-                    <div class="caption font-italic font-weight-light">
-                      Amount you will receave from seller
-                    </div>
-                    <div class="caption font-weight-black ">
+                    <div
+                      class="caption font-italic font-weight-light"
+                    >Amount you will receave from seller</div>
+                    <div class="caption font-weight-black">
                       <v-text-field
                         @keyup="validateQuantityAmount()"
                         v-model="form.amount"
@@ -84,9 +77,10 @@
                   fermentum sed felis. Duis portito. purus a suscipit consequat
                 </p>
               </v-col>
-              <v-col cols="10" class="ma-0 mx-auto caption d-flex justify-center align-center">
-                this transaction will have a fee: 0.002020 XPX</v-col
-              >
+              <v-col
+                cols="10"
+                class="ma-0 mx-auto caption d-flex justify-center align-center"
+              >this transaction will have a fee: 0.002020 XPX</v-col>
             </v-row>
             <v-row>
               <v-col cols="5" class="ma-0 mx-auto caption d-flex justify-center align-center">
@@ -114,18 +108,11 @@
           </v-form>
         </template>
         <template v-if="dataTxOfferInfo">
-          <congratulations-offer
-            :colorText="typeOfferColorText"
-            :txOfferInfo="dataTxOfferInfo"
-          ></congratulations-offer>
+          <congratulations-offer :colorText="typeOfferColorText" :txOfferInfo="dataTxOfferInfo"></congratulations-offer>
         </template>
         <v-row v-if="!dataTxOfferInfo">
           <v-col cols="5" class="ma-0 mx-auto caption d-flex justify-center align-center">
-            <custom-buttons
-              @action="action"
-              :align="'center'"
-              :arrayBtn="getArrayBtn[0]"
-            ></custom-buttons>
+            <custom-buttons @action="action" :align="'center'" :arrayBtn="getArrayBtn[0]"></custom-buttons>
           </v-col>
         </v-row>
       </v-col>
@@ -205,8 +192,7 @@ export default {
               this.$blockchainProvider.announceTx(signedTransaction).subscribe(
                 x => {},
                 err => {
-                  this.sendingForm = false
-                  console.error(err)
+                  if (err) this.sendingForm = false
                 }
               )
             }
@@ -277,7 +263,7 @@ export default {
           if (newstatusTx.type === 'unconfirmed' || newstatusTx.type === 'confirmed') {
             this.dataTxOfferInfo = { hash: this.hash }
             this.hash = null
-            console.log('exchangeOfferDb statusTx', this.exchangeOfferDb)
+            // console.log('exchangeOfferDb statusTx', this.exchangeOfferDb)
             this.$store.dispatch('socketDbStore/insertExecuteOffers', {
               io: this.$socket,
               data: this.exchangeOfferDb

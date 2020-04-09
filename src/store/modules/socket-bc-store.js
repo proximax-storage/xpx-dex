@@ -8,7 +8,7 @@ export const socketBcStore = {
   },
   mutations: {
     SET_STATUS_TX (state, data) {
-      console.log('newstatusTx', data)
+      // console.log('newstatusTx', data)
       state.statusTx = data
     }
   },
