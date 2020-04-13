@@ -26,6 +26,7 @@ Queries.getAlloffertTx = params => {
   return r.table('offers').run(DB.conn)
 }
 Queries.getMosaicInfo = params => {
+  console.log('DB', DB)
   DB.conn.use(DB.name)
   return r.table('mosaicInfo').run(DB.conn)
 }

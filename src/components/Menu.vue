@@ -1,9 +1,9 @@
 <template>
   <v-app id="sandbox">
     <v-app-bar :clipped-left="primaryDrawer.clipped" id="core-toolbar" app flat color="leveint">
-      <v-toolbar-title class=""
-        ><img :src="require('@/assets/img/logo-dex-color.svg')" alt="logo" height="35"
-      /></v-toolbar-title>
+      <v-toolbar-title class>
+        <img :src="require('@/assets/img/logo-dex-color.svg')" alt="logo" height="35" />
+      </v-toolbar-title>
       <v-spacer></v-spacer>
 
       <div v-for="(item, i) in getItemNav" :key="i">
@@ -14,8 +14,7 @@
             class="ma-2"
             :class="item.class"
             @click="actions(item.action)"
-          >
-          </v-chip>
+          ></v-chip>
           <v-btn-toggle
             v-model="activeBtn"
             tile
@@ -24,17 +23,16 @@
             v-if="item.type === 'icon-group'"
           >
             <v-btn text small :value="item.action" @click="actions(item.action)">
-              <div v-if="!responsive" class="font-weight-bold text-capitalize">
-                {{ item.title }}
-              </div>
+              <div v-if="!responsive" class="font-weight-bold text-capitalize">{{ item.title }}</div>
               <div v-if="responsive">
-                <v-icon> {{ item.icon }}</v-icon>
+                <v-icon>{{ item.icon }}</v-icon>
               </div>
             </v-btn>
           </v-btn-toggle>
 
           <div v-if="item.type === 'menu'">
-            <v-menu class="hola"
+            <v-menu
+              class="hola"
               transition="slide-y-transition"
               bottom
               right
@@ -46,11 +44,11 @@
                 <v-btn text small color="sky" v-on="on">
                   <div v-if="loadingInfo">
                     <v-progress-circular indeterminate color="grey">
-                      <v-icon> {{ item.icon }}</v-icon></v-progress-circular
-                    >
+                      <v-icon>{{ item.icon }}</v-icon>
+                    </v-progress-circular>
                   </div>
                   <div v-if="!loadingInfo">
-                    <v-icon> {{ item.icon }}</v-icon>
+                    <v-icon>{{ item.icon }}</v-icon>
                   </div>
                 </v-btn>
               </template>
@@ -75,7 +73,7 @@
           </div>
           <!-- <v-btn  icon @click="actions(item.action)">
             <v-icon v-text="item.icon"></v-icon>
-          </v-btn> -->
+          </v-btn>-->
         </div>
       </div>
     </v-app-bar>
@@ -112,48 +110,7 @@ export default {
         action: 'login',
         viewLogged: false,
         sublinks: [],
-        orderby: 2
-      },
-
-      {
-        icon: 'mdi-view-dashboard',
-        type: 'icon-group',
-        title: 'Dashboard',
-        class: 'primary white-text',
-        action: 'dashboard',
-        viewLogged: true,
-        sublinks: [],
-        orderby: 2
-      },
-      {
-        icon: 'mdi-storefront',
-        type: 'icon-group',
-        title: 'Offers',
-        class: 'primary white-text',
-        action: 'offers',
-        viewLogged: true,
-        sublinks: [],
-        orderby: 3
-      },
-      {
-        icon: 'mdi-storefront',
-        type: 'icon-group',
-        title: 'Orders',
-        class: 'primary white-text',
-        action: 'orders',
-        viewLogged: true,
-        sublinks: [],
-        orderby: 4
-      },
-      {
-        icon: 'mdi-wallet',
-        type: 'icon-group',
-        title: 'My wallet',
-        class: 'primary white-text',
-        action: 'myWallet',
-        viewLogged: true,
-        sublinks: [],
-        orderby: 5
+        orderby: 1
       },
       {
         icon: 'mdi-account-circle',
@@ -171,11 +128,83 @@ export default {
             action: 'logout',
             viewLogged: true,
             sublinks: [],
-            orderby: 5
+            orderby: 3
           }
         ],
+        orderby: 3
+      },
+      {
+        icon: 'mdi-wallet',
+        type: 'icon-group',
+        title: 'My wallet',
+        class: 'primary white-text',
+        action: 'myWallet',
+        viewLogged: true,
+        sublinks: [],
+        orderby: 4
+      },
+      {
+        icon: 'mdi-storefront',
+        type: 'icon-group',
+        title: 'New offerts',
+        class: 'primary white-text',
+        action: 'newOffer',
+        viewLogged: true,
+        sublinks: [],
+        orderby: 5
+      },
+      {
+        icon: 'mdi-storefront',
+        type: 'icon-group',
+        title: 'Search 0fferts',
+        class: 'primary white-text',
+        action: 'searchOfferts',
+        viewLogged: false,
+        sublinks: [],
+        orderby: 6
+      },
+
+      {
+        icon: 'mdi-storefront',
+        type: 'icon-group',
+        title: 'Search 0fferts',
+        class: 'primary white-text',
+        action: 'searchOfferts',
+        viewLogged: true,
+        sublinks: [],
         orderby: 6
       }
+
+      // {
+      //   icon: 'mdi-view-dashboard',
+      //   type: 'icon-group',
+      //   title: 'Dashboard',
+      //   class: 'primary white-text',
+      //   action: 'dashboard',
+      //   viewLogged: true,
+      //   sublinks: [],
+      //   orderby: 2
+      // },
+      // {
+      //   icon: 'mdi-storefront',
+      //   type: 'icon-group',
+      //   title: 'Offers',
+      //   class: 'primary white-text',
+      //   action: 'offers',
+      //   viewLogged: true,
+      //   sublinks: [],
+      //   orderby: 3
+      // },
+      // {
+      //   icon: 'mdi-storefront',
+      //   type: 'icon-group',
+      //   title: 'Orders',
+      //   class: 'primary white-text',
+      //   action: 'orders',
+      //   viewLogged: true,
+      //   sublinks: [],
+      //   orderby: 5
+      // }
     ],
     activeBtn: 'dashboard'
   }),
@@ -201,7 +230,7 @@ export default {
     ...mapGetters('accountStore', ['isLogged']),
     ...mapState(['loadingInfoWallet']),
     getItemNav () {
-      return this.buildItemNav()
+      return this.buildItemNav().reverse()
     },
     loadingInfo () {
       const value =
@@ -213,7 +242,7 @@ export default {
   methods: {
     ...mapMutations('accountStore', ['LOGIN']),
     actions (action) {
-      // console.log('action::', action)
+      console.log('action::', action)
       switch (action) {
         case 'login':
           this.$router.push(`${action}`).catch(e => {})
@@ -223,6 +252,15 @@ export default {
           this.$router.push(`${action}`).catch(e => {})
           // /select-signup-type
           break
+        case 'searchOfferts':
+          this.$router.push(`${action}`).catch(e => {})
+          // /select-signup-type
+          break
+        case 'newOffer':
+          this.$router.push(`${action}`).catch(e => {})
+          // /select-signup-type
+          break
+
         case 'logout':
           this.LOGIN(false)
           this.$router.push('/login').catch(e => {})
