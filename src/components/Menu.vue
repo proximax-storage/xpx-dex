@@ -1,7 +1,7 @@
 <template>
   <v-app id="sandbox">
-    <v-app-bar :clipped-left="primaryDrawer.clipped" id="core-toolbar" app flat color="leveint">
-      <v-toolbar-title class>
+    <v-app-bar v-if="isLogged" :clipped-left="primaryDrawer.clipped" id="core-toolbar" app flat color="leveint">
+      <v-toolbar-title >
         <img :src="require('@/assets/img/logo-dex-color.svg')" alt="logo" height="35" />
       </v-toolbar-title>
       <v-spacer></v-spacer>

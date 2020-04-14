@@ -1,87 +1,82 @@
 <template>
   <v-container class="fill-height">
-    <template>
-      <v-row justify="center" align="center">
-        <v-col cols="8">
-          <v-row class="mx-auto">
-            <v-col cols="6 pr-0 ">
-              <!-- <v-card class="pb-10" utlined height="320"> -->
-              <v-form v-model="valid" ref="form">
-                <!-- <v-card-title class=" font-italic font-weight-medium pb-0"> -->
-                <v-col cols="12" class="font-italic font-weight-medium pb-0">
-                  <span class="title sky--text">Welcome back </span>
-                  <br />
-                  <span class="subtitle-1">Ready to be?</span>
-                </v-col>
-                <!-- </v-card-title> -->
-                <!-- <v-card-text> -->
-                <!-- Account -->
-                <v-col cols="12">
-                  <v-select
-                    v-model="wallet"
-                    :items="wallets"
-                    item-text="username"
-                    item-value="username"
-                    attach
-                    dense
-                    :rules="[
+    <v-container>
+      <template>
+        <v-row class="d-flex justify-center align-center mb-8 mt-1">
+          <img :src="require('@/assets/img/logo-dex-color.svg')" alt="logo" height="70" />
+        </v-row>
+        <v-row class="d-flex justify-center align-center">
+          <v-col xl="6" lg="6" md="7" sm="8" xs="12">
+            <v-row class="mx-auto v-card d-flex">
+              <v-col cols="6 white card-border-bottom">
+                <v-form v-model="valid" ref="form">
+                  <v-col cols="12" class="font-italic font-weight-medium pb-0">
+                    <span class="title primary--text">Welcome back</span>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-select
+                      v-model="wallet"
+                      :items="wallets"
+                      item-text="username"
+                      item-value="username"
+                      attach
+                      dense
+                      :rules="[
                       configForm.wallet.rules.required,
                       configForm.wallet.rules.min,
                       configForm.wallet.rules.max
                     ]"
-                    :color="inputStyle"
-                    label="Select your account"
-                  ></v-select>
-                </v-col>
-                <!-- Password -->
-                <v-col cols="12">
-                  <v-text-field
-                    dense
-                    v-model="password"
-                    :append-icon="configForm.password.show ? 'mdi-eye' : 'mdi-eye-off'"
-                    :minlength="configForm.password.min"
-                    :maxlength="configForm.password.max"
-                    :counter="configForm.password.max"
-                    :color="inputStyle"
-                    :rules="[
+                      :color="inputStyle"
+                      label="Select your account"
+                    ></v-select>
+                  </v-col>
+                  <!-- Password -->
+                  <v-col cols="12">
+                    <v-text-field
+                      dense
+                      v-model="password"
+                      :append-icon="configForm.password.show ? 'mdi-eye' : 'mdi-eye-off'"
+                      :minlength="configForm.password.min"
+                      :maxlength="configForm.password.max"
+                      :counter="configForm.password.max"
+                      :color="inputStyle"
+                      :rules="[
                       configForm.password.rules.required,
                       configForm.password.rules.min,
                       configForm.password.rules.max
                     ]"
-                    :label="configForm.password.label"
-                    :type="configForm.password.show ? 'text' : 'password'"
-                    name="password"
-                    hint
-                    @click:append="configForm.password.show = !configForm.password.show"
-                  ></v-text-field>
+                      :label="configForm.password.label"
+                      :type="configForm.password.show ? 'text' : 'password'"
+                      name="password"
+                      hint
+                      @click:append="configForm.password.show = !configForm.password.show"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                    <!-- Buttons -->
+                    <custom-buttons @action="action" :arrayBtn="getArrayBtn[0]" :type="'text'"></custom-buttons>
+                  </v-col>
+                </v-form>
+              </v-col>
+              <v-col cols="6 pl-0 leve">
+                <v-col cols="12" class="font-italic font-weight-medium pb-0">
+                  <div>
+                    <span class="title primary--text">Create your Account</span>
+                  </div>
                 </v-col>
                 <v-col cols="12">
                   <!-- Buttons -->
-                  <custom-buttons @action="action" :arrayBtn="getArrayBtn[0]"></custom-buttons>
+                  <custom-buttons @action="action" :arrayBtn="getArrayBtn[1]" :type="'text'"></custom-buttons>
                 </v-col>
-                <!-- </v-card-text> -->
-              </v-form>
-              <!-- </v-card> -->
-            </v-col>
-            <v-col cols="6 pl-0 sky">
-              <!-- <v-card utlined class="pb-10 sky " height="320"> -->
-              <v-col cols="12" class="font-italic font-weight-medium pb-0">
-                <div>
-                  <span class="title white--text">Create your Account, </span>
-                  <br />
-                  <span class="subtitle-1">is very easy.</span>
-                </div>
               </v-col>
-              <v-col cols="12">
-                <!-- Buttons -->
-                <custom-buttons @action="action" :arrayBtn="getArrayBtn[1]"></custom-buttons>
-              </v-col>
-              <!-- </v-card> -->
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </template>
+            </v-row>
+          </v-col>
+        </v-row>
+        <v-row class="d-flex justify-center align-center ma-4">
+          <a class="font-italic font-weight-medium" href>Go to home page</a>
+        </v-row>
+      </template>
+    </v-container>
   </v-container>
 </template>
 <script>
@@ -107,17 +102,6 @@ export default {
       valid: false,
       sendingForm: false,
       wallets: null
-      // accountName: '',
-      // title: 'Welcome back'
-      // valid: false,
-      // configForm: null,
-      // walletIsRepeat: true,
-      // passwords: { password: '', confirmPassword: '' },
-      // searchingWalletName: false,
-
-      // dataWalletCreated: null,
-      // networkSelected: null,
-      // inputStyle: 'inputStyle'
     }
   },
   methods: {
@@ -165,7 +149,6 @@ export default {
     }
   },
   components: {
-    // 'big-title': () => import('@/components/shared/BigTitle'),
     'custom-buttons': () => import('@/components/shared/Buttons')
   },
   beforeMount () {
@@ -182,3 +165,9 @@ export default {
   }
 }
 </script>
+<style >
+.card-border-bottom {
+  border-bottom-left-radius: none !important;
+  border-bottom-right-radius: none !important;
+}
+</style>
