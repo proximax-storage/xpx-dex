@@ -9,7 +9,7 @@
           :disabled="item.disabled"
           :key="key"
           :color="item.color"
-          class="pl-8 pr-8 mt-2 body-2 mx-auto"
+          class="pl-8 pr-8 mt-2 title font-weight-bold  mx-auto"
           @click="triggerClick(item.action)"
         >{{ item.text }}</v-btn>
       </template>

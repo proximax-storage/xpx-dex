@@ -118,6 +118,9 @@ const router = new VueRouter({
   routes
 })
 router.beforeEach(async (to, from, next) => {
+  if (!('form' in from.params)) {
+    store.commit('mosaicExchange/SET_DATA_ASSETS', null)
+  }
   const hideMenu = to.matched.some(record => record.meta.hideMenu)
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const requiresNotAuth = to.matched.some(record => record.meta.requiresNotAuth)

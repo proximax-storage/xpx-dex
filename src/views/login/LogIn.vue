@@ -72,9 +72,9 @@
             </v-row>
           </v-col>
         </v-row>
-        <v-row class="d-flex justify-center align-center ma-4">
-          <a class="font-italic font-weight-medium" href>Go to home page</a>
-        </v-row>
+        <!-- <v-row class="d-flex justify-center align-center ma-4">
+          <router-link class="font-italic font-weight-medium" to="/">Go to home page</router-link>
+        </v-row> -->
       </template>
     </v-container>
   </v-container>

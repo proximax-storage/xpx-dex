@@ -1,20 +1,22 @@
 <template>
   <v-container class="fill-height">
-    <v-row justify="center" align="center">
-      <v-col cols="8">
-        <v-card elevation="10" class="pb-10">
-          <v-card-title class="title font-italic font-weight-medium ">{{ title }} {{ walletName }}</v-card-title>
-          <v-card-subtitle class="pa-0 pl-4">Has been created succesfully</v-card-subtitle>
+    <v-row class="d-flex justify-center align-center">
+      <v-col xl="7" lg="7" md="7" sm="8" xs="12">
+        <v-card elevation="1" class="pb-5">
           <v-row>
-            <v-col cols="11" class="mx-auto pt-0">
+            <v-col cols="11" class="mx-auto">
               <v-row>
-                <!-- <v-col cols="12" class="mx-auto">
-                  <span class="body-1">Name: {{ walletName }}</span>
-                </v-col> -->
-              </v-row>
-              <v-row>
+                <v-col cols="12" class="mx-auto title font-italic font-weight-medium pb-0">
+                  <span
+                    class="title font-italic font-weight-medium primary--text"
+                  >{{ title }} {{ walletName }}</span>
+                  <br />
+                  <span
+                    class="subtitle-1 font-italic font-weight-medium"
+                  >Has been created succesfully</span>
+                </v-col>
                 <v-col cols="10" class="mx-auto">
-                  <span class="body-1">Adress:</span>
+                  <span class="body-1 font-weight-black">Adress:</span>
                   <br />
                   <span class="body-2 d-flex">{{ address }}</span>
                 </v-col>
@@ -25,26 +27,10 @@
                   </v-btn>
                 </v-col>
               </v-row>
-              <v-row justify="center">
-                <!-- Warning Message -->
-                <v-col cols="12">
-                  <v-alert
-                    outlined
-                    type="warning"
-                    prominent
-                    class="text-center line-h-1-02em"
-                    dense
-                  >
-                    <span class="gray-black--text caption">
-                      Make sure you store your private key in a safe place.
-                      <br />Access to your digital assets cannot be recovered without it.
-                    </span>
-                  </v-alert>
-                </v-col>
-              </v-row>
+              <v-row justify="center"></v-row>
               <v-row v-if="showPrivateKey">
                 <v-col cols="10" class="mx-auto">
-                  <span class="body-1">Private key:</span>
+                  <span class="body-1 font-weight-black">Private key:</span>
                   <br />
                   <span class="body-2 d-flex break-word">{{ privateKey }}</span>
                 </v-col>
@@ -57,8 +43,10 @@
               </v-row>
             </v-col>
           </v-row>
-          <!-- Buttons -->
-            <custom-buttons @action="action" :arrayBtn="buttons"></custom-buttons>
+          <v-card-actions>
+            <!-- Buttons -->
+            <custom-buttons @action="action" :arrayBtn="arrayBtn" :align="'start'" :type="'text'"></custom-buttons>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -77,25 +65,17 @@ export default {
           key: 'showPvk',
           action: 'showPrivateKey',
           disabled: false,
-          color: 'sky',
+          color: 'primary',
           loading: false,
           text: 'Show Private Key'
         },
-        // savePaperWallet: {
-        //   key: 'showPvk',
-        //   action: 'savePaperWallet',
-        //   disabled: false,
-        //   color: 'primary',
-        //   loading: false,
-        //   text: 'Save Paper Wallet'
-        // },
         continue: {
           key: 'continue',
-          action: 'continue',
+          action: 'signin',
           disabled: false,
-          color: 'sky',
+          color: 'primary',
           loading: false,
-          text: 'Continue'
+          text: 'Sign in'
         }
       },
       privateKey: '',
@@ -110,21 +90,8 @@ export default {
         case 'showPrivateKey':
           this.showPrivateKey = !this.showPrivateKey
           break
-        // case 'savePaperWallet':
-        //   const pdf = this.$pdfGenerator.walletCreatedCertified(
-        //     this.base64QR,
-        //     this.address,
-        //     this.walletName
-        //   )
-        //   pdf.save(`${this.walletName}_paper_wallet`)
-        //   break
-        case 'continue':
-          // if (this.infoOwnedSwap) {
-          //   this.SET_SWAP_DATA(this.infoOwnedSwap)
-          //   this.$router.push('/swap-account-nis1-found').catch(e => {})
-          // } else {
+        case 'signin':
           this.$router.push('login').catch(e => {})
-          // }
           break
       }
     }
@@ -135,7 +102,7 @@ export default {
   computed: {
     buttons () {
       const arrayBtn = this.arrayBtn
-      arrayBtn['showPvk'].text = (this.showPrivateKey) ? 'Hide Private Key' : 'Show Private Key'
+      arrayBtn['showPvk'].text = this.showPrivateKey ? 'Hide Private Key' : 'Show Private Key'
       return arrayBtn
     }
   },

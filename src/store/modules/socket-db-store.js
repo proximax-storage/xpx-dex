@@ -25,7 +25,7 @@ export const socketDbStore = {
       state.mosaicsInfOffer = data
     },
     EVENT_LOADING_MOSAIC_INFO (state, data) {
-      // console.log('EVENT_LOADING_MOSAIC_INFO', data)
+      console.log('EVENT_LOADING_MOSAIC_INFO', data)
       state.loadingInfo = data
     },
     SOCKET_RETURN_INSERT_OFFERT (state, data) {

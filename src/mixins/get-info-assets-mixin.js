@@ -16,12 +16,14 @@ export default {
   },
   watch: {
     assets (newValue) {
+      console.log('newValuenewValuenewValuenewValuenewValue')
       this.getInfoAssets(newValue)
     }
   },
   methods: {
     ...mapMutations('socketDbStore', ['EVENT_LOADING_MOSAIC_INFO']),
     async getInfoAssets (data) {
+      console.log('getInfoAssets', data.length)
       let cont = 0
       if (data.length > 0) {
         for (let item of data) {
@@ -39,6 +41,8 @@ export default {
           this.EVENT_LOADING_MOSAIC_INFO(false)
           this.assets = JSON.parse(JSON.stringify(data))
         }
+      } else {
+        this.EVENT_LOADING_MOSAIC_INFO(false)
       }
     }
   }

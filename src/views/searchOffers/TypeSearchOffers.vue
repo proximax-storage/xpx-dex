@@ -8,7 +8,7 @@
               <v-item v-slot:default="{ active, toggle }" value="buy">
                 <v-row class="mx-auto mr-0 pr-0">
                   <v-col class="mr-0 pr-0" justify="center" align="center">
-                    <v-btn color="dim" min-width="200" @click="toggle()" text large>
+                    <v-btn color="dim" min-width="200" @click="toggle()" text  block>
                       <span class="font-italic font-weight-bold headline text-capitalize">
                         Buy
                       </span></v-btn
@@ -25,7 +25,7 @@
               <v-item v-slot:default="{ active, toggle }" value="sell">
                 <v-row class="mx-auto">
                   <v-col class="ml-0 pl-0" justify="center" align="center">
-                    <v-btn color="pin" min-width="200" @click="toggle()" text large>
+                    <v-btn color="pin" min-width="200" @click="toggle()" text block>
                       <span class="font-italic font-weight-bold headline text-capitalize">
                         Sell
                       </span></v-btn
@@ -265,7 +265,7 @@ export default {
         lookForOffers: this.typeButtons().lookForOffers
       }
     ]
-    this.clickButton('')
+    // this.clickButton('')
   }
 }
 </script>

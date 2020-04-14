@@ -1,9 +1,9 @@
 <template>
-  <v-content :style="backgroundImage">
-    <!-- <div :style="{ backgroundImage: `url(${ require(`@/assets/img/${backgroundId}`)})`}"> -->
-    <v-fade-transition mode="out-in" transition="slide-x-transition">
-      <router-view />
-    </v-fade-transition>
+  <v-content :style="backgroundImage" style="background-size:100% 100%;">
+    <!-- <div :style="backgroundImage"> -->
+      <v-fade-transition mode="out-in" transition="slide-x-transition">
+        <router-view />
+      </v-fade-transition>
     <!-- </div> -->
     <!-- <core-footer v-if="$route.name !== 'Maps'" /> -->
   </v-content>
@@ -13,7 +13,7 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      backgroundId: 'bg-proximax-zoom-test.jpg',
+      backgroundId: 'bg.jpg',
       img: null
     }
   },
@@ -22,8 +22,8 @@ export default {
     backgroundImage () {
       let img = null
       if (!this.isLogged) {
-        // img = `background-image: url("/img/bg-proximax-zoom-test.c81b1ad7.jpg")`
-        img = null
+        img = `background-image: url(${require(`@/assets/img/bg.jpg`)})`
+        // img = null
       }
       return img
     }
