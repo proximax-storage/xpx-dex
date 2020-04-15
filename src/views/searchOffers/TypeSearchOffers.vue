@@ -25,8 +25,9 @@
           :items="myOffers"
           :items-per-page="10"
           class="elevation-1 cursor-pointer"
+          @click:row="searchResult"
         >
-          <template v-slot:item.graphic="{}">
+          <template v-slot:item.tableData.graphic="{}">
             <sparkline :value="value" :height="height" />
           </template>
         </v-data-table>
@@ -37,7 +38,7 @@
   </v-container>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   data: () => ({
     idMosaicsToSearch: [],
@@ -45,11 +46,11 @@ export default {
     title: 'Asset with available offers',
     search: '',
     headers: [
-      { text: 'Type', value: 'type' },
-      { text: 'Asset', value: 'text' },
-      { text: 'Total assets available', value: 'totalAssetAvailable' },
-      { text: 'Average price', value: 'averagePrice' },
-      { text: 'Price Graph', value: 'graphic' }
+      { text: 'Type', value: 'tableData.type' },
+      { text: 'Asset', value: 'tableData.text' },
+      { text: 'Total assets available', value: 'tableData.totalAssetAvailable' },
+      { text: 'Average price', value: 'tableData.averagePrice' },
+      { text: 'Price Graph', value: 'tableData.graphic' }
     ],
     value: [24, 150, 675, 320, 500, 200, 170, 250, 700],
     height: 25
@@ -67,6 +68,7 @@ export default {
     sparkline: () => import('@/components/shared/Sparkline')
   },
   methods: {
+    ...mapMutations('offersStore', ['SET_OFFER_SELECTED']),
     clickButton: function (data) {
       const valor = [
         {
@@ -77,12 +79,15 @@ export default {
 
       this.$store.dispatch('socketDbStore/insertMoisaicsInfo', { io: this.$socket, data: valor })
     },
+    searchResult ($event) {
+      this.SET_OFFER_SELECTED($event)
+    },
     filtersAssets (data) {
       console.log('Filter assets data ====> ', data)
       let valor = []
       if (JSON.parse(JSON.stringify(data)).length > 0) {
         valor = data.map(item => {
-          item.text = item.mosaicIdHex.toUpperCase()
+          item.text = item.mosaicIdHex
           if (
             item.mosaicInfo !== null &&
             item.mosaicInfo !== undefined &&
@@ -143,20 +148,33 @@ export default {
       const x = this.items.filter(x => x.data.length > 0)
       if (x.length > 0) {
         x.forEach(element => {
-          console.log(this.sumAllAmount(element.data.map(x => x.price)))
-          const averagePrice =
-            this.sumAllAmount(element.data.map(x => x.price)) / element.data.length
-          const assetsAvailable = this.sumAllAmount(element.data.map(x => x.amount.compact()))
+          console.log('element', this.items)
+          console.log(
+            'this.items',
+            this.items.filter(x => x.info.mosaicIdHex === element.info.mosaicIdHex)
+          )
           const divisibility = element.info.mosaicInfo[0].mosaicInfo.properties.divisibility
+          const price = this.sumAllAmount(element.data.map(x => x.price)) / element.data.length
+          const amount = this.sumAllAmount(element.data.map(x => x.amount.compact()))
+          const totalAssets = this.$generalService.amountFormatter(amount, null, divisibility)
+          const offersBuy = this.items.filter(
+            x => x.info.mosaicIdHex === element.info.mosaicIdHex && x.type === 'buy'
+          )
+          const offersSell = this.items.filter(
+            x => x.info.mosaicIdHex === element.info.mosaicIdHex && x.type === 'sell'
+          )
           pass.push({
-            text: element.info.text,
-            type: element.type,
-            totalAssetAvailable: this.$generalService.amountFormatter(
-              assetsAvailable,
-              null,
-              divisibility
-            ),
-            averagePrice: averagePrice
+            tableData: {
+              text: element.info.text,
+              type: element.type,
+              totalAssetAvailable: totalAssets,
+              averagePrice: price,
+              info: element.info
+            },
+            allOffers: {
+              sell: offersSell.length > 0 ? offersSell[0].data : offersSell,
+              buy: offersBuy.length > 0 ? offersBuy[0].data : offersBuy
+            }
           })
         })
       }
