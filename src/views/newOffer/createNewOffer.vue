@@ -356,17 +356,23 @@ export default {
               this.form.amount,
               this.configMoneyAsset.precision
             )
-            const cost = this.form.priceForAmount
+            let cost = 0
+            if (this.typeOffer === 1) {
+              cost = this.form.priceForAmount
+            } else {
+              cost = this.$generalService.quantityStringToInt(this.form.bidPrice, 6)
+            }
+            console.log('cost', cost)
             const id = this.$blockchainProvider.getMosaicId(this.idHex)
-            const duration = Number(this.form.duration)
+            // const duration = Number(this.form.duration)
             const addExchangeOffer = this.$blockchainProvider.addExchangeOffer(
               id,
               mosaicAmount,
               cost,
-              Number(365),
-              duration,
-              this.typeOffer
+              this.typeOffer,
+              Number(500)
             )
+            console.log('addExchangeOffer', addExchangeOffer)
             this.dataMosaics.push({
               mosaicId: this.$blockchainProvider.getMosaicId(this.idHex),
               mosaicIdHex: this.idHex
@@ -511,11 +517,11 @@ export default {
     },
     typeOfferColorFuc (type) {
       if (type === 'buy') {
-        this.typeOffer = 0
+        this.typeOffer = 1
         this.typeOfferColor = 'dim'
       }
       if (type === 'sell') {
-        this.typeOffer = 1
+        this.typeOffer = 0
         this.typeOfferColor = 'pin'
       }
       if (type === null) {
@@ -561,6 +567,7 @@ export default {
   },
   beforeMount () {
     this.mountBuildCurrentAccountInfo(this.type)
+    console.log('this.type', this.type)
     this.typeOfferColorFuc(this.type)
     this.configForm = this.getConfigForm()
     this.configDuration = this.getConfigMoney({
