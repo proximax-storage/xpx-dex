@@ -81,6 +81,7 @@ export default {
     },
     searchResult ($event) {
       this.SET_OFFER_SELECTED($event)
+      this.$router.push('allOffer').catch(e => {})
     },
     filtersAssets (data) {
       console.log('Filter assets data ====> ', data)
