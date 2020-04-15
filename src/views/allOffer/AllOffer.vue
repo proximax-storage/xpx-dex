@@ -42,7 +42,12 @@
         <v-row>
           <v-col col="12 mt-0">
             <v-progress-linear v-if="progress" indeterminate color="primary"></v-progress-linear>
-            <simple-table></simple-table>
+            <simple-table
+              :type="form.active"
+              :resultsOfferFilter="data[form.active]"
+              :divisibility="propertiesMosaic.divisibility"
+              @sendOffer="sendOffer"
+            ></simple-table>
           </v-col>
         </v-row>
       </v-col>
@@ -58,16 +63,25 @@ import { mapGetters } from 'vuex'
 export default {
   data: () => {
     return {
-      progress: false,
-      mosaic: null,
-      dataAssets: {
-        form: { active: 'sell' }
+      data: {
+        buy: [],
+        sell: []
       },
-      form: {
-        asset: null,
-        amount: null,
-        bidPrice: null,
-        active: null
+      progress: false,
+      propertiesMosaic: null,
+      mosaic: null,
+      form: { active: 'sell' },
+      dataAssets: {
+        form: { asset: null, amount: null, bidPrice: null, active: 'sell' },
+        mosaicInfo: null,
+        configMoney: {
+          decimal: '.',
+          thousands: ',',
+          prefix: '',
+          suffix: '',
+          precision: 0,
+          masked: false
+        }
       }
     }
   },
@@ -81,12 +95,17 @@ export default {
     ...mapGetters('socketDbStore', ['mosaicsInfOffer', 'mosaicsInfOfferFromIdHex']),
     nameMosaicInfo () {
       return this.nameMosaic('2dad1fc91904b5af')
+    },
+    resultsData () {
+      const key = this.form.active
+      return this.data[key]
     }
   },
   methods: {
     nameMosaic (IdHex) {
       let nameMosaics = null
       if (IdHex) {
+        console.log(this.mosaic)
         this.mosaic = this.mosaicsInfOfferFromIdHex(IdHex)
         console.log(this.mosaic)
         if (this.mosaic[0].mosaicInfo !== null && this.mosaic[0].mosaicInfo !== undefined) {
@@ -95,10 +114,53 @@ export default {
               ? this.mosaic[0].mosaicInfo[0].mosaicNames.names[0].name
               : this.mosaic[0].text
         }
-        // this.setSearch(form, this.mosaic)
       }
       return nameMosaics
+    },
+    mosaicInfoProperties (IdHex) {
+      let properties = {
+        divisibility: null,
+        duration: null,
+        supplyMutable: null,
+        transferable: null
+      }
+      const mosaic = this.mosaicsInfOfferFromIdHex(IdHex)
+      if (mosaic) properties = mosaic[0].mosaicInfo[0].mosaicInfo.properties
+      return properties
+    },
+    resultsOffer (data = [], type = null) {
+      console.log('data', data)
+      for (let item of data) {
+        item.priceForAmount = item.amount.compact() * item.price
+        this.data.sell.push(item)
+      }
+    },
+    sendOffer (value) {
+      this.dataAssets.configMoney.precision = this.propertiesMosaic.divisibility
+      this.dataAssets.mosaicInfo = this.mosaic[0].mosaicInfo[0]
+      this.dataAssets.form.asset = '2dad1fc91904b5af'
+      console.log('this.dataAssets', this.dataAssets)
+
+      this.$store.commit('mosaicExchange/SET_EXCHANGE', value)
+      this.$store.commit('mosaicExchange/SET_DATA_ASSETS', this.dataAssets)
+      if (this.$store.getters['accountStore/isLogged']) {
+        this.$router.push({ path: '/take-offers' })
+      } else {
+        this.$router.push({ path: '/searchOfferts' })
+      }
     }
+  },
+  beforeMount () {
+    this.propertiesMosaic = this.mosaicInfoProperties('2dad1fc91904b5af')
+    this.progress = true
+    this.$blockchainProvider
+      .getExchangeOffersfromId('2dad1fc91904b5af', this.form.active === 'buy' ? 1 : 0)
+      .subscribe(offer => {
+        this.progress = false
+        if (offer && offer.length > 0) {
+          this.resultsOffer(offer)
+        }
+      })
   }
 }
 </script>
