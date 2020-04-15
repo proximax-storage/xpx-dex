@@ -107,6 +107,16 @@ const routes = [
     }
   },
   {
+    path: '/allOffer',
+    name: 'All offer',
+    component: () =>
+      import(/* webpackChunkName: "AllOffer" */ '../views/allOffer/AllOffer.vue'),
+    meta: {
+      requiresAuth: true,
+      hideMenu: false
+    }
+  },
+  {
     path: '*',
     redirect: '/'
   }

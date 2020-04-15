@@ -1,7 +1,14 @@
 <template>
   <v-app id="sandbox">
-    <v-app-bar v-if="isLogged" :clipped-left="primaryDrawer.clipped" id="core-toolbar" app flat color="leveint">
-      <v-toolbar-title >
+    <v-app-bar
+      v-if="isLogged"
+      :clipped-left="primaryDrawer.clipped"
+      id="core-toolbar"
+      app
+      flat
+      color="leveint"
+    >
+      <v-toolbar-title>
         <img :src="require('@/assets/img/logo-dex-color.svg')" alt="logo" height="35" />
       </v-toolbar-title>
       <v-spacer></v-spacer>
@@ -173,6 +180,16 @@ export default {
         viewLogged: true,
         sublinks: [],
         orderby: 6
+      },
+      {
+        icon: 'mdi-storefront',
+        type: 'icon-group',
+        title: 'All offer',
+        class: 'primary white-text',
+        action: 'allOffer',
+        viewLogged: true,
+        sublinks: [],
+        orderby: 7
       }
 
       // {
@@ -258,6 +275,10 @@ export default {
           break
         case 'newOffer':
           this.$store.commit('mosaicExchange/SET_DATA_ASSETS', null)
+          this.$router.push(`${action}`).catch(e => {})
+          // /select-signup-type
+          break
+        case 'allOffer':
           this.$router.push(`${action}`).catch(e => {})
           // /select-signup-type
           break
