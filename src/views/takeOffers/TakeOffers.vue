@@ -217,17 +217,18 @@ export default {
       } catch (error) {
         amount = Number(this.form.amount)
       }
-      this.form.priceForAmount = this.calcPrice(
-        this.exchange.price,
-        this.$generalService.quantityStringToInt(amount, this.dataAssets.configMoney.precision)
+      const amountValue = this.$generalService.quantityStringToInt(
+        amount,
+        this.dataAssets.configMoney.precision
       )
-      const amountx = parseFloat(this.dataAssets.form.amount.split(',').join(''))
-      if (amount !== 0) {
-        if (amount <= amountx) {
+      this.form.priceForAmount = this.calcPrice(this.exchange.price, amountValue)
+      const amountx = this.exchange.amount.compact()
+      if (amountValue !== 0) {
+        if (amountValue <= amountx) {
           this.isValidateQuantityAmount = true
         } else {
           this.isValidateQuantityAmount = `Cannot enter amount greater than ${this.$generalService.amountFormatter(
-            this.exchange.amount.compact(),
+            amountx,
             '',
             this.dataAssets.configMoney.precision
           )}`
