@@ -363,7 +363,7 @@ export default {
               id,
               mosaicAmount,
               cost,
-              0,
+              Number(365),
               duration,
               this.typeOffer
             )

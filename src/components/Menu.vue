@@ -257,6 +257,7 @@ export default {
           // /select-signup-type
           break
         case 'newOffer':
+          this.$store.commit('mosaicExchange/SET_DATA_ASSETS', null)
           this.$router.push(`${action}`).catch(e => {})
           // /select-signup-type
           break
