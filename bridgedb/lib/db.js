@@ -5,7 +5,7 @@ const DB = {
   conn: null,
   connStruc: null,
   name: 'dexWallet',
-  host: '192.168.1.69',
+  host: '192.168.43.113',
   port: 32769,
   tables: [
     { table: 'executeOffers', options: {} },

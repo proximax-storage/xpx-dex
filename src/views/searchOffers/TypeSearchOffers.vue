@@ -8,7 +8,7 @@
     <v-row class="mt-5">
       <v-col cols="12">
         <v-card-title>
-          Total Assets ({{assets.length}})
+          Filter offers {{assets}}
           <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
@@ -25,11 +25,15 @@
           :items="myOffers"
           :items-per-page="10"
           class="elevation-1 cursor-pointer"
-        ></v-data-table>
+        >
+          <template v-slot:item.graphic="{}">
+            <sparkline :value="value" :height="height" />
+          </template>
+        </v-data-table>
       </v-col>
     </v-row>
 
-    <button @click="$store.commit('socketDbStore/SOCKET_SET_MOSAIC_INFO', [])">RESET</button>
+    <!-- <button @click="clickButton">RESET</button> -->
   </v-container>
 </template>
 <script>
@@ -42,11 +46,13 @@ export default {
     search: '',
     headers: [
       { text: 'Type', value: 'type' },
-      { text: 'Asset', value: 'mosaicId' },
+      { text: 'Asset', value: 'text' },
       { text: 'Total assets available', value: 'totalAssetAvailable' },
       { text: 'Average price', value: 'averagePrice' },
       { text: 'Price Graph', value: 'graphic' }
-    ]
+    ],
+    value: [24, 150, 675, 320, 500, 200, 170, 250, 700],
+    height: 25
   }),
   beforeDestroy () {
     this.sockets.unsubscribe('getMoisaicsInfo')
@@ -57,8 +63,20 @@ export default {
       this.$socket.close()
     }
   },
-  components: {},
+  components: {
+    sparkline: () => import('@/components/shared/Sparkline')
+  },
   methods: {
+    clickButton: function (data) {
+      const valor = [
+        {
+          mosaicId: { id: { lower: 4209774098, higher: 27035008 } },
+          mosaicIdHex: '019c8580faec0e12'
+        }
+      ]
+
+      this.$store.dispatch('socketDbStore/insertMoisaicsInfo', { io: this.$socket, data: valor })
+    },
     filtersAssets (data) {
       console.log('Filter assets data ====> ', data)
       let valor = []
@@ -81,32 +99,29 @@ export default {
       return valor
     },
     mapMosaicsId (filtersAssets) {
-      console.log('mapMosaicsId')
-      const idMosaicsToSearch = filtersAssets.map(x => x.mosaicIdHex)
-      console.log('idMosaicsToSearch', idMosaicsToSearch)
       this.items = []
-      idMosaicsToSearch.forEach(element => {
+      filtersAssets.forEach(element => {
         this.getBuy(element)
         this.getSell(element)
       })
     },
-    getBuy (id) {
-      this.$blockchainProvider.getExchangeOffersfromId(id, 1).subscribe(offer => {
+    getBuy (data) {
+      this.$blockchainProvider.getExchangeOffersfromId(data.mosaicIdHex, 1).subscribe(offer => {
         console.log('offer BUY', offer)
         this.progress = false
         this.items.push({
-          mosaicId: id,
+          info: data,
           type: 'buy',
           data: offer
         })
       })
     },
-    getSell (id) {
-      this.$blockchainProvider.getExchangeOffersfromId(id, 0).subscribe(offer => {
+    getSell (data) {
+      this.$blockchainProvider.getExchangeOffersfromId(data.mosaicIdHex, 0).subscribe(offer => {
         console.log('offer Sell', offer)
         this.progress = false
         this.items.push({
-          mosaicId: id,
+          info: data,
           type: 'sell',
           data: offer
         })
@@ -128,14 +143,25 @@ export default {
       const x = this.items.filter(x => x.data.length > 0)
       if (x.length > 0) {
         x.forEach(element => {
+          console.log(this.sumAllAmount(element.data.map(x => x.price)))
+          const averagePrice =
+            this.sumAllAmount(element.data.map(x => x.price)) / element.data.length
+          const assetsAvailable = this.sumAllAmount(element.data.map(x => x.amount.compact()))
+          const divisibility = element.info.mosaicInfo[0].mosaicInfo.properties.divisibility
           pass.push({
-            mosaicId: element.mosaicId,
+            text: element.info.text,
             type: element.type,
-            totalAssetAvailable: this.sumAllAmount(element.data.map(x => x.amount.compact())),
-            averagePrice: this.sumAllAmount(element.data.map(x => x.price)) / element.data.length
+            totalAssetAvailable: this.$generalService.amountFormatter(
+              assetsAvailable,
+              null,
+              divisibility
+            ),
+            averagePrice: averagePrice
           })
         })
       }
+
+      console.log('ITEMS', this.items)
       return pass
     },
     assets () {
@@ -143,7 +169,7 @@ export default {
       const filtersAssets = this.filtersAssets(this.mosaicsInfOffer)
       console.log('filtersAssets', filtersAssets)
       this.mapMosaicsId(filtersAssets)
-      return filtersAssets
+      return ''
     }
   }
 }
