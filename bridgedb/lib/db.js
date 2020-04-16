@@ -5,7 +5,7 @@ const DB = {
   conn: null,
   connStruc: null,
   name: 'dexWallet',
-  host: '192.168.43.113',
+  host: '192.168.1.69',
   port: 32769,
   tables: [
     { table: 'executeOffers', options: {} },
@@ -15,14 +15,14 @@ const DB = {
     try {
       Log.info('   >> Connecting to RethinkDB...')
       const host = process.env.db_host || DB.host // 192.168.3.242
-      const port = process.env.db_port || DB.port
+      const port = process.env.db_port || DB.port // '
       const db = process.env.db_name || undefined
       const user = process.env.db_user || undefined
       const password = process.env.db_password || undefined
 
       DB.conn = await r.connect({ host, port, db, user, password })
       DB.dbCreateStrusture()
-      Log.info('   >> RethinkDB connected!')
+      Log.info('   >> RethinkDB connected')
     } catch (error) {
       console.error(error)
       process.exit(-1)

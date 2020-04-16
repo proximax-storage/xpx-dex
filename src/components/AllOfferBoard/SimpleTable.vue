@@ -14,6 +14,7 @@
           <tbody>
             <tr v-for="(n, commentIndex) in commentsToShow" :key="commentIndex">
               <template v-if="commentIndex < resultsOfferFilter.length">
+                <!-- {{mosaicInfo[0]}} -->
                 <td class="pr-3 pl-3" style="border:0">
                   {{
                   $generalService.amountFormatter(
@@ -72,7 +73,7 @@
 </template>
 <script>
 export default {
-  props: ['resultsOfferFilter', 'divisibility', 'type'],
+  props: ['resultsOfferFilter', 'divisibility', 'type', 'mosaicInfo'],
   data: () => ({
     typeOfferColor: null,
     commentsToShow: 5
@@ -86,6 +87,13 @@ export default {
       handler (value) {
         this.typeOfferColor = this.type === 'buy' ? 'dim' : 'pin'
         this.type = value
+      }
+    },
+    mosaicInfo: {
+      immediate: true,
+      handler (value) {
+        console.log()
+        this.mosaicInfo = value
       }
     }
   },
