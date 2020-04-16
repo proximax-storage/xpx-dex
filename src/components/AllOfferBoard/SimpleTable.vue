@@ -5,9 +5,9 @@
         <template v-slot:default>
           <thead>
             <tr style="border:0">
-              <th style="border:0" class="text-left subtitle-1 font-weight-bold">Initial amount</th>
-              <th style="border:0" class="text-left subtitle-1 font-weight-bold">Amount</th>
-              <th style="border:0" class="text-left subtitle-1 font-weight-bold">price</th>
+              <th style="border:0" class="text-left subtitle-1 font-weight-bold">Initial quantity</th>
+              <th style="border:0" class="text-left subtitle-1 font-weight-bold">Quantity Available</th>
+              <th style="border:0" class="text-left subtitle-1 font-weight-bold">price (XPX)</th>
               <th style="border:0" class="text-left subtitle-1 font-weight-bold">Total (XPX)</th>
             </tr>
           </thead>

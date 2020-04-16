@@ -21,14 +21,14 @@ export default {
     getConfigForm () {
       return {
         amount: {
-          label: 'Amount',
+          label: 'Quantity',
           icon: 'icon-amount-green-16h-proximax-sirius-wallet.svg',
           min: 3,
           max: 20,
           rules: {
-            required: v => !!v || 'Amount is required',
-            min: v => (v && v.length >= 3) || 'Amount must be less than 3 characters',
-            max: v => (v && v.length <= 20) || 'Amount must be a maximum of 20 characters'
+            required: v => !!v || 'Quantity is required',
+            min: v => (v && v.length >= 3) || 'Quantity must be less than 3 characters',
+            max: v => (v && v.length <= 20) || 'Quantity must be a maximum of 20 characters'
           }
         },
         durationOffer: {

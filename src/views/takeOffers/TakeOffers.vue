@@ -21,7 +21,7 @@
                     class="subtitle-1 pt-0 font-weight-regular text-left primary--text"
                   >My debit transaction</v-col>
                   <div class="ma-2 ml-7 mx-auto">
-                    <div class="caption font-italic font-weight-light">Amount you will send to selle</div>
+                    <div class="caption font-italic font-weight-light">Quantity you will send to selle</div>
                     <div
                       class="caption font-weight-black"
                     >{{ $generalService.amountFormatter(form.priceForAmount, '', 6) }} XPX</div>
