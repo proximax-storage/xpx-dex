@@ -8,7 +8,7 @@
     <v-row class="mt-5">
       <v-col cols="12">
         <v-card-title>
-          Filter offers {{assets}}
+          Filter Assets {{assets}}
           <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
@@ -27,7 +27,11 @@
           class="elevation-1 cursor-pointer"
           @click:row="searchResult"
         >
-          <template v-slot:item.tableData.graphic="{}">
+          <template v-slot:item.tableData.twentyFourChange="{ item }">
+            <span v-if="item.tableData.twentyFourChange > 8" class="red--text accent-4">{{item.tableData.twentyFourChange}}%</span>
+            <span v-else class="green--text darken-1">{{item.tableData.twentyFourChange}}%</span>
+          </template>
+          <template v-slot:item.tableData.graphic="{ }">
             <sparkline :value="value" :height="height" />
           </template>
         </v-data-table>
@@ -46,10 +50,9 @@ export default {
     title: 'Asset with available offers',
     search: '',
     headers: [
-      { text: 'Type', value: 'tableData.type' },
       { text: 'Asset', value: 'tableData.text' },
-      { text: 'Total assets available', value: 'tableData.totalAssetAvailable' },
-      { text: 'Average price', value: 'tableData.averagePrice' },
+      { text: 'Average price (XPX)', value: 'tableData.averagePrice' },
+      { text: '24h change', value: 'tableData.twentyFourChange' },
       { text: 'Price Graph', value: 'tableData.graphic' }
     ],
     value: [24, 150, 675, 320, 500, 200, 170, 250, 700],
@@ -69,17 +72,18 @@ export default {
   },
   methods: {
     ...mapMutations('offersStore', ['SET_OFFER_SELECTED']),
-    // clickButton: function (data) {
-    //   const valor = [
-    //     {
-    //       mosaicId: { id: { lower: 4209774098, higher: 27035008 } },
-    //       mosaicIdHex: '019c8580faec0e12'
-    //     }
-    //   ]
+    /* clickButton: function (data) {
+      const valor = [
+        {
+          mosaicId: { id: { lower: 4209774098, higher: 27035008 } },
+          mosaicIdHex: '019c8580faec0e12'
+        }
+      ]
 
-    //   this.$store.dispatch('socketDbStore/insertMoisaicsInfo', { io: this.$socket, data: valor })
-    // },
+      this.$store.dispatch('socketDbStore/insertMoisaicsInfo', { io: this.$socket, data: valor })
+    }, */
     searchResult ($event) {
+      console.log('$event', $event)
       this.SET_OFFER_SELECTED($event)
       this.$router.push('allOffer').catch(e => {})
     },
@@ -149,34 +153,40 @@ export default {
       const x = this.items.filter(x => x.data.length > 0)
       if (x.length > 0) {
         x.forEach(element => {
-          // console.log('element', this.items)
-          // console.log(
-          //   'this.items',
-          //   this.items.filter(x => x.info.mosaicIdHex === element.info.mosaicIdHex)
-          // )
-          const divisibility = element.info.mosaicInfo[0].mosaicInfo.properties.divisibility
+          console.log('element', element)
           const price = this.sumAllAmount(element.data.map(x => x.price)) / element.data.length
           const amount = this.sumAllAmount(element.data.map(x => x.amount.compact()))
-          const totalAssets = this.$generalService.amountFormatter(amount, null, divisibility)
+          const totalAssets = this.$generalService.amountFormatter(
+            amount,
+            element.info.mosaicInfo[0].mosaicInfo
+          )
           const offersBuy = this.items.filter(
             x => x.info.mosaicIdHex === element.info.mosaicIdHex && x.type === 'buy'
           )
           const offersSell = this.items.filter(
             x => x.info.mosaicIdHex === element.info.mosaicIdHex && x.type === 'sell'
           )
-          pass.push({
-            tableData: {
-              text: element.info.text,
-              type: element.type,
-              totalAssetAvailable: totalAssets,
-              averagePrice: price,
-              info: element.info
-            },
-            allOffers: {
-              sell: offersSell.length > 0 ? offersSell[0].data : offersSell,
-              buy: offersBuy.length > 0 ? offersBuy[0].data : offersBuy
-            }
-          })
+
+          if (!pass.find(x => x.tableData.text === element.info.text)) {
+            pass.push({
+              tableData: {
+                text: element.info.text,
+                type: element.type,
+                totalAssetAvailable: totalAssets,
+                averagePrice: price,
+                info: element.info,
+                priceArray: element.data.map(x => x.price),
+                twentyFourChange: `${(
+                  (Math.floor(Math.random() * 20) + Math.floor(Math.random() * 1000)) /
+                  100
+                ).toFixed(2)}`
+              },
+              allOffers: {
+                sell: offersSell.length > 0 ? offersSell[0].data : offersSell,
+                buy: offersBuy.length > 0 ? offersBuy[0].data : offersBuy
+              }
+            })
+          }
         })
       }
 
