@@ -140,16 +140,17 @@ export default {
         ],
         orderby: 3
       },
-      {
-        icon: 'mdi-wallet',
-        type: 'icon-group',
-        title: 'My wallet',
-        class: 'primary white-text',
-        action: 'myWallet',
-        viewLogged: true,
-        sublinks: [],
-        orderby: 4
-      },
+      // {
+      //   icon: 'mdi-wallet',
+      //   type: 'icon-group',
+      //   title: 'My wallet',
+      //   class: 'primary white-text',
+      //   action: 'myWallet',
+      //   viewLogged: true,
+      //   sublinks: [],
+      //   orderby: 4
+      // }
+      // ,
       {
         icon: 'mdi-storefront',
         type: 'icon-group',
@@ -180,17 +181,18 @@ export default {
         viewLogged: true,
         sublinks: [],
         orderby: 6
-      },
-      {
-        icon: 'mdi-storefront',
-        type: 'icon-group',
-        title: 'All offer',
-        class: 'primary white-text',
-        action: 'allOffer',
-        viewLogged: true,
-        sublinks: [],
-        orderby: 7
       }
+      // ,
+      // {
+      //   icon: 'mdi-storefront',
+      //   type: 'icon-group',
+      //   title: 'All offer',
+      //   class: 'primary white-text',
+      //   action: 'allOffer',
+      //   viewLogged: true,
+      //   sublinks: [],
+      //   orderby: 7
+      // }
 
       // {
       //   icon: 'mdi-view-dashboard',

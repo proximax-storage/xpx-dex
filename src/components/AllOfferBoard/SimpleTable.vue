@@ -65,7 +65,7 @@
         v-if="
           commentsToShow < resultsOfferFilter.length || resultsOfferFilter.length > commentsToShow
         "
-        @click="commentsToShow += 4"
+        @click="commentsToShow += 5"
       >Load more</a>
     </v-col>
   </v-row>
@@ -75,15 +75,21 @@ export default {
   props: ['resultsOfferFilter', 'divisibility', 'type'],
   data: () => ({
     typeOfferColor: null,
-    commentsToShow: 4
+    commentsToShow: 5
   }),
   watch: {
     resultsOfferFilter: function (newExrDay) {
-      this.commentsToShow = 4
+      this.commentsToShow = 5
+    },
+    type: {
+      immediate: true,
+      handler (value) {
+        this.typeOfferColor = this.type === 'buy' ? 'dim' : 'pin'
+        this.type = value
+      }
     }
   },
   created () {
-    console.log(this.resultsOfferFilter)
     this.typeOfferColor = this.type === 'buy' ? 'dim' : 'pin'
   },
   methods: {
