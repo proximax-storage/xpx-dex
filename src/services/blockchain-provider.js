@@ -231,7 +231,7 @@ class BlockchainProvider {
    * @memberof BlockchainProvider
    */
   getExchangeOffersfromId (Idmosaic, type) {
-    console.log('tipe:', type)
+    // console.log('tipe:', type)
     const id = new MosaicId(Idmosaic)
     return this.exchangeHttp.getExchangeOffers(type, id)
   }
@@ -341,7 +341,7 @@ class BlockchainProvider {
    * @memberof ProximaxProvider
    */
   signedTransaction (privateKey, transaction) {
-    console.log('privateKey', privateKey)
+    // console.log('privateKey', privateKey)
     const account = Account.createFromPrivateKey(privateKey, this.typeNetwork)
     return account.sign(transaction, this.generationHash)
   }

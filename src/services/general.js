@@ -223,7 +223,7 @@ class GeneralService {
    */
   calculateDuration (duration) {
     let durationCompact = 0
-    console.log(typeof duration)
+    // console.log(typeof duration)
     if (typeof duration === 'string') {
       durationCompact = Number(duration)
     } else if (typeof duration === 'number') {

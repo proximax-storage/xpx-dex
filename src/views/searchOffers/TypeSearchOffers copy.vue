@@ -208,7 +208,7 @@ export default {
     },
     filtersAssets (data) {
       // 286ABCDE88E269AC899D872F2D9CC62E2B8B0126E1F04B49A97EDBE588949806
-      console.log('data', data)
+      // console.log('data', data)
       let valor = []
       if (JSON.parse(JSON.stringify(data)).length > 0) {
         valor = data.map(item => {

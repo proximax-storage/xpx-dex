@@ -51,13 +51,11 @@ export default {
   },
   methods: {
     action (action) {
-      console.log(action)
       switch (action) {
         case 'viewOnExplorer':
           this.$router.push({ path: '/searchOfferts' })
           break
         case 'print':
-          console.log('print')
           break
       }
     }

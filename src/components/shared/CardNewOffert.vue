@@ -42,7 +42,6 @@ export default {
     type: {
       immediate: true,
       handler (value) {
-        console.log('valuevaluevalue value value value')
         this.type = value
         this.typeOfferColor = this.type === 'buy' ? 'dim' : 'pin'
         this.btn = {

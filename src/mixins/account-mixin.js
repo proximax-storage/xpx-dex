@@ -161,7 +161,6 @@ export default {
       this.$store.commit('accountStore/SET_BALANCE_CURRENT_ACCOUNT', balance)
     },
     async buildCurrentAccountInfo (accountInfo) {
-      console.log('buildCurrentAccountInfo')
       const mosaicsSelect = []
       if (accountInfo !== undefined && accountInfo !== null) {
         if (accountInfo.mosaics.length > 0) {

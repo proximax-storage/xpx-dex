@@ -363,7 +363,7 @@ export default {
             } else {
               cost = this.$generalService.quantityStringToInt(this.form.bidPrice, 6)
             }
-            console.log('cost', cost)
+            // console.log('cost', cost)
             const id = this.$blockchainProvider.getMosaicId(this.idHex)
             // const duration = Number(this.form.duration)
             const addExchangeOffer = this.$blockchainProvider.addExchangeOffer(
@@ -373,7 +373,7 @@ export default {
               this.typeOffer,
               Number(500)
             )
-            console.log('addExchangeOffer', addExchangeOffer)
+            // console.log('addExchangeOffer', addExchangeOffer)
             this.dataMosaics.push({
               mosaicId: this.$blockchainProvider.getMosaicId(this.idHex),
               mosaicIdHex: this.idHex
@@ -389,8 +389,8 @@ export default {
               common = null
               this.clear()
               this.$blockchainProvider.announceTx(signedTransaction).subscribe(
-                x => {
-                  console.log(x)
+                () => {
+                  // console.log(x)
                 },
                 err => {
                   this.sendingForm = false

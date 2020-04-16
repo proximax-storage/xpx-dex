@@ -261,7 +261,6 @@ export default {
   methods: {
     ...mapMutations('accountStore', ['LOGIN']),
     actions (action) {
-      console.log('action::', action)
       switch (action) {
         case 'login':
           this.$router.push(`${action}`).catch(e => {})

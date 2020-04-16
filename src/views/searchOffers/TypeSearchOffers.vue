@@ -153,7 +153,7 @@ export default {
       const x = this.items.filter(x => x.data.length > 0)
       if (x.length > 0) {
         x.forEach(element => {
-          console.log('element', element)
+          // console.log('element', element.info.mosaicInfo[0].mosaicInfo)
           const price = this.sumAllAmount(element.data.map(x => x.price)) / element.data.length
           const amount = this.sumAllAmount(element.data.map(x => x.amount.compact()))
           const totalAssets = this.$generalService.amountFormatter(

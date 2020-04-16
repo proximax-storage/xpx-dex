@@ -26,7 +26,6 @@ export default {
         const ad = this.$blockchainProvider.createFromRawAddress(
           element.simpleWallet.address.address
         )
-        console.log('ad', ad)
         const b = new Listener(this.url, WebSocket)
         this.connector.push(b)
         b.open().then(
@@ -48,10 +47,10 @@ export default {
       setTimeout(() => {
         // console.log('this.reconnectNode', this.reconnectNode)
         const status = this.reconnectNode.some(element => element === true)
-        console.log('status', status)
+        // console.log('status', status)
         if (status) {
           this.reconnectNum = this.reconnectNum + 1
-          console.log('this.reconnectNum', this.reconnectNum)
+          // console.log('this.reconnectNum', this.reconnectNum)
           if (this.reconnectNum === 1) {
             this.$store.dispatch('showMSG', {
               snackbar: true,
@@ -97,8 +96,8 @@ export default {
     getBlockSocket (connector) {
       connector.newBlock().subscribe(
         blockInfo => {
-          console.log('new block -->', blockInfo.numTransactions)
-          console.log('new block -->', blockInfo.height.compact())
+          // console.log('new block -->', blockInfo.numTransactions)
+          // console.log('new block -->', blockInfo.height.compact())
           //   this.saveBlockInfo(blockInfo)
         },
         err => {
@@ -135,7 +134,7 @@ export default {
           hash: confirmedTransaction.transactionInfo.hash
         })
         const wallet = this.$store.getters['walletStore/currentWallet']
-        console.log('walles', wallet)
+        // console.log('walles', wallet)
         this.set_searchAccountsInfo(wallet.accounts)
       })
     },
