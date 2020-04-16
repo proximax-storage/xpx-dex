@@ -2,15 +2,16 @@
   <v-row>
     <v-col cols="12">
       <v-card elevation="0" color="leve">
-        <v-card-title style="position: relative" class="title d-flex justify-center align-center"
-          >None of these offers is useful for you?</v-card-title
-        >
+        <v-card-title
+          style="position: relative"
+          class="title d-flex justify-center align-center"
+        >None of these offers is useful for you?</v-card-title>
 
         <v-card-actions class="d-flex justify-center align-center">
           <custom-buttons
             style="position: absolute;"
             class="pl-5"
-            @action="ownOffer"
+            @action="triggerClick"
             :align="'center'"
             :arrayBtn="buttons"
           ></custom-buttons>
@@ -23,7 +24,7 @@
 import generalMixins from '../../mixins/general-mixin'
 export default {
   mixins: [generalMixins],
-  props: ['dataAssets'],
+  props: ['type'],
   data: () => ({
     btn: null
   }),
@@ -37,13 +38,29 @@ export default {
       return btn
     }
   },
-  methods: {
-    ownOffer () {
-      if (this.$store.getters['accountStore/isLogged']) {
-        this.$router.push({ path: '/newOffer' })
-      } else {
-        this.$router.push({ path: '/login' })
+  watch: {
+    type: {
+      immediate: true,
+      handler (value) {
+        console.log('valuevaluevalue value value value')
+        this.type = value
+        this.typeOfferColor = this.type === 'buy' ? 'dim' : 'pin'
+        this.btn = {
+          ownOffer: this.typeButtons().ownOffer
+        }
       }
+    }
+  },
+  methods: {
+    // ownOffer () {
+    //   if (this.$store.getters['accountStore/isLogged']) {
+    //     this.$router.push({ path: '/newOffer' })
+    //   } else {
+    //     this.$router.push({ path: '/login' })
+    //   }
+    // },
+    triggerClick () {
+      this.$emit('ownOffer')
     }
   },
   beforeMount () {
@@ -52,7 +69,7 @@ export default {
     }
   },
   created () {
-    if (this.dataAssets) this.typeOfferColor = this.dataAssets.form.active === 'buy' ? 'dim' : 'pin'
+    this.typeOfferColor = this.type === 'buy' ? 'dim' : 'pin'
   }
 }
 </script>

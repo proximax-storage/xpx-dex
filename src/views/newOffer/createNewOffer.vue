@@ -324,7 +324,8 @@ export default {
     },
     getArrayBtn () {
       const arrayBtn = this.arrayBtn
-      arrayBtn[0]['place'].disabled = !this.valid || !this.form.checkbox || this.isValidateBalance
+      arrayBtn[0]['place'].disabled =
+        !this.valid || !this.form.checkbox || this.isValidateBalance
       arrayBtn[0]['place'].loading = this.sendingForm
       arrayBtn[0]['place'].color = this.type === null ? 'white' : this.typeOfferColor
       arrayBtn[0]['place'].textColor = 'white--text'

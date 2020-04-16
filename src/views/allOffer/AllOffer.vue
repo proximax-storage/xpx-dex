@@ -52,7 +52,7 @@
         </v-row>
       </v-col>
       <v-col sm="5" md="5" lg="3" col="3" class="pt-0">
-        <card-new-offert :dataAssets="dataAssets" />
+        <card-new-offert :type="form.active" @ownOffer="ownOffer" />
         <card-other-assets :dataAssets="dataAssets" />
       </v-col>
     </v-row>
@@ -93,8 +93,9 @@ export default {
   },
   computed: {
     ...mapGetters('socketDbStore', ['mosaicsInfOffer', 'mosaicsInfOfferFromIdHex']),
+    ...mapGetters('offersStore', ['offerSelected']),
     nameMosaicInfo () {
-      return this.nameMosaic('2dad1fc91904b5af')
+      return this.offerSelected.tableData.text
     },
     resultsData () {
       const key = this.form.active
@@ -102,45 +103,41 @@ export default {
     }
   },
   methods: {
-    nameMosaic (IdHex) {
-      let nameMosaics = null
-      if (IdHex) {
-        console.log(this.mosaic)
-        this.mosaic = this.mosaicsInfOfferFromIdHex(IdHex)
-        console.log(this.mosaic)
-        if (this.mosaic[0].mosaicInfo !== null && this.mosaic[0].mosaicInfo !== undefined) {
-          nameMosaics =
-            this.mosaic[0].mosaicInfo[0].mosaicNames.names.length > 0
-              ? this.mosaic[0].mosaicInfo[0].mosaicNames.names[0].name
-              : this.mosaic[0].text
-        }
-      }
-      return nameMosaics
-    },
-    mosaicInfoProperties (IdHex) {
+    mosaicInfoProperties (mosaic = null) {
       let properties = {
-        divisibility: null,
+        divisibility: 6,
         duration: null,
         supplyMutable: null,
         transferable: null
       }
-      const mosaic = this.mosaicsInfOfferFromIdHex(IdHex)
-      if (mosaic) properties = mosaic[0].mosaicInfo[0].mosaicInfo.properties
+      if (mosaic) properties = mosaic[0].mosaicInfo.properties
       return properties
     },
     resultsOffer (data = [], type = null) {
-      console.log('data', data)
-      for (let item of data) {
-        item.priceForAmount = item.amount.compact() * item.price
-        this.data.sell.push(item)
+      if (data.sell.length > 0) {
+        for (let item of data.sell) {
+          item.priceForAmount = item.amount.compact() * item.price
+          this.data.sell.push(item)
+        }
+      }
+      if (data.buy.length > 0) {
+        for (let item of data.buy) {
+          item.priceForAmount = item.amount.compact() * item.price
+          this.data.buy.push(item)
+        }
+      }
+    },
+    ownOffer () {
+      if (this.$store.getters['accountStore/isLogged']) {
+        this.dataAssets.form.active = this.form.active
+        this.$store.commit('mosaicExchange/SET_DATA_ASSETS', this.dataAssets)
+        this.$router.push({ path: '/newOffer' })
+      } else {
+        this.$router.push({ path: '/login' })
       }
     },
     sendOffer (value) {
-      this.dataAssets.configMoney.precision = this.propertiesMosaic.divisibility
-      this.dataAssets.mosaicInfo = this.mosaic[0].mosaicInfo[0]
-      this.dataAssets.form.asset = '2dad1fc91904b5af'
-      console.log('this.dataAssets', this.dataAssets)
-
+      this.dataAssets.form.active = this.form.active
       this.$store.commit('mosaicExchange/SET_EXCHANGE', value)
       this.$store.commit('mosaicExchange/SET_DATA_ASSETS', this.dataAssets)
       if (this.$store.getters['accountStore/isLogged']) {
@@ -151,16 +148,32 @@ export default {
     }
   },
   beforeMount () {
-    this.propertiesMosaic = this.mosaicInfoProperties('2dad1fc91904b5af')
-    this.progress = true
-    this.$blockchainProvider
-      .getExchangeOffersfromId('2dad1fc91904b5af', this.form.active === 'buy' ? 1 : 0)
-      .subscribe(offer => {
-        this.progress = false
-        if (offer && offer.length > 0) {
-          this.resultsOffer(offer)
-        }
-      })
+    console.log(this.offerSelected.tableData.info.mosaicInfo[0].idMosaic)
+
+    if (this.offerSelected) {
+      this.propertiesMosaic = this.mosaicInfoProperties(
+        this.offerSelected.tableData.info.mosaicInfo
+      )
+      this.dataAssets.form.active = this.offerSelected.tableData.type
+      this.form.active = this.offerSelected.tableData.type
+      this.resultsOffer(this.offerSelected.allOffers, this.offerSelected.tableData.type)
+      this.dataAssets.configMoney.precision = this.propertiesMosaic.divisibility
+      this.dataAssets.mosaicInfo = this.offerSelected.tableData.info.mosaicInfo
+      this.dataAssets.form.asset = this.$blockchainProvider
+        .getMosaicId(this.offerSelected.tableData.info.mosaicInfo[0].idMosaic)
+        .toHex()
+      this.$store.commit('mosaicExchange/SET_DATA_ASSETS', this.dataAssets)
+    }
+
+    // this.progress = true
+    // this.$blockchainProvider
+    //   .getExchangeOffersfromId('2dad1fc91904b5af', this.form.active === 'buy' ? 1 : 0)
+    //   .subscribe(offer => {
+    //     this.progress = false
+    //     if (offer && offer.length > 0) {
+    //       this.resultsOffer(offer)
+    //     }
+    //   })
   }
 }
 </script>

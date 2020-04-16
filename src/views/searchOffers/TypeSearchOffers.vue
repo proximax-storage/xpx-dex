@@ -69,22 +69,22 @@ export default {
   },
   methods: {
     ...mapMutations('offersStore', ['SET_OFFER_SELECTED']),
-    clickButton: function (data) {
-      const valor = [
-        {
-          mosaicId: { id: { lower: 4209774098, higher: 27035008 } },
-          mosaicIdHex: '019c8580faec0e12'
-        }
-      ]
+    // clickButton: function (data) {
+    //   const valor = [
+    //     {
+    //       mosaicId: { id: { lower: 4209774098, higher: 27035008 } },
+    //       mosaicIdHex: '019c8580faec0e12'
+    //     }
+    //   ]
 
-      this.$store.dispatch('socketDbStore/insertMoisaicsInfo', { io: this.$socket, data: valor })
-    },
+    //   this.$store.dispatch('socketDbStore/insertMoisaicsInfo', { io: this.$socket, data: valor })
+    // },
     searchResult ($event) {
       this.SET_OFFER_SELECTED($event)
       this.$router.push('allOffer').catch(e => {})
     },
     filtersAssets (data) {
-      console.log('Filter assets data ====> ', data)
+      // console.log('Filter assets data ====> ', data)
       let valor = []
       if (JSON.parse(JSON.stringify(data)).length > 0) {
         valor = data.map(item => {
@@ -113,7 +113,7 @@ export default {
     },
     getBuy (data) {
       this.$blockchainProvider.getExchangeOffersfromId(data.mosaicIdHex, 1).subscribe(offer => {
-        console.log('offer BUY', offer)
+        // console.log('offer BUY', offer)
         this.progress = false
         this.items.push({
           info: data,
@@ -124,7 +124,7 @@ export default {
     },
     getSell (data) {
       this.$blockchainProvider.getExchangeOffersfromId(data.mosaicIdHex, 0).subscribe(offer => {
-        console.log('offer Sell', offer)
+        // console.log('offer Sell', offer)
         this.progress = false
         this.items.push({
           info: data,
@@ -149,11 +149,11 @@ export default {
       const x = this.items.filter(x => x.data.length > 0)
       if (x.length > 0) {
         x.forEach(element => {
-          console.log('element', this.items)
-          console.log(
-            'this.items',
-            this.items.filter(x => x.info.mosaicIdHex === element.info.mosaicIdHex)
-          )
+          // console.log('element', this.items)
+          // console.log(
+          //   'this.items',
+          //   this.items.filter(x => x.info.mosaicIdHex === element.info.mosaicIdHex)
+          // )
           const divisibility = element.info.mosaicInfo[0].mosaicInfo.properties.divisibility
           const price = this.sumAllAmount(element.data.map(x => x.price)) / element.data.length
           const amount = this.sumAllAmount(element.data.map(x => x.amount.compact()))
@@ -180,13 +180,13 @@ export default {
         })
       }
 
-      console.log('ITEMS', this.items)
+      // console.log('ITEMS', this.items)
       return pass
     },
     assets () {
-      console.log('MOSAICS IN OFFERS ---->', this.mosaicsInfOffer)
+      // console.log('MOSAICS IN OFFERS ---->', this.mosaicsInfOffer)
       const filtersAssets = this.filtersAssets(this.mosaicsInfOffer)
-      console.log('filtersAssets', filtersAssets)
+      // console.log('filtersAssets', filtersAssets)
       this.mapMosaicsId(filtersAssets)
       return ''
     }
