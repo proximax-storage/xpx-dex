@@ -117,6 +117,16 @@ const routes = [
     }
   },
   {
+    path: '/myWallet',
+    name: 'Info walleet',
+    component: () =>
+      import(/* webpackChunkName: "WalletInfo" */ '../views/myWalletInfo/WalletInfo.vue'),
+    meta: {
+      requiresAuth: true,
+      hideMenu: false
+    }
+  },
+  {
     path: '*',
     redirect: '/'
   }

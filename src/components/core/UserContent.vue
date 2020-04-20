@@ -1,21 +1,19 @@
 <template>
   <div>
-    <v-list-item class="pt-3 ">
-      <v-list-item-content class="">
+    <v-list-item class="pt-4">
+      <v-list-item-content class>
         <v-list-item-title class="subtitle-1 pb-1 ml-1">
           <span>{{ nameCurrentWallet }}</span>
         </v-list-item-title>
         <v-divider class="mt-1" />
         <v-list-item-subtitle class="ml-1 pt-3">
-          <span class="caption font-italic">Available balance</span> <br>
+          <span class="caption font-italic">Available balance</span>
+          <br />
           <span class="subtitle-1" v-text="getTotalBalance['part1']"></span>
           <span class="caption mr-1" v-text="getTotalBalance['part2']"></span>
           <span class="subtitle-1 text-uppercase">{{ nameMosaic }}</span>
         </v-list-item-subtitle>
-        <!-- <v-list-item-subtitle class="subtitle-2 ml-1">
-          USD {{ getTotalUsd | toCurrency }}
-        </v-list-item-subtitle> -->
-        <v-list-item-subtitle class="pt-1 subtitle-2  ml-1">
+        <v-list-item-subtitle class="pt-1 subtitle-2 ml-1">
           <img
             style="vertical-align: middle"
             :src="require(`@/assets/img/${theme}/icon-mosaic.svg`)"
@@ -23,20 +21,13 @@
             class="pr-1"
             height="20"
             v-bind:title="getMosaicsListLength"
-          />{{ mosaicLength.length }} mosaics
+          />
+          {{ mosaicLength.length }} mosaics
         </v-list-item-subtitle>
-        <!-- <v-progress-linear
-          class="mt-1"
-          :active="loadingInfoWallet.show"
-          :indeterminate="loadingInfoWallet.show"
-          botton
-          color="sky"
-          rounded
-          height="9"
-          ><strong class="caption font-italic font-weight-bold ">{{
-            loadingInfoWallet.text
-          }}</strong>
-        </v-progress-linear> -->
+        <v-divider class="mt-1" />
+        <v-list-item-subtitle class="pt-2 subtitle-2 font-weight-medium primary--text">
+          <v-btn text small class="subtitle-2 primary--text" @click="activity('myWallet')">Activity</v-btn>
+        </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
   </div>
@@ -73,6 +64,9 @@ export default {
     }
   },
   methods: {
+    activity (action) {
+      this.$router.push(`${action}`).catch(e => {})
+    },
     totalBalance () {
       const total = this.$generalService.amountFormatter(
         this.$store.getters['accountStore/totalBalance'](this.$environment.mosaic.id),

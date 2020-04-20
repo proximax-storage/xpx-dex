@@ -37,9 +37,8 @@
             </v-btn>
           </v-btn-toggle>
 
-          <div v-if="item.type === 'menu'">
+          <div v-if="(item.type === 'menu') ||(item.type === 'menuIcon')">
             <v-menu
-              class="hola"
               transition="slide-y-transition"
               bottom
               right
@@ -47,8 +46,8 @@
               max-width="200"
               z-index="0"
             >
-              <template v-slot:activator="{ on }">
-                <v-btn text small color="sky" v-on="on">
+              <template v-slot:activator="{ on }" v-if="item.type === 'menuIcon'">
+                <v-btn text small color="primary" v-on="on">
                   <div v-if="loadingInfo">
                     <v-progress-circular indeterminate color="grey">
                       <v-icon>{{ item.icon }}</v-icon>
@@ -78,9 +77,6 @@
               </v-list>
             </v-menu>
           </div>
-          <!-- <v-btn  icon @click="actions(item.action)">
-            <v-icon v-text="item.icon"></v-icon>
-          </v-btn>-->
         </div>
       </div>
     </v-app-bar>
@@ -121,10 +117,10 @@ export default {
       },
       {
         icon: 'mdi-account-circle',
-        type: 'menu',
-        title: 'Log out',
+        type: 'menuIcon',
+        title: 'Account info',
         class: 'primary white-text',
-        action: 'logout',
+        action: 'accountInfo',
         viewLogged: true,
         sublinks: [
           {
@@ -140,17 +136,6 @@ export default {
         ],
         orderby: 3
       },
-      // {
-      //   icon: 'mdi-wallet',
-      //   type: 'icon-group',
-      //   title: 'My wallet',
-      //   class: 'primary white-text',
-      //   action: 'myWallet',
-      //   viewLogged: true,
-      //   sublinks: [],
-      //   orderby: 4
-      // }
-      // ,
       {
         icon: 'mdi-storefront',
         type: 'icon-group',
@@ -182,7 +167,7 @@ export default {
         sublinks: [],
         orderby: 6
       }
-      // ,
+      //, ,
       // {
       //   icon: 'mdi-storefront',
       //   type: 'icon-group',
