@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     activity (action) {
-      this.$router.push(`${action}`).catch(e => {})
+      this.$router.push({ path: `${action}`, query: { item: 2 } }).catch(e => {})
     },
     totalBalance () {
       const total = this.$generalService.amountFormatter(

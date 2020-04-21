@@ -81,8 +81,7 @@ export default {
     type: {
       immediate: true,
       handler (value) {
-        this.typeOfferColor = this.type === 'buy' ? 'dim' : 'pin'
-        this.type = value
+        this.typeOfferColor = this.typeAction(value)
       }
     },
     mosaicInfo: {
@@ -93,11 +92,21 @@ export default {
     }
   },
   created () {
-    this.typeOfferColor = this.type === 'buy' ? 'dim' : 'pin'
+    this.typeOfferColor = this.typeAction(this.type)
   },
   methods: {
     triggerClick (item) {
       this.$emit('sendOffer', item)
+    },
+    typeAction (type = null) {
+      this.type = type
+      if (type === 'buy') {
+        return 'dim'
+      } else if (type === 'sell') {
+        return 'pin'
+      } else if (type === 'cancel') {
+        return 'red'
+      }
     }
   }
 }

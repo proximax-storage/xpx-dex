@@ -22,14 +22,18 @@
         </v-tabs>
 
         <v-tabs-items v-model="tab">
-          <!-- <v-sheet style="bottom" height="4" tile color="pin"></v-sheet> -->
-          <v-tab-item v-for="item in arrayItems" :key="item.item" :value="item">{{ tab }}</v-tab-item>
+          <v-tab-item v-for="item in arrayItems" :key="item.item">
+            <template v-if="tab === 2">
+              <delete-offer />
+            </template>
+          </v-tab-item>
         </v-tabs-items>
       </v-col>
     </v-row>
   </v-col>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -57,6 +61,28 @@ export default {
         }
       ]
     }
+  },
+  computed: {
+    ...mapGetters('offersStore', ['offerAll']),
+    offerAlldata () {
+      return this.buildData(this.offerAll)
+    }
+  },
+  components: {
+    'delete-offer': () => import('@/components/deleteOffer/DeleteOffer')
+  },
+  methods: {
+    filterItems (param = null, arrayItems = []) {
+      const value = arrayItems.filter(x => x.index === param)[0]
+      return value
+    },
+    action (item) {
+      console.log(item)
+    }
+  },
+  beforeMount () {
+    const item = this.filterItems(this.$route.query.item, this.arrayItems)
+    this.tab = item.index
   }
 }
 </script>
