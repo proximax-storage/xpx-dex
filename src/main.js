@@ -30,13 +30,13 @@ import * as websocketProvider from '@/core/utils/websocketProvider'
 import * as general from '@/core/utils/general'
 import * as filters from '@/filters'
 import * as directives from '@/directives'
-import * as configApp from '@/core/configApp'
+import * as appConfig from '@/core/appConfig'
 
 Vue.use(VueAxios, axios)
 // General Config Modules
 const modulesConfig = {}
-Object.keys(configApp).forEach(element => {
-  modulesConfig[element] = configApp[element]
+Object.keys(appConfig).forEach(element => {
+  modulesConfig[element] = appConfig[element]
 })
 
 // Define Prototype

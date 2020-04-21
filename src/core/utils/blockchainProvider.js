@@ -1,3 +1,4 @@
+import * as crypto from 'js-xpx-chain-library/dist/crypto/crypto'
 import {
   PublicAccount
 } from 'tsjs-xpx-chain-sdk/dist/src/model/account/PublicAccount'
@@ -22,7 +23,6 @@ import {
 import {
   TransactionType
 } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/TransactionType'
-import * as crypto from 'js-xpx-chain-library/dist/crypto/crypto'
 import {
   Connections
 } from '@/core/utils/connection'
