@@ -17,6 +17,7 @@
     "tsjs-xpx-chain-sdk": "^0.7.0",
     "v-money": "^0.8.1",
     "vue": "^2.6.10",
+    "vue-axios": "^2.1.5",
     "vue-clipboard2": "^0.3.1",
     "vue-lodash": "^2.0.2",
     "vue-router": "^3.1.3",

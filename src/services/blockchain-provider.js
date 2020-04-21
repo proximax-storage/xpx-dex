@@ -1,4 +1,6 @@
-import { crypto } from 'js-xpx-chain-library'
+import {
+  crypto
+} from 'js-xpx-chain-library'
 import axios from 'axios'
 import {
   Account,
@@ -24,8 +26,12 @@ import {
   UInt64,
   Deadline
 } from 'tsjs-xpx-chain-sdk'
-import { ExchangeHttp } from 'tsjs-xpx-chain-sdk/dist/src/infrastructure/ExchangeHttp'
-import { GeneralService } from './general'
+import {
+  ExchangeHttp
+} from 'tsjs-xpx-chain-sdk/dist/src/infrastructure/ExchangeHttp'
+import {
+  GeneralService
+} from './general'
 
 class BlockchainProvider {
   constructor (node, protocol, typeNetwork, coingecko) {
@@ -157,26 +163,44 @@ class BlockchainProvider {
     try {
       if (account && account.encrypted !== '' && common) {
         if (!crypto.passwordToPrivatekey(common, account, account.algo)) {
-          return { status: false, msg: 'Invalid password' }
+          return {
+            status: false,
+            msg: 'Invalid password'
+          }
         }
 
         if (common.isHW) {
-          return { status: false, msg: 'Invalid password' }
+          return {
+            status: false,
+            msg: 'Invalid password'
+          }
         }
 
         if (
           !this.isValidPrivateKey(common.privateKey) ||
           !this.checkAddress(common.privateKey, network, account.address)
         ) {
-          return { status: false, msg: 'Invalid password' }
+          return {
+            status: false,
+            msg: 'Invalid password'
+          }
         }
 
-        return { status: true, msg: '' }
+        return {
+          status: true,
+          msg: ''
+        }
       } else {
-        return { status: false, msg: 'You do not have a valid account selected' }
+        return {
+          status: false,
+          msg: 'You do not have a valid account selected'
+        }
       }
     } catch (error) {
-      return { status: false, msg: 'You do not have a valid account selected.' }
+      return {
+        status: false,
+        msg: 'You do not have a valid account selected.'
+      }
     }
   }
 
@@ -435,4 +459,6 @@ class BlockchainProvider {
   }
 }
 
-export { BlockchainProvider }
+export {
+  BlockchainProvider
+}

@@ -74,34 +74,59 @@
         </v-row>
         <!-- <v-row class="d-flex justify-center align-center ma-4">
           <router-link class="font-italic font-weight-medium" to="/">Go to home page</router-link>
-        </v-row> -->
+        </v-row>-->
       </template>
     </v-container>
   </v-container>
 </template>
 <script>
 import { mapMutations } from 'vuex'
-import generalMixins from '../../mixins/general-mixin'
-import walletMixins from '../../mixins/wallet-mixin'
+// import generalMixins from '../../mixins/general-mixin'
+// import walletMixins from '../../mixins/wallet-mixin'
+import { getWalletByName, getWallets, logIn } from '@/services/account-wallet-service'
 export default {
-  mixins: [generalMixins, walletMixins],
+  // mixins: [walletMixins],
   data: () => {
     return {
-      items: [
+      wallet: null,
+      arrayBtn: [
         {
-          countryCode: 'CA',
-          countryName: 'Canada'
+          login: {
+            key: 'login',
+            action: 'login',
+            disabled: false,
+            color: 'primary',
+            textColor: 'white--text',
+
+            loading: false,
+            text: 'Log In'
+          }
+        },
+        {
+          letsgo: {
+            key: 'letgo',
+            action: 'letgo',
+            disabled: false,
+            color: 'primary',
+            textColor: 'white--text',
+            loading: false,
+            text: `Let's Go`
+          }
         }
       ],
-      wallet: null,
-      arrayBtn: null,
       password: null,
       configForm: null,
       outline: false,
       inputStyle: 'inputStyle',
       valid: false,
       sendingForm: false,
-      wallets: null
+      wallets: getWallets()
+    }
+  },
+  beforeMount () {
+    this.configForm = {
+      wallet: this.$configForm.wallet(),
+      password: this.$configForm.password()
     }
   },
   methods: {
@@ -118,9 +143,9 @@ export default {
       if (this.valid && !this.sendingForm) {
         this.sendingForm = true
         this.SHOW_LOADING(true)
-        const wallet = this.getWalletByName(this.wallet)
-        const auth = this.auth(this.password, wallet)
-        if (auth) {
+        const wallet = getWalletByName(this.wallet)
+        const login = logIn(wallet, this.password)
+        if (login) {
           setTimeout(() => {
             this.clear()
             this.sendingForm = false
@@ -150,18 +175,6 @@ export default {
   },
   components: {
     'custom-buttons': () => import('@/components/shared/Buttons')
-  },
-  beforeMount () {
-    this.configForm = this.getConfigForm()
-    this.wallets = this.getWallets()
-    this.arrayBtn = [
-      {
-        login: this.typeButtonsLogin().login
-      },
-      {
-        letsgo: this.typeButtonsLogin().letsgo
-      }
-    ]
   }
 }
 </script>

@@ -27,26 +27,35 @@
 </template>
 
 <script>
-import getInfoAssetsMixin from './mixins/get-info-assets-mixin'
-import { mapState } from 'vuex'
+import { getAccountsInfo } from '@/services/account-wallet-service'
+// import getInfoAssetsMixin from './mixins/get-info-assets-mixin'
+import { mapState, mapGetters } from 'vuex'
 export default {
-  mixins: [getInfoAssetsMixin],
+  // mixins: [getInfoAssetsMixin],
   name: 'App',
-  data: () => ({}),
+  data: () => ({
+    connectionStablished: false
+  }),
   components: {
     'menu-item': () => import('@/components/Menu')
   },
   computed: {
     ...mapState(['overlay', 'snackbar']),
-    ...mapState(['showMenu'])
+    ...mapState(['showMenu']),
+    ...mapGetters('nodeStore', ['nodeStatus'])
+  },
+  watch: {
+    nodeStatus (newValue, oldValue) {
+      console.log('Node status has changed \n\n', newValue)
+      // Node status is active
+      if (newValue === 1 && !this.connectionStablished) {
+        this.connectionStablished = true
+        getAccountsInfo(this.$store.getters['walletStore/currentWallet'].accounts)
+      }
+    }
   },
   mounted () {
-    this.$store.dispatch('socketDbStore/getMoisaicsInfo', { io: this.$socket, data: null })
+    // this.$store.dispatch('socketDbStore/getMoisaicsInfo', { io: this.$socket, data: null })
   }
 }
 </script>
-<style>
-/* #core-view {
-  padding-bottom: 100px;
-} */
-</style>

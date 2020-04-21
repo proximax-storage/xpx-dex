@@ -4,17 +4,23 @@ import { accountStore } from './modules/account-store'
 import { walletStore } from './modules/wallet-store'
 import { appCoreStore } from './modules/app-core-store'
 import { namespaceStore } from './modules/namespace-store'
-import { nodeStore } from './modules/node-store'
+// import { nodeStore } from './modules/node-store'
 import { mosaicStore } from './modules/mosaic-store'
 import { socketDbStore } from './modules/socket-db-store'
 import { mosaicExchange } from './modules/mosaic-exchange'
 import { socketBcStore } from './modules/socket-bc-store'
 import { offersStore } from './modules/offers-store'
+import {
+  nodeStore
+} from '@/core/store/'
+
 Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
+    environment: null,
+    configApp: null,
+    networkSelected: '',
     count: null,
-    configInfo: null,
     showMenu: true,
     overlay: false,
     loadingInfoWallet: {
@@ -32,9 +38,28 @@ export default new Vuex.Store({
       y: 'top'
     }
   },
+  getters: {
+    nameApp: state => {
+      if (state.configApp) return state.configApp.infoApp.nameApp
+      else return ''
+    },
+    pseudonymApp: state => {
+      if (state.configApp) return state.configApp.infoApp.pseudonymApp
+      else return ''
+    },
+    version: state => {
+      if (state.configApp) return state.configApp.infoApp.version
+      else return ''
+    },
+    environment: state => state.environment
+  },
   mutations: {
-    ADD_CONFIG_INFO (state, data) {
-      state.configInfo = data
+    ADD_CONFIG_APP (state, data) {
+      state.configApp = data
+      state.networkSelected = data.networkSelected
+    },
+    ADD_ENVIRONMENT_APP (state, networkType) {
+      if (state.configApp) state.environment = state.configApp.environment[networkType]
     },
     SHOW_LOADING (state, value) {
       state.overlay = value
@@ -43,17 +68,14 @@ export default new Vuex.Store({
       state.showMenu = value
     },
     SHOW_LOADING_INFO_WALLET (state, data) {
-      // console.log('SHOW_LOADING_INFO_WALLET', data)
-      const { show, text, type } = data
-      state.loadingInfoWallet.show = show
-      state.loadingInfoWallet.text = text
-      state.loadingInfoWallet.type = type
+      state.loadingInfoWallet.show = data.show
+      state.loadingInfoWallet.text = data.text
+      state.loadingInfoWallet.type = data.type
     },
     SHOW_SNACKBAR (state, data) {
-      const { snackbar, text, color } = data
-      state.snackbar.snackbar = snackbar
-      state.snackbar.text = text
-      state.snackbar.color = color
+      state.snackbar.snackbar = data.snackbar
+      state.snackbar.text = data.text
+      state.snackbar.color = data.color
     }
   },
   actions: {

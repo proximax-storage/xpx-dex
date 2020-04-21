@@ -32,6 +32,7 @@
     </v-list-item>
   </div>
 </template>
+
 <script>
 import { mapGetters } from 'vuex'
 export default {
@@ -42,18 +43,22 @@ export default {
       mosaicLength: [],
       usd: null,
       usdValue: '',
-      loading: true
+      loading: true,
+      environment: ''
     }
+  },
+  beforeMount () {
+    this.environment = this.$store.getters.environment
+    this.nameMosaic = this.environment.mosaic.name
   },
   computed: {
     ...mapGetters('walletStore', ['nameCurrentWallet']),
     // ...mapState(['loadingInfoWallet']),
     getTotalBalance () {
-      const vestedBalance = this.$generalService.getDataPart(
+      return this.$generalService.getDataPart(
         this.totalBalance(),
-        this.$environment.mosaic.divisibility
+        this.environment.mosaic.divisibility
       )
-      return vestedBalance
     },
     getTotalUsd () {
       this.coingecko(this.totalBalance())
@@ -69,9 +74,8 @@ export default {
     },
     totalBalance () {
       const total = this.$generalService.amountFormatter(
-        this.$store.getters['accountStore/totalBalance'](this.$environment.mosaic.id),
-        this.$environment.mosaic.id,
-        this.$environment.mosaic.divisibility
+        this.$store.getters['accountStore/totalBalance'](this.environment.mosaic.id),
+        this.environment.mosaic.divisibility
       )
       return total
     },
@@ -87,13 +91,10 @@ export default {
     },
     mosaicLengthFunc () {
       this.mosaicLength = this.$store.getters['mosaicStore/othersMosaics'](
-        this.$environment.mosaic.id
+        this.environment.mosaic.id
       )
       return this.mosaicLength.length
     }
-  },
-  beforeMount () {
-    this.nameMosaic = this.$environment.mosaic.name
   }
 }
 </script>
