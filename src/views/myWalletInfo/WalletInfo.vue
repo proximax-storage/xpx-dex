@@ -23,8 +23,8 @@
 
         <v-tabs-items v-model="tab">
           <v-tab-item v-for="item in arrayItems" :key="item.item">
-            <template v-if="tab === 2">
-              <delete-offer />
+            <template v-if="tab === 1">
+              <delete-offer-list/>
             </template>
           </v-tab-item>
         </v-tabs-items>
@@ -37,39 +37,36 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      tab: 3,
+      tab: 1,
       arrayItems: [
+        // {
+        //   items: 'assets',
+        //   name: 'Assets',
+        //   index: 0
+        // },
+        // {
+        //   items: 'activity',
+        //   name: 'Activity',
+        //   index: 1
+        // },
         {
-          items: 'assets',
-          name: 'Assets',
+          items: 'info',
+          name: 'Info',
           index: 0
-        },
-        {
-          items: 'activity',
-          name: 'Activity',
-          index: 1
         },
         {
           items: 'myOffers',
           name: 'My offers',
-          index: 2
-        },
-        {
-          items: 'info',
-          name: 'Info',
-          index: 3
+          index: 1
         }
       ]
     }
   },
   computed: {
-    ...mapGetters('offersStore', ['offerAll']),
-    offerAlldata () {
-      return this.buildData(this.offerAll)
-    }
+    ...mapGetters('offersStore', ['offerAll'])
   },
   components: {
-    'delete-offer': () => import('@/components/deleteOffer/DeleteOffer')
+    'delete-offer-list': () => import('@/components/deleteOffer/DeleteOfferList')
   },
   methods: {
     filterItems (param = null, arrayItems = []) {
