@@ -239,7 +239,7 @@
 </template>
 
 <script>
-import { buildCurrentAccountInfo } from '@/services/account-wallet-service'
+import { buildCurrentAccountInfo, decrypt } from '@/services/account-wallet-service'
 import { mapGetters } from 'vuex'
 export default {
   data: () => {
@@ -391,19 +391,20 @@ export default {
               mosaicId: this.$blockchainProvider.getMosaicId(this.idHex),
               mosaicIdHex: this.idHex
             })
-            let common = this.decrypt(this.currentAccount.simpleWallet, this.form.password)
+            let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
               const signedTransaction = this.$blockchainProvider.signedTransaction(
                 common.privateKey,
-                addExchangeOffer
+                addExchangeOffer,
+                this.currentAccount.simpleWallet.network
               )
               this.hash = signedTransaction.hash
               this.sendingForm = true
               common = null
               this.clear()
               this.$blockchainProvider.announceTx(signedTransaction).subscribe(
-                () => {
-                  // console.log(x)
+                (x) => {
+                  console.log(x)
                 },
                 err => {
                   this.sendingForm = false
@@ -469,8 +470,6 @@ export default {
       }
     },
     changeTypeoffer (event) {
-      // amountF
-
       this.configOtherMoneyAsset()
       this.type = event
       this.mountBuildCurrentAccountInfo(this.type)

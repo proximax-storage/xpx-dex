@@ -4,7 +4,7 @@ export const socketDbStore = {
     offersTx: [],
     newOffersTx: null,
     mosaicsInfOffer: [],
-    loadingInfo: null
+    loadingInfo: false
   },
   mutations: {
     SOCKET_SET_OFFERS (state, data) {
