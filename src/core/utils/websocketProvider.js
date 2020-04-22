@@ -115,6 +115,7 @@ function clearTimeOutTime () {
 function getBlocks () {
   connector.newBlock().subscribe(block => {
     console.log('----NEW BLOCK -----', block.height.compact())
+    console.log('----INFO BLOCK -----', block)
     checkNodeIsLive(block.height.compact())
     store.commit('nodeStore/SET_CURRENT_BLOCK', block.height.compact())
   }, () => {
@@ -262,6 +263,7 @@ function getStatus (arrayAddress) {
  * @param {*} addressArray
  */
 function monitorAllChannels (addressArray) {
+  console.log('addressArray', addressArray)
   if (checkIsOpenConnection()) {
     getAggregateBondedAdded(addressArray)
     getAggregateBondedRemoved(addressArray)

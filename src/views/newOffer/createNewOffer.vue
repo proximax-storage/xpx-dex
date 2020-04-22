@@ -398,7 +398,9 @@ export default {
                 addExchangeOffer,
                 this.currentAccount.simpleWallet.network
               )
+              console.log('signedTransaction', signedTransaction)
               this.hash = signedTransaction.hash
+              console.log('HASH ---->', this.hash)
               this.sendingForm = true
               common = null
               this.clear()
@@ -417,7 +419,6 @@ export default {
     },
     clear () {
       this.$refs.form.reset('password')
-      // this.$refs['password'].reset()
     },
     validateBalanceXpx (amount) {
       this.isValidateBalance = amount > this.balanceCurrentAccount ? 'Insufficient balance' : null

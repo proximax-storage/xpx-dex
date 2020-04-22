@@ -51,6 +51,14 @@ export default {
       // if (newValue === 1 && !this.connectionStablished) {
       if (newValue === 1) {
         this.connectionStablished = true
+        const accounts = this.$store.getters['walletStore/currentWallet'].accounts.map(x => {
+          const publicKey = x.publicKey
+          const network = x.simpleWallet.network
+          const publicAccount = this.$blockchainProvider.publicAccountFromPublicKey(publicKey, network)
+          console.log('Public accounts to monitor', publicAccount)
+          return publicAccount.address
+        })
+        this.$websocketProvider.monitorAllChannels(accounts)
         getAccountsInfo(this.$store.getters['walletStore/currentWallet'].accounts)
       }
     }
