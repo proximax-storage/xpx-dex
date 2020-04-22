@@ -6,6 +6,7 @@
  * @returns
  */
 function amountFormatter (amount, d = 6) {
+  console.log('amount', amount)
   const amountDivisibility = Number(amount) / Math.pow(10, d)
   return amountDivisibility.toLocaleString('en-us', {
     minimumFractionDigits: d
@@ -155,6 +156,30 @@ function validateMatch (value1, value2, text = '') {
   return value1 === value2 || `${text} must match`
 }
 
+/**
+ *
+ *
+ * @param {*} [value=[]]
+ * @returns
+ */
+function validateZero (value = []) {
+  let valueR = true
+  for (let index = 0; index < value.length; index++) {
+    const item = value[index]
+    let amount = null
+    try {
+      amount = parseFloat(item.split(',').join(''))
+    } catch (error) {
+      amount = Number(item)
+    }
+    if (amount === 0) {
+      valueR = false
+      break
+    }
+  }
+  return valueR
+}
+
 export {
   amountFormatter,
   buildBoxServices,
@@ -163,5 +188,6 @@ export {
   getDataPart,
   quantityStringToInt,
   replaceData,
-  validateMatch
+  validateMatch,
+  validateZero
 }

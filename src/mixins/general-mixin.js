@@ -267,23 +267,23 @@ export default {
         masked: false
       }
       return value || money
-    },
-    validateZero (value = []) {
-      let valueR = true
-      for (let index = 0; index < value.length; index++) {
-        const item = value[index]
-        let amount = null
-        try {
-          amount = parseFloat(item.split(',').join(''))
-        } catch (error) {
-          amount = Number(item)
-        }
-        if (amount === 0) {
-          valueR = false
-          break
-        }
-      }
-      return valueR
     }
+    // validateZero (value = []) {
+    //   let valueR = true
+    //   for (let index = 0; index < value.length; index++) {
+    //     const item = value[index]
+    //     let amount = null
+    //     try {
+    //       amount = parseFloat(item.split(',').join(''))
+    //     } catch (error) {
+    //       amount = Number(item)
+    //     }
+    //     if (amount === 0) {
+    //       valueR = false
+    //       break
+    //     }
+    //   }
+    //   return valueR
+    // }
   }
 }

@@ -63,17 +63,14 @@ function filterMosaicToReturn (infoMosaics) {
     infoMosaics.forEach(element => {
       if (returned.length > 0) {
         const existByNamespace = returned.find(x => {
-          const mosaicId = Vue.prototype.$blockchainProvider.getMosaicId(x.isNamespace).toHex()
-          const mosaicId2 = Vue.prototype.$blockchainProvider.getMosaicId(element.isNamespace).toHex()
-          return x.isNamespace && element.isNamespace ? mosaicId === mosaicId2 : undefined
+          console.log('element', element)
+          return x.isNamespace && element.isNamespace ? Vue.prototype.$blockchainProvider.getMosaicId(x.isNamespace).toHex() === Vue.prototype.$blockchainProvider.getMosaicId(element.isNamespace).toHex() : undefined
         })
 
         // search by mosaic
         if (!existByNamespace) {
           const existByMosaic = returned.find(x => {
-            const mosaicId = Vue.prototype.$blockchainProvider.getMosaicId(x.idMosaic).toHex()
-            const mosaicId2 = Vue.prototype.$blockchainProvider.getMosaicId(element.idMosaic).toHex()
-            return x => mosaicId === mosaicId2
+            return x => Vue.prototype.$blockchainProvider.getMosaicId(x.idMosaic).toHex() === Vue.prototype.$blockchainProvider.getMosaicId(element.idMosaic).toHex()
           })
 
           if (!existByMosaic) {

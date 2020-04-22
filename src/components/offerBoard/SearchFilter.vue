@@ -5,12 +5,13 @@
         <v-card elevation="0" class="mb-3 d-flex" color="leve">
           <v-card-text class="pt-1 pb-1">
             <v-row>
-              <v-col cols="1" class="d-flex justify-center align-center pa-0 ">
+              <v-col cols="1" class="d-flex justify-center align-center pa-0">
                 <img
                   style="vertical-align: middle"
                   :src="require(`@/assets/img/${theme}/icon-search.svg`)"
                   width="35"
-              /></v-col>
+                />
+              </v-col>
               <v-col cols="5" class="pa-0">
                 <v-row>
                   <v-col cols="5" class="pt-3 pb-0">
@@ -33,14 +34,17 @@
                         configForm.amount.rules.max,
                         isValidateQuantityAmount
                       ]"
-                    ></v-text-field> </v-col
-                  ><v-col cols="1" class=" pt-3 d-flex justify-center align-center">
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="1" class="pt-3 d-flex justify-center align-center">
                     <img
                       style="vertical-align: middle"
                       :src="require(`@/assets/img/${theme}/icon-and.svg`)"
                       width="20"
-                      height="20"/></v-col
-                  ><v-col clcols="5" class="pt-3 pb-0">
+                      height="20"
+                    />
+                  </v-col>
+                  <v-col clcols="5" class="pt-3 pb-0">
                     <v-text-field
                       dense
                       outlined
@@ -61,8 +65,9 @@
                         isValidateQuantityBidPrice
                       ]"
                     ></v-text-field>
-                  </v-col> </v-row
-              ></v-col>
+                  </v-col>
+                </v-row>
+              </v-col>
               <v-col cols="6" class="pa-0 pr-5 d-flex justify-center align-center">
                 <custom-buttons
                   class="pb-4"
@@ -79,9 +84,7 @@
   </v-row>
 </template>
 <script>
-import generalMixins from '../../mixins/general-mixin'
 export default {
-  mixins: [generalMixins],
   props: ['dataForm'],
   data: () => ({
     form: {
@@ -105,11 +108,9 @@ export default {
   },
   computed: {
     getArrayBtn () {
+      const validateZero = this.$generalService.validateZero([this.form.amount, this.form.bidPrice])
       const arrayBtn = this.arrayBtn
-      arrayBtn[0]['lookAgain'].disabled =
-        !this.valid ||
-        this.sendingForm ||
-        !this.validateZero([this.form.amount, this.form.bidPrice])
+      arrayBtn[0]['lookAgain'].disabled = !this.valid || this.sendingForm || !validateZero
       arrayBtn[0]['lookAgain'].loading = this.sendingForm
       return arrayBtn
     }

@@ -39,7 +39,7 @@ async function buildCurrentAccountInfo (accountInfo) {
           if ('mosaicInfo' in mosaic) {
             amount = Vue.prototype.$generalService.amountFormatter(
               currentMosaic.amount.compact(),
-              mosaic.mosaicInfo
+              mosaic.mosaicInfo.properties.divisibility
             )
             balanceValidate = currentMosaic.amount.compact()
             const durationMosaic = Vue.prototype.$blockchainProvider.getUint64([
@@ -65,7 +65,7 @@ async function buildCurrentAccountInfo (accountInfo) {
             expired = true
           }
           const idMosaic = Vue.prototype.$blockchainProvider.getMosaicId(mosaic.idMosaic).id.toHex()
-          const x = idMosaic !== this.$environment.mosaic.id
+          const x = idMosaic !== store.getters.environment.mosaic.id
           if (x) {
             const mosaicId = Vue.prototype.$blockchainProvider.getMosaicId(mosaic.idMosaic).toHex()
             const nameMosaic = mosaic.mosaicNames.names.length > 0 ? mosaic.mosaicNames.names[0].name : mosaicId
@@ -85,6 +85,7 @@ async function buildCurrentAccountInfo (accountInfo) {
       }
     }
   }
+
   store.commit('accountStore/SET_BUILD_CURRENT_ACCOUNT_MOSAIC', mosaicsSelect)
 }
 
