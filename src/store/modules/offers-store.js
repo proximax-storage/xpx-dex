@@ -3,14 +3,19 @@ export const offersStore = {
   // instead of mounting getters, mutations, and actions to the root namespace.
   namespaced: true,
   state: {
-    offerSelected: []
+    offerSelected: [],
+    offerAll: []
   },
   getters: {
-    offerSelected: state => state.offerSelected
+    offerSelected: state => state.offerSelected,
+    offerAll: state => state.offerAll
   },
   mutations: {
     SET_OFFER_SELECTED (state, data) {
       state.offerSelected = data
+    },
+    SET_OFFER_ALL (state, data) {
+      state.offerAll = data
     }
   }
 }

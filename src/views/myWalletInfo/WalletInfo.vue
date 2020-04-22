@@ -22,41 +22,64 @@
         </v-tabs>
 
         <v-tabs-items v-model="tab">
-          <!-- <v-sheet style="bottom" height="4" tile color="pin"></v-sheet> -->
-          <v-tab-item v-for="item in arrayItems" :key="item.item" :value="item">{{ tab }}</v-tab-item>
+          <v-tab-item v-for="item in arrayItems" :key="item.item">
+            <template v-if="tab === 1">
+              <delete-offer-list/>
+            </template>
+          </v-tab-item>
         </v-tabs-items>
       </v-col>
     </v-row>
   </v-col>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      tab: 3,
+      tab: 1,
       arrayItems: [
+        // {
+        //   items: 'assets',
+        //   name: 'Assets',
+        //   index: 0
+        // },
+        // {
+        //   items: 'activity',
+        //   name: 'Activity',
+        //   index: 1
+        // },
         {
-          items: 'assets',
-          name: 'Assets',
+          items: 'info',
+          name: 'Info',
           index: 0
-        },
-        {
-          items: 'activity',
-          name: 'Activity',
-          index: 1
         },
         {
           items: 'myOffers',
           name: 'My offers',
-          index: 2
-        },
-        {
-          items: 'info',
-          name: 'Info',
-          index: 3
+          index: 1
         }
       ]
     }
+  },
+  computed: {
+    ...mapGetters('offersStore', ['offerAll'])
+  },
+  components: {
+    'delete-offer-list': () => import('@/components/deleteOffer/DeleteOfferList')
+  },
+  methods: {
+    filterItems (param = null, arrayItems = []) {
+      const value = arrayItems.filter(x => x.index === param)[0]
+      return value
+    },
+    action (item) {
+      console.log(item)
+    }
+  },
+  beforeMount () {
+    const item = this.filterItems(this.$route.query.item, this.arrayItems)
+    this.tab = item.index
   }
 }
 </script>

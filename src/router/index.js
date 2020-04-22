@@ -127,6 +127,16 @@ const routes = [
     }
   },
   {
+    path: '/deleteOffer',
+    name: 'Delete Offer',
+    component: () =>
+      import(/* webpackChunkName: "deleteOffer" */ '../views/deleteOffer/DeleteOffer.vue'),
+    meta: {
+      requiresAuth: true,
+      hideMenu: false
+    }
+  },
+  {
     path: '*',
     redirect: '/'
   }

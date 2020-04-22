@@ -28,7 +28,10 @@
           @click:row="searchResult"
         >
           <template v-slot:item.tableData.twentyFourChange="{ item }">
-            <span v-if="item.tableData.twentyFourChange > 8" class="red--text accent-4">{{item.tableData.twentyFourChange}}%</span>
+            <span
+              v-if="item.tableData.twentyFourChange > 8"
+              class="red--text accent-4"
+            >{{item.tableData.twentyFourChange}}%</span>
             <span v-else class="green--text darken-1">{{item.tableData.twentyFourChange}}%</span>
           </template>
           <template v-slot:item.tableData.graphic="{ }">
@@ -71,7 +74,7 @@ export default {
     sparkline: () => import('@/components/shared/Sparkline')
   },
   methods: {
-    ...mapMutations('offersStore', ['SET_OFFER_SELECTED']),
+    ...mapMutations('offersStore', ['SET_OFFER_SELECTED', 'SET_OFFER_ALL']),
     /* clickButton: function (data) {
       const valor = [
         {
@@ -190,7 +193,9 @@ export default {
         })
       }
 
-      // console.log('ITEMS', this.items)
+      // console.log('ITsEMS', x)
+      // console.log('pass', pass)
+      this.SET_OFFER_ALL(pass)
       return pass
     },
     assets () {
