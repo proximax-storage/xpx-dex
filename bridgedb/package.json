@@ -2,9 +2,9 @@
   "name": "bridedb",
   "version": "1.0.0",
   "description": "bridge between the database and the client. Express methods",
-  "main": "nodemon main.js",
+  "main": "forever main.js",
   "scripts": {
-    "start": "nodemon main.js",
+    "start": "forever main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Proximax.io",
