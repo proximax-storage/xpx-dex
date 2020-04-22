@@ -530,7 +530,7 @@ function publicAccountFromPublicKey (publicKey, network) {
  * @returns
  */
 function signedTransaction (privateKey, transaction, network) {
-  const currentNode = store.getters['nodeStore/generationHash']
+  const currentNode = store.getters['nodeStore/currentNode']
   const account = getAccountFromPrivateKey(privateKey, currentNode.networkType)
   return account.sign(transaction, currentNode.generationHash)
 }
