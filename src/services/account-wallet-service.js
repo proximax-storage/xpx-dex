@@ -17,7 +17,9 @@ async function buildCurrentAccountInfo (accountInfo) {
   const mosaicsSelect = []
   if (accountInfo !== undefined && accountInfo !== null) {
     if (accountInfo.mosaics.length > 0) {
+      console.log('\n\n -----> accountInfo', accountInfo.mosaics)
       const mosaics = await filterMosaics(accountInfo.mosaics.map(n => n.id))
+      console.log('\n\n -----> mosaicsId', mosaics)
       if (mosaics.length > 0) {
         for (const mosaic of mosaics) {
           const configInput = {
@@ -42,16 +44,20 @@ async function buildCurrentAccountInfo (accountInfo) {
               mosaic.mosaicInfo.properties.divisibility
             )
             balanceValidate = currentMosaic.amount.compact()
+            console.log('balanceValidate', balanceValidate)
             const durationMosaic = Vue.prototype.$blockchainProvider.getUint64([
               mosaic.mosaicInfo['properties']['duration']['lower'],
               mosaic.mosaicInfo['properties']['duration']['higher']
             ])
-            configInput.precision = mosaic.mosaicInfo['properties']['divisibility']
 
+            console.log('durationMosaic', durationMosaic)
+            configInput.precision = mosaic.mosaicInfo['properties']['divisibility']
             const createdBlock = Vue.prototype.$blockchainProvider.getUint64([
               mosaic.mosaicInfo.height.lower,
               mosaic.mosaicInfo.height.higher
             ])
+
+            console.log('createdBlock', createdBlock)
             if (durationMosaic.compact() > 0) {
               if (this.currentBlock >= durationMosaic.compact() + createdBlock.compact()) {
                 expired = true
@@ -66,6 +72,7 @@ async function buildCurrentAccountInfo (accountInfo) {
           }
           const idMosaic = Vue.prototype.$blockchainProvider.getMosaicId(mosaic.idMosaic).id.toHex()
           const x = idMosaic !== store.getters.environment.mosaic.id
+          console.log('xxxxxxxxxxxxxxxxx', x)
           if (x) {
             const mosaicId = Vue.prototype.$blockchainProvider.getMosaicId(mosaic.idMosaic).toHex()
             const nameMosaic = mosaic.mosaicNames.names.length > 0 ? mosaic.mosaicNames.names[0].name : mosaicId

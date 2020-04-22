@@ -14,15 +14,14 @@ async function filterMosaics (mosaicsId = null) {
     if (mosaicsFromStore.length > 0) {
       const dataReturn = []
       const toSearch = []
-      // mosaicsId.forEach(element => {
       for (let element of mosaicsId) {
         const existMosaic = mosaicsFromStore.find(
           x => Vue.prototype.$blockchainProvider.getMosaicId(x.idMosaic).toHex() === element.toHex()
         )
+
         if (existMosaic) {
           dataReturn.push(existMosaic)
         } else {
-          // tslint:disable-next-line: no-shadowed-variable
           const existMosaic = mosaicsFromStore.find(x =>
             x.isNamespace
               ? Vue.prototype.$blockchainProvider.getMosaicId(x.isNamespace).toHex() === element.toHex()
@@ -43,6 +42,8 @@ async function filterMosaics (mosaicsId = null) {
           })
         }
       }
+
+      console.log('dataReturn', dataReturn)
       return filterMosaicToReturn(dataReturn)
     } else {
       const infoMosaics = await searchInfoMosaics(mosaicsId)
@@ -62,16 +63,17 @@ function filterMosaicToReturn (infoMosaics) {
   if (infoMosaics && infoMosaics.length > 0) {
     infoMosaics.forEach(element => {
       if (returned.length > 0) {
-        const existByNamespace = returned.find(x => {
-          console.log('element', element)
-          return x.isNamespace && element.isNamespace ? Vue.prototype.$blockchainProvider.getMosaicId(x.isNamespace).toHex() === Vue.prototype.$blockchainProvider.getMosaicId(element.isNamespace).toHex() : undefined
-        })
+        const existByNamespace = returned.find(x =>
+          x.isNamespace && element.isNamespace ? Vue.prototype.$blockchainProvider.getMosaicId(x.isNamespace).toHex() ===
+          Vue.prototype.$blockchainProvider.getMosaicId(element.isNamespace).toHex() : undefined
+        )
 
         // search by mosaic
         if (!existByNamespace) {
-          const existByMosaic = returned.find(x => {
-            return x => Vue.prototype.$blockchainProvider.getMosaicId(x.idMosaic).toHex() === Vue.prototype.$blockchainProvider.getMosaicId(element.idMosaic).toHex()
-          })
+          const existByMosaic = returned.find(x =>
+            Vue.prototype.$blockchainProvider.getMosaicId(x.idMosaic).toHex() ===
+            Vue.prototype.$blockchainProvider.getMosaicId(element.idMosaic).toHex()
+          )
 
           if (!existByMosaic) {
             returned.push(element)
