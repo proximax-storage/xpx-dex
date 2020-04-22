@@ -11,6 +11,7 @@ export const nodeStore = {
   getters: {
     currentBlock: state => state.currentBlock,
     currentNode: state => state.currentNode,
+    generationHash: state => (state.currentNode) ? state.currentNode.generationHash : '',
     nodesList: state => state.nodesList,
     nodeStatus: state => state.nodeStatus
   },

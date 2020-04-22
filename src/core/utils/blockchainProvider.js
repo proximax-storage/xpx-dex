@@ -1,3 +1,4 @@
+import store from '@/store'
 import * as crypto from 'js-xpx-chain-library/dist/crypto/crypto'
 import {
   Account
@@ -506,7 +507,7 @@ function publicAccountFromPublicKey (publicKey, network) {
  */
 function signedTransaction (privateKey, transaction, network) {
   const account = getAccountFromPrivateKey(privateKey, network)
-  return account.sign(transaction, this.generationHash)
+  return account.sign(transaction, store.getters['nodeStore/generationHash'])
 }
 
 /**
