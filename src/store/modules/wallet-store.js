@@ -6,7 +6,8 @@ export const walletStore = {
     currentWallet: null
   },
   getters: {
-    currentWallet: state => state.currentWallet
+    currentWallet: state => state.currentWallet,
+    nameCurrentWallet: state => state.currentWallet.username
   },
   mutations: {
     SET_CURRENT_WALLET (state, data) {

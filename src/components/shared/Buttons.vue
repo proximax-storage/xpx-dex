@@ -1,22 +1,37 @@
 <template>
-  <v-row class="d-flex justify-center">
+  <v-row :class="`d-flex justify-${align}`">
     <template v-for="(item, key) of arrayBtn">
-      <v-btn
-        :loading="item.loading"
-        :disabled="item.disabled"
-        :key="key"
-        :color="item.color"
-        class="pl-8 pr-8 mt-2 mr-3 sky body-2 write--text"
-        rounded
-        @click="triggerClick(item.action)"
-      >{{item.text}}</v-btn>
+      <template v-if="type === 'text'">
+        <v-btn
+          text
+          large
+          :loading="item.loading"
+          :disabled="item.disabled"
+          :key="key"
+          :color="item.color"
+          class="pl-8 pr-8 mt-2 title font-weight-bold  mx-auto"
+          @click="triggerClick(item.action)"
+        >{{ item.text }}</v-btn>
+      </template>
+      <template v-else>
+        <v-btn
+          :loading="item.loading"
+          :disabled="item.disabled"
+          :key="key"
+          :color="item.color"
+          class="pl-8 pr-8 mt-2 body-2 mx-auto"
+          :class="item.textColor"
+          rounded
+          @click="triggerClick(item.action)"
+        >{{ item.text }}</v-btn>
+      </template>
     </template>
   </v-row>
 </template>
 
 <script>
 export default {
-  props: ['arrayBtn'],
+  props: ['arrayBtn', 'align', 'type'],
   methods: {
     triggerClick (action) {
       this.$emit('action', action)

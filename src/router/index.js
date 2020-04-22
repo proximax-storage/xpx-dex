@@ -7,6 +7,28 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
+    name: 'Log In',
+    component: () => import(/* webpackChunkName: "SelectTypeSignup" */ '../views/login/LogIn.vue'),
+    meta: {}
+  },
+  {
+    path: '/searchOfferts',
+    name: 'Search Offerts ',
+    component: () =>
+      import(/* webpackChunkName: "searchOfferts" */ '../views/searchOffers/TypeSearchOffers.vue'),
+    meta: {}
+  },
+  {
+    path: '/newOffer',
+    name: 'new Offer',
+    component: () =>
+      import(/* webpackChunkName: "searchOfferts" */ '../views/newOffer/createNewOffer.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/home',
     name: 'home',
     component: () => import(/* webpackChunkName: "Home" */ '../views/Home.vue'),
     meta: {
@@ -15,22 +37,103 @@ const routes = [
   },
   {
     path: '/create-new-signup',
-    name: 'create-new-signup',
+    name: 'New Signup',
     component: () =>
       import(/* webpackChunkName: "CreateNewSignup.vue" */ '../views/signup/CreateNewSignup.vue'),
     meta: {
       requiresNotAuth: true,
-      hideMenu: true
+      hideMenu: false
     }
   },
   {
     path: '/select-signup-type',
-    name: 'select-signup-type',
+    name: 'Signup Type',
     component: () =>
       import(/* webpackChunkName: "SelectTypeSignup" */ '../views/signup/SelectTypeSignup.vue'),
     meta: {
       requiresNotAuth: true,
-      hideMenu: true
+      hideMenu: false
+    }
+  },
+  {
+    path: '/take-offers',
+    name: 'take offers',
+    component: () =>
+      import(/* webpackChunkName: "SelectTypeSignup" */ '../views/takeOffers/TakeOffers.vue'),
+    meta: {
+      requiresAuth: true,
+      // requiresNotAuth: true,
+      hideMenu: false
+    }
+  },
+  {
+    path: '/offer-board',
+    name: 'Offer Board',
+    component: () =>
+      import(/* webpackChunkName: "SelectTypeSignup" */ '../views/offerBoard/OfferBoard.vue'),
+    meta: {
+      requiresNotAuth: true,
+      requiresAuth: true,
+      hideMenu: false
+    }
+  },
+  {
+    path: '/create-from-privateKey',
+    name: 'Create from private key',
+    component: () =>
+      import(/* webpackChunkName: "SelectTypeSignup" */ '../views/signup/CreateFromPrivateKey.vue'),
+    meta: {
+      requiresNotAuth: true,
+      hideMenu: false
+    }
+  },
+  {
+    path: '/login',
+    name: 'Log In',
+    component: () => import(/* webpackChunkName: "SelectTypeSignup" */ '../views/login/LogIn.vue'),
+    meta: {
+      requiresNotAuth: true,
+      hideMenu: false
+    }
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: () =>
+      import(/* webpackChunkName: "SelectTypeSignup" */ '../views/dashboard/dashboard.vue'),
+    meta: {
+      requiresAuth: true,
+      hideMenu: false
+    }
+  },
+  {
+    path: '/allOffer',
+    name: 'All offer',
+    component: () =>
+      import(/* webpackChunkName: "AllOffer" */ '../views/allOffer/AllOffer.vue'),
+    meta: {
+      requiresAuth: true,
+      hideMenu: false
+    }
+  },
+  {
+    path: '/myWallet',
+    name: 'Info walleet',
+    component: () =>
+      import(/* webpackChunkName: "WalletInfo" */ '../views/myWalletInfo/WalletInfo.vue'),
+    meta: {
+      requiresAuth: true,
+      hideMenu: false
+    }
+  },
+  {
+    path: '/deleteOffer',
+    name: 'Delete Offer',
+    component: () =>
+      import(/* webpackChunkName: "deleteOffer" */ '../views/deleteOffer/DeleteOffer.vue'),
+    meta: {
+      requiresAuth: true,
+      hideMenu: false
     }
   },
   {
@@ -53,10 +156,13 @@ router.beforeEach(async (to, from, next) => {
   } else {
     store.commit('SHOW_MENU', true)
   }
-  const isLogged = false
-  if (requiresAuth && !isLogged) {
+  if (requiresAuth && requiresNotAuth) {
+    next()
+    return
+  }
+  if (requiresAuth && !store.getters['accountStore/isLogged']) {
     next('/')
-  } else if (requiresNotAuth && isLogged) {
+  } else if (requiresNotAuth && store.getters['accountStore/isLogged']) {
     next('/home')
   } else {
     next()

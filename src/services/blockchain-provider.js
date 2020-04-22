@@ -1,4 +1,5 @@
 import { crypto } from 'js-xpx-chain-library'
+import axios from 'axios'
 import {
   Account,
   BlockHttp,
@@ -13,13 +14,22 @@ import {
   MetadataHttp,
   NetworkType,
   Address,
-  PublicAccount
+  PublicAccount,
+  NamespaceId,
+  MosaicId,
+  ExchangeOffer,
+  ExchangeOfferTransaction,
+  AddExchangeOffer,
+  AddExchangeOfferTransaction,
+  UInt64,
+  Deadline
 } from 'tsjs-xpx-chain-sdk'
-
+import { ExchangeHttp } from 'tsjs-xpx-chain-sdk/dist/src/infrastructure/ExchangeHttp'
 import { GeneralService } from './general'
 
 class BlockchainProvider {
-  constructor (node, protocol, typeNetwork) {
+  constructor (node, protocol, typeNetwork, coingecko) {
+    this.urlCoingecko = coingecko
     this.url = this.buildURL(node, protocol)
     this.typeNetwork = NetworkType[typeNetwork]
     this.accountHttp = new AccountHttp(this.url)
@@ -30,7 +40,9 @@ class BlockchainProvider {
     this.mosaicHttp = new MosaicHttp(this.url)
     this.namespaceHttp = new NamespaceHttp(this.url)
     this.transactionHttp = new TransactionHttp(this.url)
+    this.exchangeHttp = new ExchangeHttp(this.url)
     this.generalService = new GeneralService()
+    this.generationHash = 'B750FC8ADD9FAB8C71F0BB90B6409C66946844F07C5CADB51F27A9FAF219BFC7'
   }
 
   /**
@@ -127,7 +139,9 @@ class BlockchainProvider {
    * @memberof BlockchainProvider
    */
   checkAddress (privateKey, network, address) {
-    return (privateKey && privateKey !== '') ? Account.createFromPrivateKey(privateKey, network).address.plain() === address : null
+    return privateKey && privateKey !== ''
+      ? Account.createFromPrivateKey(privateKey, network).address.plain() === address
+      : null
   }
 
   /**
@@ -150,7 +164,10 @@ class BlockchainProvider {
           return { status: false, msg: 'Invalid password' }
         }
 
-        if (!this.isValidPrivateKey(common.privateKey) || !this.checkAddress(common.privateKey, network, account.address)) {
+        if (
+          !this.isValidPrivateKey(common.privateKey) ||
+          !this.checkAddress(common.privateKey, network, account.address)
+        ) {
           return { status: false, msg: 'Invalid password' }
         }
 
@@ -171,7 +188,7 @@ class BlockchainProvider {
    * @memberof BlockchainProvider
    */
   isValidPrivateKey (privateKey) {
-    if (privateKey && (privateKey.length !== 64 && privateKey.length !== 66)) {
+    if (privateKey && privateKey.length !== 64 && privateKey.length !== 66) {
       // console.error('Private key length must be 64 or 66 characters !')
       return false
     } else if (privateKey && !this.generalService.isHexadecimal(privateKey)) {
@@ -194,7 +211,99 @@ class BlockchainProvider {
   getAccountFromPrivateKey (privateKey, network) {
     return Account.createFromPrivateKey(privateKey, network)
   }
+  /**
+   *
+   *
+   * @param {*} address
+   * @returns
+   * @memberof BlockchainProvider
+   */
+  getAccountInfo (address) {
+    const adss = Address.createFromRawAddress(address)
+    return this.accountHttp.getAccountInfo(adss)
+  }
+  /**
+   *
+   *
+   * @param {*} Idmosaic
+   * @param {*} type
+   * @returns
+   * @memberof BlockchainProvider
+   */
+  getExchangeOffersfromId (Idmosaic, type) {
+    // console.log('tipe:', type)
+    const id = new MosaicId(Idmosaic)
+    return this.exchangeHttp.getExchangeOffers(type, id)
+  }
 
+  /**
+   *
+   *
+   * @param {Address} address
+   * @memberof BlockchainProvider
+   */
+  getNamespaceFromAccount (address) {
+    return this.namespaceHttp.getNamespacesFromAccount(address)
+  }
+  /**
+   *
+   *
+   * @param {NamespaceInfo} namespaceInfo
+   * @memberof BlockchainProvider
+   */
+
+  getNamespacesName (namespaceIds) {
+    return this.namespaceHttp.getNamespacesName(namespaceIds)
+  }
+  /**
+   * Get namespace id
+   *
+   * @param {any} id
+   * @returns
+   * @memberof BlockchainProvider
+   */
+  getNamespaceId (id) {
+    return new NamespaceId(id)
+  }
+  /**
+   *
+   *
+   * @param {MosaicId[]} mosaicIsd
+   * @memberof BlockchainProvider
+   */
+  getMosaics (mosaicIsd) {
+    return this.mosaicHttp.getMosaics(mosaicIsd)
+  }
+
+  /**
+   *
+   *
+   * @param {MosaicId[]} mosaicIsd
+   * @memberof BlockchainProvider
+   */
+  getMosaicsName (mosaicsId) {
+    return this.mosaicHttp.getMosaicsNames(mosaicsId).toPromise()
+  }
+  /**
+   *
+   *
+   * @param {(string | number[])} id
+   * @returns {MosaicId}
+   * @memberof BlockchainProvider
+   */
+  getMosaicId (id) {
+    return new MosaicId(id)
+  }
+
+  /**
+   *
+   *
+   * @param {NamespaceId} namespace
+   * @memberof BlockchainProvider
+   */
+  getLinkedMosaicId (namespace) {
+    return this.namespaceHttp.getLinkedMosaicId(namespace)
+  }
   /**
    *
    *
@@ -215,7 +324,93 @@ class BlockchainProvider {
       pvk: newPrivateKey
     }
   }
+  /**
+   *
+   *
+   * @param {string} coinId
+   * @returns
+   * @memberof ProximaxProvider
+   */
+  coingecko (coinId) {
+    return axios.get(`${this.urlCoingecko.url}${coinId}`)
+  }
+  /**
+   * @param {Transaction} transaction
+   * @param {PrivateKey} privateKey
+   * @returns {SignedTransaction}
+   * @memberof ProximaxProvider
+   */
+  signedTransaction (privateKey, transaction) {
+    // console.log('privateKey', privateKey)
+    const account = Account.createFromPrivateKey(privateKey, this.typeNetwork)
+    return account.sign(transaction, this.generationHash)
+  }
+  /**
+   * @param {SignedTransaction} signedTransaction
+   * @returns
+   * @memberof ProximaxProvider
+   */
+  announceTx (signedTransaction) {
+    return this.transactionHttp.announce(signedTransaction)
+  }
+  /**
+   * @param {MosaicId} mosaicId MosaicId
+   * @param {Number} mosaicAmount
+   * @param {Number} cost
+   * @param {Int} type
+   * @param {Number} duration
+   * @returns
+   * @memberof ProximaxProvider
+   */
+  addExchangeOffer (mosaicId, mosaicAmount, costValue, type, durationValue) {
+    const amount = UInt64.fromUint(mosaicAmount)
+    const cost = UInt64.fromUint(costValue)
+    const duration = UInt64.fromUint(durationValue)
+    return AddExchangeOfferTransaction.create(
+      Deadline.create(10),
+      [new AddExchangeOffer(mosaicId, amount, cost, type, duration)],
+      this.typeNetwork
+    )
+  }
+  addExchangeOfferDb (mosaicId, mosaicAmount, costValue, type, durationValue) {
+    const amount = UInt64.fromUint(mosaicAmount)
+    const cost = UInt64.fromUint(costValue)
+    const duration = UInt64.fromUint(durationValue)
+    return new AddExchangeOffer(mosaicId, amount, cost, type, duration)
+  }
 
+  /**
+   * @param {MosaicId} mosaicId MosaicId
+   * @param {Number} mosaicAmount
+   * @param {Number} cost
+   * @param {Int} type
+   * @param {PublicAccount} publicAccount
+   * @returns
+   * @memberof ProximaxProvider
+   */
+  exchangeOffer (mosaicId, mosaicAmount, costValue, type, publicAccount) {
+    const amount = UInt64.fromUint(mosaicAmount)
+    const cost = UInt64.fromUint(costValue)
+    return ExchangeOfferTransaction.create(
+      Deadline.create(10),
+      [new ExchangeOffer(mosaicId, amount, cost, type, publicAccount)],
+      this.typeNetwork
+    )
+  }
+  /**
+   * @param {MosaicId} mosaicId MosaicId
+   * @param {Number} mosaicAmount
+   * @param {Number} cost
+   * @param {Int} type
+   * @param {PublicAccount} publicAccount
+   * @returns
+   * @memberof ProximaxProvider
+   */
+  exchangeOfferDb (mosaicId, mosaicAmount, costValue, type, publicAccount) {
+    const amount = UInt64.fromUint(mosaicAmount)
+    const cost = UInt64.fromUint(costValue)
+    return new ExchangeOffer(mosaicId, amount, cost, type, publicAccount)
+  }
   /**
    *
    *
@@ -233,6 +428,10 @@ class BlockchainProvider {
         value: NetworkType.MAIN_NET
       }
     }
+  }
+
+  uInt64 (value) {
+    return new UInt64(value)
   }
 }
 

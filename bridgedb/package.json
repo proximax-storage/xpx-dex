@@ -1,0 +1,25 @@
+{
+  "name": "bridedb",
+  "version": "1.0.0",
+  "description": "bridge between the database and the client. Express methods",
+  "main": "forever main.js",
+  "scripts": {
+    "start": "forever main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Proximax.io",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "events": "^3.1.0",
+    "express": "^4.17.1",
+    "morgan": "^1.9.1",
+    "nodemon": "^2.0.2",
+    "path": "^0.12.7",
+    "rethinkdb": "^2.4.2",
+    "socket.io": "^2.3.0",
+    "tsjs-xpx-chain-sdk": "^0.7.0",
+    "winston": "^3.2.1"
+  }
+}
