@@ -229,7 +229,7 @@ function getUnConfirmedRemoved (arrayAddress) {
     arrayAddress.forEach(address => {
       connector.unconfirmedRemoved(address).subscribe(transaction => {
         console.log('-----------------------UNCONFIRMED_REMOVED--------------------------')
-        console.log(transaction.transactionInfo.hash)
+        console.log(transaction)
         console.log('------------------------------------------------------------------\n\n')
         store.commit('transactionsStore/SET_UNCONFIRMED_REMOVED', transaction)
       })
@@ -246,9 +246,10 @@ function getStatus (arrayAddress) {
   if (checkIsOpenConnection()) {
     console.log('MONITOR ACCOUNTS --->', arrayAddress)
     arrayAddress.forEach(address => {
+      console.log('MONITOR STATUS', address)
       connector.status(address).subscribe(transaction => {
         console.log('-----------------------STATUS--------------------------')
-        console.log(transaction.hash)
+        // console.log(transaction.hash)
         console.log(transaction)
         console.log('------------------------------------------------------------------\n\n')
         store.commit('transactionsStore/SET_STATUS', transaction)

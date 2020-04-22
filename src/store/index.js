@@ -11,7 +11,8 @@ import { mosaicExchange } from './modules/mosaic-exchange'
 import { socketBcStore } from './modules/socket-bc-store'
 import { offersStore } from './modules/offers-store'
 import {
-  nodeStore
+  nodeStore,
+  transactionsStore
 } from '@/core/store/'
 
 Vue.use(Vuex)
@@ -91,6 +92,7 @@ export default new Vuex.Store({
     walletStore,
     appCoreStore,
     nodeStore,
+    transactionsStore,
     namespaceStore,
     mosaicStore,
     socketDbStore,

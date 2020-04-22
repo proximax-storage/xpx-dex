@@ -12,6 +12,7 @@ export const nodeStore = {
     currentBlock: state => state.currentBlock,
     currentNode: state => state.currentNode,
     generationHash: state => (state.currentNode) ? state.currentNode.generationHash : '',
+    networkType: state => (state.currentNode) ? state.currentNode.networkType : '',
     nodesList: state => state.nodesList,
     nodeStatus: state => state.nodeStatus
   },
