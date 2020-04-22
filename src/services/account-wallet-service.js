@@ -1,11 +1,92 @@
 import Vue from 'vue'
 import store from '@/store'
 import {
+  filterMosaics,
   searchInfoMosaics
 } from '@/services/mosaics-service'
 import {
   searchNamespacesFromAccounts
 } from '@/services/namespace-service'
+
+/**
+ *
+ *
+ * @param {*} accountInfo
+ */
+async function buildCurrentAccountInfo (accountInfo) {
+  const mosaicsSelect = []
+  if (accountInfo !== undefined && accountInfo !== null) {
+    if (accountInfo.mosaics.length > 0) {
+      const mosaics = await filterMosaics(accountInfo.mosaics.map(n => n.id))
+      if (mosaics.length > 0) {
+        for (const mosaic of mosaics) {
+          const configInput = {
+            prefix: '',
+            thousands: ',',
+            decimal: '.',
+            precision: '0'
+          }
+
+          const currentMosaic = accountInfo.mosaics.find(element => {
+            const mosaicId = Vue.prototype.$blockchainProvider.getMosaicId(mosaic.idMosaic).toHex()
+            return element.id.toHex() === mosaicId
+          })
+
+          let amount = ''
+          let expired = false
+          let nameExpired = ''
+          let balanceValidate = 0
+          if ('mosaicInfo' in mosaic) {
+            amount = Vue.prototype.$generalService.amountFormatter(
+              currentMosaic.amount.compact(),
+              mosaic.mosaicInfo
+            )
+            balanceValidate = currentMosaic.amount.compact()
+            const durationMosaic = Vue.prototype.$blockchainProvider.getUint64([
+              mosaic.mosaicInfo['properties']['duration']['lower'],
+              mosaic.mosaicInfo['properties']['duration']['higher']
+            ])
+            configInput.precision = mosaic.mosaicInfo['properties']['divisibility']
+
+            const createdBlock = Vue.prototype.$blockchainProvider.getUint64([
+              mosaic.mosaicInfo.height.lower,
+              mosaic.mosaicInfo.height.higher
+            ])
+            if (durationMosaic.compact() > 0) {
+              if (this.currentBlock >= durationMosaic.compact() + createdBlock.compact()) {
+                expired = true
+                nameExpired = ' - Expired'
+              }
+            }
+          } else {
+            balanceValidate = currentMosaic.amount.compact()
+            amount = Vue.prototype.$generalService.amountFormatter(currentMosaic.amount.compact(), 6)
+            nameExpired = ' - Expired'
+            expired = true
+          }
+          const idMosaic = Vue.prototype.$blockchainProvider.getMosaicId(mosaic.idMosaic).id.toHex()
+          const x = idMosaic !== this.$environment.mosaic.id
+          if (x) {
+            const mosaicId = Vue.prototype.$blockchainProvider.getMosaicId(mosaic.idMosaic).toHex()
+            const nameMosaic = mosaic.mosaicNames.names.length > 0 ? mosaic.mosaicNames.names[0].name : mosaicId
+            mosaicsSelect.push({
+              text: `${nameMosaic}${nameExpired} > Balance: ${amount}`,
+              mosaic: mosaic.idMosaic,
+              mosaicIdHex: idMosaic,
+              balance: amount,
+              balanceValidate: balanceValidate,
+              expired: false,
+              selected: false,
+              disabled: expired,
+              config: configInput
+            })
+          }
+        }
+      }
+    }
+  }
+  store.commit('accountStore/SET_BUILD_CURRENT_ACCOUNT_MOSAIC', mosaicsSelect)
+}
 
 /**
  *
@@ -25,7 +106,6 @@ async function searchAccountsInfo (accounts) {
   const accountsInfo = []
   const promise = new Promise(async resolve => {
     accounts.forEach(element => {
-      console.log('element', element)
       const address = Vue.prototype.$blockchainProvider.createRawAddress(element.simpleWallet.address['address'])
       Vue.prototype.$blockchainProvider.getAccountInfo(address).subscribe(
         async accountInfo => {
@@ -61,6 +141,7 @@ async function searchAccountsInfo (accounts) {
             accountInfo: null,
             multisigInfo: null
           }
+
           accountsInfo.push(accountInfoBuilded)
           setAccountsInfo([accountInfoBuilded], true)
           counter = counter + 1
@@ -153,7 +234,6 @@ function decrypt (account, password) {
     password: password
   }
 
-  console.log('common', common)
   const toDecrypt = {
     algo: 'pass:bip32',
     encrypted: account.encryptedPrivateKey.encryptedKey,
@@ -161,7 +241,6 @@ function decrypt (account, password) {
   }
 
   const decrypt = Vue.prototype.$blockchainProvider.decryptPrivateKey(common, toDecrypt)
-  console.log('decrypt', decrypt)
   if (decrypt && decrypt.status) {
     return common
   }
@@ -247,10 +326,7 @@ function logIn (wallet, password) {
             store.commit('walletStore/SET_CURRENT_WALLET', wallet)
             store.commit('accountStore/SET_CURRENT_ACCOUNT', defaultAccount)
             store.commit('mosaicStore/SET_MOSAICS', [])
-            console.log('HERE SEARCH INFO NAMESPACE WITH REFACTOR')
-            // this.searchNamespacesFromAccounts(wallet.accounts)
             store.dispatch('nodeStore/initNodes', connectionNodes)
-            // getAccountsInfo(wallet.accounts)
             return true
           }
         } else {
@@ -270,12 +346,6 @@ function logIn (wallet, password) {
     color: 'error'
   })
   return false
-  // this.$store.commit('mosaicStore/SET_MOSAICS', [])
-  // this.closeConection()
-  // this.connectnWs()
-  // this.searchNamespacesFromAccounts(wallet.accounts)
-  // this.set_searchAccountsInfo(wallet.accounts)
-  // return true
 }
 
 /**
@@ -288,7 +358,6 @@ function getAccountsInfo (accounts) {
   searchAccountsInfo(accounts).then(data => {
     updateBalance()
     if (data.mosaicsId && data.mosaicsId.length > 0) {
-      console.log('HERE SEARCH INFO MOSAIC WITH REFACTOR')
       searchInfoMosaics(data.mosaicsId)
     }
   }).catch(error => console.error(error))
@@ -342,6 +411,7 @@ function updateBalance () {
 }
 
 export {
+  buildCurrentAccountInfo,
   createWallet,
   getAccountsInfo,
   getWallets,

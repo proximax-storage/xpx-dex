@@ -21,7 +21,9 @@
                     class="subtitle-1 pt-0 font-weight-regular text-left primary--text"
                   >My debit transaction</v-col>
                   <div class="ma-2 ml-7 mx-auto">
-                    <div class="caption font-italic font-weight-light">Quantity you will send to selle</div>
+                    <div
+                      class="caption font-italic font-weight-light"
+                    >Quantity you will send to selle</div>
                     <div
                       class="caption font-weight-black"
                     >{{ $generalService.amountFormatter(form.priceForAmount, '', 6) }} XPX</div>
@@ -124,10 +126,10 @@
 </template>
 <script>
 import { mapGetters, mapState } from 'vuex'
-import generalMixins from '../../mixins/general-mixin'
-import walletMixins from '../../mixins/wallet-mixin'
+// import generalMixins from '../../mixins/general-mixin'
+// import walletMixins from '../../mixins/wallet-mixin'
 export default {
-  mixins: [generalMixins, walletMixins],
+  // mixins: [generalMixins, walletMixins],
   data: () => ({
     form: {
       amount: null,
@@ -154,6 +156,24 @@ export default {
     'custom-buttons': () => import('@/components/shared/Buttons'),
     'congratulations-offer': () => import('@/components/shared/CongratulationsOffer'),
     'card-assets-market': () => import('@/components/shared/CardAssetsMarket')
+  },
+
+  beforeMount () {
+    if (this.dataAssets) {
+      this.typeOfferColorFuc(this.dataAssets.form.active)
+      this.form.amount = this.exchange.amount.compact()
+      this.form.priceForAmount = this.exchange.priceForAmount
+    }
+    this.configForm = {
+      amount: this.$configForm.amount('Quantity'),
+      password: this.$configForm.password()
+    }
+    this.arrayBtn = [
+      {
+        cancel: this.typeButtons().cancel,
+        buy: this.typeButtons().buy
+      }
+    ]
   },
   methods: {
     action (action) {
@@ -291,20 +311,6 @@ export default {
       arrayBtn[0]['buy'].loading = this.sendingForm
       return arrayBtn
     }
-  },
-  beforeMount () {
-    if (this.dataAssets) {
-      this.typeOfferColorFuc(this.dataAssets.form.active)
-      this.form.amount = this.exchange.amount.compact()
-      this.form.priceForAmount = this.exchange.priceForAmount
-    }
-    this.configForm = this.getConfigForm()
-    this.arrayBtn = [
-      {
-        cancel: this.typeButtons().cancel,
-        buy: this.typeButtons().buy
-      }
-    ]
   }
 }
 </script>

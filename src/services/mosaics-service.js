@@ -4,6 +4,93 @@ import store from '@/store'
 /**
  *
  *
+ * @param {*} [mosaicsId=null]
+ * @param {string} [byAccount='']
+ * @returns
+ */
+async function filterMosaics (mosaicsId = null) {
+  if (mosaicsId) {
+    let mosaicsFromStore = store.getters['mosaicStore/mosaics']
+    if (mosaicsFromStore.length > 0) {
+      const dataReturn = []
+      const toSearch = []
+      // mosaicsId.forEach(element => {
+      for (let element of mosaicsId) {
+        const existMosaic = mosaicsFromStore.find(
+          x => Vue.prototype.$blockchainProvider.getMosaicId(x.idMosaic).toHex() === element.toHex()
+        )
+        if (existMosaic) {
+          dataReturn.push(existMosaic)
+        } else {
+          // tslint:disable-next-line: no-shadowed-variable
+          const existMosaic = mosaicsFromStore.find(x =>
+            x.isNamespace
+              ? Vue.prototype.$blockchainProvider.getMosaicId(x.isNamespace).toHex() === element.toHex()
+              : undefined
+          )
+          if (existMosaic) {
+            dataReturn.push(existMosaic)
+          } else {
+            toSearch.push(element)
+          }
+        }
+      }
+      if (toSearch.length > 0) {
+        const mosaicsSearched = await searchInfoMosaics(toSearch)
+        if (mosaicsSearched && mosaicsSearched.length > 0) {
+          mosaicsSearched.forEach(element => {
+            dataReturn.push(element)
+          })
+        }
+      }
+      return filterMosaicToReturn(dataReturn)
+    } else {
+      const infoMosaics = await searchInfoMosaics(mosaicsId)
+      return filterMosaicToReturn(infoMosaics)
+    }
+  }
+}
+
+/**
+ *
+ *
+ * @param {*} infoMosaics
+ * @returns
+ */
+function filterMosaicToReturn (infoMosaics) {
+  const returned = []
+  if (infoMosaics && infoMosaics.length > 0) {
+    infoMosaics.forEach(element => {
+      if (returned.length > 0) {
+        const existByNamespace = returned.find(x => {
+          const mosaicId = Vue.prototype.$blockchainProvider.getMosaicId(x.isNamespace).toHex()
+          const mosaicId2 = Vue.prototype.$blockchainProvider.getMosaicId(element.isNamespace).toHex()
+          return x.isNamespace && element.isNamespace ? mosaicId === mosaicId2 : undefined
+        })
+
+        // search by mosaic
+        if (!existByNamespace) {
+          const existByMosaic = returned.find(x => {
+            const mosaicId = Vue.prototype.$blockchainProvider.getMosaicId(x.idMosaic).toHex()
+            const mosaicId2 = Vue.prototype.$blockchainProvider.getMosaicId(element.idMosaic).toHex()
+            return x => mosaicId === mosaicId2
+          })
+
+          if (!existByMosaic) {
+            returned.push(element)
+          }
+        }
+      } else {
+        returned.push(element)
+      }
+    })
+  }
+  return returned
+}
+
+/**
+ *
+ *
  * @param {*} mosaicsId
  * @param {boolean} [mosaicsInfOffer=false]
  * @returns
@@ -160,5 +247,6 @@ async function saveMosaicStorage (mosaicsTosaved) {
 }
 
 export {
+  filterMosaics,
   searchInfoMosaics
 }

@@ -81,11 +81,8 @@
 </template>
 <script>
 import { mapMutations } from 'vuex'
-// import generalMixins from '../../mixins/general-mixin'
-// import walletMixins from '../../mixins/wallet-mixin'
 import { getWalletByName, getWallets, logIn } from '@/services/account-wallet-service'
 export default {
-  // mixins: [walletMixins],
   data: () => {
     return {
       wallet: null,

@@ -227,7 +227,7 @@
         </template>
         <v-row v-if="!dataTxOfferInfo">
           <v-col cols="5" class="ma-0 mx-auto caption d-flex justify-center align-center">
-            <custom-button @action="action" :align="'center'" :arrayBtn="getArrayBtn[0]"></custom-button>
+            <custom-button @action="action" :align="'center'" :arrayBtn="getArrayBtn"></custom-button>
           </v-col>
         </v-row>
       </v-col>
@@ -239,13 +239,9 @@
 </template>
 
 <script>
-import generalMixins from '../../mixins/general-mixin'
-import mosaicMixins from '../../mixins/mosaic-mixin'
-import accountMixins from '../../mixins/account-mixin'
-import walletMixins from '../../mixins/wallet-mixin'
+import { buildCurrentAccountInfo } from '@/services/account-wallet-service'
 import { mapGetters } from 'vuex'
 export default {
-  mixins: [generalMixins, mosaicMixins, accountMixins, walletMixins],
   data: () => {
     return {
       selectTypeOffer: null,
@@ -296,6 +292,23 @@ export default {
     'custom-button': () => import('@/components/shared/Buttons'),
     'card-assets-market': () => import('@/components/shared/CardAssetsMarket')
   },
+  beforeMount () {
+    this.mountBuildCurrentAccountInfo(this.type)
+    this.typeOfferColorFuc(this.type)
+    this.configForm = {
+      assets: this.$configForm.amount('Asset'),
+      amount: this.$configForm.amount(),
+      bidPrice: this.$configForm.amount('BID Price (XPX)'),
+      durationOffer: this.$configForm.namespace('Duration (number of days)'),
+      password: this.$configForm.password()
+    }
+    this.configDuration = this.$configForm.getConfigMoney('', '', '', '', 0, true)
+    this.configMoney = this.$configForm.getConfigMoney()
+    this.arrayBtn = {
+      cancel: this.$configForm.buildButton('Cancel', 'cancel', 'cancel', 'primary', 'white--text'),
+      place: this.$configForm.buildButton('Place', 'place', 'place', 'primary', 'white--text')
+    }
+  },
   computed: {
     ...mapGetters('socketDbStore', ['mosaicsInfOffer', 'loadingInfo', 'mosaicsInfOfferFromIdHex']),
     ...mapGetters('mosaicExchange', ['exchange', 'dataAssets']),
@@ -324,12 +337,11 @@ export default {
     },
     getArrayBtn () {
       const arrayBtn = this.arrayBtn
-      arrayBtn[0]['place'].disabled =
-        !this.valid || !this.form.checkbox || this.isValidateBalance
-      arrayBtn[0]['place'].loading = this.sendingForm
-      arrayBtn[0]['place'].color = this.type === null ? 'white' : this.typeOfferColor
-      arrayBtn[0]['place'].textColor = 'white--text'
-      arrayBtn[0]['place'].textColor = this.type === null ? 'primary--text' : 'white--text'
+      arrayBtn['place'].disabled = !this.valid || !this.form.checkbox || this.isValidateBalance
+      arrayBtn['place'].loading = this.sendingForm
+      arrayBtn['place'].color = this.type === null ? 'white' : this.typeOfferColor
+      arrayBtn['place'].textColor = 'white--text'
+      arrayBtn['place'].textColor = this.type === null ? 'primary--text' : 'white--text'
       return arrayBtn
     },
     assetsSell () {
@@ -453,7 +465,7 @@ export default {
         this.balanceAssets = mosaic.balanceValidate
         this.configMoneyAsset = mosaic.config
       } else {
-        this.configMoneyAsset = this.getConfigMoney()
+        this.configMoneyAsset = this.$configForm.getConfigMoney()
       }
     },
     changeTypeoffer (event) {
@@ -467,15 +479,8 @@ export default {
     },
     configOtherMoneyAsset (divisibility) {
       this.configMoneyAsset = divisibility
-        ? {
-          decimal: '.',
-          thousands: ',',
-          prefix: '',
-          suffix: '',
-          precision: divisibility,
-          masked: false
-        }
-        : this.getConfigMoney()
+        ? this.$configForm.getConfigMoney('.', ',', '', '', divisibility, false)
+        : this.$configForm.getConfigMoney()
     },
     validateQuantity (e) {
       let amount = null
@@ -536,7 +541,7 @@ export default {
     mountBuildCurrentAccountInfo (type = null) {
       if (type === 'sell') {
         const accountFiltered = this.accountInfoByNameAccount(this.currentAccount.name)
-        this.buildCurrentAccountInfo(accountFiltered.accountInfo)
+        buildCurrentAccountInfo(accountFiltered.accountInfo)
       }
     },
     clearForm () {
@@ -567,27 +572,6 @@ export default {
     accountsInfo (newAccountsInfo) {
       this.mountBuildCurrentAccountInfo(this.type)
     }
-  },
-  beforeMount () {
-    this.mountBuildCurrentAccountInfo(this.type)
-    console.log('this.type', this.type)
-    this.typeOfferColorFuc(this.type)
-    this.configForm = this.getConfigForm()
-    this.configDuration = this.getConfigMoney({
-      decimal: '',
-      thousands: '',
-      prefix: '',
-      suffix: '',
-      precision: 0,
-      masked: true
-    })
-    this.configMoney = this.getConfigMoney()
-    this.arrayBtn = [
-      {
-        cancel: this.typeButtons().cancel,
-        place: this.typeButtons().place
-      }
-    ]
   }
 }
 </script>

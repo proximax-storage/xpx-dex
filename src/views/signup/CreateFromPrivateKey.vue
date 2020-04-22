@@ -133,10 +133,7 @@
 <script>
 import { mapMutations } from 'vuex'
 import { createWallet, getWalletByName } from '@/services/account-wallet-service'
-// import generalMixins from '../../mixins/general-mixin'
-// import walletMixins from '../../mixins/wallet-mixin'
 export default {
-  // mixins: [generalMixins, walletMixins],
   data: () => {
     return {
       accountName: '',

@@ -7,6 +7,10 @@ const generalConfig = {
     min: 3,
     max: 30
   },
+  namespace: {
+    min: 1,
+    max: 30
+  },
   password: {
     min: 8,
     max: 30
@@ -97,6 +101,23 @@ function buildButton (text, key, action, color, textColor, disabled = false, loa
 /**
  *
  *
+ * @param {*} [value=null]
+ * @returns
+ */
+function getConfigMoney (decimal = '.', thousands = ',', prefix = '', suffix = '', precision = 6, masked = false) {
+  return {
+    decimal,
+    thousands,
+    prefix,
+    suffix,
+    precision,
+    masked
+  }
+}
+
+/**
+ *
+ *
  * @param {*} value1
  * @param {*} value2
  * @param {string} [nameValidation='']
@@ -104,6 +125,23 @@ function buildButton (text, key, action, color, textColor, disabled = false, loa
  */
 function isMatch (value1, value2, nameValidation = '') {
   return value1 === value2 || `${nameValidation} must match`
+}
+
+/**
+ *
+ *
+ * @param {string} [label='Namespace']
+ * @returns
+ */
+function namespace (label = 'Namespace') {
+  const min = generalConfig.namespace.min
+  const max = generalConfig.namespace.max
+  const rules = {
+    required: value => !!value || `${label} is required`,
+    min: v => (v && v.length >= min) || `${label} must be less than ${min} characters`,
+    max: v => (v && v.length <= max) || `${label} must be a maximum of ${max} characters`
+  }
+  return assemblyConfig(label, '', '', min, max, rules)
 }
 
 /**
@@ -156,7 +194,9 @@ function walletAccountName (label = 'Wallet') {
 export {
   amount,
   buildButton,
+  getConfigMoney,
   isMatch,
+  namespace,
   password,
   privateKey,
   walletAccountName

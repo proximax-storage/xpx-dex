@@ -33,6 +33,9 @@ import {
   Password
 } from 'tsjs-xpx-chain-sdk/dist/src/model/wallet/Password'
 import {
+  UInt64
+} from 'tsjs-xpx-chain-sdk/dist/src/model/UInt64'
+import {
   Connections
 } from '@/core/utils/connection'
 
@@ -435,6 +438,16 @@ function getEnvironmentByNetworkType (configInfo) {
 /**
  *
  *
+ * @param {*} value
+ * @returns
+ */
+function getUint64 (value) {
+  return new UInt64(value)
+}
+
+/**
+ *
+ *
  * @param {*} publicKey
  * @param {*} network
  * @returns
@@ -550,6 +563,7 @@ export {
   getNetworkTypes,
   getIncomingTransactions,
   getEnvironmentByNetworkType,
+  getUint64,
   publicAccountFromPublicKey,
   getTransactionsFromAccount,
   getNamespaceFromAccount,
