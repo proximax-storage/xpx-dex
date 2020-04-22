@@ -125,7 +125,7 @@ async function searchInfoMosaics (mosaicsId, mosaicsInfOffer = false) {
         })
       }
       if (mosaicsFound.length > 0) {
-        const mosaicsName = await Vue.prototype.$blockchainProvider.getMosaicsName(mosaicsId)
+        const mosaicsName = await Vue.prototype.$blockchainProvider.getMosaicsName(mosaicsId).toPromise()
         mosaicsFound.forEach(infoMosaic => {
           try {
             const existMosaicName = mosaicsName

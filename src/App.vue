@@ -48,7 +48,8 @@ export default {
     nodeStatus (newValue, oldValue) {
       console.log('Node status has changed \n\n', newValue)
       // Node status is active
-      if (newValue === 1 && !this.connectionStablished) {
+      // if (newValue === 1 && !this.connectionStablished) {
+      if (newValue === 1) {
         this.connectionStablished = true
         getAccountsInfo(this.$store.getters['walletStore/currentWallet'].accounts)
       }
