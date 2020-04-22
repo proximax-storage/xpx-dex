@@ -7,8 +7,14 @@ import {
   AddExchangeOffer
 } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/AddExchangeOffer'
 import {
+  ExchangeOffer
+} from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/ExchangeOffer'
+import {
   AddExchangeOfferTransaction
 } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/AddExchangeOfferTransaction'
+import {
+  ExchangeOfferTransaction
+} from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/ExchangeOfferTransaction'
 import {
   Deadline
 } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/Deadline'
@@ -86,6 +92,24 @@ function addExchangeOffer (mosaicId, mosaicAmount, costValue, type, durationValu
   return AddExchangeOfferTransaction.create(
     Deadline.create(10),
     [new AddExchangeOffer(mosaicId, amount, cost, type, duration)],
+    store.getters['nodeStore/networkType']
+  )
+}
+/**
+  * @param {MosaicId} mosaicId MosaicId
+  * @param {Number} mosaicAmount
+  * @param {Number} cost
+  * @param {Int} type
+  * @param {PublicAccount} publicAccount
+  * @returns
+  * @memberof ProximaxProvider
+  */
+function exchangeOffer (mosaicId, mosaicAmount, costValue, type, publicAccount) {
+  const amount = UInt64.fromUint(mosaicAmount)
+  const cost = UInt64.fromUint(costValue)
+  return ExchangeOfferTransaction.create(
+    Deadline.create(10),
+    [new ExchangeOffer(mosaicId, amount, cost, type, publicAccount)],
     this.typeNetwork
   )
 }
@@ -606,6 +630,7 @@ export {
   createSimpleWallet,
   createSimpleWalletFromPrivateKey,
   decryptPrivateKey,
+  exchangeOffer,
   isValidPrivateKey,
   isHexadecimal,
   filterNetworkTypeFromString,
