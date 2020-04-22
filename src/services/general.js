@@ -28,19 +28,19 @@ class GeneralService {
     }
     return realAmount
   }
-  addZerosquantity (cant, amount = '0') {
-    const x = '0'
-    if (amount === '0') {
-      for (let index = 0; index < cant - 1; index++) {
-        amount += x
-      }
-    } else {
-      for (let index = 0; index < cant; index++) {
-        amount += x
-      }
-    }
-    return amount
-  }
+  // addZerosquantity (cant, amount = '0') {
+  //   const x = '0'
+  //   if (amount === '0') {
+  //     for (let index = 0; index < cant - 1; index++) {
+  //       amount += x
+  //     }
+  //   } else {
+  //     for (let index = 0; index < cant; index++) {
+  //       amount += x
+  //     }
+  //   }
+  //   return amount
+  // }
 
   /**
    *
@@ -195,24 +195,24 @@ class GeneralService {
    * @returns
    * @memberof GeneralService
    */
-  quantityStringToInt (quantity, divisibility = 6) {
-    let rQuantity = null
-    if (quantity !== '' && quantity !== null && Number(quantity) !== 0) {
-      const arrCifraQuantity = quantity
-        .toString()
-        .replace(/,/g, '')
-        .split('.')
-      let decimal = null
-      if (arrCifraQuantity.length < 2) {
-        decimal = this.addZerosquantity(divisibility)
-      } else {
-        const arrDecimals = arrCifraQuantity[1].split('')
-        decimal = this.addZerosquantity(divisibility - arrDecimals.length, arrCifraQuantity[1])
-      }
-      rQuantity = `${arrCifraQuantity[0]}${decimal}`
-    }
-    return Number(rQuantity)
-  }
+  // quantityStringToInt (quantity, divisibility = 6) {
+  //   let rQuantity = null
+  //   if (quantity !== '' && quantity !== null && Number(quantity) !== 0) {
+  //     const arrCifraQuantity = quantity
+  //       .toString()
+  //       .replace(/,/g, '')
+  //       .split('.')
+  //     let decimal = null
+  //     if (arrCifraQuantity.length < 2) {
+  //       decimal = this.addZerosquantity(divisibility)
+  //     } else {
+  //       const arrDecimals = arrCifraQuantity[1].split('')
+  //       decimal = this.addZerosquantity(divisibility - arrDecimals.length, arrCifraQuantity[1])
+  //     }
+  //     rQuantity = `${arrCifraQuantity[0]}${decimal}`
+  //   }
+  //   return Number(rQuantity)
+  // }
 
   /**
    * Calculate duration based in blocks

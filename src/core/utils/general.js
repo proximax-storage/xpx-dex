@@ -15,6 +15,27 @@ function amountFormatter (amount, d = 6) {
 /**
  *
  *
+ * @param {*} cant
+ * @param {string} [amount='0']
+ * @returns
+ */
+function addZerosQuantity (cant, amount = '0') {
+  const data = '0'
+  if (amount === '0') {
+    for (let index = 0; index < cant - 1; index++) {
+      amount += data
+    }
+  } else {
+    for (let index = 0; index < cant; index++) {
+      amount += data
+    }
+  }
+  return amount
+}
+
+/**
+ *
+ *
  * @param {*} title
  * @param {*} show
  * @param {*} description
@@ -90,6 +111,29 @@ function getDataPart (data, cantPart) {
 /**
  *
  *
+ * @param {*} quantity
+ * @param {number} [divisibility=6]
+ * @returns
+ */
+function quantityStringToInt (quantity, divisibility = 6) {
+  let rQuantity = null
+  if (quantity !== '' && quantity !== null && Number(quantity) !== 0) {
+    const arrCifraQuantity = quantity.toString().replace(/,/g, '').split('.')
+    let decimal = null
+    if (arrCifraQuantity.length < 2) {
+      decimal = addZerosQuantity(divisibility)
+    } else {
+      const arrDecimals = arrCifraQuantity[1].split('')
+      decimal = addZerosQuantity(divisibility - arrDecimals.length, arrCifraQuantity[1])
+    }
+    rQuantity = `${arrCifraQuantity[0]}${decimal}`
+  }
+  return Number(rQuantity)
+}
+
+/**
+ *
+ *
  * @param {*} d
  * @param {*} e
  * @param {*} r
@@ -117,6 +161,7 @@ export {
   buildButton,
   buildTableHeader,
   getDataPart,
+  quantityStringToInt,
   replaceData,
   validateMatch
 }

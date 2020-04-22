@@ -3,6 +3,15 @@ import {
   Account
 } from 'tsjs-xpx-chain-sdk/dist/src/model/account/Account'
 import {
+  AddExchangeOffer
+} from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/AddExchangeOffer'
+import {
+  AddExchangeOfferTransaction
+} from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/AddExchangeOfferTransaction'
+import {
+  Deadline
+} from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/Deadline'
+import {
   PublicAccount
 } from 'tsjs-xpx-chain-sdk/dist/src/model/account/PublicAccount'
 import {
@@ -47,6 +56,37 @@ let connection = []
  */
 function instanceConnectionApi (randomNode, protocol) {
   connection = new Connections(randomNode, protocol)
+}
+
+/**
+ *
+ *
+ * @param {*} signedTransaction
+ * @returns
+ */
+function announceTx (signedTransaction) {
+  return connection.transactionHttp.announce(signedTransaction)
+}
+
+/**
+ *
+ *
+ * @param {*} mosaicId
+ * @param {*} mosaicAmount
+ * @param {*} costValue
+ * @param {*} type
+ * @param {*} durationValue
+ * @returns
+ */
+function addExchangeOffer (mosaicId, mosaicAmount, costValue, type, durationValue) {
+  const amount = UInt64.fromUint(mosaicAmount)
+  const cost = UInt64.fromUint(costValue)
+  const duration = UInt64.fromUint(durationValue)
+  return AddExchangeOfferTransaction.create(
+    Deadline.create(10),
+    [new AddExchangeOffer(mosaicId, amount, cost, type, duration)],
+    this.typeNetwork
+  )
 }
 
 /**
@@ -459,6 +499,19 @@ function publicAccountFromPublicKey (publicKey, network) {
 /**
  *
  *
+ * @param {*} privateKey
+ * @param {*} transaction
+ * @param {*} network
+ * @returns
+ */
+function signedTransaction (privateKey, transaction, network) {
+  const account = getAccountFromPrivateKey(privateKey, network)
+  return account.sign(transaction, this.generationHash)
+}
+
+/**
+ *
+ *
  * @returns
  */
 function typeTransactions () {
@@ -544,6 +597,8 @@ function typeTransactions () {
 
 export {
   instanceConnectionApi,
+  addExchangeOffer,
+  announceTx,
   createRawAddress,
   createSimpleWallet,
   createSimpleWalletFromPrivateKey,
@@ -569,9 +624,10 @@ export {
   getNamespaceFromAccount,
   getNamespacesName,
   getPrefixAndPrivateKey,
-  typeTransactions,
   getBlockInfo,
-  dateFormatUTC,
   getTransactionId,
+  typeTransactions,
+  dateFormatUTC,
+  signedTransaction,
   outgoingTransactions
 }

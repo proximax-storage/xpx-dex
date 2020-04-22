@@ -413,6 +413,7 @@ function updateBalance () {
 export {
   buildCurrentAccountInfo,
   createWallet,
+  decrypt,
   getAccountsInfo,
   getWallets,
   getWalletByName,
