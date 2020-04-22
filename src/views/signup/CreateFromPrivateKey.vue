@@ -29,11 +29,11 @@
                             :counter="configForm.accountName.max"
                             :color="inputStyle"
                             :rules="[
-                        configForm.accountName.rules.required,
-                        configForm.accountName.rules.min,
-                        configForm.accountName.rules.max,
-                        walletIsRepeat
-                      ]"
+                              configForm.accountName.rules.required,
+                              configForm.accountName.rules.min,
+                              configForm.accountName.rules.max,
+                              walletIsRepeat
+                            ]"
                           ></v-text-field>
                         </v-col>
                         <!-- Private Key -->
@@ -46,11 +46,11 @@
                             :counter="configForm.privateKey.max"
                             :color="inputStyle"
                             :rules="[
-                        configForm.privateKey.rules.required,
-                        configForm.privateKey.rules.min,
-                        configForm.privateKey.rules.max,
-                        configForm.privateKey.rules.isHex
-                      ]"
+                              configForm.privateKey.rules.required,
+                              configForm.privateKey.rules.min,
+                              configForm.privateKey.rules.max,
+                              configForm.privateKey.rules.validatePvk
+                            ]"
                             :label="configForm.privateKey.label"
                             :type="configForm.privateKey.show ? 'text' : 'password'"
                             name="privateKey"
@@ -68,10 +68,10 @@
                             :counter="configForm.password.max"
                             :color="inputStyle"
                             :rules="[
-                        configForm.password.rules.required,
-                        configForm.password.rules.min,
-                        configForm.password.rules.max
-                      ]"
+                              configForm.password.rules.required,
+                              configForm.password.rules.min,
+                              configForm.password.rules.max
+                            ]"
                             :label="configForm.password.label"
                             :type="configForm.password.show ? 'text' : 'password'"
                             name="password"
@@ -90,11 +90,12 @@
                             :counter="configForm.password.max"
                             :color="inputStyle"
                             :rules="[
-                        configForm.password.rules.required,
-                        configForm.password.rules.min,
-                        configForm.password.rules.max,
-                        isMatch(passwords.password, passwords.confirmPassword, 'Password')
-                      ]"
+                              configForm.password.rules.required,
+                              configForm.password.rules.min,
+                              configForm.password.rules.max,
+                              configForm.password.rules.max,
+                              $configForm.isMatch(passwords.password, passwords.confirmPassword, 'Password')
+                            ]"
                             :type="configForm.password.show ? 'text' : 'password'"
                             label="Confirm Password"
                             hint="Confirm Password"
@@ -131,10 +132,11 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import generalMixins from '../../mixins/general-mixin'
-import walletMixins from '../../mixins/wallet-mixin'
+import { createWallet, getWalletByName } from '@/services/account-wallet-service'
+// import generalMixins from '../../mixins/general-mixin'
+// import walletMixins from '../../mixins/wallet-mixin'
 export default {
-  mixins: [generalMixins, walletMixins],
+  // mixins: [generalMixins, walletMixins],
   data: () => {
     return {
       accountName: '',
@@ -150,6 +152,21 @@ export default {
       privateKey: '',
       walletIsRepeat: true,
       inputStyle: 'inputStyle'
+    }
+  },
+  beforeMount () {
+    const networks = this.$blockchainProvider.getNetworkTypes()
+    this.networkSelected = networks[0]
+    this.debouncedValidateWalletName = this.lodash.debounce(this.validateWalletName, 500)
+    this.configForm = {
+      accountName: this.$configForm.walletAccountName('Account name'),
+      privateKey: this.$configForm.privateKey(),
+      password: this.$configForm.password(),
+      confirmPassword: this.$configForm.password('Confirm password')
+    }
+    this.arrayBtn = {
+      create: this.$configForm.buildButton('Create', 'create', 'create', 'primary', 'white--text'),
+      clear: this.$configForm.buildButton('Clear', 'clear', 'clear', 'primary', 'white--text')
     }
   },
   computed: {
@@ -186,7 +203,7 @@ export default {
         if (this.valid && !this.sendingForm) {
           this.sendingForm = true
           this.SHOW_LOADING(true)
-          const walletCreated = this.createWallet({
+          const walletCreated = createWallet({
             default: true,
             firstAccount: true,
             walletName: this.accountName,
@@ -204,6 +221,7 @@ export default {
           }, 500)
         }
       } catch (error) {
+        console.log('error', error)
         this.SHOW_LOADING(false)
         this.clear()
         this.sendingForm = false
@@ -219,7 +237,7 @@ export default {
       if (usr && usr !== '' && usr.length >= this.configForm.accountName.min) {
         this.searchingWalletName = true
         setTimeout(() => {
-          if (this.getWalletByName(usr, this.networkSelected.value)) {
+          if (getWalletByName(usr, this.networkSelected.value)) {
             this.searchingWalletName = false
             this.walletIsRepeat = `${usr} already exists, try another wallet name.`
             return
@@ -229,24 +247,11 @@ export default {
           this.searchingWalletName = false
         }, 500)
       }
-    },
-    isMatch (value1, value2, nameValidation = '') {
-      return this.$generalService.isMatch(value1, value2, nameValidation)
     }
   },
   watch: {
     accountName (newVal) {
       this.debouncedValidateWalletName()
-    }
-  },
-  beforeMount () {
-    const networks = this.$blockchainProvider.getNetworkTypes()
-    this.networkSelected = networks.testnet
-    this.debouncedValidateWalletName = this.lodash.debounce(this.validateWalletName, 500)
-    this.configForm = this.getConfigForm()
-    this.arrayBtn = {
-      clear: this.typeButtons().clear,
-      create: this.typeButtons().create
     }
   }
 }

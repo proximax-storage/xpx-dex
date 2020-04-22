@@ -79,6 +79,71 @@ async function searchAccountsInfo (accounts) {
 /**
  *
  *
+ * @param {*} data
+ * @returns
+ */
+function createWallet (data) {
+  const existWallet = getWalletByName(data.walletName, data.network)
+  if (existWallet === undefined || existWallet === null) {
+    let walletCreated = null
+    if (data.privateKey) {
+      const prefixAndPvk = Vue.prototype.$blockchainProvider.getPrefixAndPrivateKey(data.privateKey)
+      walletCreated = Vue.prototype.$blockchainProvider.createSimpleWalletFromPrivateKey(
+        data.walletName,
+        data.password,
+        prefixAndPvk.pvk,
+        data.network
+      )
+    } else {
+      walletCreated = Vue.prototype.$blockchainProvider.createSimpleWallet(
+        data.walletName,
+        data.password,
+        data.network
+      )
+    }
+    const decrypted = decrypt(walletCreated, data.password)
+    if (decrypted.privateKey) {
+      const account = Vue.prototype.$blockchainProvider.getAccountFromPrivateKey(
+        decrypted.privateKey,
+        walletCreated.network
+      )
+      const accountBuilded = {
+        default: data.default,
+        firstAccount: data.firstAccount,
+        name: 'Primary',
+        simpleWallet: walletCreated,
+        publicKey: account.publicAccount.publicKey
+      }
+
+      const walletBuilded = {
+        username: data.walletName,
+        accounts: [accountBuilded]
+      }
+
+      const wallets = getWallets()
+      wallets.push(walletBuilded)
+      const pseudonymApp = store.getters.pseudonymApp
+      Vue.prototype.$browserStorage.set(`wallets-${pseudonymApp}`, JSON.stringify(wallets))
+      store.commit('walletStore/SET_CURRENT_WALLET', walletBuilded)
+      return {
+        status: true,
+        data: walletBuilded,
+        pvk: decrypted.privateKey
+      }
+    }
+    return {
+      status: false,
+      msg: 'Error to decrypt wallet'
+    }
+  }
+  return {
+    status: false,
+    msg: 'Wallet name already exists, try another name'
+  }
+}
+/**
+ *
+ *
  * @param {*} account
  * @param {*} password
  * @returns
@@ -277,6 +342,7 @@ function updateBalance () {
 }
 
 export {
+  createWallet,
   getAccountsInfo,
   getWallets,
   getWalletByName,

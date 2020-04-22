@@ -60,64 +60,64 @@ export default {
     //   this.set_searchAccountsInfo(wallet.accounts)
     //   return true
     // },
-    createWallet (data) {
-      const existWallet = this.getWalletByName(data.walletName, data.network)
-      if (existWallet === undefined || existWallet === null) {
-        let walletCreated = null
-        if (data.privateKey) {
-          const prefixAndPvk = this.$blockchainProvider.getPrefixAndPrivateKey(data.privateKey)
-          walletCreated = this.$blockchainProvider.createSimpleWalletFromPrivateKey(
-            data.walletName,
-            data.password,
-            prefixAndPvk.pvk,
-            data.network
-          )
-        } else {
-          walletCreated = this.$blockchainProvider.createSimpleWallet(
-            data.walletName,
-            data.password,
-            data.network
-          )
-        }
-        const decrypted = this.decrypt(walletCreated, data.password)
-        if (decrypted.privateKey) {
-          const account = this.$blockchainProvider.getAccountFromPrivateKey(
-            decrypted.privateKey,
-            walletCreated.network
-          )
-          const accountBuilded = {
-            default: data.default,
-            firstAccount: data.firstAccount,
-            name: 'Primary',
-            simpleWallet: walletCreated,
-            publicKey: account.publicAccount.publicKey
-          }
+    // createWallet (data) {
+    //   const existWallet = this.getWalletByName(data.walletName, data.network)
+    //   if (existWallet === undefined || existWallet === null) {
+    //     let walletCreated = null
+    //     if (data.privateKey) {
+    //       const prefixAndPvk = this.$blockchainProvider.getPrefixAndPrivateKey(data.privateKey)
+    //       walletCreated = this.$blockchainProvider.createSimpleWalletFromPrivateKey(
+    //         data.walletName,
+    //         data.password,
+    //         prefixAndPvk.pvk,
+    //         data.network
+    //       )
+    //     } else {
+    //       walletCreated = this.$blockchainProvider.createSimpleWallet(
+    //         data.walletName,
+    //         data.password,
+    //         data.network
+    //       )
+    //     }
+    //     const decrypted = this.decrypt(walletCreated, data.password)
+    //     if (decrypted.privateKey) {
+    //       const account = this.$blockchainProvider.getAccountFromPrivateKey(
+    //         decrypted.privateKey,
+    //         walletCreated.network
+    //       )
+    //       const accountBuilded = {
+    //         default: data.default,
+    //         firstAccount: data.firstAccount,
+    //         name: 'Primary',
+    //         simpleWallet: walletCreated,
+    //         publicKey: account.publicAccount.publicKey
+    //       }
 
-          const walletBuilded = {
-            username: data.walletName,
-            accounts: [accountBuilded]
-          }
+    //       const walletBuilded = {
+    //         username: data.walletName,
+    //         accounts: [accountBuilded]
+    //       }
 
-          const wallets = this.getWallets()
-          wallets.push(walletBuilded)
-          this.$browserStorage.set(`wallets-${this.pseudonymApp}`, wallets)
-          this.$store.commit('walletStore/SET_CURRENT_WALLET', walletBuilded)
-          return {
-            status: true,
-            data: walletBuilded,
-            pvk: decrypted.privateKey
-          }
-        }
-        return {
-          status: false,
-          msg: 'Error to decrypt wallet'
-        }
-      }
-      return {
-        status: false,
-        msg: 'Wallet name already exists, try another name'
-      }
-    }
+    //       const wallets = this.getWallets()
+    //       wallets.push(walletBuilded)
+    //       this.$browserStorage.set(`wallets-${this.pseudonymApp}`, wallets)
+    //       this.$store.commit('walletStore/SET_CURRENT_WALLET', walletBuilded)
+    //       return {
+    //         status: true,
+    //         data: walletBuilded,
+    //         pvk: decrypted.privateKey
+    //       }
+    //     }
+    //     return {
+    //       status: false,
+    //       msg: 'Error to decrypt wallet'
+    //     }
+    //   }
+    //   return {
+    //     status: false,
+    //     msg: 'Wallet name already exists, try another name'
+    //   }
+    // }
     // decrypt (account, password) {
     //   const common = { password: password }
     //   const toDecrypt = {

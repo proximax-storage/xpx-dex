@@ -1,5 +1,8 @@
 import * as crypto from 'js-xpx-chain-library/dist/crypto/crypto'
 import {
+  Account
+} from 'tsjs-xpx-chain-sdk/dist/src/model/account/Account'
+import {
   PublicAccount
 } from 'tsjs-xpx-chain-sdk/dist/src/model/account/PublicAccount'
 import {
@@ -24,6 +27,12 @@ import {
   TransactionType
 } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/TransactionType'
 import {
+  SimpleWallet
+} from 'tsjs-xpx-chain-sdk/dist/src/model/wallet/SimpleWallet'
+import {
+  Password
+} from 'tsjs-xpx-chain-sdk/dist/src/model/wallet/Password'
+import {
   Connections
 } from '@/core/utils/connection'
 
@@ -45,6 +54,41 @@ function instanceConnectionApi (randomNode, protocol) {
  */
 function createRawAddress (address) {
   return Address.createFromRawAddress(address)
+}
+
+/**
+ *
+ *
+ * @param {*} name
+ * @param {*} password
+ * @param {*} [network=this.typeNetwork]
+ * @returns
+ */
+function createSimpleWallet (name, password, network) {
+  return SimpleWallet.create(name, createPassword(password), network)
+}
+
+/**
+ *
+ *
+ * @param {*} name
+ * @param {*} password
+ * @param {*} privateKey
+ * @param {*} [network=this.typeNetwork]
+ * @returns
+ */
+function createSimpleWalletFromPrivateKey (name, password, privateKey, network) {
+  return SimpleWallet.createFromPrivateKey(name, createPassword(password), privateKey, network)
+}
+
+/**
+ *
+ *
+ * @param {*} password
+ * @returns
+ */
+function createPassword (password) {
+  return new Password(password)
 }
 
 /**
@@ -81,7 +125,7 @@ function decryptPrivateKey (common, account) {
         }
       }
 
-      if (!isValidPKey(common.privateKey)) {
+      if (!isValidPrivateKey(common.privateKey)) {
         return {
           status: false,
           msg: 'Invalid Private Key'
@@ -114,14 +158,12 @@ function decryptPrivateKey (common, account) {
 
 /**
  *
- * @param {*} isValidPKey
+ * @param {*} isValidPrivateKey
  */
-function isValidPKey (value) {
-  console.log(value)
+function isValidPrivateKey (value) {
   if (value && value !== '' && (value.length === 64 || value.length === 66) && isHexadecimal(value)) {
     return true
   } else {
-    console.error('Private key length must be 64 or 66 characters and Hexadecimal!')
     return false
   }
 }
@@ -133,11 +175,7 @@ function isValidPKey (value) {
  * @returns
  */
 function isHexadecimal (str) {
-  if (str) {
-    return str && str.match('^(0x|0X)?[a-fA-F0-9]+$') !== null
-  }
-
-  return false
+  return (str) ? str.match('^(0x|0X)?[a-fA-F0-9]+$') !== null : false
 }
 
 /**
@@ -174,6 +212,8 @@ function filterNetworkTypeFromNumber (network) {
       return 'MIJIN_TEST'
     case NetworkType.TEST_NET:
       return 'TEST_NET'
+    case NetworkType.PRIVATE:
+      return 'PRIVATE'
   }
 }
 
@@ -198,6 +238,17 @@ function getBlockInfo (height = 1, url = '') {
  */
 function getAccountInfo (address) {
   return connection.accountHttp.getAccountInfo(address)
+}
+
+/**
+ *
+ *
+ * @param {*} privateKey
+ * @param {*} network
+ * @returns
+ */
+function getAccountFromPrivateKey (privateKey, network) {
+  return Account.createFromPrivateKey(privateKey, network)
 }
 
 /**
@@ -294,6 +345,26 @@ function getNamespaceId (id) {
 /**
  *
  *
+ * @param {*} privateKey
+ * @returns
+ */
+function getPrefixAndPrivateKey (privateKey) {
+  let pref = null
+  let newPrivateKey = privateKey
+  if (newPrivateKey && newPrivateKey.length > 64) {
+    pref = newPrivateKey.slice(0, -64)
+    newPrivateKey = newPrivateKey.slice(2)
+  }
+
+  return {
+    pref: pref,
+    pvk: newPrivateKey
+  }
+}
+
+/**
+ *
+ *
  * @param {*} address
  * @returns
  */
@@ -333,6 +404,9 @@ function getNetworkTypes () {
   }, {
     text: 'Main Net',
     value: NetworkType.MAIN_NET
+  }, {
+    text: 'Private',
+    value: NetworkType.PRIVATE
   }]
 }
 
@@ -458,11 +532,14 @@ function typeTransactions () {
 export {
   instanceConnectionApi,
   createRawAddress,
+  createSimpleWallet,
+  createSimpleWalletFromPrivateKey,
   decryptPrivateKey,
-  isValidPKey,
+  isValidPrivateKey,
   isHexadecimal,
   filterNetworkTypeFromString,
   filterNetworkTypeFromNumber,
+  getAccountFromPrivateKey,
   getAccountInfo,
   getMosaics,
   getMosaicId,
@@ -477,6 +554,7 @@ export {
   getTransactionsFromAccount,
   getNamespaceFromAccount,
   getNamespacesName,
+  getPrefixAndPrivateKey,
   typeTransactions,
   getBlockInfo,
   dateFormatUTC,

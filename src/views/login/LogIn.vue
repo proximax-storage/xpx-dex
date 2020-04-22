@@ -89,31 +89,7 @@ export default {
   data: () => {
     return {
       wallet: null,
-      arrayBtn: [
-        {
-          login: {
-            key: 'login',
-            action: 'login',
-            disabled: false,
-            color: 'primary',
-            textColor: 'white--text',
-
-            loading: false,
-            text: 'Log In'
-          }
-        },
-        {
-          letsgo: {
-            key: 'letgo',
-            action: 'letgo',
-            disabled: false,
-            color: 'primary',
-            textColor: 'white--text',
-            loading: false,
-            text: `Let's Go`
-          }
-        }
-      ],
+      arrayBtn: [],
       password: null,
       configForm: null,
       outline: false,
@@ -125,9 +101,23 @@ export default {
   },
   beforeMount () {
     this.configForm = {
-      wallet: this.$configForm.wallet(),
+      wallet: this.$configForm.walletAccountName(),
       password: this.$configForm.password()
     }
+    this.arrayBtn = [
+      {
+        login: this.$configForm.buildButton('Log In', 'login', 'login', 'primary', 'white--text')
+      },
+      {
+        letsgo: this.$configForm.buildButton(
+          `Let's Go`,
+          'letsgo',
+          'letsgo',
+          'primary',
+          'white--text'
+        )
+      }
+    ]
   },
   methods: {
     ...mapMutations('accountStore', ['LOGIN']),

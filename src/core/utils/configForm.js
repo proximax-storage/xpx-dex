@@ -1,6 +1,6 @@
-// import {
-//   isValidPKey
-// } from '@/core/utils/blockchainProvider'
+import {
+  isValidPrivateKey
+} from '@/core/utils/blockchainProvider'
 
 const generalConfig = {
   amount: {
@@ -19,7 +19,7 @@ const generalConfig = {
     min: 64,
     max: 66
   },
-  walletName: {
+  walletAccountName: {
     min: 3,
     max: 30
   }
@@ -69,6 +69,43 @@ function amount (name = 'Amount') {
   }
   return assemblyConfig(name, '', 'number', min, max, rules)
 }
+
+/**
+ *
+ *
+ * @param {*} key
+ * @param {*} action
+ * @param {*} disabled
+ * @param {*} color
+ * @param {*} textColor
+ * @param {*} loading
+ * @param {*} text
+ * @returns
+ */
+function buildButton (text, key, action, color, textColor, disabled = false, loading = false) {
+  return {
+    text,
+    key,
+    action,
+    color,
+    textColor,
+    disabled,
+    loading
+  }
+}
+
+/**
+ *
+ *
+ * @param {*} value1
+ * @param {*} value2
+ * @param {string} [nameValidation='']
+ * @returns
+ */
+function isMatch (value1, value2, nameValidation = '') {
+  return value1 === value2 || `${nameValidation} must match`
+}
+
 /**
  *
  *
@@ -84,24 +121,43 @@ function password (label = 'Password') {
   }
   return assemblyConfig(label, '', 'password', min, max, rules)
 }
+
+/**
+ *
+ *
+ */
+function privateKey (label = 'Private key') {
+  const min = generalConfig.privateKey.min
+  const max = generalConfig.privateKey.max
+  const rules = {
+    required: value => !!value || `${label} is required`,
+    min: v => (v && v.length >= min) || `${label} must be less than ${min} characters`,
+    max: v => (v && v.length <= max) || `${label} must be a maximum of ${max} characters`,
+    validatePvk: v => (isValidPrivateKey(v) || 'Private key must be Hexadecimal')
+  }
+  return assemblyConfig(label, '', 'password', min, max, rules)
+}
 /**
  *
  *
  * @returns
  */
-function wallet () {
-  const min = generalConfig.walletName.min
-  const max = generalConfig.walletName.max
+function walletAccountName (label = 'Wallet') {
+  const min = generalConfig.walletAccountName.min
+  const max = generalConfig.walletAccountName.max
   const rules = {
-    required: value => !!value || 'Wallet is required',
-    min: v => (v && v.length >= min) || `Wallet must be less than ${min} characters`,
-    max: v => (v && v.length <= max) || `Wallet must be a maximum of ${max} characters`
+    required: value => !!value || `${label} is required`,
+    min: v => (v && v.length >= min) || `${label} must be less than ${min} characters`,
+    max: v => (v && v.length <= max) || `${label} must be a maximum of ${max} characters`
   }
-  return assemblyConfig('Wallet', '', '', min, max, rules)
+  return assemblyConfig(label, '', '', min, max, rules)
 }
 
 export {
   amount,
+  buildButton,
+  isMatch,
   password,
-  wallet
+  privateKey,
+  walletAccountName
 }
