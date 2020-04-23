@@ -9,6 +9,7 @@ var connector
 var timeOut
 var cacheBlock = 1
 var checking = false
+var nodesConfig = Vue.prototype.$modulesConfig.nodes
 
 /**
  *
@@ -65,7 +66,7 @@ function checkNodeIsLive (height) {
   timeOut = setTimeout(function () {
     closeConnection()
     showMsgAndChangeStatus('The connection node is stuck', 0, 'errorIntense')
-  }, Number(Vue.prototype.$modulesConfig.nodes.timeOutNewBlocks) * 1000)
+  }, Number(nodesConfig.timeOutNewBlocks) * 1000)
 
   if (!checking) {
     checking = true
@@ -78,7 +79,7 @@ function checkNodeIsLive (height) {
       } else {
         cacheBlock = height
       }
-    }, 6000)
+    }, nodesConfig.timeValidateSynchronization)
   }
 }
 
@@ -115,7 +116,6 @@ function clearTimeOutTime () {
 function getBlocks () {
   connector.newBlock().subscribe(block => {
     console.log('----NEW BLOCK -----', block.height.compact())
-    console.log('----INFO BLOCK -----', block)
     checkNodeIsLive(block.height.compact())
     store.commit('nodeStore/SET_CURRENT_BLOCK', block.height.compact())
   }, () => {
