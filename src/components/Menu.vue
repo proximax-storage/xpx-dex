@@ -29,7 +29,7 @@
             group
             v-if="item.type === 'icon-group'"
           >
-            <v-btn text small :value="item.action" @click="actions(item.action)">
+            <v-btn text small :value="item.action" @click="actions(item.action)" :to="item.action">
               <div v-if="!responsive" class="font-weight-bold text-capitalize">{{ item.title }}</div>
               <div v-if="responsive">
                 <v-icon>{{ item.icon }}</v-icon>
@@ -47,7 +47,7 @@
               z-index="0"
             >
               <template v-slot:activator="{ on }" v-if="item.type === 'menuIcon'">
-                <v-btn text small color="primary" v-on="on">
+                <v-btn text small color="primary" v-on="on" >
                   <div v-if="loadingInfo">
                     <v-progress-circular indeterminate color="grey">
                       <v-icon>{{ item.icon }}</v-icon>
@@ -145,16 +145,6 @@ export default {
         viewLogged: true,
         sublinks: [],
         orderby: 5
-      },
-      {
-        icon: 'mdi-storefront',
-        type: 'icon-group',
-        title: 'Search 0fferts',
-        class: 'primary white-text',
-        action: 'searchOfferts',
-        viewLogged: false,
-        sublinks: [],
-        orderby: 6
       },
 
       {

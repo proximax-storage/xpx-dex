@@ -16,7 +16,9 @@ const routes = [
     name: 'Search Offerts ',
     component: () =>
       import(/* webpackChunkName: "searchOfferts" */ '../views/searchOffers/TypeSearchOffers.vue'),
-    meta: {}
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/newOffer',
