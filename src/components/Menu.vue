@@ -270,6 +270,7 @@ export default {
           break
 
         case 'logout':
+          this.$websocketProvider.closeConnection()
           this.LOGIN(false)
           this.$router.push('/login').catch(e => {})
           break

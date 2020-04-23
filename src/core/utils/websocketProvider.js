@@ -9,7 +9,7 @@ var connector
 var timeOut
 var cacheBlock = 1
 var checking = false
-var nodesConfig = Vue.prototype.$modulesConfig.nodes
+var nodesConfig = null
 
 /**
  *
@@ -20,6 +20,7 @@ var nodesConfig = Vue.prototype.$modulesConfig.nodes
  */
 function webSocketConnection (node, protocol) {
   try {
+    nodesConfig = Vue.prototype.$modulesConfig.nodes
     reconnect(false)
     store.commit('nodeStore/SET_STATUS_NODE', 2)
     setTimeout(() => {
@@ -68,7 +69,7 @@ function checkNodeIsLive (height) {
     showMsgAndChangeStatus('The connection node is stuck', 0, 'errorIntense')
   }, Number(nodesConfig.timeOutNewBlocks) * 1000)
 
-  if (!checking) {
+  if (connector && !checking) {
     checking = true
     setTimeout(() => {
       checking = false
@@ -283,6 +284,8 @@ function monitorAllChannels (addressArray) {
  * @memberof WebsocketConnection
  */
 function openConnection () {
+  cacheBlock = 1
+  checking = false
   if (connector) {
     connector.open().then(() => {
       checkNodeIsLive(1)
