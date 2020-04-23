@@ -154,41 +154,43 @@ export default {
     myOffers () {
       const pass = []
       const x = this.items.filter(x => x.data.length > 0)
+      console.log('x', x)
       if (x.length > 0) {
         x.forEach(element => {
-          // console.log('element', element.info.mosaicInfo[0].mosaicInfo)
-          const price = this.sumAllAmount(element.data.map(x => x.price)) / element.data.length
-          const amount = this.sumAllAmount(element.data.map(x => x.amount.compact()))
-          const totalAssets = this.$generalService.amountFormatter(
-            amount,
-            element.info.mosaicInfo[0].mosaicInfo
-          )
-          const offersBuy = this.items.filter(
-            x => x.info.mosaicIdHex === element.info.mosaicIdHex && x.type === 'buy'
-          )
-          const offersSell = this.items.filter(
-            x => x.info.mosaicIdHex === element.info.mosaicIdHex && x.type === 'sell'
-          )
+          if (element.info.mosaicInfo) {
+            const price = this.sumAllAmount(element.data.map(x => x.price)) / element.data.length
+            const amount = this.sumAllAmount(element.data.map(x => x.amount.compact()))
+            const totalAssets = this.$generalService.amountFormatter(
+              amount,
+              element.info.mosaicInfo[0].mosaicInfo.properties.divisibility
+            )
+            const offersBuy = this.items.filter(
+              x => x.info.mosaicIdHex === element.info.mosaicIdHex && x.type === 'buy'
+            )
+            const offersSell = this.items.filter(
+              x => x.info.mosaicIdHex === element.info.mosaicIdHex && x.type === 'sell'
+            )
 
-          if (!pass.find(x => x.tableData.text === element.info.text)) {
-            pass.push({
-              tableData: {
-                text: element.info.text,
-                type: element.type,
-                totalAssetAvailable: totalAssets,
-                averagePrice: price,
-                info: element.info,
-                priceArray: element.data.map(x => x.price),
-                twentyFourChange: `${(
-                  (Math.floor(Math.random() * 20) + Math.floor(Math.random() * 1000)) /
-                  100
-                ).toFixed(2)}`
-              },
-              allOffers: {
-                sell: offersSell.length > 0 ? offersSell[0].data : offersSell,
-                buy: offersBuy.length > 0 ? offersBuy[0].data : offersBuy
-              }
-            })
+            if (!pass.find(x => x.tableData.text === element.info.text)) {
+              pass.push({
+                tableData: {
+                  text: element.info.text,
+                  type: element.type,
+                  totalAssetAvailable: totalAssets,
+                  averagePrice: price,
+                  info: element.info,
+                  priceArray: element.data.map(x => x.price),
+                  twentyFourChange: `${(
+                    (Math.floor(Math.random() * 20) + Math.floor(Math.random() * 1000)) /
+                    100
+                  ).toFixed(2)}`
+                },
+                allOffers: {
+                  sell: offersSell.length > 0 ? offersSell[0].data : offersSell,
+                  buy: offersBuy.length > 0 ? offersBuy[0].data : offersBuy
+                }
+              })
+            }
           }
         })
       }

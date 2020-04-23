@@ -307,6 +307,19 @@ function getBlockInfo (height = 1, url = '') {
 function getAccountInfo (address) {
   return connection.accountHttp.getAccountInfo(address)
 }
+/**
+   *
+   *
+   * @param {*} Idmosaic
+   * @param {*} type
+   * @returns
+   * @memberof BlockchainProvider
+   */
+function getExchangeOffersfromId (Idmosaic, type) {
+  // console.log('tipe:', type)
+  const id = new MosaicId(Idmosaic)
+  return connection.exchangeHttp.getExchangeOffers(type, id)
+}
 
 /**
  *
@@ -645,6 +658,7 @@ export {
   getNetworkTypes,
   getIncomingTransactions,
   getEnvironmentByNetworkType,
+  getExchangeOffersfromId,
   getUint64,
   publicAccountFromPublicKey,
   getTransactionsFromAccount,

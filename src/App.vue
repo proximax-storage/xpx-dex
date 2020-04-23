@@ -28,10 +28,10 @@
 
 <script>
 import { getAccountsInfo } from '@/services/account-wallet-service'
-// import getInfoAssetsMixin from './mixins/get-info-assets-mixin'
+import getInfoAssetsMixin from './mixins/get-info-assets-mixin'
 import { mapState, mapGetters } from 'vuex'
 export default {
-  // mixins: [getInfoAssetsMixin],
+  mixins: [getInfoAssetsMixin],
   name: 'App',
   data: () => ({
     connectionStablished: false
@@ -54,17 +54,18 @@ export default {
         const accounts = this.$store.getters['walletStore/currentWallet'].accounts.map(x => {
           const publicKey = x.publicKey
           const network = x.simpleWallet.network
-          const publicAccount = this.$blockchainProvider.publicAccountFromPublicKey(publicKey, network)
+          const publicAccount = this.$blockchainProvider.publicAccountFromPublicKey(
+            publicKey,
+            network
+          )
           console.log('Public accounts to monitor', publicAccount)
           return publicAccount.address
         })
         this.$websocketProvider.monitorAllChannels(accounts)
         getAccountsInfo(this.$store.getters['walletStore/currentWallet'].accounts)
+        this.$store.dispatch('socketDbStore/getMoisaicsInfo', { io: this.$socket, data: null })
       }
     }
-  },
-  mounted () {
-    // this.$store.dispatch('socketDbStore/getMoisaicsInfo', { io: this.$socket, data: null })
   }
 }
 </script>

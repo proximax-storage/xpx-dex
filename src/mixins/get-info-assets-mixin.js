@@ -1,7 +1,8 @@
 import { mapState, mapGetters, mapMutations } from 'vuex'
-import mosaicMixins from './mosaic-mixin'
+import {
+  searchInfoMosaics
+} from '@/services/mosaics-service'
 export default {
-  mixins: [mosaicMixins],
   computed: {
     ...mapState('socketDbStore', ['offersTx']),
     ...mapGetters('socketDbStore', ['mosaicsInfOffer']),
@@ -22,6 +23,7 @@ export default {
   methods: {
     ...mapMutations('socketDbStore', ['EVENT_LOADING_MOSAIC_INFO']),
     async getInfoAssets (data) {
+      console.log('datadata', data)
       let cont = 0
       if (data.length > 0) {
         for (let item of data) {
@@ -29,7 +31,7 @@ export default {
             cont = cont + 1
             const mosaicId = this.$blockchainProvider.getMosaicId(item.mosaicIdHex)
             try {
-              item.mosaicInfo = await this.searchInfoMosaics([mosaicId], true)
+              item.mosaicInfo = await searchInfoMosaics([mosaicId], true)
             } catch (error) {
               item.mosaicInfo = ''
             }

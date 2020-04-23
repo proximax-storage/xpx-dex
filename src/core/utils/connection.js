@@ -16,7 +16,9 @@ import {
 import {
   BlockHttp
 } from 'tsjs-xpx-chain-sdk/dist/src/infrastructure/BlockHttp'
-
+import {
+  ExchangeHttp
+} from 'tsjs-xpx-chain-sdk/dist/src/infrastructure/ExchangeHttp'
 import {
   MosaicHttp
 } from 'tsjs-xpx-chain-sdk/dist/src/infrastructure/MosaicHttp'
@@ -37,6 +39,7 @@ class Connections {
     this.mosaicHttp = new MosaicHttp(this.url)
     this.namespaceHttp = new NamespaceHttp(this.url)
     this.transactionHttp = new TransactionHttp(this.url)
+    this.exchangeHttp = new ExchangeHttp(this.url)
   }
 
   getBuildUrl (node, protocol) {
