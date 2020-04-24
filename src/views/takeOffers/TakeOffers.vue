@@ -26,7 +26,7 @@
                     >Quantity you will send to selle</div>
                     <div
                       class="caption font-weight-black"
-                    >{{ $generalService.amountFormatter(form.priceForAmount, '', 6) }} XPX</div>
+                    >{{ $generalService.amountFormatter(form.priceForAmount, 6) }} XPX</div>
                   </div>
                   <div class="ma-2 ml-7 mx-auto">
                     <div class="caption font-italic font-weight-light mx-auto">BID Price</div>
@@ -114,7 +114,7 @@
         </template>
         <v-row v-if="!dataTxOfferInfo">
           <v-col cols="5" class="ma-0 mx-auto caption d-flex justify-center align-center">
-            <custom-buttons @action="action" :align="'center'" :arrayBtn="getArrayBtn[0]"></custom-buttons>
+            <custom-buttons @action="action" :align="'center'" :arrayBtn="getArrayBtn"></custom-buttons>
           </v-col>
         </v-row>
       </v-col>
@@ -165,17 +165,22 @@ export default {
       amount: this.$configForm.amount('Quantity'),
       password: this.$configForm.password()
     }
-    this.arrayBtn = [
-      {
-        cancel: this.typeButtons().cancel,
-        buy: this.typeButtons().buy
-      }
-    ]
+    // this.arrayBtn = [
+    //   {
+    //     cancel: this.typeButtons().cancel,
+    //     buy: this.typeButtons().buy
+    //   }
+    // ]
+
+    this.arrayBtn = {
+      cancel: this.$configForm.buildButton('Cancel', 'cancel', 'cancel', 'primary', 'white--text'),
+      place: this.$configForm.buildButton('Place', 'place', 'place', 'primary', 'white--text')
+    }
   },
   methods: {
     action (action) {
       switch (action) {
-        case 'buy':
+        case 'place':
           if (this.valid && !this.sendingForm) {
             this.exchangeOffer = null
             const mosaicAmount = this.$generalService.quantityStringToInt(
@@ -246,7 +251,6 @@ export default {
         } else {
           this.isValidateQuantityAmount = `Cannot enter amount greater than ${this.$generalService.amountFormatter(
             amountx,
-            '',
             this.dataAssets.configMoney.precision
           )}`
         }
@@ -304,8 +308,8 @@ export default {
     },
     getArrayBtn () {
       const arrayBtn = this.arrayBtn
-      arrayBtn[0]['buy'].disabled = !this.valid
-      arrayBtn[0]['buy'].loading = this.sendingForm
+      arrayBtn['place'].disabled = !this.valid
+      arrayBtn['place'].loading = this.sendingForm
       return arrayBtn
     }
   }

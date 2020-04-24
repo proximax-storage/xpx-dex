@@ -137,7 +137,7 @@
                         </div>
                         <div
                           class="subtitle-1 font-weight-black"
-                        >{{ $generalService.amountFormatter(form.priceForAmount, '', 6) }} XPX</div>
+                        >{{ $generalService.amountFormatter(form.priceForAmount,6) }} XPX</div>
                         <div v-if="isValidateBalance" class="v-text-field__details">
                           <div class="v-messages error--text" role="alert">
                             <div class="v-messages__wrapper">
@@ -312,7 +312,7 @@ export default {
   computed: {
     ...mapGetters('socketDbStore', ['mosaicsInfOffer', 'loadingInfo', 'mosaicsInfOfferFromIdHex']),
     ...mapGetters('mosaicExchange', ['exchange', 'dataAssets']),
-    ...mapGetters('transactionsStore', ['confirmed', 'unconfirmedAdded']),
+    ...mapGetters('transactionsStore', ['confirmed', 'unconfirmedAdded', 'status']),
     ...mapGetters('accountStore', [
       'balanceCurrentAccount',
       'accountsInfo',
@@ -457,6 +457,7 @@ export default {
       return amountValue * priceValue
     },
     changeAssetIdBuy (event) {
+      this.clearForm()
       this.idHex = event
       if (this.idHex) {
         const data = this.mosaicsInfOfferFromIdHex(this.idHex)
@@ -467,6 +468,7 @@ export default {
       }
     },
     changeAssetIdSell (event) {
+      this.clearForm()
       this.idHex = event
       const mosaic = this.mosaicBuild.find(item => item.mosaicIdHex === this.idHex)
       if (mosaic) {
@@ -556,6 +558,7 @@ export default {
       this.$refs.amountF.$el.getElementsByTagName('input')[0].value = ''
       this.$refs.bidPriceF.$el.getElementsByTagName('input')[0].value = ''
       this.$refs.form.reset('assest')
+      this.form.priceForAmount = 0
     },
     validateTxHash (transactions) {
       this.sendingForm = false

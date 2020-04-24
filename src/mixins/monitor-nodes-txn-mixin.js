@@ -22,7 +22,7 @@ export default {
       const monitorHashs = this.$store.getters['monitorNodesTxnStore/getMonitorHashs']
       monitorHashs.forEach(element => {
         if (hashs.find(x => x === element.hash)) {
-          console.log('MONITOR HASH FOUND --->', element)
+          // console.log('MONITOR HASH FOUND --->', element)
           this.REMOVE_MONITOR_HASH(element.hash)
           this.actions(element)
         }
