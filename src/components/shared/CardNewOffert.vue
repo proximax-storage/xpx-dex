@@ -21,9 +21,7 @@
   </v-row>
 </template>
 <script>
-import generalMixins from '../../mixins/general-mixin'
 export default {
-  mixins: [generalMixins],
   props: ['type'],
   data: () => ({
     btn: null
@@ -45,7 +43,15 @@ export default {
         this.type = value
         this.typeOfferColor = this.type === 'buy' ? 'dim' : 'pin'
         this.btn = {
-          ownOffer: this.typeButtons().ownOffer
+          ownOffer: {
+            key: 'ownoffer',
+            action: 'ownoffer',
+            disabled: false,
+            color: 'primary',
+            textColor: 'white--text',
+            loading: false,
+            text: 'Pleace your own offer'
+          }
         }
       }
     }
@@ -64,7 +70,15 @@ export default {
   },
   beforeMount () {
     this.btn = {
-      ownOffer: this.typeButtons().ownOffer
+      ownOffer: {
+        key: 'ownoffer',
+        action: 'ownoffer',
+        disabled: false,
+        color: 'primary',
+        textColor: 'white--text',
+        loading: false,
+        text: 'Pleace your own offer'
+      }
     }
   },
   created () {

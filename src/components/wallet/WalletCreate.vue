@@ -22,7 +22,7 @@
                 </v-col>
                 <!-- Icon -->
                 <v-col cols="2" class="text-right pt-7">
-                  <v-btn text icon @click="doCopy('Address', address)">
+                  <v-btn text icon @click="$generalService.doCopy('Address', address)">
                     <v-icon>mdi-content-copy</v-icon>
                   </v-btn>
                 </v-col>
@@ -36,7 +36,7 @@
                 </v-col>
                 <!-- Icon -->
                 <v-col cols="2" class="text-right pt-7">
-                  <v-btn text icon @click="doCopy('Private key', privateKey)">
+                  <v-btn text icon @click="$generalService.doCopy('Private key', privateKey)">
                     <v-icon>mdi-content-copy</v-icon>
                   </v-btn>
                 </v-col>
@@ -53,9 +53,7 @@
   </v-container>
 </template>
 <script>
-import generalMixins from '../../mixins/general-mixin'
 export default {
-  mixins: [generalMixins],
   props: ['walletInfo'],
   data: () => {
     return {

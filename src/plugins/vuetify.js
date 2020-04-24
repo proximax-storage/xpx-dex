@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify/lib'
+import colors from 'vuetify/lib/util/colors'
 
 Vue.use(Vuetify)
 
@@ -22,6 +23,7 @@ export default new Vuetify({
         info: '#2196f3',
         success: '#4caf50',
         darkness: '#222222', // CUMSTON
+        errorIntense: colors.red.darken1,
         pin: '604CC0', //
         dim: '#00B938',
         sky: '062B39',
@@ -39,7 +41,8 @@ export default new Vuetify({
         darkness: '#222222',
         chip1: '#194b2e',
         chip2: '#4a3c19',
-        chip3: '#102638'
+        chip3: '#102638',
+        errorIntense: colors.red.darken1
       }
     }
   }

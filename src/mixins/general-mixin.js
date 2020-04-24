@@ -1,23 +1,23 @@
 export default {
   methods: {
-    doCopy (itemName, text) {
-      this.$copyText(text).then(
-        e => {
-          this.$store.dispatch('showMSG', {
-            snackbar: true,
-            text: `${itemName} copied`,
-            color: 'success'
-          })
-        },
-        e => {
-          this.$store.dispatch('showMSG', {
-            snackbar: true,
-            text: `Can not copy`,
-            color: 'error'
-          })
-        }
-      )
-    },
+    // doCopy (itemName, text) {
+    //   this.$copyText(text).then(
+    //     e => {
+    //       this.$store.dispatch('showMSG', {
+    //         snackbar: true,
+    //         text: `${itemName} copied`,
+    //         color: 'success'
+    //       })
+    //     },
+    //     e => {
+    //       this.$store.dispatch('showMSG', {
+    //         snackbar: true,
+    //         text: `Can not copy`,
+    //         color: 'error'
+    //       })
+    //     }
+    //   )
+    // },
     getConfigForm () {
       return {
         amount: {
@@ -141,133 +141,133 @@ export default {
           text: `Let's Go`
         }
       }
-    },
-    typeButtons () {
-      return {
-        print: {
-          key: 'print',
-          action: 'print',
-          disabled: false,
-          color: 'white',
-          textColor: 'primary--text',
-          loading: false,
-          text: 'Print'
-        },
-        place: {
-          key: 'place',
-          action: 'place',
-          disabled: false,
-          color: 'white',
-          textColor: 'primary--text',
-          loading: false,
-          text: 'Place'
-        },
-        viewOnExplorer: {
-          key: 'viewOnExplorer',
-          action: 'viewOnExplorer',
-          disabled: false,
-          color: 'primary',
-          textColor: 'white--text',
-          loading: false,
-          text: 'view on explorer'
-        },
-        cancel: {
-          key: 'cancel',
-          action: 'cancel',
-          disabled: false,
-          color: 'white',
-          textColor: 'error--text',
-          loading: false,
-          text: 'Cancel'
-        },
-        buy: {
-          key: 'buy',
-          action: 'buy',
-          disabled: false,
-          color: 'primary',
-          textColor: 'white--text',
-          loading: false,
-          text: 'Buy'
-        },
-        lookForOffers: {
-          key: 'lookForOffers',
-          action: 'lookOffers',
-          disabled: false,
-          color: 'primary',
-          textColor: 'white--text',
-          loading: false,
-          text: 'Look for offers'
-        },
-        lookAgain: {
-          key: 'lookAgain',
-          action: 'lookAgain',
-          disabled: false,
-          color: 'leve',
-          textColor: 'primary--text',
-          loading: false,
-          text: 'Look Again'
-        },
-        clear: {
-          key: 'clear',
-          action: 'clear',
-          disabled: false,
-          color: 'primary',
-          textColor: 'white--text',
-          loading: false,
-          text: 'Clear'
-        },
-        create: {
-          key: 'create',
-          action: 'create',
-          disabled: false,
-          color: 'primary',
-          textColor: 'white--text',
-          loading: false,
-          text: 'Create'
-        },
-        ownOffer: {
-          key: 'ownoffer',
-          action: 'ownoffer',
-          disabled: false,
-          color: 'primary',
-          textColor: 'white--text',
-          loading: false,
-          text: 'Pleace your own offer'
-        },
-        viewAllassets: {
-          key: 'ownoffer',
-          action: 'ownoffer',
-          disabled: false,
-          color: 'leve',
-          textColor: 'primary--text',
-          loading: false,
-          text: 'view All'
-        }
-      }
-    },
-    getArrayTitle () {
-      return [
-        {
-          title: 'Sports',
-          class: 'leve--text'
-        },
-        {
-          title: 'Bet',
-          class: 'primary--text'
-        }
-      ]
-    },
-    getConfigMoney (value = null) {
-      const money = {
-        decimal: '.',
-        thousands: ',',
-        prefix: '',
-        suffix: '',
-        precision: 6,
-        masked: false
-      }
-      return value || money
     }
+    // typeButtons () {
+    //   return {
+    //     print: {
+    //       key: 'print',
+    //       action: 'print',
+    //       disabled: false,
+    //       color: 'white',
+    //       textColor: 'primary--text',
+    //       loading: false,
+    //       text: 'Print'
+    //     },
+    //     place: {
+    //       key: 'place',
+    //       action: 'place',
+    //       disabled: false,
+    //       color: 'white',
+    //       textColor: 'primary--text',
+    //       loading: false,
+    //       text: 'Place'
+    //     },
+    //     viewOnExplorer: {
+    //       key: 'viewOnExplorer',
+    //       action: 'viewOnExplorer',
+    //       disabled: false,
+    //       color: 'primary',
+    //       textColor: 'white--text',
+    //       loading: false,
+    //       text: 'view on explorer'
+    //     },
+    //     cancel: {
+    //       key: 'cancel',
+    //       action: 'cancel',
+    //       disabled: false,
+    //       color: 'white',
+    //       textColor: 'error--text',
+    //       loading: false,
+    //       text: 'Cancel'
+    //     },
+    //     buy: {
+    //       key: 'buy',
+    //       action: 'buy',
+    //       disabled: false,
+    //       color: 'primary',
+    //       textColor: 'white--text',
+    //       loading: false,
+    //       text: 'Buy'
+    //     },
+    //     lookForOffers: {
+    //       key: 'lookForOffers',
+    //       action: 'lookOffers',
+    //       disabled: false,
+    //       color: 'primary',
+    //       textColor: 'white--text',
+    //       loading: false,
+    //       text: 'Look for offers'
+    //     },
+    //     lookAgain: {
+    //       key: 'lookAgain',
+    //       action: 'lookAgain',
+    //       disabled: false,
+    //       color: 'leve',
+    //       textColor: 'primary--text',
+    //       loading: false,
+    //       text: 'Look Again'
+    //     },
+    //     clear: {
+    //       key: 'clear',
+    //       action: 'clear',
+    //       disabled: false,
+    //       color: 'primary',
+    //       textColor: 'white--text',
+    //       loading: false,
+    //       text: 'Clear'
+    //     },
+    //     create: {
+    //       key: 'create',
+    //       action: 'create',
+    //       disabled: false,
+    //       color: 'primary',
+    //       textColor: 'white--text',
+    //       loading: false,
+    //       text: 'Create'
+    //     },
+    //     ownOffer: {
+    //       key: 'ownoffer',
+    //       action: 'ownoffer',
+    //       disabled: false,
+    //       color: 'primary',
+    //       textColor: 'white--text',
+    //       loading: false,
+    //       text: 'Pleace your own offer'
+    //     },
+    //     viewAllassets: {
+    //       key: 'ownoffer',
+    //       action: 'ownoffer',
+    //       disabled: false,
+    //       color: 'leve',
+    //       textColor: 'primary--text',
+    //       loading: false,
+    //       text: 'view All'
+    //     }
+    //   }
+    // },
+    // getArrayTitle () {
+    //   return [
+    //     {
+    //       title: 'Sports',
+    //       class: 'leve--text'
+    //     },
+    //     {
+    //       title: 'Bet',
+    //       class: 'primary--text'
+    //     }
+    //   ]
+    // }
+    // getConfigMoney (value = null) {
+    //   const money = {
+    //     decimal: '.',
+    //     thousands: ',',
+    //     prefix: '',
+    //     suffix: '',
+    //     precision: 6,
+    //     masked: false
+    //   }
+    //   return value || money
+    // }
     // validateZero (value = []) {
     //   let valueR = true
     //   for (let index = 0; index < value.length; index++) {

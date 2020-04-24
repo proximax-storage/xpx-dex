@@ -77,12 +77,45 @@ export const transactionsStore = {
         state.unconfirmedRemoved = d
       }
     },
-    SET_STATUS (state, transaction) {
-      if (!state.status.find(t => transaction.transactionInfo.hash === t.transactionInfo.hash)) {
+    SET_STATUS (state, hash) {
+      if (!state.status.find(t => hash === t)) {
         const d = state.status
-        d.unshift(transaction)
+        d.unshift(hash)
         state.status = d
       }
+    },
+    REMOVE_AGGREGATE_BONDED_ADDED_TX (state, hash) {
+      state.aggregateBondedAdded = state.aggregateBondedAdded.filter(t => hash !== t.transactionInfo.hash)
+    },
+    REMOVE_AGGREGATE_BONDED_REMOVED_TX (state, hash) {
+      state.aggregateBondedRemoved = state.aggregateBondedRemoved.filter(t => hash !== t.transactionInfo.hash)
+    },
+    REMOVE_COSIGNATURE_ADDED_TX (state, hash) {
+      state.cosignatureAdded = state.cosignatureAdded.filter(t => hash !== t.transactionInfo.hash)
+    },
+    REMOVE_CONFIRMED_TX (state, hash) {
+      state.confirmed = state.confirmed.filter(t => hash !== t.transactionInfo.hash)
+    },
+    REMOVE_UNCONFIRMED_ADDED_TX (state, hash) {
+      state.unconfirmedAdded = state.unconfirmedAdded.filter(t => hash !== t.transactionInfo.hash)
+    },
+    REMOVE_UNCONFIRMED_REMOVED_TX (state, hash) {
+      state.unconfirmedRemoved = state.unconfirmedRemoved.filter(t => hash !== t.transactionInfo.hash)
+    },
+    REMOVE_STATUS_TX (state, hash) {
+      state.status = state.status.filter(t => hash !== t)
+    },
+    REMOVE_ALL_TXN (state) {
+      state.aggregateBondedAdded = []
+      state.aggregateBondedRemoved = []
+      state.blockInfo = []
+      state.cosignatureAdded = []
+      state.confirmed = []
+      state.incomingTransactions = []
+      state.outgoingTransactions = []
+      state.unconfirmedAdded = []
+      state.unconfirmedRemoved = []
+      state.status = []
     }
   },
   actions: {}

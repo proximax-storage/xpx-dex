@@ -240,7 +240,7 @@
 
 <script>
 import { buildCurrentAccountInfo, decrypt } from '@/services/account-wallet-service'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   data: () => {
     return {
@@ -360,6 +360,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('monitorNodesTxnStore', ['SET_MONITOR_HASH', 'REMOVE_MONITOR_HASH']),
     action (action) {
       switch (action) {
         case 'place':
@@ -369,14 +370,14 @@ export default {
               this.form.amount,
               this.configMoneyAsset.precision
             )
-            let cost = 0
+            /* let cost = 0
             console.log('this.typeOffer', this.typeOffer)
             if (this.typeOffer === 1) {
               cost = this.form.priceForAmount
             } else {
               cost = this.$generalService.quantityStringToInt(this.form.bidPrice, 6)
             }
-            console.log('costs', cost)
+            console.log('costs', cost) */
             const id = this.$blockchainProvider.getMosaicId(this.idHex)
             // const duration = Number(this.form.duration)
             const addExchangeOffer = this.$blockchainProvider.addExchangeOffer(
@@ -386,11 +387,12 @@ export default {
               this.typeOffer,
               Number(500)
             )
-            console.log('addExchangeOffer', addExchangeOffer)
+
             this.dataMosaics.push({
               mosaicId: this.$blockchainProvider.getMosaicId(this.idHex),
               mosaicIdHex: this.idHex
             })
+
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
               const signedTransaction = this.$blockchainProvider.signedTransaction(
@@ -398,19 +400,19 @@ export default {
                 addExchangeOffer,
                 this.currentAccount.simpleWallet.network
               )
-              console.log('signedTransaction', signedTransaction)
-              this.hash = signedTransaction.hash
-              console.log('HASH ---->', this.hash)
+
+              // this.hash = signedTransaction.hash
               this.sendingForm = true
               common = null
               this.clear()
+              const dataMonitorHash = this.$generalService.buildMonitorHash('insertMoisaicsInfo', signedTransaction.hash, '')
+              this.SET_MONITOR_HASH(dataMonitorHash)
               this.$blockchainProvider.announceTx(signedTransaction).subscribe(
-                (x) => {
-                  console.log(x)
-                },
-                err => {
+                response => console.log(response),
+                error => {
+                  console.error(error)
                   this.sendingForm = false
-                  console.error(err)
+                  this.REMOVE_MONITOR_HASH(dataMonitorHash)
                 }
               )
             }

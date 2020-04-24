@@ -1,15 +1,36 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { accountStore } from './modules/account-store'
-import { walletStore } from './modules/wallet-store'
-import { appCoreStore } from './modules/app-core-store'
-import { namespaceStore } from './modules/namespace-store'
+import {
+  accountStore
+} from './modules/account-store'
+import {
+  walletStore
+} from './modules/wallet-store'
+import {
+  appCoreStore
+} from './modules/app-core-store'
+import {
+  namespaceStore
+} from './modules/namespace-store'
 // import { nodeStore } from './modules/node-store'
-import { mosaicStore } from './modules/mosaic-store'
-import { socketDbStore } from './modules/socket-db-store'
-import { mosaicExchange } from './modules/mosaic-exchange'
-import { socketBcStore } from './modules/socket-bc-store'
-import { offersStore } from './modules/offers-store'
+import {
+  mosaicStore
+} from './modules/mosaic-store'
+import {
+  socketDbStore
+} from './modules/socket-db-store'
+import {
+  mosaicExchange
+} from './modules/mosaic-exchange'
+import {
+  socketBcStore
+} from './modules/socket-bc-store'
+import {
+  offersStore
+} from './modules/offers-store'
+import {
+  monitorNodesTxnStore
+} from './modules/monitor-nodes-txn-store'
 import {
   nodeStore,
   transactionsStore
@@ -80,10 +101,14 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    showMSG ({ commit }, data) {
+    showMSG ({
+      commit
+    }, data) {
       commit('SHOW_SNACKBAR', data)
     },
-    showLIW ({ commit }, data) {
+    showLIW ({
+      commit
+    }, data) {
       commit('SHOW_LOADING_INFO_WALLET', data)
     }
   },
@@ -94,6 +119,7 @@ export default new Vuex.Store({
     nodeStore,
     transactionsStore,
     namespaceStore,
+    monitorNodesTxnStore,
     mosaicStore,
     socketDbStore,
     mosaicExchange,

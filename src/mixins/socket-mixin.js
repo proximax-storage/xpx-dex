@@ -1,9 +1,9 @@
-import nodeMixins from './node-mixin'
-import accountMixins from './account-mixin'
+// import nodeMixins from './node-mixin'
+// import accountMixins from './account-mixin'
 import { Listener } from 'tsjs-xpx-chain-sdk'
 import { mapMutations } from 'vuex'
 export default {
-  mixins: [nodeMixins, accountMixins],
+  // mixins: [nodeMixins, accountMixins],
   data: () => ({
     audio: HTMLAudioElement,
     audio2: HTMLAudioElement,

@@ -89,21 +89,22 @@ function addExchangeOffer (mosaicId, mosaicAmount, costValue, type, durationValu
   const amount = UInt64.fromUint(mosaicAmount)
   const cost = UInt64.fromUint(costValue)
   const duration = UInt64.fromUint(durationValue)
+  const network = store.getters['nodeStore/networkType']
   return AddExchangeOfferTransaction.create(
     Deadline.create(10),
     [new AddExchangeOffer(mosaicId, amount, cost, type, duration)],
-    store.getters['nodeStore/networkType']
+    network
   )
 }
 /**
-  * @param {MosaicId} mosaicId MosaicId
-  * @param {Number} mosaicAmount
-  * @param {Number} cost
-  * @param {Int} type
-  * @param {PublicAccount} publicAccount
-  * @returns
-  * @memberof ProximaxProvider
-  */
+ * @param {MosaicId} mosaicId MosaicId
+ * @param {Number} mosaicAmount
+ * @param {Number} cost
+ * @param {Int} type
+ * @param {PublicAccount} publicAccount
+ * @returns
+ * @memberof ProximaxProvider
+ */
 function exchangeOffer (mosaicId, mosaicAmount, costValue, type, publicAccount) {
   const amount = UInt64.fromUint(mosaicAmount)
   const cost = UInt64.fromUint(costValue)
@@ -308,13 +309,13 @@ function getAccountInfo (address) {
   return connection.accountHttp.getAccountInfo(address)
 }
 /**
-   *
-   *
-   * @param {*} Idmosaic
-   * @param {*} type
-   * @returns
-   * @memberof BlockchainProvider
-   */
+ *
+ *
+ * @param {*} Idmosaic
+ * @param {*} type
+ * @returns
+ * @memberof BlockchainProvider
+ */
 function getExchangeOffersfromId (Idmosaic, type) {
   // console.log('tipe:', type)
   const id = new MosaicId(Idmosaic)

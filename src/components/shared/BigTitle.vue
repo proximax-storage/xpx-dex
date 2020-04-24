@@ -10,11 +10,9 @@
   </v-row>
 </template>
 <script>
-import generalMixins from '../../mixins/general-mixin'
 export default {
-  mixins: [generalMixins],
   beforeMount () {
-    this.arrayTitle = this.getArrayTitle()
+    this.arrayTitle = []
   },
   data: () => {
     return {

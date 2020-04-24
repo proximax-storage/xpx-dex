@@ -1,3 +1,6 @@
+import store from '@/store'
+import Vue from 'vue'
+
 /**
  *
  *
@@ -95,6 +98,32 @@ function buildTableHeader (text, value, sortable = false) {
     sortable
   }
 }
+
+/**
+ *
+ *
+ * @param {*} itemName
+ * @param {*} text
+ */
+function doCopy (itemName, text) {
+  Vue.prototype.$copyText(text).then(
+    e => {
+      store.dispatch('showMSG', {
+        snackbar: true,
+        text: `${itemName} copied`,
+        color: 'success'
+      })
+    },
+    e => {
+      store.dispatch('showMSG', {
+        snackbar: true,
+        text: `Can not copy`,
+        color: 'error'
+      })
+    }
+  )
+}
+
 /**
  *
  *
@@ -106,6 +135,24 @@ function getDataPart (data, cantPart) {
   return {
     part1: data.slice(0, data.length - cantPart),
     part2: data.slice(-cantPart)
+  }
+}
+
+/**
+ *
+ *
+ * @param {*} action
+ * @param {*} hash
+ * @param {*} typeTransaction
+ * @param {*} dataRequired
+ * @returns
+ */
+function buildMonitorHash (action, hash, typeTransaction, dataRequired = []) {
+  return {
+    action,
+    hash,
+    typeTransaction,
+    dataRequired
   }
 }
 
@@ -185,6 +232,8 @@ export {
   buildBoxServices,
   buildButton,
   buildTableHeader,
+  buildMonitorHash,
+  doCopy,
   getDataPart,
   quantityStringToInt,
   replaceData,

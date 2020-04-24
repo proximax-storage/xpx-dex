@@ -27,45 +27,20 @@
 </template>
 
 <script>
-import { getAccountsInfo } from '@/services/account-wallet-service'
-import getInfoAssetsMixin from './mixins/get-info-assets-mixin'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
+import getInfoAssetsMixin from '@/mixins/get-info-assets-mixin'
+import monitorNodesTxn from '@/mixins/monitor-nodes-txn-mixin'
 export default {
-  mixins: [getInfoAssetsMixin],
+  mixins: [getInfoAssetsMixin, monitorNodesTxn],
   name: 'App',
   data: () => ({
-    connectionStablished: false
   }),
   components: {
     'menu-item': () => import('@/components/Menu')
   },
   computed: {
     ...mapState(['overlay', 'snackbar']),
-    ...mapState(['showMenu']),
-    ...mapGetters('nodeStore', ['nodeStatus'])
-  },
-  watch: {
-    nodeStatus (newValue, oldValue) {
-      console.log('Node status has changed \n\n', newValue)
-      // Node status is active
-      // if (newValue === 1 && !this.connectionStablished) {
-      if (newValue === 1) {
-        this.connectionStablished = true
-        const accounts = this.$store.getters['walletStore/currentWallet'].accounts.map(x => {
-          const publicKey = x.publicKey
-          const network = x.simpleWallet.network
-          const publicAccount = this.$blockchainProvider.publicAccountFromPublicKey(
-            publicKey,
-            network
-          )
-          console.log('Public accounts to monitor', publicAccount)
-          return publicAccount.address
-        })
-        this.$websocketProvider.monitorAllChannels(accounts)
-        getAccountsInfo(this.$store.getters['walletStore/currentWallet'].accounts)
-        this.$store.dispatch('socketDbStore/getMoisaicsInfo', { io: this.$socket, data: null })
-      }
-    }
+    ...mapState(['showMenu'])
   }
 }
 </script>

@@ -10,6 +10,14 @@ var timeOut
 var cacheBlock = 1
 var checking = false
 var nodesConfig = null
+var messages = {
+  'aggregateBondedAdded': 'Transaction Aggregate Bonded Added',
+  'aggregateBondedRemoved': 'Transaction Aggregate Bonded Removed',
+  'cosignatureAdded': 'Cosignature Added',
+  'confirmed': 'Transaction confirmed',
+  'unconfirmed': 'Transaction unconfirmed',
+  'unconfirmedRemoved': 'Transaction unconfirmed removed'
+}
 
 /**
  *
@@ -29,7 +37,7 @@ function webSocketConnection (node, protocol) {
       openConnection()
     }, 10)
   } catch (error) {
-    showMsgAndChangeStatus('Error connecting to the node', 0, 'errorIntense')
+    showMsgAndChangeStatus('Error connecting to the node', 'errorIntense', 0)
   }
 }
 
@@ -66,7 +74,7 @@ function checkNodeIsLive (height) {
   clearTimeOutTime()
   timeOut = setTimeout(function () {
     closeConnection()
-    showMsgAndChangeStatus('The connection node is stuck', 0, 'errorIntense')
+    showMsgAndChangeStatus('The connection node is stuck', 'errorIntense', 0)
   }, Number(nodesConfig.timeOutNewBlocks) * 1000)
 
   if (connector && !checking) {
@@ -76,7 +84,7 @@ function checkNodeIsLive (height) {
       if (cacheBlock > 1 && height > cacheBlock + 4) {
         clearTimeOutTime()
         closeConnection()
-        showMsgAndChangeStatus('The node is synchronizing', 0, 'errorIntense')
+        showMsgAndChangeStatus('The node is synchronizing', 'errorIntense', 0)
       } else {
         cacheBlock = height
       }
@@ -120,7 +128,7 @@ function getBlocks () {
     checkNodeIsLive(block.height.compact())
     store.commit('nodeStore/SET_CURRENT_BLOCK', block.height.compact())
   }, () => {
-    showMsgAndChangeStatus('Error connecting to the node', 0, 'errorIntense')
+    showMsgAndChangeStatus('Error connecting to the node', 'errorIntense', 0)
   })
 }
 
@@ -131,9 +139,10 @@ function getBlocks () {
  */
 function getAggregateBondedAdded (arrayAddress) {
   if (checkIsOpenConnection()) {
-    console.log('MONITOR ACCOUNTS --->', arrayAddress)
+    // console.log('MONITOR ACCOUNTS --->', arrayAddress)
     arrayAddress.forEach(address => {
       connector.aggregateBondedAdded(address).subscribe(transaction => {
+        showMsgAndChangeStatus(messages.aggregateBondedAdded, 'success')
         console.log('--------------------AGGREGATE_BONDED_ADDED------------------------')
         console.log(transaction.transactionInfo.hash)
         console.log('------------------------------------------------------------------\n\n')
@@ -150,9 +159,10 @@ function getAggregateBondedAdded (arrayAddress) {
  */
 function getAggregateBondedRemoved (arrayAddress) {
   if (checkIsOpenConnection()) {
-    console.log('MONITOR ACCOUNTS --->', arrayAddress)
+    // console.log('MONITOR ACCOUNTS --->', arrayAddress)
     arrayAddress.forEach(address => {
       connector.aggregateBondedRemoved(address).subscribe(transaction => {
+        showMsgAndChangeStatus(messages.aggregateBondedRemoved, 'success')
         console.log('-----------------------AGGREGATE_BONDED_REMOVED--------------------------')
         console.log(transaction.transactionInfo.hash)
         console.log('------------------------------------------------------------------\n\n')
@@ -169,9 +179,10 @@ function getAggregateBondedRemoved (arrayAddress) {
  */
 function getCosignatureAdded (arrayAddress) {
   if (checkIsOpenConnection()) {
-    console.log('MONITOR ACCOUNTS --->', arrayAddress)
+    // console.log('MONITOR ACCOUNTS --->', arrayAddress)
     arrayAddress.forEach(address => {
       connector.cosignatureAdded(address).subscribe(transaction => {
+        showMsgAndChangeStatus(messages.cosignatureAdded, 'success')
         console.log('-----------------------COSIGNATURE_ADDED--------------------------')
         console.log(transaction.transactionInfo.hash)
         console.log('------------------------------------------------------------------\n\n')
@@ -188,9 +199,10 @@ function getCosignatureAdded (arrayAddress) {
  */
 function getConfirmed (arrayAddress) {
   if (checkIsOpenConnection()) {
-    console.log('MONITOR ACCOUNTS --->', arrayAddress)
+    // console.log('MONITOR ACCOUNTS --->', arrayAddress)
     arrayAddress.forEach(address => {
       connector.confirmed(address).subscribe(transaction => {
+        showMsgAndChangeStatus(messages.confirmed, 'success')
         console.log(' -----------------------CONFIRMED---------------------------------')
         console.log(transaction.transactionInfo.hash)
         console.log('------------------------------------------------------------------ \n\n')
@@ -207,9 +219,10 @@ function getConfirmed (arrayAddress) {
  */
 function getUnConfirmedAdded (arrayAddress) {
   if (checkIsOpenConnection()) {
-    console.log('MONITOR ACCOUNTS --->', arrayAddress)
+    // console.log('MONITOR ACCOUNTS --->', arrayAddress)
     arrayAddress.forEach(address => {
       connector.unconfirmedAdded(address).subscribe(transaction => {
+        showMsgAndChangeStatus(messages.unconfirmed, 'success')
         console.log('-----------------------UNCONFIRMED_ADDED--------------------------')
         console.log(transaction.transactionInfo.hash)
         console.log('------------------------------------------------------------------\n\n')
@@ -226,9 +239,10 @@ function getUnConfirmedAdded (arrayAddress) {
  */
 function getUnConfirmedRemoved (arrayAddress) {
   if (checkIsOpenConnection()) {
-    console.log('MONITOR ACCOUNTS --->', arrayAddress)
+    // console.log('MONITOR ACCOUNTS --->', arrayAddress)
     arrayAddress.forEach(address => {
       connector.unconfirmedRemoved(address).subscribe(transaction => {
+        // showMsgAndChangeStatus(messages.unconfirmedRemoved, 'success')
         console.log('-----------------------UNCONFIRMED_REMOVED--------------------------')
         console.log(transaction)
         console.log('------------------------------------------------------------------\n\n')
@@ -245,15 +259,16 @@ function getUnConfirmedRemoved (arrayAddress) {
  */
 function getStatus (arrayAddress) {
   if (checkIsOpenConnection()) {
-    console.log('MONITOR ACCOUNTS --->', arrayAddress)
+    // console.log('MONITOR ACCOUNTS --->', arrayAddress)
     arrayAddress.forEach(address => {
-      console.log('MONITOR STATUS', address)
+      // console.log('MONITOR STATUS', address)
       connector.status(address).subscribe(transaction => {
+        showMsgAndChangeStatus(transaction.status.split('_').join(' '), 'errorIntense')
         console.log('-----------------------STATUS--------------------------')
-        // console.log(transaction.hash)
-        console.log(transaction)
+        console.log(transaction.hash)
+        // console.log(transaction)
         console.log('------------------------------------------------------------------\n\n')
-        store.commit('transactionsStore/SET_STATUS', transaction)
+        store.commit('transactionsStore/SET_STATUS', transaction.hash)
       })
     })
   }
@@ -289,10 +304,10 @@ function openConnection () {
   if (connector) {
     connector.open().then(() => {
       checkNodeIsLive(1)
-      showMsgAndChangeStatus('Node Connection Established', 1, 'success')
+      showMsgAndChangeStatus('Node Connection Established', 'success', 1)
       getBlocks()
     }, () => {
-      showMsgAndChangeStatus('Error connecting to the node', 0, 'errorIntense')
+      showMsgAndChangeStatus('Error connecting to the node', 'errorIntense', 0)
     })
   }
 }
@@ -327,8 +342,8 @@ function selectNode (nodesList, nodeSelected = null) {
  * @param {*} status
  * @param {*} color
  */
-function showMsgAndChangeStatus (msg, status, color) {
-  store.commit('nodeStore/SET_STATUS_NODE', status)
+function showMsgAndChangeStatus (msg, color, status = null) {
+  if (status !== null) store.commit('nodeStore/SET_STATUS_NODE', status)
   store.commit('SHOW_SNACKBAR', {
     snackbar: true,
     text: msg,

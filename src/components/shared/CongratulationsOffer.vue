@@ -1,20 +1,18 @@
 <template>
   <v-row>
-    <v-col cols="12"
-      ><div
-        class="display-1 font-weight-regular  text-left primary--text"
+    <v-col cols="12">
+      <div
+        class="display-1 font-weight-regular text-left primary--text"
         v-bind:class="[colorText]"
-      >
-        Congratulations
-      </div>
+      >Congratulations</div>
       <div class="ma-2 ml-4 mx-auto">
-        <div class="caption font-weight-black pt-3">
-          You trasaction has beet successfully registered into blockchain.
-        </div>
+        <div
+          class="caption font-weight-black pt-3"
+        >You trasaction has beet successfully registered into blockchain.</div>
       </div>
       <div class="ma-2 pt-4 ml-4 mx-auto">
-        <span class="body-1 font-weight-black"> Hash :</span>
-        <span class="">{{ txOfferInfo.hash }}</span>
+        <span class="body-1 font-weight-black">Hash :</span>
+        <span class>{{ txOfferInfo.hash }}</span>
       </div>
       <div class="ma-2 pt-4 ml-4 mx-auto">
         <p class="caption">
@@ -31,9 +29,7 @@
   </v-row>
 </template>
 <script>
-import generalMixins from '../../mixins/general-mixin'
 export default {
-  mixins: [generalMixins],
   props: ['txOfferInfo', 'colorText', 'typeOfferColor'],
   data: () => {
     return {
@@ -63,8 +59,24 @@ export default {
   beforeMount () {
     this.arrayBtn = [
       {
-        print: this.typeButtons().print,
-        viewOnExplorer: this.typeButtons().viewOnExplorer
+        print: {
+          key: 'print',
+          action: 'print',
+          disabled: false,
+          color: 'white',
+          textColor: 'primary--text',
+          loading: false,
+          text: 'Print'
+        },
+        viewOnExplorer: {
+          key: 'viewOnExplorer',
+          action: 'viewOnExplorer',
+          disabled: false,
+          color: 'primary',
+          textColor: 'white--text',
+          loading: false,
+          text: 'view on explorer'
+        }
       }
     ]
   }

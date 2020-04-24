@@ -126,10 +126,7 @@
 </template>
 <script>
 import { mapGetters, mapState } from 'vuex'
-// import generalMixins from '../../mixins/general-mixin'
-// import walletMixins from '../../mixins/wallet-mixin'
 export default {
-  // mixins: [generalMixins, walletMixins],
   data: () => ({
     form: {
       amount: null,
