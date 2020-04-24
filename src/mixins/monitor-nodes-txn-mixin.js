@@ -18,12 +18,13 @@ export default {
   watch: {
     confirmed (transactions) {
       console.log('----- WATCH CONFIRMED ------', transactions)
-      const monitorHashs = this.$store.getters['monitorNodesTxnStore/getMonitorHashs']
       const hashs = transactions.map(t => t.transactionInfo.hash)
+      const monitorHashs = this.$store.getters['monitorNodesTxnStore/getMonitorHashs']
       monitorHashs.forEach(element => {
         if (hashs.find(x => x === element.hash)) {
           console.log('MONITOR HASH FOUND --->', element)
           this.REMOVE_MONITOR_HASH(element.hash)
+          this.actions(element)
         }
       })
     },
@@ -55,6 +56,17 @@ export default {
   },
   methods: {
     ...mapMutations('monitorNodesTxnStore', ['REMOVE_MONITOR_HASH']),
-    ...mapMutations('transactionsStore', ['REMOVE_STATUS_TX'])
+    ...mapMutations('transactionsStore', ['REMOVE_STATUS_TX']),
+    actions (data) {
+      console.log('INIT ACTION ---->', data)
+      switch (data.action) {
+        case 'insertMoisaicsInfo':
+          this.$store.dispatch('socketDbStore/insertMoisaicsInfo', {
+            io: this.$socket,
+            data: data.dataRequired
+          })
+          break
+      }
+    }
   }
 }

@@ -401,11 +401,11 @@ export default {
                 this.currentAccount.simpleWallet.network
               )
 
-              // this.hash = signedTransaction.hash
+              this.hash = signedTransaction.hash
               this.sendingForm = true
               common = null
               this.clear()
-              const dataMonitorHash = this.$generalService.buildMonitorHash('insertMoisaicsInfo', signedTransaction.hash, '')
+              const dataMonitorHash = this.$generalService.buildMonitorHash('insertMoisaicsInfo', signedTransaction.hash, '', this.dataMosaics)
               this.SET_MONITOR_HASH(dataMonitorHash)
               this.$blockchainProvider.announceTx(signedTransaction).subscribe(
                 response => console.log(response),
@@ -563,10 +563,10 @@ export default {
           if (newstatusTx.type === 'unconfirmed' || newstatusTx.type === 'confirmed') {
             this.dataTxOfferInfo = { hash: this.hash }
             this.hash = null
-            this.$store.dispatch('socketDbStore/insertMoisaicsInfo', {
-              io: this.$socket,
-              data: this.dataMosaics
-            })
+            // this.$store.dispatch('socketDbStore/insertMoisaicsInfo', {
+            //   io: this.$socket,
+            //   data: this.dataMosaics
+            // })
           }
         }
       }
