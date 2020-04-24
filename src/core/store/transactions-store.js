@@ -10,7 +10,8 @@ export const transactionsStore = {
     confirmed: [],
     unconfirmedAdded: [],
     unconfirmedRemoved: [],
-    status: []
+    status: [],
+    monitorHashs: []
   },
   getters: {
     aggregateBondedAdded: state => state.aggregateBondedAdded,
@@ -22,7 +23,11 @@ export const transactionsStore = {
     confirmed: state => state.confirmed,
     unconfirmedAdded: state => state.unconfirmedAdded,
     unconfirmedRemoved: state => state.unconfirmedRemoved,
-    status: state => state.status
+    status: state => state.status,
+    filterHash: (state) => (transactions) => {
+      return transactions.filter(t => state.monitorHashs.filter(m => m.hash === t.transactionInfo.hash))
+    },
+    getMonitorHashs: state => state.monitorHashs
   },
   mutations: {
     SET_AGGREGATE_BONDED_ADDED (state, transaction) {
@@ -82,6 +87,11 @@ export const transactionsStore = {
         state.status = d
       }
     },
+    SET_MONITOR_HASH (state, data) {
+      const filtered = state.monitorHashs.filter(x => x.hash !== data.hash)
+      filtered.push(data)
+      state.monitorHashs = filtered
+    },
     REMOVE_AGGREGATE_BONDED_ADDED_TX (state, hash) {
       state.aggregateBondedAdded = state.aggregateBondedAdded.filter(t => hash !== t.transactionInfo.hash)
     },
@@ -112,6 +122,11 @@ export const transactionsStore = {
       state.unconfirmedAdded = []
       state.unconfirmedRemoved = []
       state.status = []
+    },
+    REMOVE_MONITOR_HASH (state, hash) {
+      console.log('REMOVE', hash)
+      const filtered = state.monitorHashs.filter(x => x.hash !== hash)
+      state.monitorHashs = filtered
     }
   },
   actions: {}

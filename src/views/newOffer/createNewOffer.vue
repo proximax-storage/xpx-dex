@@ -360,7 +360,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('monitorNodesTxnStore', ['SET_MONITOR_HASH', 'REMOVE_MONITOR_HASH']),
+    ...mapMutations('transactionsStore', ['SET_MONITOR_HASH', 'REMOVE_MONITOR_HASH']),
     action (action) {
       switch (action) {
         case 'place':

@@ -29,9 +29,6 @@ import {
   offersStore
 } from './modules/offers-store'
 import {
-  monitorNodesTxnStore
-} from './modules/monitor-nodes-txn-store'
-import {
   nodeStore,
   transactionsStore
 } from '@/core/store/'
@@ -119,7 +116,6 @@ export default new Vuex.Store({
     nodeStore,
     transactionsStore,
     namespaceStore,
-    monitorNodesTxnStore,
     mosaicStore,
     socketDbStore,
     mosaicExchange,

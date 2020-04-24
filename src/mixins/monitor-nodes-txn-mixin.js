@@ -19,7 +19,7 @@ export default {
     confirmed (transactions) {
       console.log('----- WATCH CONFIRMED ------', transactions)
       const hashs = transactions.map(t => t.transactionInfo.hash)
-      const monitorHashs = this.$store.getters['monitorNodesTxnStore/getMonitorHashs']
+      const monitorHashs = this.$store.getters['transactionsStore/getMonitorHashs']
       monitorHashs.forEach(element => {
         if (hashs.find(x => x === element.hash)) {
           console.log('MONITOR HASH FOUND --->', element)
@@ -30,7 +30,7 @@ export default {
     },
     status (hashs) {
       console.log('----- WATCH STATUS ------', hashs)
-      const monitorHashs = this.$store.getters['monitorNodesTxnStore/getMonitorHashs']
+      const monitorHashs = this.$store.getters['transactionsStore/getMonitorHashs']
       monitorHashs.forEach(element => {
         if (hashs.find(x => x === element.hash)) {
           this.REMOVE_MONITOR_HASH(element.hash)
@@ -41,7 +41,7 @@ export default {
     unconfirmedAdded (transactions) {
       console.log('----- WATCH UNCONFIRMED_ADDED ------', transactions)
       const hashs = transactions.map(t => t.transactionInfo.hash)
-      const monitorHashs = this.$store.getters['monitorNodesTxnStore/getMonitorHashs']
+      const monitorHashs = this.$store.getters['transactionsStore/getMonitorHashs']
       monitorHashs.forEach(element => {
         if (hashs.find(x => x === element.hash)) {
           console.log('MONITOR HASH FOUND --->', element)
@@ -67,8 +67,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('monitorNodesTxnStore', ['REMOVE_MONITOR_HASH']),
-    ...mapMutations('transactionsStore', ['REMOVE_STATUS_TX']),
+    ...mapMutations('transactionsStore', ['REMOVE_STATUS_TX', 'REMOVE_MONITOR_HASH']),
     actions (data) {
       console.log('INIT ACTION ---->', data)
       switch (data.action) {
