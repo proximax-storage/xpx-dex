@@ -9,8 +9,7 @@ import Vue from 'vue'
  * @returns
  */
 function amountFormatter (amount, divisibility = 6) {
-  // console.log('amount', amount)
-  return Number(amount) / Math.pow(10, divisibility).toLocaleString('en-us', {
+  return Number(amount / Math.pow(10, divisibility)).toLocaleString('en-us', {
     minimumFractionDigits: divisibility
   })
 }
@@ -131,6 +130,7 @@ function doCopy (itemName, text) {
  * @returns
  */
 function getDataPart (data, cantPart) {
+  console.log('data', data)
   return {
     part1: data.slice(0, data.length - cantPart),
     part2: data.slice(-cantPart)

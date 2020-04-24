@@ -84,6 +84,7 @@ export const accountStore = {
       state.currentAccount = data
     },
     SET_TOTAL_BALANCE (state, data) {
+      console.log('SET_TOTAL_BALANCE', data)
       state.totalBalance = data
     },
     UPDATE_DATA_USER (state, data) {

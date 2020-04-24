@@ -32,7 +32,7 @@ export default {
     },
     status (hashs) {
       // console.log('----- WATCH STATUS ------', hashs)
-      const monitorHashs = this.$store.getters['monitorNodesTxnStore/getMonitorHashs']
+      const monitorHashs = this.$store.getters['transactionsStore/getMonitorHashs']
       monitorHashs.forEach(element => {
         if (hashs.find(x => x === element.hash)) {
           this.REMOVE_MONITOR_HASH(element.hash)
