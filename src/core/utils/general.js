@@ -9,7 +9,7 @@ import Vue from 'vue'
  * @returns
  */
 function amountFormatter (amount, d = 6) {
-  console.log('amount', amount)
+  // console.log('amount', amount)
   const amountDivisibility = Number(amount) / Math.pow(10, d)
   return amountDivisibility.toLocaleString('en-us', {
     minimumFractionDigits: d

@@ -17,7 +17,7 @@ export default {
   },
   watch: {
     confirmed (transactions) {
-      console.log('----- WATCH CONFIRMED ------', transactions)
+      // console.log('----- WATCH CONFIRMED ------', transactions)
       const hashs = transactions.map(t => t.transactionInfo.hash)
       const monitorHashs = this.$store.getters['monitorNodesTxnStore/getMonitorHashs']
       monitorHashs.forEach(element => {
@@ -29,7 +29,7 @@ export default {
       })
     },
     status (hashs) {
-      console.log('----- WATCH STATUS ------', hashs)
+      // console.log('----- WATCH STATUS ------', hashs)
       const monitorHashs = this.$store.getters['monitorNodesTxnStore/getMonitorHashs']
       monitorHashs.forEach(element => {
         if (hashs.find(x => x === element.hash)) {
@@ -39,7 +39,7 @@ export default {
       })
     },
     unconfirmedAdded (transactions) {
-      console.log('----- WATCH UNCONFIRMED_ADDED ------', transactions)
+      // console.log('----- WATCH UNCONFIRMED_ADDED ------', transactions)
       const hashs = transactions.map(t => t.transactionInfo.hash)
       const monitorHashs = this.$store.getters['monitorNodesTxnStore/getMonitorHashs']
       monitorHashs.forEach(element => {
@@ -51,7 +51,7 @@ export default {
       })
     },
     nodeStatus (newValue, oldValue) {
-      console.log('\n------------ STATUS NODE HAS CHANGED ------------\n')
+      // console.log('\n------------ STATUS NODE HAS CHANGED ------------\n')
       // Init app
       if (newValue === 1) {
         this.connectionStablished = true
@@ -70,7 +70,7 @@ export default {
     ...mapMutations('monitorNodesTxnStore', ['REMOVE_MONITOR_HASH']),
     ...mapMutations('transactionsStore', ['REMOVE_STATUS_TX']),
     actions (data) {
-      console.log('INIT ACTION ---->', data)
+      // console.log('INIT ACTION ---->', data)
       switch (data.action) {
         case 'insertMoisaicsInfo':
           this.$store.dispatch('socketDbStore/insertMoisaicsInfo', {
