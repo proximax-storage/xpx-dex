@@ -13,7 +13,7 @@ export default {
   },
   computed: {
     ...mapGetters('nodeStore', ['nodeStatus', 'networkType']),
-    ...mapGetters('transactionsStore', ['confirmed', 'status'])
+    ...mapGetters('transactionsStore', ['confirmed', 'status', 'unconfirmedAdded'])
   },
   watch: {
     confirmed (transactions) {
@@ -35,6 +35,18 @@ export default {
         if (hashs.find(x => x === element.hash)) {
           this.REMOVE_MONITOR_HASH(element.hash)
           this.REMOVE_STATUS_TX(element.hash)
+        }
+      })
+    },
+    unconfirmedAdded (transactions) {
+      console.log('----- WATCH UNCONFIRMED_ADDED ------', transactions)
+      const hashs = transactions.map(t => t.transactionInfo.hash)
+      const monitorHashs = this.$store.getters['monitorNodesTxnStore/getMonitorHashs']
+      monitorHashs.forEach(element => {
+        if (hashs.find(x => x === element.hash)) {
+          console.log('MONITOR HASH FOUND --->', element)
+          this.REMOVE_MONITOR_HASH(element.hash)
+          this.actions(element)
         }
       })
     },

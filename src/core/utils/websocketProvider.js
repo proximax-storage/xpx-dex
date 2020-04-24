@@ -241,12 +241,12 @@ function getUnConfirmedRemoved (arrayAddress) {
   if (checkIsOpenConnection()) {
     // console.log('MONITOR ACCOUNTS --->', arrayAddress)
     arrayAddress.forEach(address => {
-      connector.unconfirmedRemoved(address).subscribe(transaction => {
+      connector.unconfirmedRemoved(address).subscribe(hash => {
         // showMsgAndChangeStatus(messages.unconfirmedRemoved, 'success')
         console.log('-----------------------UNCONFIRMED_REMOVED--------------------------')
-        console.log(transaction)
+        console.log(hash)
         console.log('------------------------------------------------------------------\n\n')
-        store.commit('transactionsStore/SET_UNCONFIRMED_REMOVED', transaction)
+        store.commit('transactionsStore/SET_UNCONFIRMED_REMOVED', hash)
       })
     })
   }

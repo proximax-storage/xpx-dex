@@ -70,10 +70,10 @@ export const transactionsStore = {
         state.unconfirmedAdded = d
       }
     },
-    SET_UNCONFIRMED_REMOVED (state, transaction) {
-      if (!state.unconfirmedRemoved.find(t => transaction.transactionInfo.hash === t.transactionInfo.hash)) {
+    SET_UNCONFIRMED_REMOVED (state, hash) {
+      if (!state.unconfirmedRemoved.find(h => hash === h)) {
         const d = state.unconfirmedRemoved
-        d.unshift(transaction)
+        d.unshift(hash)
         state.unconfirmedRemoved = d
       }
     },
