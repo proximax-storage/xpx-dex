@@ -46,7 +46,6 @@
               :type="form.active"
               :resultsOfferFilter="data[form.active]"
               :divisibility="propertiesMosaic.divisibility"
-              :mosaicInfo="dataAssets.mosaicInfo"
               @sendOffer="sendOffer"
             ></simple-table>
           </v-col>

@@ -14,18 +14,18 @@
           <tbody>
             <tr v-for="(n, commentIndex) in commentsToShow" :key="commentIndex">
               <template v-if="commentIndex < resultsOfferFilter.length">
-                <!-- {{mosaicInfo[0].mosaicInfo}} -->
+                <!-- {{divisibility}} -->
                 <td class="pr-3 pl-3" style="border:0">
                   {{
                   $generalService.amountFormatter(
-                  resultsOfferFilter[commentIndex].initialAmount.compact(),mosaicInfo[0].mosaicInfo
+                  resultsOfferFilter[commentIndex].initialAmount.compact(),divisibility
                   )
                   }}
                 </td>
                 <td class="pr-3 pl-3" style="border:0">
                   {{
                   $generalService.amountFormatter(
-                  resultsOfferFilter[commentIndex].amount.compact(),mosaicInfo[0].mosaicInfo
+                  resultsOfferFilter[commentIndex].amount.compact(),divisibility
                   )
                   }}
                 </td>
@@ -69,7 +69,7 @@
 </template>
 <script>
 export default {
-  props: ['resultsOfferFilter', 'divisibility', 'type', 'mosaicInfo'],
+  props: ['resultsOfferFilter', 'divisibility', 'type'],
   data: () => ({
     typeOfferColor: null,
     commentsToShow: 5
@@ -84,10 +84,10 @@ export default {
         this.typeOfferColor = this.typeAction(value)
       }
     },
-    mosaicInfo: {
+    divisibility: {
       immediate: true,
       handler (value) {
-        this.mosaicInfo = value
+        this.divisibility = value
       }
     }
   },
