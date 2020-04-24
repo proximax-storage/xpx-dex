@@ -217,9 +217,8 @@ function getConfirmed (arrayAddress) {
  *
  * @param {*} arrayAddress
  */
-function getUnConfirmedAdded (arrayAddress) {
+function getUnconfirmedAdded (arrayAddress) {
   if (checkIsOpenConnection()) {
-    // console.log('MONITOR ACCOUNTS --->', arrayAddress)
     arrayAddress.forEach(address => {
       connector.unconfirmedAdded(address).subscribe(transaction => {
         showMsgAndChangeStatus(messages.unconfirmed, 'success')
@@ -237,7 +236,7 @@ function getUnConfirmedAdded (arrayAddress) {
  *
  * @param {*} arrayAddress
  */
-function getUnConfirmedRemoved (arrayAddress) {
+function getUnconfirmedRemoved (arrayAddress) {
   if (checkIsOpenConnection()) {
     // console.log('MONITOR ACCOUNTS --->', arrayAddress)
     arrayAddress.forEach(address => {
@@ -246,7 +245,7 @@ function getUnConfirmedRemoved (arrayAddress) {
         console.log('-----------------------UNCONFIRMED_REMOVED--------------------------')
         console.log(hash)
         console.log('------------------------------------------------------------------\n\n')
-        store.commit('transactionsStore/SET_UNCONFIRMED_REMOVED', hash)
+        store.commit('transactionsStore/REMOVE_UNCONFIRMED_ADDED_TX', hash)
       })
     })
   }
@@ -286,8 +285,8 @@ function monitorAllChannels (addressArray) {
     getAggregateBondedRemoved(addressArray)
     getCosignatureAdded(addressArray)
     getConfirmed(addressArray)
-    getUnConfirmedAdded(addressArray)
-    getUnConfirmedRemoved(addressArray)
+    getUnconfirmedAdded(addressArray)
+    getUnconfirmedRemoved(addressArray)
     getStatus(addressArray)
   }
 }
@@ -359,8 +358,8 @@ export {
   getAggregateBondedRemoved,
   getCosignatureAdded,
   getConfirmed,
-  getUnConfirmedAdded,
-  getUnConfirmedRemoved,
+  getUnconfirmedAdded,
+  getUnconfirmedRemoved,
   getStatus,
   webSocketConnection
 }

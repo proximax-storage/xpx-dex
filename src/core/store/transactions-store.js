@@ -8,8 +8,6 @@ export const transactionsStore = {
     blockInfo: [],
     cosignatureAdded: [],
     confirmed: [],
-    incomingTransactions: [],
-    outgoingTransactions: [],
     unconfirmedAdded: [],
     unconfirmedRemoved: [],
     status: []
@@ -111,8 +109,6 @@ export const transactionsStore = {
       state.blockInfo = []
       state.cosignatureAdded = []
       state.confirmed = []
-      state.incomingTransactions = []
-      state.outgoingTransactions = []
       state.unconfirmedAdded = []
       state.unconfirmedRemoved = []
       state.status = []
