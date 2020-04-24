@@ -17,19 +17,23 @@ export default {
   },
   watch: {
     confirmed (transactions) {
-      const transactionsFiltered = this.$store.getters['monitorNodesTxnStore/filterHash'](transactions)
-      console.log('transactionsFiltered', transactionsFiltered)
-      transactionsFiltered.forEach(element => {
-        console.log('element', element)
+      console.log('----- WATCH CONFIRMED ------', transactions)
+      const monitorHashs = this.$store.getters['monitorNodesTxnStore/getMonitorHashs']
+      const hashs = transactions.map(t => t.transactionInfo.hash)
+      monitorHashs.forEach(element => {
+        if (hashs.find(x => x === element.hash)) {
+          console.log('MONITOR HASH FOUND --->', element)
+          this.REMOVE_MONITOR_HASH(element.hash)
+        }
       })
     },
     status (hashs) {
-      console.log('----- STATUS ------', hashs)
+      console.log('----- WATCH STATUS ------', hashs)
       const monitorHashs = this.$store.getters['monitorNodesTxnStore/getMonitorHashs']
-      hashs.forEach(h => {
-        if (monitorHashs.find(x => x.hash === h)) {
-          this.REMOVE_MONITOR_HASH(h)
-          this.REMOVE_STATUS_TX(h)
+      monitorHashs.forEach(element => {
+        if (hashs.find(x => x === element.hash)) {
+          this.REMOVE_MONITOR_HASH(element.hash)
+          this.REMOVE_STATUS_TX(element.hash)
         }
       })
     },
