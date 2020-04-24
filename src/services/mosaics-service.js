@@ -43,7 +43,7 @@ async function filterMosaics (mosaicsId = null) {
         }
       }
 
-      console.log('dataReturn', dataReturn)
+      // console.log('dataReturn', dataReturn)
       return filterMosaicToReturn(dataReturn)
     } else {
       const infoMosaics = await searchInfoMosaics(mosaicsId)

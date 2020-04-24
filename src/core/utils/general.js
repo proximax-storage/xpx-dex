@@ -182,6 +182,36 @@ function quantityStringToInt (quantity, divisibility = 6) {
 /**
  *
  *
+ * @param {*} quantity
+ * @param {number} [divisibility=6]
+ * @returns
+ */
+function quantityStringToIntMath (quantityValue, divisibility = 6) {
+  const quantity = quantityValue
+  let rQuantity = null
+  if (quantity !== '' && quantity !== null && Number(quantity) !== 0) {
+    const arrCifraQuantity = quantity.toString().replace(/,/g, '').split('.')
+    let decimal = null
+    if (arrCifraQuantity.length < 2) {
+      decimal = addZerosQuantity(divisibility)
+    } else {
+      const arrDecimals = arrCifraQuantity[1].split('')
+      decimal = addZerosQuantity(divisibility - arrDecimals.length, arrCifraQuantity[1])
+    }
+    rQuantity = `${arrCifraQuantity[0]}${decimal}`
+  }
+  return Number(rQuantity)
+}
+
+function priceFormatter (quantity) {
+  const value = String(quantity)
+
+  return Number(value.split('.').join(''))
+}
+
+/**
+ *
+ *
  * @param {*} d
  * @param {*} e
  * @param {*} r
@@ -229,6 +259,7 @@ function validateZero (value = []) {
 
 export {
   amountFormatter,
+  priceFormatter,
   buildBoxServices,
   buildButton,
   buildTableHeader,
@@ -236,6 +267,7 @@ export {
   doCopy,
   getDataPart,
   quantityStringToInt,
+  quantityStringToIntMath,
   replaceData,
   validateMatch,
   validateZero

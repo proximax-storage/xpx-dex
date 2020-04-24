@@ -183,9 +183,9 @@ function getCosignatureAdded (arrayAddress) {
     arrayAddress.forEach(address => {
       connector.cosignatureAdded(address).subscribe(transaction => {
         showMsgAndChangeStatus(messages.cosignatureAdded, 'success')
-        console.log('-----------------------COSIGNATURE_ADDED--------------------------')
-        console.log(transaction.transactionInfo.hash)
-        console.log('------------------------------------------------------------------\n\n')
+        // console.log('-----------------------COSIGNATURE_ADDED--------------------------')
+        // console.log(transaction.transactionInfo.hash)
+        // console.log('------------------------------------------------------------------\n\n')
         store.commit('transactionsStore/SET_COSIGNATURE_ADDED', transaction)
       })
     })
@@ -203,9 +203,9 @@ function getConfirmed (arrayAddress) {
     arrayAddress.forEach(address => {
       connector.confirmed(address).subscribe(transaction => {
         showMsgAndChangeStatus(messages.confirmed, 'success')
-        console.log(' -----------------------CONFIRMED---------------------------------')
-        console.log(transaction.transactionInfo.hash)
-        console.log('------------------------------------------------------------------ \n\n')
+        // console.log(' -----------------------CONFIRMED---------------------------------')
+        // console.log(transaction.transactionInfo.hash)
+        // console.log('------------------------------------------------------------------ \n\n')
         store.commit('transactionsStore/SET_CONFIRMED', transaction)
       })
     })
@@ -222,9 +222,9 @@ function getUnconfirmedAdded (arrayAddress) {
     arrayAddress.forEach(address => {
       connector.unconfirmedAdded(address).subscribe(transaction => {
         showMsgAndChangeStatus(messages.unconfirmed, 'success')
-        console.log('-----------------------UNCONFIRMED_ADDED--------------------------')
-        console.log(transaction.transactionInfo.hash)
-        console.log('------------------------------------------------------------------\n\n')
+        // console.log('-----------------------UNCONFIRMED_ADDED--------------------------')
+        // console.log(transaction.transactionInfo.hash)
+        // console.log('------------------------------------------------------------------\n\n')
         store.commit('transactionsStore/SET_UNCONFIRMED_ADDED', transaction)
       })
     })
@@ -242,9 +242,9 @@ function getUnconfirmedRemoved (arrayAddress) {
     arrayAddress.forEach(address => {
       connector.unconfirmedRemoved(address).subscribe(hash => {
         // showMsgAndChangeStatus(messages.unconfirmedRemoved, 'success')
-        console.log('-----------------------UNCONFIRMED_REMOVED--------------------------')
-        console.log(hash)
-        console.log('------------------------------------------------------------------\n\n')
+        // console.log('-----------------------UNCONFIRMED_REMOVED--------------------------')
+        // console.log(hash)
+        // console.log('------------------------------------------------------------------\n\n')
         store.commit('transactionsStore/REMOVE_UNCONFIRMED_ADDED_TX', hash)
       })
     })
@@ -263,10 +263,9 @@ function getStatus (arrayAddress) {
       // console.log('MONITOR STATUS', address)
       connector.status(address).subscribe(transaction => {
         showMsgAndChangeStatus(transaction.status.split('_').join(' '), 'errorIntense')
-        console.log('-----------------------STATUS--------------------------')
-        console.log(transaction.hash)
-        // console.log(transaction)
-        console.log('------------------------------------------------------------------\n\n')
+        // console.log('-----------------------STATUS--------------------------')
+        // console.log(transaction.hash)
+        // console.log('------------------------------------------------------------------\n\n')
         store.commit('transactionsStore/SET_STATUS', transaction.hash)
       })
     })
@@ -279,7 +278,7 @@ function getStatus (arrayAddress) {
  * @param {*} addressArray
  */
 function monitorAllChannels (addressArray) {
-  console.log('addressArray', addressArray)
+  // console.log('addressArray', addressArray)
   if (checkIsOpenConnection()) {
     getAggregateBondedAdded(addressArray)
     getAggregateBondedRemoved(addressArray)

@@ -86,7 +86,6 @@ export default {
       this.$store.dispatch('socketDbStore/insertMoisaicsInfo', { io: this.$socket, data: valor })
     }, */
     searchResult ($event) {
-      console.log('$event', $event)
       this.SET_OFFER_SELECTED($event)
       this.$router.push('allOffer').catch(e => {})
     },
@@ -154,7 +153,6 @@ export default {
     myOffers () {
       const pass = []
       const x = this.items.filter(x => x.data.length > 0)
-      console.log('x', x)
       if (x.length > 0) {
         x.forEach(element => {
           if (element.info.mosaicInfo) {

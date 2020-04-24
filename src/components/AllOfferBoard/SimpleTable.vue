@@ -29,12 +29,14 @@
                   )
                   }}
                 </td>
-                <td class="pr-3 pl-3" style="border:0">{{ resultsOfferFilter[commentIndex].price }}</td>
                 <td class="pr-3 pl-3" style="border:0">
+                  {{  resultsOfferFilter[commentIndex].price
+                  }}
+                </td>
+                <td class="pr-3 pl-3" style="border:0 ">
                   {{
                   $generalService.amountFormatter(
                   resultsOfferFilter[commentIndex].priceForAmount,
-                  '',
                   6
                   )
                   }}

@@ -125,7 +125,8 @@
   </v-col>
 </template>
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapMutations } from 'vuex'
+import { decrypt } from '@/services/account-wallet-service'
 export default {
   data: () => ({
     form: {
@@ -165,19 +166,13 @@ export default {
       amount: this.$configForm.amount('Quantity'),
       password: this.$configForm.password()
     }
-    // this.arrayBtn = [
-    //   {
-    //     cancel: this.typeButtons().cancel,
-    //     buy: this.typeButtons().buy
-    //   }
-    // ]
-
     this.arrayBtn = {
       cancel: this.$configForm.buildButton('Cancel', 'cancel', 'cancel', 'primary', 'white--text'),
       place: this.$configForm.buildButton('Place', 'place', 'place', 'primary', 'white--text')
     }
   },
   methods: {
+    ...mapMutations('monitorNodesTxnStore', ['SET_MONITOR_HASH', 'REMOVE_MONITOR_HASH']),
     action (action) {
       switch (action) {
         case 'place':
@@ -201,7 +196,7 @@ export default {
               this.type,
               this.exchange.owner
             )
-            let common = this.decrypt(this.currentAccount.simpleWallet, this.form.password)
+            let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
               const signedTransaction = this.$blockchainProvider.signedTransaction(
                 common.privateKey,
@@ -211,10 +206,21 @@ export default {
               this.sendingForm = true
               common = null
               this.clear()
+              const dataMonitorHash = this.$generalService.buildMonitorHash(
+                'insertExecuteOffers',
+                signedTransaction.hash,
+                '',
+                this.exchangeOfferDb
+              )
+              this.SET_MONITOR_HASH(dataMonitorHash)
+              console.log('SET_MONITOR_HASH', dataMonitorHash)
               this.$blockchainProvider.announceTx(signedTransaction).subscribe(
                 x => {},
                 err => {
-                  if (err) this.sendingForm = false
+                  if (err) {
+                    this.sendingForm = false
+                    this.REMOVE_MONITOR_HASH(dataMonitorHash)
+                  }
                 }
               )
             }
@@ -275,32 +281,49 @@ export default {
         }
       }
       return nameMosaics
-    }
-  },
-  watch: {
-    statusTx (newstatusTx, old) {
+    },
+    validateTxHash (transactions) {
       this.sendingForm = false
       if (this.hash) {
-        if (newstatusTx.hash === this.hash) {
-          if (newstatusTx.type === 'unconfirmed' || newstatusTx.type === 'confirmed') {
-            this.dataTxOfferInfo = { hash: this.hash }
-            this.hash = null
-            // console.log('exchangeOfferDb statusTx', this.exchangeOfferDb)
-            this.$store.dispatch('socketDbStore/insertExecuteOffers', {
-              io: this.$socket,
-              data: this.exchangeOfferDb
-            })
-          }
+        if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hash)) {
+          this.dataTxOfferInfo = { hash: this.hash }
+          this.hash = null
         }
       }
     }
   },
+  watch: {
+    confirmed (transactions) {
+      this.validateTxHash(transactions)
+    },
+    unconfirmedAdded (transactions) {
+      this.validateTxHash(transactions)
+    },
+    status (hashs) {
+      this.sendingForm = false
+    }
+    // statusTx (newstatusTx, old) {
+    //   this.sendingForm = false
+    //   if (this.hash) {
+    //     if (newstatusTx.hash === this.hash) {
+    //       if (newstatusTx.type === 'unconfirmed' || newstatusTx.type === 'confirmed') {
+    //         this.dataTxOfferInfo = { hash: this.hash }
+    //         this.hash = null
+    //         // console.log('exchangeOfferDb statusTx', this.exchangeOfferDb)
+    //         this.$store.dispatch('socketDbStore/insertExecuteOffers', {
+    //           io: this.$socket,
+    //           data: this.exchangeOfferDb
+    //         })
+    //       }
+    //     }
+    //   }
+    // }
+  },
   computed: {
     ...mapGetters('socketDbStore', ['mosaicsInfOfferFromIdHex']),
     ...mapGetters('mosaicExchange', ['exchange', 'dataAssets']),
-    ...mapGetters('socketBcStore', ['statusTx']),
-
-    ...mapState('accountStore', ['currentAccount']),
+    ...mapGetters('transactionsStore', ['confirmed', 'unconfirmedAdded', 'status']),
+    ...mapState('accountStore', ['currentAccount', 'accountInfoByNameAccount']),
     nameMosaicInfo () {
       let nameMosaic = null
       nameMosaic = this.dataAssets ? this.nameMosaic(this.dataAssets.form) : ''

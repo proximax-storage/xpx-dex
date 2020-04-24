@@ -23,7 +23,6 @@ export default {
   methods: {
     ...mapMutations('socketDbStore', ['EVENT_LOADING_MOSAIC_INFO']),
     async getInfoAssets (data) {
-      console.log('datadata', data)
       let cont = 0
       if (data.length > 0) {
         for (let item of data) {

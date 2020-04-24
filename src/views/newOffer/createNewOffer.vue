@@ -452,9 +452,7 @@ export default {
       }
     },
     calcPrice (price, amount) {
-      const priceValue = this.$generalService.quantityStringToInt(price, 6)
-      const amountValue = this.$generalService.quantityStringToInt(amount, 4)
-      return amountValue * priceValue
+      return this.$generalService.quantityStringToIntMath(Number(amount) * Number(price), 6)
     },
     changeAssetIdBuy (event) {
       this.clearForm()
@@ -499,7 +497,11 @@ export default {
         amount = Number(amountValue)
       }
 
-      this.form.priceForAmount = this.calcPrice(this.form.bidPrice, this.form.amount)
+      this.form.priceForAmount = this.calcPrice(
+        this.form.bidPrice.split(',').join(''),
+        this.form.amount.split(',').join('')
+      )
+      console.log('this.form.priceForAmount', this.form.priceForAmount)
       if (this.type === 'sell') {
         if (e.target.name === 'amountF') this.validateBalanceAssets(amount)
       } else {

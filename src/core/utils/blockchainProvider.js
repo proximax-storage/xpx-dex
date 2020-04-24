@@ -72,6 +72,7 @@ function instanceConnectionApi (randomNode, protocol) {
  * @returns
  */
 function announceTx (signedTransaction) {
+  console.log('signedTransaction', signedTransaction)
   return connection.transactionHttp.announce(signedTransaction)
 }
 
@@ -108,11 +109,26 @@ function addExchangeOffer (mosaicId, mosaicAmount, costValue, type, durationValu
 function exchangeOffer (mosaicId, mosaicAmount, costValue, type, publicAccount) {
   const amount = UInt64.fromUint(mosaicAmount)
   const cost = UInt64.fromUint(costValue)
+  const network = store.getters['nodeStore/networkType']
   return ExchangeOfferTransaction.create(
     Deadline.create(10),
     [new ExchangeOffer(mosaicId, amount, cost, type, publicAccount)],
-    this.typeNetwork
+    network
   )
+}
+/**
+ * @param {MosaicId} mosaicId MosaicId
+ * @param {Number} mosaicAmount
+ * @param {Number} cost
+ * @param {Int} type
+ * @param {PublicAccount} publicAccount
+ * @returns
+ * @memberof ProximaxProvider
+ */
+function exchangeOfferDb (mosaicId, mosaicAmount, costValue, type, publicAccount) {
+  const amount = UInt64.fromUint(mosaicAmount)
+  const cost = UInt64.fromUint(costValue)
+  return new ExchangeOffer(mosaicId, amount, cost, type, publicAccount)
 }
 
 /**
@@ -644,6 +660,7 @@ export {
   createSimpleWalletFromPrivateKey,
   decryptPrivateKey,
   exchangeOffer,
+  exchangeOfferDb,
   isValidPrivateKey,
   isHexadecimal,
   filterNetworkTypeFromString,

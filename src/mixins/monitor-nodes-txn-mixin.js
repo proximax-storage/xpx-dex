@@ -17,7 +17,9 @@ export default {
   },
   watch: {
     confirmed (transactions) {
-      // console.log('----- WATCH CONFIRMED ------', transactions)
+      const allAccounts = this.$store.getters['walletStore/currentWallet'].accounts
+      getAccountsInfo(allAccounts)
+      console.log('----- WATCH CONFIRMED ------', transactions)
       const hashs = transactions.map(t => t.transactionInfo.hash)
       const monitorHashs = this.$store.getters['monitorNodesTxnStore/getMonitorHashs']
       monitorHashs.forEach(element => {
@@ -70,10 +72,17 @@ export default {
     ...mapMutations('monitorNodesTxnStore', ['REMOVE_MONITOR_HASH']),
     ...mapMutations('transactionsStore', ['REMOVE_STATUS_TX']),
     actions (data) {
-      // console.log('INIT ACTION ---->', data)
+      console.log('INIT ACTION ---->', data)
       switch (data.action) {
         case 'insertMoisaicsInfo':
           this.$store.dispatch('socketDbStore/insertMoisaicsInfo', {
+            io: this.$socket,
+            data: data.dataRequired
+          })
+          break
+        case 'insertExecuteOffers':
+          console.log('insertExecuteOffers >', data.dataRequired)
+          this.$store.dispatch('socketDbStore/insertExecuteOffers', {
             io: this.$socket,
             data: data.dataRequired
           })
