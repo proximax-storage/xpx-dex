@@ -312,7 +312,7 @@ export default {
   computed: {
     ...mapGetters('socketDbStore', ['mosaicsInfOffer', 'loadingInfo', 'mosaicsInfOfferFromIdHex']),
     ...mapGetters('mosaicExchange', ['exchange', 'dataAssets']),
-    ...mapGetters('socketBcStore', ['statusTx']),
+    ...mapGetters('transactionsStore', ['confirmed', 'unconfirmedAdded']),
     ...mapGetters('accountStore', [
       'balanceCurrentAccount',
       'accountsInfo',
@@ -405,7 +405,12 @@ export default {
               this.sendingForm = true
               common = null
               this.clear()
-              const dataMonitorHash = this.$generalService.buildMonitorHash('insertMoisaicsInfo', signedTransaction.hash, '', this.dataMosaics)
+              const dataMonitorHash = this.$generalService.buildMonitorHash(
+                'insertMoisaicsInfo',
+                signedTransaction.hash,
+                '',
+                this.dataMosaics
+              )
               this.SET_MONITOR_HASH(dataMonitorHash)
               this.$blockchainProvider.announceTx(signedTransaction).subscribe(
                 response => console.log(response),
@@ -553,23 +558,23 @@ export default {
       this.$refs.amountF.$el.getElementsByTagName('input')[0].value = ''
       this.$refs.bidPriceF.$el.getElementsByTagName('input')[0].value = ''
       this.$refs.form.reset('assest')
+    },
+    validateTxHash (transactions) {
+      this.sendingForm = false
+      if (this.hash) {
+        if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hash)) {
+          this.dataTxOfferInfo = { hash: this.hash }
+          this.hash = null
+        }
+      }
     }
   },
   watch: {
-    statusTx (newstatusTx, old) {
-      this.sendingForm = false
-      if (this.hash) {
-        if (newstatusTx.hash === this.hash) {
-          if (newstatusTx.type === 'unconfirmed' || newstatusTx.type === 'confirmed') {
-            this.dataTxOfferInfo = { hash: this.hash }
-            this.hash = null
-            // this.$store.dispatch('socketDbStore/insertMoisaicsInfo', {
-            //   io: this.$socket,
-            //   data: this.dataMosaics
-            // })
-          }
-        }
-      }
+    confirmed (transactions) {
+      this.validateTxHash(transactions)
+    },
+    unconfirmedAdded (transactions) {
+      this.validateTxHash(transactions)
     },
     accountsInfo (newAccountsInfo) {
       this.mountBuildCurrentAccountInfo(this.type)
