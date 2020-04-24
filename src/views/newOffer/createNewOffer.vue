@@ -467,7 +467,6 @@ export default {
       }
     },
     changeAssetIdSell (event) {
-      console.log(event)
       this.idHex = event
       const mosaic = this.mosaicBuild.find(item => item.mosaicIdHex === this.idHex)
       if (mosaic) {
@@ -542,7 +541,6 @@ export default {
         this.typeOffer = 2
         this.typeOfferColor = 'primary'
       }
-      console.log(this.typeOffer)
       this.typeOfferColorText = `${this.typeOfferColor}--text`
     },
     mountBuildCurrentAccountInfo (type = null) {
@@ -578,6 +576,9 @@ export default {
     },
     accountsInfo (newAccountsInfo) {
       this.mountBuildCurrentAccountInfo(this.type)
+    },
+    status (hashs) {
+      this.sendingForm = false
     }
   }
 }
