@@ -60,21 +60,20 @@ export default {
     typeBuildData (type = null, data = []) {
       let offerts = []
       if (data.allOffers[type] && data.allOffers[type].length > 0) {
-        console.log(this.currentAccount.publicKey)
         offerts = data.allOffers[type]
           .filter(x => x.owner.publicKey === this.currentAccount.publicKey)
           .map(f => {
-            console.log(f.owner.publicKey)
-
+            console.log('ownet', f.owner.publicKey)
+            console.log('my publickey', this.currentAccount.publicKey)
             const initialQuantity = this.$generalService.amountFormatter(
               f.initialAmount.compact(),
-              data.tableData.info.mosaicInfo[0].mosaicInfo
+              data.tableData.info.mosaicInfo[0].mosaicInfo.properties.divisibility
             )
             const quantityAvailable = this.$generalService.amountFormatter(
               f.amount.compact(),
-              data.tableData.info.mosaicInfo[0].mosaicInfo
+              data.tableData.info.mosaicInfo[0].mosaicInfo.properties.divisibility
             )
-            const initialCost = this.$generalService.amountFormatter(f.initialCost.compact(), '', 6)
+            const initialCost = this.$generalService.amountFormatter(f.initialCost.compact(), 6)
             const price = f.price
             return {
               type: type,

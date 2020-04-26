@@ -50,7 +50,7 @@
         v-if="
           commentsToShow < dataTable.length || dataTable.length > commentsToShow
         "
-        @click="commentsToShow += 1"
+        @click="commentsToShow += 5"
       >Load more</a>
     </v-col>
   </v-row>
@@ -60,11 +60,11 @@ export default {
   props: ['dataTh', 'dataTable', 'type', 'mosaicInfo'],
   data: () => ({
     typeOfferColor: null,
-    commentsToShow: 1
+    commentsToShow: 5
   }),
   watch: {
     dataTable: function (newExrDay) {
-      this.commentsToShow = 1
+      this.commentsToShow = 5
     },
     type: {
       immediate: true,

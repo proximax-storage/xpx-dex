@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     activity (action) {
-      // this.$router.push({ path: `${action}`, query: { item: 1 } }).catch(e => {})
+      this.$router.push({ path: `${action}`, query: { item: 1 } }).catch(e => {})
     },
     totalBalance () {
       const total = this.$generalService.amountFormatter(
