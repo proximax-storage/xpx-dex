@@ -22,6 +22,12 @@ import {
   PublicAccount
 } from 'tsjs-xpx-chain-sdk/dist/src/model/account/PublicAccount'
 import {
+  RemoveExchangeOfferTransaction
+} from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/RemoveExchangeOfferTransaction'
+import {
+  RemoveExchangeOffer
+} from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/RemoveExchangeOffer'
+import {
   BlockHttp
 } from 'tsjs-xpx-chain-sdk/dist/src/infrastructure/BlockHttp'
 import {
@@ -553,6 +559,20 @@ function publicAccountFromPublicKey (publicKey, network) {
 
 /**
  *
+ * @param {*} mosaicId
+ * @param {*} type
+ */
+function removeExchangeOffer (mosaicId, type) {
+  const network = store.getters['nodeStore/networkType']
+  return RemoveExchangeOfferTransaction.create(
+    Deadline.create(10),
+    [new RemoveExchangeOffer(mosaicId, type)],
+    network
+  )
+}
+
+/**
+ *
  *
  * @param {*} privateKey
  * @param {*} transaction
@@ -679,6 +699,7 @@ export {
   getExchangeOffersfromId,
   getUint64,
   publicAccountFromPublicKey,
+  removeExchangeOffer,
   getTransactionsFromAccount,
   getNamespaceFromAccount,
   getNamespacesName,

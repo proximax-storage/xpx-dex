@@ -83,13 +83,17 @@
                 ></v-text-field>
               </v-col>
             </v-row>
+            <v-row>
+              <v-col cols="12" class="ma-0 pa-0 mx-auto caption d-flex justify-center align-center">
+                <v-checkbox v-model="form.checkbox" class="pa-0"></v-checkbox>Accept terms and conditions
+              </v-col>
+            </v-row>
           </v-form>
         </template>
         <template v-if="dataTxOfferInfo">
-          <!-- <congratulations-offer :colorText="typeOfferColorText" :txOfferInfo="dataTxOfferInfo"></congratulations-offer> -->
+          <congratulations-offer :colorText="'error--text'" :txOfferInfo="dataTxOfferInfo"></congratulations-offer>
         </template>
         <v-row v-if="!dataTxOfferInfo">
-          {{getArrayBtn[0]}}
           <v-col cols="5" class="ma-0 mx-auto caption d-flex justify-center align-center">
             <custom-button @action="action" :align="'center'" :arrayBtn="getArrayBtn"></custom-button>
           </v-col>
@@ -99,18 +103,17 @@
   </v-col>
 </template>
 <script>
-import { mapGetters } from 'vuex'
-import generalMixins from '../../mixins/general-mixin'
-
+import { mapGetters, mapMutations } from 'vuex'
+import { decrypt } from '@/services/account-wallet-service'
 export default {
-  mixins: [generalMixins],
   data () {
     return {
-      form: { password: null },
+      form: { password: null, checkbox: false },
       valid: null,
       inputStyle: 'inputStyle',
       configForm: null,
       dataTxOfferInfo: null,
+      hash: null,
       arrayBtn: {
         cancel: {
           key: 'cancel',
@@ -118,7 +121,7 @@ export default {
           disabled: false,
           color: 'white',
           textColor: 'error--text',
-          loading: false,
+
           text: 'Cancel'
         },
         delete: {
@@ -127,30 +130,97 @@ export default {
           disabled: true,
           color: 'error',
           textColor: 'white--text',
+          loading: false,
           text: 'Delete'
         }
-      }
+      },
+      sendingForm: false
     }
   },
   computed: {
     ...mapGetters('mosaicExchange', ['exchangeDelete']),
+    ...mapGetters('accountStore', ['currentAccount']),
+    ...mapGetters('transactionsStore', ['confirmed', 'unconfirmedAdded', 'status']),
     getArrayBtn () {
       const arrayBtn = this.arrayBtn
       console.log(arrayBtn)
-      arrayBtn.delete.disabled = !this.valid
+      arrayBtn.delete.disabled = !this.valid || !this.form.checkbox
       arrayBtn.delete.loading = this.sendingForm
       return arrayBtn
     }
   },
   components: {
-    'custom-button': () => import('@/components/shared/Buttons')
+    'custom-button': () => import('@/components/shared/Buttons'),
+    'congratulations-offer': () => import('@/components/shared/CongratulationsOffer')
   },
 
   methods: {
-    action (item) {}
+    ...mapMutations('transactionsStore', ['SET_MONITOR_HASH', 'REMOVE_MONITOR_HASH']),
+    action (action) {
+      switch (action) {
+        case 'delete':
+          if (this.valid && !this.sendingForm) {
+            let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
+            if (common) {
+              if (this.exchangeDelete) {
+                const type = this.exchangeDelete.type === 'sell' ? 0 : 1
+                const removeExchangeOffer = this.$blockchainProvider.removeExchangeOffer(
+                  this.exchangeDelete.exchange.mosaicId,
+                  type
+                )
+                const signedTransaction = this.$blockchainProvider.signedTransaction(
+                  common.privateKey,
+                  removeExchangeOffer,
+                  this.currentAccount.simpleWallet.network
+                )
+                this.hash = signedTransaction.hash
+                this.sendingForm = true
+                common = null
+                const dataMonitorHash = this.$generalService.buildMonitorHash(
+                  'removeExchangeOffer',
+                  signedTransaction.hash,
+                  '',
+                  []
+                )
+                this.SET_MONITOR_HASH(dataMonitorHash)
+                this.$blockchainProvider.announceTx(signedTransaction).subscribe(
+                  response => console.log(response),
+                  error => {
+                    console.error(error)
+                    this.sendingForm = false
+                    this.REMOVE_MONITOR_HASH(dataMonitorHash)
+                  }
+                )
+              }
+            }
+          }
+      }
+    },
+    validateTxHash (transactions) {
+      this.sendingForm = false
+      if (this.hash) {
+        if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hash)) {
+          this.dataTxOfferInfo = { hash: this.hash }
+          this.hash = null
+        }
+      }
+    }
   },
   beforeMount () {
-    this.configForm = this.getConfigForm()
+    this.configForm = {
+      password: this.$configForm.password()
+    }
+  },
+  watch: {
+    confirmed (transactions) {
+      this.validateTxHash(transactions)
+    },
+    unconfirmedAdded (transactions) {
+      this.validateTxHash(transactions)
+    },
+    status (hashs) {
+      this.sendingForm = false
+    }
   }
 }
 </script>
