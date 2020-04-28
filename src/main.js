@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import App from '@/App.vue'
+import AppVue from '@/App.vue'
 import '@/assets/css/style.css'
 import router from '@/router'
 import store from '@/store'
@@ -129,7 +129,7 @@ const configIntegration = async function () {
       router,
       store,
       vuetify,
-      render: h => h(App)
+      render: h => h(AppVue)
     }).$mount('#app')
   } catch (e) {
     console.error(e)

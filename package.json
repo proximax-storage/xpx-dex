@@ -12,6 +12,7 @@
     "axios": "^0.19.2",
     "core-js": "^3.4.4",
     "js-xpx-chain-library": "^0.3.0",
+    "qrcode.vue": "^1.7.0",
     "rethinkdb": "^2.4.2",
     "socket.io-client": "^2.3.0",
     "tsjs-xpx-chain-sdk": "^0.7.0",

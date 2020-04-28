@@ -23,8 +23,11 @@
 
         <v-tabs-items v-model="tab">
           <v-tab-item v-for="item in arrayItems" :key="item.item">
+            <template v-if="tab === 0">
+              <account-setting/>
+            </template>
             <template v-if="tab === 1">
-              <delete-offer-list/>
+              <delete-offer-list />
             </template>
           </v-tab-item>
         </v-tabs-items>
@@ -66,7 +69,8 @@ export default {
     ...mapGetters('offersStore', ['offerAll'])
   },
   components: {
-    'delete-offer-list': () => import('@/components/deleteOffer/DeleteOfferList')
+    'delete-offer-list': () => import('@/components/deleteOffer/DeleteOfferList'),
+    'account-setting': () => import('@/components/myWalletInfo/AccountSetting')
   },
   methods: {
     filterItems (param = null, arrayItems = []) {
