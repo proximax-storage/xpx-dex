@@ -10,7 +10,7 @@
           <div>{{address.pretty()}}</div>
         </v-col>
         <v-col xs="2" sm="2" md="2" lg="2" xl="2" class="d-flex align-center">
-           <v-btn text icon large @click="$generalService.doCopy('Address', address.plain())">
+          <v-btn text icon large @click="$generalService.doCopy('Address', address.plain())">
             <v-icon>mdi-content-copy</v-icon>
           </v-btn>
         </v-col>
@@ -30,18 +30,6 @@
       </v-row>
     </v-col>
   </v-row>
-  <!-- <div>
-    <v-row>
-      <v-col cols="12" class="d-flex justify-center subtitle-1 font-weight-black">Sirius address</v-col>
-      <v-col cols="12" class="d-flex justify-center align-center">
-        <qrcode-vue :value="address.plain()" :size="size" level="L"></qrcode-vue>
-      </v-col>
-      <v-col cols="12" class="d-flex justify-center align-center">{{address.pretty()}}</v-col>
-    </v-row>
-    <custom-button @action="action" :align="'center'" :arrayBtn="getArrayBtn"></custom-button>
-  </div>-->
-
-  <!-- <v-row class="pt-3 justify-center">asd</v-row> -->
 </template>
 <script>
 import { mapGetters } from 'vuex'

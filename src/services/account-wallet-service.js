@@ -7,7 +7,7 @@ import {
 import {
   searchNamespacesFromAccounts
 } from '@/services/namespace-service'
-
+import * as CryptoJS from 'crypto-js'
 /**
  *
  *
@@ -261,7 +261,62 @@ function decrypt (account, password) {
 
   return decrypt.status
 }
+/**
+ *
+ * @param {*} account
+ */
+function exportAccount (accountValue = null) {
+  console.log('accountValue ', accountValue)
+  const account = {
+    address: accountValue.simpleWallet.address.address,
+    algo: 'pass:bip32',
+    balance: null,
+    brain: true,
+    default: false,
+    encrypted: accountValue.simpleWallet.encryptedPrivateKey.encryptedKey,
+    firstAccount: false,
+    isMultisign: null,
+    iv: accountValue.simpleWallet.encryptedPrivateKey.iv,
+    mosaics: null,
+    name: accountValue.name,
+    network: accountValue.simpleWallet.network,
+    nis1Account: null,
+    publicAccount: Vue.prototype.$blockchainProvider.createPublicAccount(accountValue.publicKey, accountValue.simpleWallet.network)
 
+  }
+
+  console.log('account', account)
+  const acc = Object.assign({}, account)
+  const accounts = []
+  accounts.push(acc)
+  const wallet = {
+    name: `${store.getters['walletStore/nameCurrentWallet']}_${acc.name}`,
+    accounts
+  }
+  wallet.accounts[0].name = 'Primary_Account'
+  wallet.accounts[0].firstAccount = true
+  wallet.accounts[0].default = true
+  console.log('wallet', wallet)
+  const wordArray = CryptoJS.enc.Utf8.parse(JSON.stringify(wallet))
+  const file = CryptoJS.enc.Base64.stringify(wordArray)
+  // Word array to base64
+  const now = Date.now()
+  const date = new Date(now)
+  const year = date.getFullYear()
+  const month = ((date.getMonth() + 1) < 10) ? `0${(date.getMonth() + 1)}` : date.getMonth() + 1
+  const day = (date.getDate() < 10) ? `0${date.getDate()}` : date.getDate()
+
+  const blob = new Blob([file], { type: '' })
+  const url = window.URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.style.display = 'none'
+  a.href = url
+
+  a.download = `${wallet.name}_${year}-${month}-${day}.wlt`
+  document.body.appendChild(a)
+  a.click()
+  window.URL.revokeObjectURL(url)
+}
 /**
  *
  *
@@ -422,6 +477,7 @@ export {
   buildCurrentAccountInfo,
   createWallet,
   decrypt,
+  exportAccount,
   getAccountsInfo,
   getWallets,
   getWalletByName,

@@ -138,6 +138,17 @@ function exchangeOfferDb (mosaicId, mosaicAmount, costValue, type, publicAccount
 }
 
 /**
+  *
+  *
+  * @param {*} publicKey
+  * @param {*} network
+  * @returns
+  * @memberof BlockchainProvider
+  */
+function createPublicAccount (publicKey, network) {
+  return PublicAccount.createFromPublicKey(publicKey, network)
+}
+/**
  *
  *
  * @param {*} address
@@ -675,6 +686,7 @@ export {
   instanceConnectionApi,
   addExchangeOffer,
   announceTx,
+  createPublicAccount,
   createRawAddress,
   createSimpleWallet,
   createSimpleWalletFromPrivateKey,
