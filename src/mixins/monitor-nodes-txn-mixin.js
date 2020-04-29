@@ -24,7 +24,7 @@ export default {
       const monitorHashs = this.$store.getters['transactionsStore/getMonitorHashs']
       monitorHashs.forEach(element => {
         if (hashs.find(x => x === element.hash)) {
-          // console.log('MONITOR HASH FOUND --->', element)
+          console.log('MONITOR HASH FOUND --->', element)
           this.REMOVE_MONITOR_HASH(element.hash)
           this.actions(element)
         }
@@ -40,18 +40,16 @@ export default {
         }
       })
     },
-    unconfirmedAdded (transactions) {
-      // console.log('----- WATCH UNCONFIRMED_ADDED ------', transactions)
-      const hashs = transactions.map(t => t.transactionInfo.hash)
-      const monitorHashs = this.$store.getters['transactionsStore/getMonitorHashs']
-      monitorHashs.forEach(element => {
-        if (hashs.find(x => x === element.hash)) {
-          console.log('MONITOR HASH FOUND --->', element)
-          this.REMOVE_MONITOR_HASH(element.hash)
-          this.actions(element)
-        }
-      })
-    },
+    // unconfirmedAdded (transactions) {
+    //   const hashs = transactions.map(t => t.transactionInfo.hash)
+    //   const monitorHashs = this.$store.getters['transactionsStore/getMonitorHashs']
+    //   monitorHashs.forEach(element => {
+    //     if (hashs.find(x => x === element.hash)) {
+    //       this.REMOVE_MONITOR_HASH(element.hash)
+    //       this.actions(element)
+    //     }
+    //   })
+    // },
     nodeStatus (newValue, oldValue) {
       // console.log('\n------------ STATUS NODE HAS CHANGED ------------\n')
       // Init app
@@ -71,16 +69,15 @@ export default {
   methods: {
     ...mapMutations('transactionsStore', ['REMOVE_STATUS_TX', 'REMOVE_MONITOR_HASH']),
     actions (data) {
-      console.log('INIT ACTION ---->', data)
       switch (data.action) {
         case 'insertMoisaicsInfo':
+          console.log('GUARDO EN MSOAIC SCKER')
           this.$store.dispatch('socketDbStore/insertMoisaicsInfo', {
             io: this.$socket,
             data: data.dataRequired
           })
           break
         case 'insertExecuteOffers':
-          console.log('insertExecuteOffers >', data.dataRequired)
           this.$store.dispatch('socketDbStore/insertExecuteOffers', {
             io: this.$socket,
             data: data.dataRequired

@@ -203,9 +203,9 @@ function getConfirmed (arrayAddress) {
     arrayAddress.forEach(address => {
       connector.confirmed(address).subscribe(transaction => {
         showMsgAndChangeStatus(messages.confirmed, 'success')
-        // console.log(' -----------------------CONFIRMED---------------------------------')
-        // console.log(transaction.transactionInfo.hash)
-        // console.log('------------------------------------------------------------------ \n\n')
+        console.log(' -----------------------CONFIRMED---------------------------------')
+        console.log(transaction)
+        console.log('------------------------------------------------------------------ \n\n')
         store.commit('transactionsStore/SET_CONFIRMED', transaction)
       })
     })

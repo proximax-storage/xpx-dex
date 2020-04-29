@@ -29,12 +29,12 @@
 <script>
 import { mapState } from 'vuex'
 import getInfoAssetsMixin from '@/mixins/get-info-assets-mixin'
+import getOffertMixin from '@/mixins/get-offert-mixin'
 import monitorNodesTxn from '@/mixins/monitor-nodes-txn-mixin'
 export default {
-  mixins: [getInfoAssetsMixin, monitorNodesTxn],
+  mixins: [getInfoAssetsMixin, monitorNodesTxn, getOffertMixin],
   name: 'App',
-  data: () => ({
-  }),
+  data: () => ({}),
   components: {
     'menu-item': () => import('@/components/Menu')
   },

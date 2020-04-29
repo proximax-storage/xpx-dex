@@ -52,9 +52,9 @@ function getMosaicInfo () {
 function insertMoisaicsInfo (data) {
   queries.insertMoisaicsInfo(data).then(result => {
     if (result['errors'] > 0) throw result['first_error']
-    if (result['inserted'] > 0) {
-      io.emit('RETURN_INSERT_MOSAIC_INFO', result)
-    }
+    // if (result['inserted'] > 0) {
+    io.emit('RETURN_INSERT_MOSAIC_INFO', result)
+    // }
   })
 }
 function insertExecuteOffers (data) {
