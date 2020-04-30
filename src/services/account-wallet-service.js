@@ -389,6 +389,7 @@ function logIn (wallet, password) {
             store.commit('walletStore/SET_CURRENT_WALLET', wallet)
             store.commit('accountStore/SET_CURRENT_ACCOUNT', defaultAccount)
             store.commit('mosaicStore/SET_MOSAICS', [])
+            store.commit('offersStore/SET_OFFER_ALL', [])
             store.dispatch('nodeStore/initNodes', connectionNodes)
             return true
           }

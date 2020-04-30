@@ -5,7 +5,7 @@ export const socketDbStore = {
     newOffersTx: null,
     mosaicsInfOffer: [],
     loadingInfo: false,
-    unchanged: null
+    unchanged: []
   },
   mutations: {
     SOCKET_SET_OFFERS (state, data) {
@@ -40,7 +40,6 @@ export const socketDbStore = {
     },
     SOCKET_RETURN_INSERT_MOSAIC_INFO (state, data) {
       console.log('SOCKET_RETURN_INSERT_MOSAIC_INFO', data)
-      state.unchanged = null
       // changes
       if (data['inserted'] > 0) {
         for (let index = 0; index < data['inserted']; index++) {
@@ -50,7 +49,7 @@ export const socketDbStore = {
           }
         }
       } else if (data['unchanged'] > 0) {
-        state.unchanged = data['unchanged']
+        state.unchanged.push(data['unchanged'])
       }
       // console.log('SOCKET_RETURN_INSERT_MOSAIC_INFO', data)
     }

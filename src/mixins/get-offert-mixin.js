@@ -40,12 +40,12 @@ export default {
   watch: {
     unchanged (newValue) {
       if (newValue) {
-        // console.log('mosaicsInfOffer unchanged ===>', this.mosaicsInfOffer)
+        console.log(' UNCHANGED  ===>', this.mosaicsInfOffer)
         this.mapMosaicsId(this.mosaicsInfOffer)
       }
     },
     mosaicsInfOffer (newValue) {
-    //   console.log('mosaicsInfOffer ===>', newValue)
+      console.log('MOSAIC INFO OFFER ===>', newValue)
       this.mapMosaicsId(newValue)
     },
     items (newValue) {
