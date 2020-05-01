@@ -39,17 +39,20 @@ export const socketDbStore = {
       // console.log('RETURN_INSERT_EXECUTE_OFFERS', data)
     },
     SOCKET_RETURN_INSERT_MOSAIC_INFO (state, data) {
+      state.unchanged = []
       console.log('SOCKET_RETURN_INSERT_MOSAIC_INFO', data)
+      const dataDb = data.dataDb
       // changes
-      if (data['inserted'] > 0) {
-        for (let index = 0; index < data['inserted']; index++) {
-          const element = data['changes'][index]
+      if (dataDb['inserted'] > 0) {
+        for (let index = 0; index < dataDb['inserted']; index++) {
+          const element = dataDb['changes'][index]
           if (element['new_val']) {
+            state.unchanged.push(data.dataOffer)
             state.mosaicsInfOffer.push(element['new_val'])
           }
         }
-      } else if (data['unchanged'] > 0) {
-        state.unchanged.push(data['unchanged'])
+      } else if (dataDb['unchanged'] > 0) {
+        state.unchanged.push(data.dataOffer)
       }
       // console.log('SOCKET_RETURN_INSERT_MOSAIC_INFO', data)
     }
@@ -90,6 +93,12 @@ export const socketDbStore = {
     },
     insertMoisaicsInfo: ({ commit, state }, params) => {
       params.io.emit('insertMoisaicsInfo', params.data)
+    },
+    // app
+    setMoisaicUnchanged: ({ commit, state }, params) => {
+      commit('EVENT_SET_MOSAIC_INFO', params)
+      // params.io.emit('insertMoisaicsInfo', params.data)
     }
+
   }
 }

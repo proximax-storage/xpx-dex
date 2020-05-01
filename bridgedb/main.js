@@ -50,10 +50,12 @@ function getMosaicInfo () {
 }
 // ISERT QUERIES
 function insertMoisaicsInfo (data) {
-  queries.insertMoisaicsInfo(data).then(result => {
+  const dataMoisaics = data.moisaicsInfo
+  const dataOffer = data.dataOffer
+  queries.insertMoisaicsInfo(dataMoisaics).then(result => {
     if (result['errors'] > 0) throw result['first_error']
     // if (result['inserted'] > 0) {
-    io.emit('RETURN_INSERT_MOSAIC_INFO', result)
+    io.emit('RETURN_INSERT_MOSAIC_INFO', { dataDb: result, dataOffer: dataOffer })
     // }
   })
 }

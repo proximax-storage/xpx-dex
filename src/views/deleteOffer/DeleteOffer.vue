@@ -176,11 +176,26 @@ export default {
                 this.hash = signedTransaction.hash
                 this.sendingForm = true
                 common = null
+                const dataRequired = {
+                  dataRequiredDb: [],
+                  dataRequiredMosaic: {
+                    moisaicsInfo: [
+                      {
+                        mosaicId: this.exchangeDelete.exchange.mosaicId,
+                        mosaicIdHex: this.exchangeDelete.exchange.mosaicId.toHex()
+                      }
+                    ],
+                    dataOffer: {
+                      type: type,
+                      mosaicIdHex: this.exchangeDelete.exchange.mosaicId.toHex()
+                    }
+                  }
+                }
                 const dataMonitorHash = this.$generalService.buildMonitorHash(
                   'removeExchangeOffer',
                   signedTransaction.hash,
                   '',
-                  []
+                  dataRequired
                 )
                 this.SET_MONITOR_HASH(dataMonitorHash)
                 this.$blockchainProvider.announceTx(signedTransaction).subscribe(

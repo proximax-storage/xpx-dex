@@ -1,17 +1,17 @@
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import {
   searchInfoMosaics
 } from '@/services/mosaics-service'
 export default {
   computed: {
-    ...mapState('socketDbStore', ['offersTx']),
     ...mapGetters('socketDbStore', ['mosaicsInfOffer']),
     assets: {
       get () {
         return this.mosaicsInfOffer
       },
       set (value) {
-        this.$store.commit('socketDbStore/EVENT_SET_MOSAIC_INFO', value)
+        this.setMoisaicUnchanged(value)
+        // this.$store.commit('socketDbStore/EVENT_SET_MOSAIC_INFO', value)
       }
     }
   },
@@ -21,6 +21,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('socketDbStore', ['setMoisaicUnchanged']),
     ...mapMutations('socketDbStore', ['EVENT_LOADING_MOSAIC_INFO']),
     async getInfoAssets (data) {
       let cont = 0

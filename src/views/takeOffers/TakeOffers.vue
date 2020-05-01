@@ -196,6 +196,22 @@ export default {
               this.type,
               this.exchange.owner
             )
+
+            const dataRequired = {
+              dataRequiredDb: this.exchangeOfferDb,
+              dataRequiredMosaic: {
+                moisaicsInfo: [
+                  {
+                    mosaicId: this.exchange.mosaicId,
+                    mosaicIdHex: this.exchange.mosaicId.toHex()
+                  }
+                ],
+                dataOffer: {
+                  type: this.type,
+                  mosaicIdHex: this.exchange.mosaicId.toHex()
+                }
+              }
+            }
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
               const signedTransaction = this.$blockchainProvider.signedTransaction(
@@ -210,7 +226,7 @@ export default {
                 'insertExecuteOffers',
                 signedTransaction.hash,
                 '',
-                this.exchangeOfferDb
+                dataRequired
               )
               this.SET_MONITOR_HASH(dataMonitorHash)
               console.log('SET_MONITOR_HASH', dataMonitorHash)

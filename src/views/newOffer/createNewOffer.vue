@@ -283,7 +283,7 @@ export default {
       sendingForm: false,
       configMoneyAsset: null,
       addExchangeOffer: null,
-      dataMosaics: [],
+      dataMosaics: null,
       hash: null
     }
   },
@@ -388,10 +388,25 @@ export default {
               Number(500)
             )
 
-            this.dataMosaics.push({
-              mosaicId: this.$blockchainProvider.getMosaicId(this.idHex),
-              mosaicIdHex: this.idHex
-            })
+            // this.dataMosaics.push(
+            //   {
+            //     mosaicId: this.$blockchainProvider.getMosaicId(this.idHex),
+            //     mosaicIdHex: this.idHex
+            //   },
+            //   { type: this.typeOffer }
+            // )
+            this.dataMosaics = {
+              moisaicsInfo: [
+                {
+                  mosaicId: this.$blockchainProvider.getMosaicId(this.idHex),
+                  mosaicIdHex: this.idHex
+                }
+              ],
+              dataOffer: {
+                type: this.typeOffer,
+                mosaicIdHex: this.idHex
+              }
+            }
 
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {

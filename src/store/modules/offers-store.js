@@ -15,7 +15,6 @@ export const offersStore = {
       state.offerSelected = data
     },
     SET_OFFER_ALL (state, data) {
-      console.log('SET_OFFER_ALL', data)
       state.offerAll = data
     }
   }

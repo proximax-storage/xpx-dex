@@ -71,16 +71,30 @@ export default {
     actions (data) {
       switch (data.action) {
         case 'insertMoisaicsInfo':
-          console.log('GUARDO EN MSOAIC SCKER')
           this.$store.dispatch('socketDbStore/insertMoisaicsInfo', {
             io: this.$socket,
             data: data.dataRequired
           })
           break
         case 'insertExecuteOffers':
+          console.log('I N S E R T    EXECUE ', data.dataRequired.dataRequiredDb)
           this.$store.dispatch('socketDbStore/insertExecuteOffers', {
             io: this.$socket,
-            data: data.dataRequired
+            data: data.dataRequired.dataRequiredDb
+          })
+          this.$store.dispatch('socketDbStore/insertMoisaicsInfo', {
+            io: this.$socket,
+            data: data.dataRequired.dataRequiredMosaic
+          })
+          break
+        case 'removeExchangeOffer':
+          // this.$store.dispatch('socketDbStore/removeExchangeOffer', {
+          //   io: this.$socket,
+          //   data: data.dataRequired.dataRequiredDb
+          // })
+          this.$store.dispatch('socketDbStore/insertMoisaicsInfo', {
+            io: this.$socket,
+            data: data.dataRequired.dataRequiredMosaic
           })
           break
       }

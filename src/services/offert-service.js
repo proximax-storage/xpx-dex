@@ -5,11 +5,14 @@ import store from '@/store'
  * @param {*} items
  */
 function getAllOffer (items) {
-  console.log(' items getAllOffer', items)
+  // const items = JSON.parse(JSON.stringify(itemsValue))
+  // console.log('items fet', items)
   const pass = []
   const x = items.filter(x => x.data.length > 0)
+  console.log('xxxx')
   if (x.length > 0) {
     x.forEach(element => {
+      console.log('element.info.mosaicInfo', element.info.mosaicInfo)
       if (element.info.mosaicInfo) {
         const price = sumAllAmount(element.data.map(x => x.price)) / element.data.length
         const amount = sumAllAmount(element.data.map(x => x.amount.compact()))
@@ -35,7 +38,7 @@ function getAllOffer (items) {
               priceArray: element.data.map(x => x.price),
               twentyFourChange: `${(
                 (Math.floor(Math.random() * 20) + Math.floor(Math.random() * 1000)) /
-                                100
+                100
               ).toFixed(2)}`
             },
             allOffers: {
@@ -47,6 +50,7 @@ function getAllOffer (items) {
       }
     })
   }
+  console.log('pass', pass)
   store.commit('offersStore/SET_OFFER_ALL', pass)
   return pass
 }
@@ -73,9 +77,9 @@ function filtersAssetsFunc (data) {
       item.text = item.mosaicIdHex
       if (
         item.mosaicInfo !== null &&
-                item.mosaicInfo !== undefined &&
-                item.mosaicInfo[0] &&
-                item.mosaicInfo[0].mosaicNames.names.length > 0
+        item.mosaicInfo !== undefined &&
+        item.mosaicInfo[0] &&
+        item.mosaicInfo[0].mosaicNames.names.length > 0
       ) {
         item.text = item.mosaicInfo[0].mosaicNames.names[0].name
       }
