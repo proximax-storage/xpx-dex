@@ -9,10 +9,10 @@ function getAllOffer (items) {
   // console.log('items fet', items)
   const pass = []
   const x = items.filter(x => x.data.length > 0)
-  console.log('xxxx')
+  // console.log('xxxx')
   if (x.length > 0) {
     x.forEach(element => {
-      console.log('element.info.mosaicInfo', element.info.mosaicInfo)
+      // console.log('element.info.mosaicInfo', element.info.mosaicInfo)
       if (element.info.mosaicInfo) {
         const price = sumAllAmount(element.data.map(x => x.price)) / element.data.length
         const amount = sumAllAmount(element.data.map(x => x.amount.compact()))
@@ -50,7 +50,7 @@ function getAllOffer (items) {
       }
     })
   }
-  console.log('pass', pass)
+  // console.log('pass', pass)
   store.commit('offersStore/SET_OFFER_ALL', pass)
   return pass
 }

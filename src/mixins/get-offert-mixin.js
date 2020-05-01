@@ -13,7 +13,7 @@ export default {
     mapMosaicsId (value) {
       const filtersAssets = filtersAssetsFunc(value)
       this.items = []
-      console.log('filtersAssets', filtersAssets)
+      // console.log('filtersAssets', filtersAssets)
       filtersAssets.forEach(element => {
         this.getBuy(element)
         this.getSell(element)
@@ -30,7 +30,7 @@ export default {
     },
     getSell (data) {
       this.$blockchainProvider.getExchangeOffersfromId(data.mosaicIdHex, 0).subscribe(offer => {
-        console.log('consulto offer', offer)
+        // console.log('consulto offer', offer)
         this.items.push({
           info: data,
           type: 'sell',
@@ -56,7 +56,7 @@ export default {
       }
     },
     items (newValue) {
-      console.log('items', newValue)
+      // console.log('items', newValue)
       getAllOffer(newValue)
     }
   }

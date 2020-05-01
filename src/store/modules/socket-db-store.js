@@ -18,15 +18,15 @@ export const socketDbStore = {
       state.offersTx.push(data)
     },
     SOCKET_SET_MOSAIC_INFO (state, data) {
-      console.log('SOCKET_SET_MOSAIC_INFO', data)
+      // console.log('SOCKET_SET_MOSAIC_INFO', data)
       state.mosaicsInfOffer = data
     },
     EVENT_SET_MOSAIC_INFO (state, data) {
-      console.log('EVENT_SET_MOSAIC_INFO', data)
+      // console.log('EVENT_SET_MOSAIC_INFO', data)
       state.mosaicsInfOffer = data
     },
     EVENT_LOADING_MOSAIC_INFO (state, data) {
-      console.log('EVENT_LOADING_MOSAIC_INFO', data)
+      // console.log('EVENT_LOADING_MOSAIC_INFO', data)
       state.loadingInfo = data
     },
     EVENT_UNCHANGED (state, data) {
@@ -40,7 +40,7 @@ export const socketDbStore = {
     },
     SOCKET_RETURN_INSERT_MOSAIC_INFO (state, data) {
       state.unchanged = []
-      console.log('SOCKET_RETURN_INSERT_MOSAIC_INFO', data)
+      // console.log('SOCKET_RETURN_INSERT_MOSAIC_INFO', data)
       const dataDb = data.dataDb
       // changes
       if (dataDb['inserted'] > 0) {

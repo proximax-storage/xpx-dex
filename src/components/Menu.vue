@@ -12,7 +12,8 @@
         <img :src="require('@/assets/img/logo-dex-color.svg')" alt="logo" height="35" />
       </v-toolbar-title>
       <v-spacer></v-spacer>
-
+      <!-- <v-btn icon color="primary" @click="activity('myWallet', 0)">
+      </v-btn>-->
       <div v-for="(item, i) in getItemNav" :key="i">
         <div :key="item.title">
           <v-chip
@@ -47,7 +48,7 @@
               z-index="0"
             >
               <template v-slot:activator="{ on }" v-if="item.type === 'menuIcon'">
-                <v-btn text small color="primary" v-on="on" >
+                <v-btn text small color="primary" v-on="on">
                   <div v-if="loadingInfo">
                     <v-progress-circular indeterminate color="grey">
                       <v-icon>{{ item.icon }}</v-icon>
@@ -79,6 +80,7 @@
           </div>
         </div>
       </div>
+      <node-status class="ma-1" />
     </v-app-bar>
     <core-view></core-view>
     <core-footer></core-footer>
@@ -206,7 +208,8 @@ export default {
     // 'core-Drawer': () => import('@/components/core/Drawer'),
     'core-view': () => import('@/components/core/View'),
     'core-footer': () => import('@/components/core/Footer'),
-    'user-content': () => import('@/components/core/UserContent')
+    'user-content': () => import('@/components/core/UserContent'),
+    'node-status': () => import('@/core/components/nodes/NodeStatus')
   },
   watch: {
     $route (val) {

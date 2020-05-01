@@ -42,13 +42,13 @@
           <div class="text-center pt-1 d-flex align-center">
             <span class="caption" :title="currentNode.uri">
               <template v-if="nodeStatus === 1">
-                <img :src="require('@/assets/img/icon-nodes-green-30h.svg')" alt width="25px" />
+                <img :src="require(`@/assets/img/${theme}/icon-nodes-green-30h.svg`)" alt width="25px" />
               </template>
               <template v-if="nodeStatus === 2">
-                <img :src="require('@/assets/img/icon-nodes-yellow-30h.svg')" alt width="25px" />
+                <img :src="require(`@/assets/img/${theme}/icon-nodes-yellow-30h.svg`)" alt width="25px" />
               </template>
               <template v-if="nodeStatus === 0">
-                <img :src="require('@/assets/img/icon-nodes-red-30h.svg')" alt width="25px" />
+                <img :src="require(`@/assets/img/${theme}/icon-nodes-red-30h.svg`)" alt width="25px" />
               </template>
             </span>
           </div>
@@ -61,6 +61,11 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
+  data () {
+    return {
+      theme: 'light'
+    }
+  },
   computed: {
     ...mapGetters('nodeStore', ['currentNode', 'nodeStatus'])
   }

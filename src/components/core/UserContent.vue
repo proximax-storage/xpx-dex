@@ -3,6 +3,11 @@
     <v-list-item class="pt-4">
       <v-list-item-content class>
         <v-list-item-title class="subtitle-1 pb-1 ml-1">
+          <span>
+            <v-btn icon color="primary" @click="activity('myWallet', 0)">
+              <v-icon>mdi-cog</v-icon>
+            </v-btn>
+          </span>
           <span>{{ nameCurrentWallet }}</span>
         </v-list-item-title>
         <v-divider class="mt-1" />
@@ -26,7 +31,12 @@
         </v-list-item-subtitle>
         <v-divider class="mt-1" />
         <v-list-item-subtitle class="pt-2 subtitle-2 font-weight-medium primary--text">
-          <v-btn text small class="subtitle-2 primary--text" @click="activity('myWallet')">Activity</v-btn>
+          <v-btn
+            text
+            small
+            class="subtitle-2 primary--text"
+            @click="activity('myWallet', 1)"
+          >Activity</v-btn>
         </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
@@ -69,8 +79,8 @@ export default {
     }
   },
   methods: {
-    activity (action) {
-      this.$router.push({ path: `${action}`, query: { item: 1 } }).catch(e => {})
+    activity (action, item) {
+      this.$router.push({ path: `${action}`, query: { item: item } }).catch(e => {})
     },
     totalBalance () {
       const total = this.$generalService.amountFormatter(
