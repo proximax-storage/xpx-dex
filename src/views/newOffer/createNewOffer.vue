@@ -379,13 +379,20 @@ export default {
             }
             console.log('costs', cost) */
             const id = this.$blockchainProvider.getMosaicId(this.idHex)
-            // const duration = Number(this.form.duration)
+            console.log('duration 1', Number(this.form.duration))
+            const duration = this.$generalService
+              .calculateDurationforDay(Number(this.form.duration))
+              .toString()
+            console.log('duration', duration)
+            const durationSend = parseFloat(duration)
+
+            console.log('durationSend', durationSend)
             const addExchangeOffer = this.$blockchainProvider.addExchangeOffer(
               id,
               mosaicAmount,
               this.form.priceForAmount,
               this.typeOffer,
-              Number(500)
+              durationSend
             )
 
             // this.dataMosaics.push(

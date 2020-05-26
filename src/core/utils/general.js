@@ -96,6 +96,16 @@ function buildTableHeader (text, value, sortable = false) {
     sortable
   }
 }
+/**
+   * Calculate duration based in days
+   *
+   * @param {number} duration
+   * @returns
+   * @memberof GeneralService
+   */
+function calculateDurationforDay (duration) {
+  return duration * 5760
+}
 
 /**
  *
@@ -263,6 +273,7 @@ export {
   buildButton,
   buildTableHeader,
   buildMonitorHash,
+  calculateDurationforDay,
   doCopy,
   getDataPart,
   quantityStringToInt,

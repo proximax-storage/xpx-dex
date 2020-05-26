@@ -34,7 +34,11 @@
         "networkType": "TEST_NET",
         "protocol": "https",
         "protocolWs": "wss",
-        "nodes": ["bcstage1.xpxsirius.io"]
+        "nodes": [
+          "bctestnet1.brimstone.xpxsirius.io",
+          "bctestnet2.brimstone.xpxsirius.io",
+          "bctestnet3.brimstone.xpxsirius.io"
+        ]
       },
       "rentalFeeSink": {
         "namespaceRentalFeeSink": {
