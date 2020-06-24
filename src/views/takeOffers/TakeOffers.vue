@@ -127,6 +127,7 @@
 <script>
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { decrypt } from '@/services/account-wallet-service'
+import { buildExchangeOffer } from '@/services/buildOffer-by-type-service'
 export default {
   data: () => ({
     form: {
@@ -177,56 +178,63 @@ export default {
       switch (action) {
         case 'place':
           if (this.valid && !this.sendingForm) {
-            this.exchangeOffer = null
+            // this.exchangeOffer = null
             const mosaicAmount = this.$generalService.quantityStringToInt(
               this.form.amount,
               this.dataAssets.configMoney.precision
             )
-            const exchangeOffer = this.$blockchainProvider.exchangeOffer(
+            const returnBuild = buildExchangeOffer(
               this.exchange.mosaicId,
               mosaicAmount,
               this.form.priceForAmount,
               this.type,
               this.exchange.owner
             )
-            this.exchangeOfferDb = this.$blockchainProvider.exchangeOfferDb(
-              this.exchange.mosaicId,
-              mosaicAmount,
-              this.form.priceForAmount,
-              this.type,
-              this.exchange.owner
-            )
+            // const exchangeOffer = this.$blockchainProvider.exchangeOffer(
+            //   this.exchange.mosaicId,
+            //   mosaicAmount,
+            //   this.form.priceForAmount,
+            //   this.type,
+            //   this.exchange.owner
+            // )
+            // this.exchangeOfferDb = this.$blockchainProvider.exchangeOfferDb(
+            //   this.exchange.mosaicId,
+            //   mosaicAmount,
+            //   this.form.priceForAmount,
+            //   this.type,
+            //   this.exchange.owner
+            // )
 
-            const dataRequired = {
-              dataRequiredDb: this.exchangeOfferDb,
-              dataRequiredMosaic: {
-                moisaicsInfo: [
-                  {
-                    mosaicId: this.exchange.mosaicId,
-                    mosaicIdHex: this.exchange.mosaicId.toHex()
-                  }
-                ],
-                dataOffer: {
-                  type: this.type,
-                  mosaicIdHex: this.exchange.mosaicId.toHex()
-                }
-              }
-            }
+            // const dataRequired = {
+            //   dataRequiredDb: this.exchangeOfferDb,
+            //   dataRequiredMosaic: {
+            //     moisaicsInfo: [
+            //       {
+            //         mosaicId: this.exchange.mosaicId,
+            //         mosaicIdHex: this.exchange.mosaicId.toHex()
+            //       }
+            //     ],
+            //     dataOffer: {
+            //       type: this.type,
+            //       mosaicIdHex: this.exchange.mosaicId.toHex()
+            //     }
+            //   }
+            // }
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
               const signedTransaction = this.$blockchainProvider.signedTransaction(
                 common.privateKey,
-                exchangeOffer
+                returnBuild.transaction
               )
               this.hash = signedTransaction.hash
               this.sendingForm = true
               common = null
               this.clear()
               const dataMonitorHash = this.$generalService.buildMonitorHash(
-                'insertExecuteOffers',
+                returnBuild.action,
                 signedTransaction.hash,
                 '',
-                dataRequired
+                returnBuild.dataRequired
               )
               this.SET_MONITOR_HASH(dataMonitorHash)
               console.log('SET_MONITOR_HASH', dataMonitorHash)
@@ -318,22 +326,6 @@ export default {
     status (hashs) {
       this.sendingForm = false
     }
-    // statusTx (newstatusTx, old) {
-    //   this.sendingForm = false
-    //   if (this.hash) {
-    //     if (newstatusTx.hash === this.hash) {
-    //       if (newstatusTx.type === 'unconfirmed' || newstatusTx.type === 'confirmed') {
-    //         this.dataTxOfferInfo = { hash: this.hash }
-    //         this.hash = null
-    //         // console.log('exchangeOfferDb statusTx', this.exchangeOfferDb)
-    //         this.$store.dispatch('socketDbStore/insertExecuteOffers', {
-    //           io: this.$socket,
-    //           data: this.exchangeOfferDb
-    //         })
-    //       }
-    //     }
-    //   }
-    // }
   },
   computed: {
     ...mapGetters('socketDbStore', ['mosaicsInfOfferFromIdHex']),
