@@ -1,5 +1,6 @@
 import store from '@/store'
 import Vue from 'vue'
+import { ExchangeOfferType } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/ExchangeOfferType'
 
 /**
  *
@@ -266,6 +267,28 @@ function validateZero (value = []) {
   return valueR
 }
 
+/**
+ * Verify type offer for name
+ *
+ * @param {number} itemType
+ * @returns
+ * @memberof GeneralService
+ */
+function verifyTypeOfferName (itemType) {
+  const type = [
+    {
+      type: ExchangeOfferType.SELL_OFFER,
+      name: 'SELL'
+    },
+    {
+      type: ExchangeOfferType.BUY_OFFER,
+      name: 'BUY'
+    }
+  ]
+  const nameType = type.find(x => x.type === itemType).name
+  return nameType
+}
+
 export {
   amountFormatter,
   priceFormatter,
@@ -280,5 +303,6 @@ export {
   quantityStringToIntMath,
   replaceData,
   validateMatch,
-  validateZero
+  validateZero,
+  verifyTypeOfferName
 }

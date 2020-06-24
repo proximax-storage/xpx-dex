@@ -382,6 +382,7 @@ function logIn (wallet, password) {
     if (currentAccount) {
       if (decrypt(currentAccount.simpleWallet, password)) {
         const connectionNodes = store.getters.environment.connectionNodes
+        console.log('connectionNodes', connectionNodes)
         const network = Vue.prototype.$blockchainProvider.filterNetworkTypeFromString(connectionNodes.networkType)
         if (!wallet.accounts.find(element => element.simpleWallet.network !== network)) {
           const defaultAccount = filterAccountDefault(wallet)

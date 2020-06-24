@@ -40,12 +40,9 @@ export default {
   methods: {
     action (exchange) {
       this.$store.commit('mosaicExchange/SET_EXCHANGE_DELETE', exchange)
-      console.log('SET_EXCHANGE_DELETE', exchange)
-      // /deleteOffer
       this.$router.push({ path: '/deleteOffer' })
     },
     buildData (data = []) {
-      console.log('data', data)
       let offerts = []
       if (data.length > 0) {
         for (let x of data) {
@@ -63,8 +60,6 @@ export default {
         offerts = data.allOffers[type]
           .filter(x => x.owner.publicKey === this.currentAccount.publicKey)
           .map(f => {
-            console.log('ownet', f.owner.publicKey)
-            console.log('my publickey', this.currentAccount.publicKey)
             const initialQuantity = this.$generalService.amountFormatter(
               f.initialAmount.compact(),
               data.tableData.info.mosaicInfo[0].mosaicInfo.properties.divisibility

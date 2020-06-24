@@ -240,6 +240,7 @@
 
 <script>
 import { buildCurrentAccountInfo, decrypt } from '@/services/account-wallet-service'
+import { buildAddExchangeOffer } from '@/services/buildOffer-by-type-service'
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   data: () => {
@@ -282,8 +283,6 @@ export default {
       typeOffer: null,
       sendingForm: false,
       configMoneyAsset: null,
-      addExchangeOffer: null,
-      dataMosaics: null,
       hash: null
     }
   },
@@ -320,6 +319,7 @@ export default {
       'currentAccount',
       'mosaicBuild'
     ]),
+    ...mapGetters('offersStore', ['offerAll']),
     isAsset () {
       let value = null
       if (this.dataAssets === null) return (value = false)
@@ -365,61 +365,33 @@ export default {
       switch (action) {
         case 'place':
           if (this.valid && !this.sendingForm) {
-            this.addExchangeOffer = null
             const mosaicAmount = this.$generalService.quantityStringToInt(
               this.form.amount,
               this.configMoneyAsset.precision
             )
-            /* let cost = 0
-            console.log('this.typeOffer', this.typeOffer)
-            if (this.typeOffer === 1) {
-              cost = this.form.priceForAmount
-            } else {
-              cost = this.$generalService.quantityStringToInt(this.form.bidPrice, 6)
-            }
-            console.log('costs', cost) */
-            const id = this.$blockchainProvider.getMosaicId(this.idHex)
-            console.log('duration 1', Number(this.form.duration))
-            const duration = this.$generalService
-              .calculateDurationforDay(Number(this.form.duration))
-              .toString()
-            console.log('duration', duration)
-            const durationSend = parseFloat(duration)
-
-            console.log('durationSend', durationSend)
-            const addExchangeOffer = this.$blockchainProvider.addExchangeOffer(
-              id,
+            let returnBuild = null
+            // const offerMerching = this.filterMerching(
+            //   this.offerAll,
+            //   this.typeOffer,
+            //   this.idHex,
+            //   mosaicAmount
+            // )
+            // if (offerMerching.length > 0) {
+            // } else {
+            returnBuild = buildAddExchangeOffer(
+              this.idHex,
               mosaicAmount,
               this.form.priceForAmount,
               this.typeOffer,
-              durationSend
+              this.form.duration
             )
-
-            // this.dataMosaics.push(
-            //   {
-            //     mosaicId: this.$blockchainProvider.getMosaicId(this.idHex),
-            //     mosaicIdHex: this.idHex
-            //   },
-            //   { type: this.typeOffer }
-            // )
-            this.dataMosaics = {
-              moisaicsInfo: [
-                {
-                  mosaicId: this.$blockchainProvider.getMosaicId(this.idHex),
-                  mosaicIdHex: this.idHex
-                }
-              ],
-              dataOffer: {
-                type: this.typeOffer,
-                mosaicIdHex: this.idHex
-              }
-            }
+            // }
 
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
               const signedTransaction = this.$blockchainProvider.signedTransaction(
                 common.privateKey,
-                addExchangeOffer,
+                returnBuild.transaction,
                 this.currentAccount.simpleWallet.network
               )
 
@@ -428,20 +400,24 @@ export default {
               common = null
               this.clear()
               const dataMonitorHash = this.$generalService.buildMonitorHash(
-                'insertMoisaicsInfo',
+                returnBuild.action,
                 signedTransaction.hash,
                 '',
-                this.dataMosaics
+                returnBuild.dataRequired
               )
-              this.SET_MONITOR_HASH(dataMonitorHash)
-              this.$blockchainProvider.announceTx(signedTransaction).subscribe(
-                response => console.log(response),
-                error => {
-                  console.error(error)
-                  this.sendingForm = false
-                  this.REMOVE_MONITOR_HASH(dataMonitorHash)
-                }
-              )
+
+              console.log('dataMonitorHash', dataMonitorHash)
+              this.sendingForm = false
+              //  ##########################################fin
+              // this.SET_MONITOR_HASH(dataMonitorHash)
+              // this.$blockchainProvider.announceTx(signedTransaction).subscribe(
+              //   response => console.log(response),
+              //   error => {
+              //     console.error(error)
+              //     this.sendingForm = false
+              //     this.REMOVE_MONITOR_HASH(dataMonitorHash)
+              //   }
+              // )
             }
           }
       }
@@ -464,10 +440,10 @@ export default {
       let duration = null
       duration = Number(value)
       if (duration !== 0) {
-        if (duration <= 365) {
+        if (duration <= 1) {
           return true
         } else {
-          return 'You cannot enter the duration greater than 365'
+          return 'You cannot enter the duration greater than 1 '
         }
       } else {
         return 'Cannot enter duration zero'
@@ -523,7 +499,6 @@ export default {
         this.form.bidPrice.split(',').join(''),
         this.form.amount.split(',').join('')
       )
-      console.log('this.form.priceForAmount', this.form.priceForAmount)
       if (this.type === 'sell') {
         if (e.target.name === 'amountF') this.validateBalanceAssets(amount)
       } else {
@@ -536,7 +511,6 @@ export default {
       }
     },
     filtersAssets (data) {
-      // 286ABCDE88E269AC899D872F2D9CC62E2B8B0126E1F04B49A97EDBE588949806
       let valor = []
       if (JSON.parse(JSON.stringify(data)).length > 0) {
         valor = data.map(item => {
@@ -553,6 +527,20 @@ export default {
         })
       }
       return valor
+    },
+    filterMerching (data, type = null, mosaicMerge = null, mosaicAmount = null) {
+      let offerts = []
+      console.log('data', data)
+      const typeName = this.$generalService.verifyTypeOfferName(type)
+      console.log('typeName', typeName)
+      console.log('mosaicMerge', mosaicMerge)
+      console.log('mosaicAmount', mosaicAmount)
+      offerts = data[0].allOffers[typeName.toLowerCase()].filter(
+        x => x.mosaicId.toHex() === mosaicMerge && x.amount.compact() >= mosaicAmount
+      )
+
+      console.log('offerts', offerts)
+      return offerts
     },
     typeOfferColorFuc (type) {
       if (type === 'buy') {
