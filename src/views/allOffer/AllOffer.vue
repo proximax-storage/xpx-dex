@@ -116,13 +116,17 @@ export default {
     resultsOffer (data = [], type = null) {
       if (data.sell.length > 0) {
         for (let item of data.sell) {
-          item.priceForAmount = item.amount.compact() * item.price
+          // item.priceForAmount = item.amount.compact() * item.price
+          item.priceForAmount = item.initialCost.compact()
+          item.price = this.$generalService.formatterPrice(item.price)
           this.data.sell.push(item)
         }
       }
       if (data.buy.length > 0) {
         for (let item of data.buy) {
-          item.priceForAmount = item.amount.compact() * item.price
+          // item.priceForAmount = item.amount.compact() * item.price
+          item.priceForAmount = item.initialCost.compact()
+          item.price = this.$generalService.formatterPrice(item.price)
           this.data.buy.push(item)
         }
       }
@@ -148,7 +152,7 @@ export default {
     }
   },
   beforeMount () {
-    console.log(this.offerSelected.tableData.info.mosaicInfo[0].idMosaic)
+    console.log(this.offerSelected)
 
     if (this.offerSelected) {
       this.propertiesMosaic = this.mosaicInfoProperties(

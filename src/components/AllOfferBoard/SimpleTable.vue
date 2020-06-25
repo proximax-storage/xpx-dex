@@ -7,6 +7,7 @@
             <tr style="border:0">
               <th style="border:0" class="text-left subtitle-1 font-weight-bold">Initial quantity</th>
               <th style="border:0" class="text-left subtitle-1 font-weight-bold">Quantity Available</th>
+              <!-- <th style="border:0" class="text-left subtitle-1 font-weight-bold">price</th> -->
               <th style="border:0" class="text-left subtitle-1 font-weight-bold">price (XPX)</th>
               <th style="border:0" class="text-left subtitle-1 font-weight-bold">Total (XPX)</th>
             </tr>
@@ -30,7 +31,9 @@
                   }}
                 </td>
                 <td class="pr-3 pl-3" style="border:0">
-                  {{  resultsOfferFilter[commentIndex].price
+                  {{ $generalService.amountFormatter(resultsOfferFilter[commentIndex].price,
+                  6
+                  )
                   }}
                 </td>
                 <td class="pr-3 pl-3" style="border:0 ">

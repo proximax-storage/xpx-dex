@@ -21,16 +21,19 @@
                     class="subtitle-1 pt-0 font-weight-regular text-left primary--text"
                   >My debit transaction</v-col>
                   <div class="ma-2 ml-7 mx-auto">
+                    <div class="caption font-italic font-weight-light mx-auto">BID Price</div>
+                    <div
+                      class="caption font-weight-black mx-auto"
+                    >{{ $generalService.amountFormatter(exchange.price, 6) }} pxp</div>
+                    <!-- <div class="caption font-weight-black mx-auto">{{ exchange.price }}</div> -->
+                  </div>
+                  <div class="ma-2 ml-7 mx-auto">
                     <div
                       class="caption font-italic font-weight-light"
                     >Quantity you will send to selle</div>
                     <div
                       class="caption font-weight-black"
                     >{{ $generalService.amountFormatter(form.priceForAmount, 6) }} XPX</div>
-                  </div>
-                  <div class="ma-2 ml-7 mx-auto">
-                    <div class="caption font-italic font-weight-light mx-auto">BID Price</div>
-                    <div class="caption font-weight-black mx-auto">{{ exchange.price }} pxp</div>
                   </div>
                 </v-row>
               </v-col>

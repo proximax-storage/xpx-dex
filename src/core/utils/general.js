@@ -133,6 +133,12 @@ function doCopy (itemName, text) {
   )
 }
 
+function formatterPrice (price) {
+  const priceFormatte = price.toString().split(',').join('').split('.').join('')
+
+  return Number(priceFormatte)
+}
+
 /**
  *
  *
@@ -298,6 +304,7 @@ export {
   buildMonitorHash,
   calculateDurationforDay,
   doCopy,
+  formatterPrice,
   getDataPart,
   quantityStringToInt,
   quantityStringToIntMath,
