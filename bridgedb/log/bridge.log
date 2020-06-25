@@ -1541,3 +1541,25 @@
 [32minfo[39m: [32m   >> socket user connected[39m
 [32minfo[39m: [32m   >> socket user disconnected'[39m
 [32minfo[39m: [32m   >> socket user connected[39m
+[32minfo[39m: [32m   >> Connecting to RethinkDB...[39m
+[32minfo[39m: [32m   >> listening on port 900[39m
+[32minfo[39m: [32m   >> Create strusture  RethinkDB...[39m
+[32minfo[39m: [32m   >> RethinkDB connected[39m
+[32minfo[39m: [32m   >> Created dataBase 'dexWallet'[39m
+[32minfo[39m: [32m        >> Created Table 'executeOffers'[39m
+[32minfo[39m: [32m        >> Created Table 'mosaicInfo'[39m
+[32minfo[39m: [32m   >> socket user connected[39m
+[32minfo[39m: [32m   >> socket user disconnected'[39m
+[32minfo[39m: [32m   >> socket user connected[39m
+[32minfo[39m: [32m   >> socket user disconnected'[39m
+[32minfo[39m: [32m   >> socket user connected[39m
+[32minfo[39m: [32m   >> socket user disconnected'[39m
+[32minfo[39m: [32m   >> socket user connected[39m
+[32minfo[39m: [32m   >> socket user disconnected'[39m
+[32minfo[39m: [32m   >> socket user connected[39m
+[32minfo[39m: [32m   >> socket user disconnected'[39m
+[32minfo[39m: [32m   >> socket user connected[39m
+[32minfo[39m: [32m   >> socket user disconnected'[39m
+[32minfo[39m: [32m   >> socket user connected[39m
+[32minfo[39m: [32m   >> socket user disconnected'[39m
+[32minfo[39m: [32m   >> socket user connected[39m

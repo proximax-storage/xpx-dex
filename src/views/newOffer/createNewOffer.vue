@@ -231,7 +231,7 @@
 
 <script>
 import { buildCurrentAccountInfo, decrypt } from '@/services/account-wallet-service'
-import { buildAddExchangeOffer } from '@/services/buildOffer-by-type-service'
+import { buildAddExchangeOffer, buildExchangeOffer } from '@/services/buildOffer-by-type-service'
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   data: () => {
@@ -360,6 +360,7 @@ export default {
               this.form.amount,
               this.configMoneyAsset.precision
             )
+            const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
             let returnBuild = null
             const offerMerching = this.filterMerching(
               this.offerAll,
@@ -367,22 +368,25 @@ export default {
               this.idHex,
               mosaicAmount
             )
-            console.log('offerMerching', offerMerching)
-            console.log('form.bidPric', this.$generalService.formatterPrice(this.form.bidPrice))
-            // if (offerMerching.length > 0) {
-            // } else {
-
-            console.log('mosaicAmount', mosaicAmount)
-            console.log(' this.form.priceForAmount', this.form.priceForAmount)
-            returnBuild = buildAddExchangeOffer(
-              this.idHex,
-              mosaicAmount,
-              this.form.priceForAmount,
-              this.typeOffer,
-              this.form.duration
-            )
-            // }
-
+            if (offerMerching.length > 0) {
+              const mosaicId = this.$blockchainProvider.getMosaicId(this.idHex)
+              const type = this.typeOffer === 0 ? 1 : 0
+              returnBuild = buildExchangeOffer(
+                mosaicId,
+                mosaicAmount,
+                costTotal,
+                type,
+                offerMerching[0].owner
+              )
+            } else {
+              returnBuild = buildAddExchangeOffer(
+                this.idHex,
+                mosaicAmount,
+                costTotal,
+                this.typeOffer,
+                this.form.duration
+              )
+            }
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
               const signedTransaction = this.$blockchainProvider.signedTransaction(
@@ -401,9 +405,6 @@ export default {
                 '',
                 returnBuild.dataRequired
               )
-
-              console.log('dataMonitorHash', dataMonitorHash)
-              // this.sendingForm = false
               //  ##########################################fin
               this.SET_MONITOR_HASH(dataMonitorHash)
               this.$blockchainProvider.announceTx(signedTransaction).subscribe(
@@ -446,9 +447,6 @@ export default {
       }
     },
     calcPrice (price, amount) {
-      console.log('PRICE', price)
-      console.log('AMOUNT', amount)
-      console.log(price / amount)
       return price / amount
     },
     changeAssetIdBuy (event) {
@@ -530,25 +528,17 @@ export default {
       return valor
     },
     filterMerching (data, type = null, mosaicMerge = null, mosaicAmount = null) {
-      console.log('allOffers', data)
       let offerts = []
-      console.log('data', data[0])
       const typeInvert = type === 0 ? 1 : 0
       const typeName = this.$generalService.verifyTypeOfferName(typeInvert)
-      console.log('typeName', typeName)
-      console.log('mosaicMerge', mosaicMerge)
-      console.log('mosaicAmount', mosaicAmount)
-      const bidPrice = this.$generalService.formatterPrice(this.form.bidPrice)
       if (data[0]) {
         offerts = data[0].allOffers[typeName.toLowerCase()].filter(
           x =>
             x.mosaicId.toHex() === mosaicMerge &&
             x.amount.compact() >= mosaicAmount &&
-            bidPrice === this.$generalService.formatterPrice(x.price)
+            this.form.bidPrice === this.$generalService.formatterPrice(x.price)
         )
       }
-
-      console.log('offerts', offerts)
       return offerts
     },
     typeOfferColorFuc (type) {
@@ -579,7 +569,7 @@ export default {
       this.$refs.amountF.$el.getElementsByTagName('input')[0].value = ''
       this.$refs.totalCostF.$el.getElementsByTagName('input')[0].value = ''
       this.$refs.form.reset('assest')
-      this.form.priceForAmount = 0
+      this.form.totalCost = 0
     },
     validateTxHash (transactions) {
       this.sendingForm = false
