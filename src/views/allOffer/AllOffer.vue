@@ -118,7 +118,7 @@ export default {
         for (let item of data.sell) {
           // item.priceForAmount = item.amount.compact() * item.price
           item.priceForAmount = item.initialCost.compact()
-          item.price = this.$generalService.formatterPrice(item.price)
+          // item.price = this.$generalService.formatterPrice(item.price)
           this.data.sell.push(item)
         }
       }
@@ -126,7 +126,7 @@ export default {
         for (let item of data.buy) {
           // item.priceForAmount = item.amount.compact() * item.price
           item.priceForAmount = item.initialCost.compact()
-          item.price = this.$generalService.formatterPrice(item.price)
+          // item.price = this.$generalService.formatterPrice(item.price)
           this.data.buy.push(item)
         }
       }

@@ -193,36 +193,6 @@ export default {
               this.type,
               this.exchange.owner
             )
-            // const exchangeOffer = this.$blockchainProvider.exchangeOffer(
-            //   this.exchange.mosaicId,
-            //   mosaicAmount,
-            //   this.form.priceForAmount,
-            //   this.type,
-            //   this.exchange.owner
-            // )
-            // this.exchangeOfferDb = this.$blockchainProvider.exchangeOfferDb(
-            //   this.exchange.mosaicId,
-            //   mosaicAmount,
-            //   this.form.priceForAmount,
-            //   this.type,
-            //   this.exchange.owner
-            // )
-
-            // const dataRequired = {
-            //   dataRequiredDb: this.exchangeOfferDb,
-            //   dataRequiredMosaic: {
-            //     moisaicsInfo: [
-            //       {
-            //         mosaicId: this.exchange.mosaicId,
-            //         mosaicIdHex: this.exchange.mosaicId.toHex()
-            //       }
-            //     ],
-            //     dataOffer: {
-            //       type: this.type,
-            //       mosaicIdHex: this.exchange.mosaicId.toHex()
-            //     }
-            //   }
-            // }
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
               const signedTransaction = this.$blockchainProvider.signedTransaction(
@@ -240,7 +210,6 @@ export default {
                 returnBuild.dataRequired
               )
               this.SET_MONITOR_HASH(dataMonitorHash)
-              console.log('SET_MONITOR_HASH', dataMonitorHash)
               this.$blockchainProvider.announceTx(signedTransaction).subscribe(
                 x => {},
                 err => {
@@ -263,7 +232,9 @@ export default {
       // this.$refs['password'].reset()
     },
     calcPrice (price, amount) {
-      return amount * price
+      const power = Math.pow(10, 6)
+      const value = Math.round(price * power) / power
+      return Math.ceil(value * amount)
     },
     validateQuantityAmount () {
       let amount = null
@@ -277,6 +248,8 @@ export default {
         this.dataAssets.configMoney.precision
       )
       this.form.priceForAmount = this.calcPrice(this.exchange.price, amountValue)
+      // console.log(this.form.priceForAmount)
+      console.log('this.form.priceForAmount', this.form.priceForAmount)
       const amountx = this.exchange.amount.compact()
       if (amountValue !== 0) {
         if (amountValue <= amountx) {

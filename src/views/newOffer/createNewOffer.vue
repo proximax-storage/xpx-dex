@@ -447,6 +447,7 @@ export default {
       }
     },
     calcPrice (price, amount) {
+      console.log(`PRINCE: ${price} / AMOUNT: ${amount}`)
       return price / amount
     },
     changeAssetIdBuy (event) {
@@ -503,6 +504,8 @@ export default {
         this.configMoneyAsset.precision
       )
       this.form.bidPrice = this.calcPrice(costTotal, mosaicAmount)
+      console.log('this.form.bidPrice', this.form.bidPrice)
+      console.log('multilicar :', mosaicAmount * this.form.bidPrice)
       if (amount === 0) {
         return 'Cannot enter amount zero'
       } else {
