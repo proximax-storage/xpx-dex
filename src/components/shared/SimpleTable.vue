@@ -25,7 +25,13 @@
               <template v-if="commentIndex < dataTable.length">
                 <template v-for="i in Object.keys( dataTable[commentIndex])">
                   <!-- {{i}} -->
-                  <td v-if="i !== 'exchange'" class="pr-3" style="border:0" :key="i" v-html="dataTable[commentIndex][i]"></td>
+                  <td
+                    v-if="i !== 'exchange'"
+                    class="pr-3"
+                    style="border:0"
+                    :key="i"
+                    v-html="dataTable[commentIndex][i]"
+                  ></td>
                 </template>
 
                 <td class="pr-3" style="border:0">
@@ -94,6 +100,8 @@ export default {
         return 'pin'
       } else if (type === 'delete') {
         return 'error'
+      } else if (type === 'take this offer') {
+        return 'primary'
       }
     }
   }

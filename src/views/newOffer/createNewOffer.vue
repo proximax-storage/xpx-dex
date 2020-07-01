@@ -10,7 +10,17 @@
     <!-- mosaicInfo -->
     <v-row>
       <v-col sm="7" md="7" lg="9" col="9" class="pt-0">
-        <template v-if="!dataTxOfferInfo">
+        <template v-if="isMerchingoffer">
+          <merching-offert
+            :offerMerching="offerMerching"
+            :divisibility="configMoneyAsset.precision"
+            :nameMosaic="nameMosaic"
+            :dataOffertActual="dataOffertActual"
+            @actionMerching="actionMerching"
+            :typeOfferColor="typeOfferColor"
+          />
+        </template>
+        <template v-if="!dataTxOfferInfo && !isMerchingoffer">
           <v-divider class="pb-2"></v-divider>
 
           <v-row>
@@ -59,6 +69,7 @@
                     ></v-select>
                   </template>
                   <template v-if="type === 'sell'">
+                    {{assetsSell}}
                     <v-select
                       class="pt-1"
                       v-model="form.asset"
@@ -216,7 +227,7 @@
             :txOfferInfo="dataTxOfferInfo"
           ></congratulations-offer>
         </template>
-        <v-row v-if="!dataTxOfferInfo">
+        <v-row v-if="!dataTxOfferInfo && !isMerchingoffer">
           <v-col cols="5" class="ma-0 mx-auto caption d-flex justify-center align-center">
             <custom-button @action="action" :align="'center'" :arrayBtn="getArrayBtn"></custom-button>
           </v-col>
@@ -248,6 +259,9 @@ export default {
         }
       ],
       dataTxOfferInfo: null,
+      dataOffertActual: null,
+      offerMerching: [],
+      nameMosaic: null,
       typeOfferColorText: 'dim--text',
       form: {
         asset: null,
@@ -267,6 +281,7 @@ export default {
       isValidateDuration: true,
       isValidateBalance: null,
       isValidateAssets: true,
+      isMerchingoffer: false,
       balanceAssets: 0,
       configDuration: null,
       duration: 0,
@@ -280,14 +295,15 @@ export default {
   components: {
     'congratulations-offer': () => import('@/components/shared/CongratulationsOffer'),
     'custom-button': () => import('@/components/shared/Buttons'),
-    'card-assets-market': () => import('@/components/shared/CardAssetsMarket')
+    'card-assets-market': () => import('@/components/shared/CardAssetsMarket'),
+    'merching-offert': () => import('@/components/newOffer/MerchingOffer')
   },
   beforeMount () {
     this.mountBuildCurrentAccountInfo(this.type)
     this.typeOfferColorFuc(this.type)
     this.configForm = {
       assets: this.$configForm.amount('Asset'),
-      amount: this.$configForm.amount(),
+      amount: this.$configForm.amount('Amount you will send '),
       totalCost: this.$configForm.amount('Total cost (XPX)'),
       durationOffer: this.$configForm.namespace('Duration (number of days)'),
       password: this.$configForm.password()
@@ -356,98 +372,93 @@ export default {
       switch (action) {
         case 'place':
           if (this.valid && !this.sendingForm) {
-            const mosaicAmount = this.$generalService.quantityStringToInt(
-              this.form.amount,
-              this.configMoneyAsset.precision
-            )
-            const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
-            let returnBuild = null
-            const offerMerching = this.filterMerching(
-              this.offerAll,
-              this.typeOffer,
-              this.idHex,
-              mosaicAmount
-            )
-            if (offerMerching.length > 0) {
-              const mosaicId = this.$blockchainProvider.getMosaicId(this.idHex)
-              const type = this.typeOffer === 0 ? 1 : 0
-              returnBuild = buildExchangeOffer(
-                mosaicId,
-                mosaicAmount,
-                costTotal,
-                type,
-                offerMerching[0].owner
-              )
-            } else {
-              returnBuild = buildAddExchangeOffer(
-                this.idHex,
-                mosaicAmount,
-                costTotal,
-                this.typeOffer,
-                this.form.duration
-              )
-            }
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
-              const signedTransaction = this.$blockchainProvider.signedTransaction(
-                common.privateKey,
-                returnBuild.transaction,
-                this.currentAccount.simpleWallet.network
-              )
-
-              this.hash = signedTransaction.hash
-              this.sendingForm = true
               common = null
-              this.clear()
-              const dataMonitorHash = this.$generalService.buildMonitorHash(
-                returnBuild.action,
-                signedTransaction.hash,
-                '',
-                returnBuild.dataRequired
+              const mosaicAmount = this.$generalService.quantityStringToInt(
+                this.form.amount,
+                this.configMoneyAsset.precision
               )
-              //  ##########################################fin
-              this.SET_MONITOR_HASH(dataMonitorHash)
-              this.$blockchainProvider.announceTx(signedTransaction).subscribe(
-                response => console.log(response),
-                error => {
-                  console.error(error)
-                  this.sendingForm = false
-                  this.REMOVE_MONITOR_HASH(dataMonitorHash)
+              const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
+              let returnBuild = null
+              this.offerMerching = this.filterMerching(
+                this.offerAll,
+                this.typeOffer,
+                this.idHex,
+                mosaicAmount
+              )
+              console.log('offerMerching::', this.offerMerching)
+              console.log(buildExchangeOffer)
+              if (this.offerMerching.length > 0) {
+                this.isMerchingoffer = true
+                this.dataOffertActual = {
+                  amount: mosaicAmount,
+                  costTotal: costTotal,
+                  bidPrice: this.form.bidPrice
                 }
-              )
+                //   const mosaicId = this.$blockchainProvider.getMosaicId(this.idHex)
+                //   const type = this.typeOffer === 0 ? 1 : 0
+                //   returnBuild = buildExchangeOffer(
+                //     mosaicId,
+                //     mosaicAmount,
+                //     costTotal,
+                //     type,
+                //     offerMerching[0].owner
+                //   )
+              } else {
+                returnBuild = buildAddExchangeOffer(
+                  this.idHex,
+                  mosaicAmount,
+                  costTotal,
+                  this.typeOffer,
+                  this.form.duration
+                )
+                this.announceTx(returnBuild)
+              }
             }
           }
       }
     },
-    clear () {
-      this.$refs.form.reset('password')
+    actionMerching (data) {
+      console.log('exchange actionMerching::', data)
     },
-    validateBalanceXpx (amount) {
-      this.isValidateBalance = amount > this.balanceCurrentAccount ? 'Insufficient balance' : null
-    },
-    validateBalanceAssets (amount) {
-      this.isValidateAssets =
-        this.$generalService.quantityStringToInt(amount, this.configMoneyAsset.precision) >
-        this.balanceAssets
-          ? 'Insufficient balance for this asset'
-          : true
-    },
-    validateDuration (e) {
-      const value = e.target.value
-      let duration = null
-      duration = Number(value)
-      if (duration !== 0) {
-        if (duration <= 1) {
-          return true
-        } else {
-          return 'You cannot enter the duration greater than 1 '
-        }
-      } else {
-        return 'Cannot enter duration zero'
-      }
+    announceTx (buildTx) {
+      let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
+      buildTx.transaction.version = 3
+      console.log('transactions,', buildTx.transaction)
+      // let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
+      // if (common) {
+      const signedTransaction = this.$blockchainProvider.signedTransaction(
+        common.privateKey,
+        buildTx.transaction,
+        this.currentAccount.simpleWallet.network
+      )
+
+      this.hash = signedTransaction.hash
+      this.sendingForm = true
+      common = null
+      this.clear()
+      const dataMonitorHash = this.$generalService.buildMonitorHash(
+        buildTx.action,
+        signedTransaction.hash,
+        '',
+        buildTx.dataRequired
+      )
+      //  ##########################################fin
+      this.sendingForm = false
+      console.log('dataMonitorHash', dataMonitorHash)
+      // this.SET_MONITOR_HASH(dataMonitorHash)
+      // this.$blockchainProvider.announceTx(signedTransaction).subscribe(
+      //   response => console.log(response),
+      //   error => {
+      //     console.error(error)
+      //     this.sendingForm = false
+      //     this.REMOVE_MONITOR_HASH(dataMonitorHash)
+      //   }
+      // )
+      // }
     },
     calcPrice (price, amount) {
-      console.log(`PRINCE: ${price} / AMOUNT: ${amount}`)
       return price / amount
     },
     changeAssetIdBuy (event) {
@@ -455,6 +466,11 @@ export default {
       this.idHex = event
       if (this.idHex) {
         const data = this.mosaicsInfOfferFromIdHex(this.idHex)
+        if (data) {
+          this.nameMosaic = data[0].text
+        } else {
+          this.nameMosaic = null
+        }
         const divisibility = data[0].mosaicInfo
           ? data[0].mosaicInfo[0].mosaicInfo.properties.divisibility
           : null
@@ -465,10 +481,13 @@ export default {
       this.clearForm()
       this.idHex = event
       const mosaic = this.mosaicBuild.find(item => item.mosaicIdHex === this.idHex)
+      console.log('data', mosaic.balanceValidate)
       if (mosaic) {
+        this.nameMosaic = mosaic.nameMosaic
         this.balanceAssets = mosaic.balanceValidate
         this.configMoneyAsset = mosaic.config
       } else {
+        this.nameMosaic = null
         this.configMoneyAsset = this.$configForm.getConfigMoney()
       }
     },
@@ -484,33 +503,17 @@ export default {
         ? this.$configForm.getConfigMoney('.', ',', '', '', divisibility, false)
         : this.$configForm.getConfigMoney()
     },
-    validateQuantity (e) {
-      let amount = null
-      const amountValue = e.target.value
-      try {
-        amount = parseFloat(amountValue.split(',').join(''))
-      } catch (error) {
-        amount = Number(amountValue)
-      }
-      const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
-      if (this.type === 'sell') {
-        if (e.target.name === 'amountF') this.validateBalanceAssets(amount)
-      } else {
-        this.validateBalanceXpx(costTotal)
-      }
-
-      const mosaicAmount = this.$generalService.quantityStringToInt(
-        this.form.amount,
-        this.configMoneyAsset.precision
-      )
-      this.form.bidPrice = this.calcPrice(costTotal, mosaicAmount)
-      console.log('this.form.bidPrice', this.form.bidPrice)
-      console.log('multilicar :', mosaicAmount * this.form.bidPrice)
-      if (amount === 0) {
-        return 'Cannot enter amount zero'
-      } else {
-        return true
-      }
+    clearForm () {
+      this.isValidateAssets = true
+      this.isValidateBalance = null
+      this.isValidateQuantityTotalCost = false
+      this.$refs.amountF.$el.getElementsByTagName('input')[0].value = ''
+      this.$refs.totalCostF.$el.getElementsByTagName('input')[0].value = ''
+      this.$refs.form.reset('assest')
+      this.form.totalCost = 0
+    },
+    clear () {
+      this.$refs.form.reset('password')
     },
     filtersAssets (data) {
       let valor = []
@@ -565,14 +568,55 @@ export default {
         buildCurrentAccountInfo(accountFiltered.accountInfo)
       }
     },
-    clearForm () {
-      this.isValidateAssets = true
-      this.isValidateBalance = null
-      this.isValidateQuantityTotalCost = false
-      this.$refs.amountF.$el.getElementsByTagName('input')[0].value = ''
-      this.$refs.totalCostF.$el.getElementsByTagName('input')[0].value = ''
-      this.$refs.form.reset('assest')
-      this.form.totalCost = 0
+    validateBalanceXpx (amount) {
+      this.isValidateBalance = amount > this.balanceCurrentAccount ? 'Insufficient balance' : null
+    },
+    validateBalanceAssets (amount) {
+      this.isValidateAssets =
+        this.$generalService.quantityStringToInt(amount, this.configMoneyAsset.precision) >
+        this.balanceAssets
+          ? 'Insufficient balance for this asset'
+          : true
+    },
+    validateDuration (e) {
+      const value = e.target.value
+      let duration = null
+      duration = Number(value)
+      if (duration !== 0) {
+        if (duration <= 2) {
+          return true
+        } else {
+          return 'You cannot enter the duration greater than 2 '
+        }
+      } else {
+        return 'Cannot enter duration zero'
+      }
+    },
+    validateQuantity (e) {
+      let amount = null
+      const amountValue = e.target.value
+      try {
+        amount = parseFloat(amountValue.split(',').join(''))
+      } catch (error) {
+        amount = Number(amountValue)
+      }
+      const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
+      if (this.type === 'sell') {
+        if (e.target.name === 'amountF') this.validateBalanceAssets(amount)
+      } else {
+        this.validateBalanceXpx(costTotal)
+      }
+
+      const mosaicAmount = this.$generalService.quantityStringToInt(
+        this.form.amount,
+        this.configMoneyAsset.precision
+      )
+      this.form.bidPrice = this.calcPrice(costTotal, mosaicAmount)
+      if (amount === 0) {
+        return 'Cannot enter amount zero'
+      } else {
+        return true
+      }
     },
     validateTxHash (transactions) {
       this.sendingForm = false

@@ -78,6 +78,7 @@ async function buildCurrentAccountInfo (accountInfo) {
             const nameMosaic = mosaic.mosaicNames.names.length > 0 ? mosaic.mosaicNames.names[0].name : mosaicId
             mosaicsSelect.push({
               text: `${nameMosaic}${nameExpired} > Balance: ${amount}`,
+              nameMosaic: nameMosaic,
               mosaic: mosaic.idMosaic,
               mosaicIdHex: idMosaic,
               balance: amount,

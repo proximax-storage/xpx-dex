@@ -94,7 +94,7 @@ export const accountStore = {
       state.dataUser.name = name
     },
     SET_BUILD_CURRENT_ACCOUNT_MOSAIC (state, data) {
-      console.log('\n\n SET_BUILD_CURRENT_ACCOUNT_MOSAIC \n', data)
+      // console.log('\n\n SET_BUILD_CURRENT_ACCOUNT_MOSAIC \n', data)
       state.mosaicBuild = data
     }
   },
