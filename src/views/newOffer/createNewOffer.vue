@@ -17,7 +17,9 @@
             :nameMosaic="nameMosaic"
             :dataOffertActual="dataOffertActual"
             @actionMerching="actionMerching"
+            @continueOffer="continueOffer"
             :typeOfferColor="typeOfferColor"
+            :continueLoading="continueLoading"
           />
         </template>
         <template v-if="!dataTxOfferInfo && !isMerchingoffer">
@@ -342,6 +344,9 @@ export default {
         this.$store.commit('mosaicExchange/SET_DATA_ASSETS', { form: { active: newtType } })
       }
     },
+    continueLoading () {
+      return this.sendingForm
+    },
     getArrayBtn () {
       const arrayBtn = this.arrayBtn
       arrayBtn['place'].disabled = !this.valid || !this.form.checkbox || this.isValidateBalance
@@ -387,8 +392,6 @@ export default {
                 this.idHex,
                 mosaicAmount
               )
-              console.log('offerMerching::', this.offerMerching)
-              console.log(buildExchangeOffer)
               if (this.offerMerching.length > 0) {
                 this.isMerchingoffer = true
                 this.dataOffertActual = {
@@ -396,15 +399,6 @@ export default {
                   costTotal: costTotal,
                   bidPrice: this.form.bidPrice
                 }
-                //   const mosaicId = this.$blockchainProvider.getMosaicId(this.idHex)
-                //   const type = this.typeOffer === 0 ? 1 : 0
-                //   returnBuild = buildExchangeOffer(
-                //     mosaicId,
-                //     mosaicAmount,
-                //     costTotal,
-                //     type,
-                //     offerMerching[0].owner
-                //   )
               } else {
                 returnBuild = buildAddExchangeOffer(
                   this.idHex,
@@ -413,21 +407,28 @@ export default {
                   this.typeOffer,
                   this.form.duration
                 )
-                this.announceTx(returnBuild)
+                this.announceTx(returnBuild, true)
               }
             }
           }
       }
     },
     actionMerching (data) {
-      console.log('exchange actionMerching::', data)
+      if (!this.sendingForm) {
+        const mosaicAmount = this.$generalService.quantityStringToInt(
+          this.form.amount,
+          this.configMoneyAsset.precision
+        )
+        const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
+        const mosaicId = this.$blockchainProvider.getMosaicId(this.idHex)
+        const type = this.typeOffer === 0 ? 1 : 0
+        const returnBuild = buildExchangeOffer(mosaicId, mosaicAmount, costTotal, type, data.owner)
+        this.announceTx(returnBuild)
+      }
     },
-    announceTx (buildTx) {
+    announceTx (buildTx, clear = false) {
       let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
-      buildTx.transaction.version = 3
-      console.log('transactions,', buildTx.transaction)
-      // let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
-      // if (common) {
+      // buildTx.transaction.version = 3
       const signedTransaction = this.$blockchainProvider.signedTransaction(
         common.privateKey,
         buildTx.transaction,
@@ -437,26 +438,23 @@ export default {
       this.hash = signedTransaction.hash
       this.sendingForm = true
       common = null
-      this.clear()
+      if (clear) this.clear()
       const dataMonitorHash = this.$generalService.buildMonitorHash(
         buildTx.action,
         signedTransaction.hash,
         '',
         buildTx.dataRequired
       )
-      //  ##########################################fin
-      this.sendingForm = false
-      console.log('dataMonitorHash', dataMonitorHash)
-      // this.SET_MONITOR_HASH(dataMonitorHash)
-      // this.$blockchainProvider.announceTx(signedTransaction).subscribe(
-      //   response => console.log(response),
-      //   error => {
-      //     console.error(error)
-      //     this.sendingForm = false
-      //     this.REMOVE_MONITOR_HASH(dataMonitorHash)
-      //   }
-      // )
-      // }
+      // this.sendingForm = false
+      this.SET_MONITOR_HASH(dataMonitorHash)
+      this.$blockchainProvider.announceTx(signedTransaction).subscribe(
+        response => console.log(response),
+        error => {
+          console.error(error)
+          this.sendingForm = false
+          this.REMOVE_MONITOR_HASH(dataMonitorHash)
+        }
+      )
     },
     calcPrice (price, amount) {
       return price / amount
@@ -481,7 +479,6 @@ export default {
       this.clearForm()
       this.idHex = event
       const mosaic = this.mosaicBuild.find(item => item.mosaicIdHex === this.idHex)
-      console.log('data', mosaic.balanceValidate)
       if (mosaic) {
         this.nameMosaic = mosaic.nameMosaic
         this.balanceAssets = mosaic.balanceValidate
@@ -502,6 +499,23 @@ export default {
       this.configMoneyAsset = divisibility
         ? this.$configForm.getConfigMoney('.', ',', '', '', divisibility, false)
         : this.$configForm.getConfigMoney()
+    },
+    continueOffer () {
+      if (!this.sendingForm) {
+        const mosaicAmount = this.$generalService.quantityStringToInt(
+          this.form.amount,
+          this.configMoneyAsset.precision
+        )
+        const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
+        const returnBuild = buildAddExchangeOffer(
+          this.idHex,
+          mosaicAmount,
+          costTotal,
+          this.typeOffer,
+          this.form.duration
+        )
+        this.announceTx(returnBuild)
+      }
     },
     clearForm () {
       this.isValidateAssets = true
@@ -622,6 +636,7 @@ export default {
       this.sendingForm = false
       if (this.hash) {
         if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hash)) {
+          this.isMerchingoffer = false
           this.dataTxOfferInfo = { hash: this.hash }
           this.hash = null
         }

@@ -34,6 +34,17 @@
     </v-row>
     <v-row>
       <v-col cols="12">
+        <!-- <v-row>
+        <v-col cols="12">-->
+
+        <!-- </v-col>
+        </v-row>-->
+        <v-progress-linear
+          color="primary"
+          :active="continueLoading"
+          :indeterminate="continueLoading"
+          class="ml-2"
+        ></v-progress-linear>
         <div>
           <simple-table
             :dataTh="dataTh"
@@ -103,7 +114,14 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  props: ['offerMerching', 'divisibility', 'nameMosaic', 'dataOffertActual', 'typeOfferColor'],
+  props: [
+    'offerMerching',
+    'divisibility',
+    'nameMosaic',
+    'dataOffertActual',
+    'typeOfferColor',
+    'continueLoading'
+  ],
   data () {
     return {
       arrayBtn: null,
@@ -123,18 +141,18 @@ export default {
     },
     getArrayBtn () {
       const arrayBtn = this.arrayBtn
-      console.log('arrayBtn', arrayBtn)
+      arrayBtn['continue'].disabled = this.continueLoading
+      arrayBtn['continue'].loading = this.continueLoading
       arrayBtn['continue'].color = this.typeOfferColor === null ? 'white' : this.typeOfferColor
       return arrayBtn
     }
   },
   methods: {
     action (data) {
-      console.log('exchange::', data.exchange)
       this.$emit('actionMerching', data.exchange)
     },
     actionBtn (data) {
-      console.log('data::', data)
+      this.$emit('continueOffer', data.exchange)
     },
     buildData (data = []) {
       const dataMap = data
@@ -150,7 +168,6 @@ export default {
           )
           const initialCost = this.$generalService.amountFormatter(f.initialCost.compact(), 6)
           const price = this.$generalService.amountFormatter(f.price, 6)
-
           return {
             initialQuantity: initialQuantity,
             quantityAvailable: quantityAvailable,

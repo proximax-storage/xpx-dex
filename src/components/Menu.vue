@@ -45,7 +45,6 @@
               right
               offset-y
               max-width="200"
-              z-index="0"
             >
               <template v-slot:activator="{ on }" v-if="item.type === 'menuIcon'">
                 <v-btn text small color="primary" v-on="on">
