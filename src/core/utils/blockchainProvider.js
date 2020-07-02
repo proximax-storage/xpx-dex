@@ -414,8 +414,9 @@ function getIncomingTransactions (publicAccount, queryParams = 100) {
  * @param queryParams - (Optional) Query params
  * @returns Observable<Transaction[]>
  */
-function outgoingTransactions (publicAccount, queryParams) {
-  return connection.accountHttp.outgoingTransactions(publicAccount, queryParams)
+function getOutgoingTransactions (publicAccount, id = null, queryParams = 100) {
+  const query = (id) ? new QueryParams(queryParams, id) : new QueryParams(queryParams)
+  return connection.accountHttp.outgoingTransactions(publicAccount, query)
 }
 
 /**
@@ -721,5 +722,5 @@ export {
   typeTransactions,
   dateFormatUTC,
   signedTransaction,
-  outgoingTransactions
+  getOutgoingTransactions
 }

@@ -60,6 +60,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import { validateExpireOffer } from '@/services/offert-service'
 export default {
   data: () => {
     return {
@@ -140,7 +141,10 @@ export default {
         this.$router.push({ path: '/login' })
       }
     },
-    sendOffer (value) {
+    async sendOffer (value) {
+      const val = await validateExpireOffer(value)
+      console.log('validateExpireOffer', val)
+      if (!val) return console.log('offer expire')
       this.dataAssets.form.active = this.form.active
       this.$store.commit('mosaicExchange/SET_EXCHANGE', value)
       this.$store.commit('mosaicExchange/SET_DATA_ASSETS', this.dataAssets)

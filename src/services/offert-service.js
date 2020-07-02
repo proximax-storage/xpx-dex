@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import store from '@/store'
+import {
+  TransactionType
+} from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/TransactionType'
 /**
  *
  * @param {*} items
@@ -88,8 +91,46 @@ function filtersAssetsFunc (data) {
   }
   return valor
 }
+/**
+ *
+ * @param {*} data
+ */
+async function validateExpireOffer (data) {
+  console.log('dataaa', data)
+  try {
+    const tx = await Vue.prototype.$blockchainProvider.getOutgoingTransactions(data.owner).toPromise()
+    const txFilter = filterTxOfferForType(TransactionType.ADD_EXCHANGE_OFFER, tx)
+    let pushTx = []
+    console.log('txFilter.offers', txFilter)
+    for (let x of txFilter) {
+      let offertTx = x.offers.filter(l =>
+        l.mosaicId.toHex() === data.mosaicId.toHex() &&
+        l.cost.compact() === data.initialCost.compact() &&
+        l.mosaicAmount.compact() === data.initialAmount.compact())
+      if (offertTx.length > 0) { pushTx.push(x) }
+    }
+    console.log('pushTx', pushTx)
+
+    // const txFilterFordata = txFilter.offers.filter(l => l.mosaicId.toHex() === data.mosaicId.toHex())
+    // console.log('txFilterFordata', txFilterFordata)
+  } catch (error) {
+    console.error('----Search namespaces from accoun ts error----', error)
+  }
+  console.log('offer::', data)
+  return true
+}
+/**
+ *
+ * @param {*} type
+ */
+function filterTxOfferForType (type, tx = []) {
+  const txs = tx.filter(x => x.type === type)
+  return txs
+}
 
 export {
   getAllOffer,
-  filtersAssetsFunc
+  filtersAssetsFunc,
+  validateExpireOffer
+
 }

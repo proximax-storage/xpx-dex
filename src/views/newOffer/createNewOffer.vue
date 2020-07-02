@@ -71,7 +71,6 @@
                     ></v-select>
                   </template>
                   <template v-if="type === 'sell'">
-                    {{assetsSell}}
                     <v-select
                       class="pt-1"
                       v-model="form.asset"
@@ -428,7 +427,7 @@ export default {
     },
     announceTx (buildTx, clear = false) {
       let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
-      // buildTx.transaction.version = 3
+      buildTx.transaction.version = 3
       const signedTransaction = this.$blockchainProvider.signedTransaction(
         common.privateKey,
         buildTx.transaction,
