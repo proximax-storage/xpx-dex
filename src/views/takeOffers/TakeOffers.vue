@@ -73,6 +73,11 @@
                   </div>
                 </v-row>
               </v-col>
+              <v-col cols="12" class="caption font-italic font-weight-light">
+                <!-- <div > -->
+                  <span class="font-weight-black">Offer expire in : </span>{{expireOffer}}
+                  <!-- </div> -->
+              </v-col>
             </v-row>
             <v-row>
               <v-col cols="10" class="mx-auto caption d-flex justify-center align-center">
@@ -138,6 +143,7 @@ export default {
       priceForAmount: null,
       password: null
     },
+    expireForm: null,
     dataTxOfferInfo: null,
     sendingForm: false,
     inputStyle: 'inputStyle',
@@ -161,6 +167,9 @@ export default {
   },
 
   beforeMount () {
+    if (this.expire.expireInitial) {
+      this.expireForm = this.$generalService.calculateDurationExpire(this.expire.expireInitial)
+    }
     if (this.dataAssets) {
       this.typeOfferColorFuc(this.dataAssets.form.active)
       this.form.amount = this.exchange.amount.compact()
@@ -236,6 +245,11 @@ export default {
       const value = Math.round(price * power) / power
       return Math.ceil(value * amount)
     },
+    calcExpire (block) {
+      const rest = block - this.expire.blockHeight
+      const expireIn = this.expire.duration - rest
+      this.expireForm = this.$generalService.calculateDurationExpire(expireIn)
+    },
     validateQuantityAmount () {
       let amount = null
       try {
@@ -301,12 +315,16 @@ export default {
     },
     status (hashs) {
       this.sendingForm = false
+    },
+    currentBlock (newBlock) {
+      this.calcExpire(newBlock)
     }
   },
   computed: {
     ...mapGetters('socketDbStore', ['mosaicsInfOfferFromIdHex']),
-    ...mapGetters('mosaicExchange', ['exchange', 'dataAssets']),
+    ...mapGetters('mosaicExchange', ['exchange', 'dataAssets', 'expire']),
     ...mapGetters('transactionsStore', ['confirmed', 'unconfirmedAdded', 'status']),
+    ...mapGetters('nodeStore', ['currentBlock']),
     ...mapState('accountStore', ['currentAccount', 'accountInfoByNameAccount']),
     nameMosaicInfo () {
       let nameMosaic = null
@@ -318,6 +336,11 @@ export default {
       arrayBtn['place'].disabled = !this.valid
       arrayBtn['place'].loading = this.sendingForm
       return arrayBtn
+    },
+    expireOffer: {
+      get: function () {
+        return this.expireForm
+      }
     }
   }
 }

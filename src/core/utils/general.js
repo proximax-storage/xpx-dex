@@ -107,6 +107,21 @@ function buildTableHeader (text, value, sortable = false) {
 function calculateDurationforDay (duration) {
   return duration * 5760
 }
+/**
+ *  Calculate Expire tx
+ * @param {*} durationCompact
+ */
+function calculateDurationExpire (durationCompact) {
+  let seconds = durationCompact * 15
+  let days = Math.floor(seconds / (3600 * 24))
+  seconds -= days * 3600 * 24
+  let hrs = Math.floor(seconds / 3600)
+  seconds -= hrs * 3600
+  let mnts = Math.floor(seconds / 60)
+  seconds -= mnts * 60
+  const response = days + ' days, ' + hrs + ' Hrs, ' + mnts + ' Minutes, ' + seconds + ' Seconds'
+  return response
+}
 
 /**
  *
@@ -303,6 +318,7 @@ export {
   buildTableHeader,
   buildMonitorHash,
   calculateDurationforDay,
+  calculateDurationExpire,
   doCopy,
   formatterPrice,
   getDataPart,

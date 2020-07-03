@@ -95,28 +95,32 @@ function filtersAssetsFunc (data) {
  *
  * @param {*} data
  */
-async function validateExpireOffer (data) {
-  console.log('dataaa', data)
+async function validateExpireOffer (data, typeOffer) {
+  console.log('dataaasss', data)
   try {
     const tx = await Vue.prototype.$blockchainProvider.getOutgoingTransactions(data.owner).toPromise()
     const txFilter = filterTxOfferForType(TransactionType.ADD_EXCHANGE_OFFER, tx)
-    let pushTx = []
-    console.log('txFilter.offers', txFilter)
-    for (let x of txFilter) {
-      let offertTx = x.offers.filter(l =>
-        l.mosaicId.toHex() === data.mosaicId.toHex() &&
-        l.cost.compact() === data.initialCost.compact() &&
-        l.mosaicAmount.compact() === data.initialAmount.compact())
-      if (offertTx.length > 0) { pushTx.push(x) }
+    const pushTx = filterTxOffer(txFilter, data, typeOffer)
+    const block = store.getters['nodeStore/currentBlock']
+    const offer = findOffer(pushTx, data, typeOffer)
+    const blockHeight = pushTx[0].transactionInfo.height.compact()
+    let dataRet = null
+    for (let index = 0; index < offer.length; index++) {
+      const element = offer[index]
+      const rest = block - blockHeight
+      const expireIn = element.duration.compact() - rest
+      if (rest >= element.duration.compact()) {
+        dataRet = { expire: true, infoExpire: 0 }
+        break
+      } else {
+        dataRet = { expire: false, infoExpire: { expireInitial: expireIn, blockHeight: blockHeight, duration: element.duration.compact() } }
+      }
     }
-    console.log('pushTx', pushTx)
-
-    // const txFilterFordata = txFilter.offers.filter(l => l.mosaicId.toHex() === data.mosaicId.toHex())
-    // console.log('txFilterFordata', txFilterFordata)
+    return dataRet
   } catch (error) {
     console.error('----Search namespaces from accoun ts error----', error)
   }
-  console.log('offer::', data)
+  console.log('offer::ssss', data)
   return true
 }
 /**
@@ -127,7 +131,45 @@ function filterTxOfferForType (type, tx = []) {
   const txs = tx.filter(x => x.type === type)
   return txs
 }
-
+/**
+ *
+ * @param {*} tx
+ * @param {*} txCompare
+ */
+function filterTxOffer (tx, txCompare, typeOffer) {
+  let pushTx = []
+  for (let x of tx) {
+    let offertTx = x.offers.filter(l =>
+      l.mosaicId.toHex() === txCompare.mosaicId.toHex() &&
+      l.cost.compact() === txCompare.initialCost.compact() &&
+      l.mosaicAmount.compact() === txCompare.initialAmount.compact() &&
+      l.type === typeOffer)
+    if (offertTx.length > 0) {
+      pushTx.push(x)
+    }
+  }
+  return pushTx
+}
+/**
+ * TODO
+ * @param {*} tx
+ * @param {*} txCompare
+ */
+function findOffer (tx, txCompare, typeOffer) {
+  let pushOffer = []
+  // reduce((a, b) => Math.max(a, b))
+  for (let x of tx) {
+    let offertTx = x.offers.find(l =>
+      l.mosaicId.toHex() === txCompare.mosaicId.toHex() &&
+      l.cost.compact() === txCompare.initialCost.compact() &&
+      l.mosaicAmount.compact() === txCompare.initialAmount.compact() &&
+      l.type === typeOffer)
+    if (offertTx) {
+      pushOffer.push(offertTx)
+    }
+  }
+  return pushOffer
+}
 export {
   getAllOffer,
   filtersAssetsFunc,

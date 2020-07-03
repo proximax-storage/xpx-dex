@@ -3,12 +3,14 @@ export const mosaicExchange = {
   state: {
     exchange: null,
     dataAssets: null,
-    exchangeDelete: null
+    exchangeDelete: null,
+    expire: 0
   },
   getters: {
     exchange: state => state.exchange,
     dataAssets: state => state.dataAssets,
-    exchangeDelete: state => state.exchangeDelete
+    exchangeDelete: state => state.exchangeDelete,
+    expire: state => state.expire
   },
   mutations: {
     SET_EXCHANGE (state, data) {
@@ -19,6 +21,9 @@ export const mosaicExchange = {
     },
     SET_DATA_ASSETS (state, data) {
       state.dataAssets = data
+    },
+    SET_EXPIRE (state, data) {
+      state.expire = data
     }
   }
 }

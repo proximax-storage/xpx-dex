@@ -124,7 +124,7 @@ function clearTimeOutTime () {
  */
 function getBlocks () {
   connector.newBlock().subscribe(block => {
-    // console.log('----NEW BLOCK -----', block.height.compact())
+    console.log('----NEW BLOCK -----', block.height.compact())
     checkNodeIsLive(block.height.compact())
     store.commit('nodeStore/SET_CURRENT_BLOCK', block.height.compact())
   }, () => {

@@ -59,7 +59,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { validateExpireOffer } from '@/services/offert-service'
 export default {
   data: () => {
@@ -104,6 +104,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['SHOW_LOADING', 'SHOW_SNACKBAR']),
     mosaicInfoProperties (mosaic = null) {
       let properties = {
         divisibility: 6,
@@ -142,12 +143,15 @@ export default {
       }
     },
     async sendOffer (value) {
-      const val = await validateExpireOffer(value)
+      this.SHOW_LOADING(true)
+      const val = await validateExpireOffer(value, this.form.active === 'buy' ? 1 : 0)
+      this.SHOW_LOADING(false)
       console.log('validateExpireOffer', val)
-      if (!val) return console.log('offer expire')
+      if (val.expire) return console.log('offer expire')
       this.dataAssets.form.active = this.form.active
       this.$store.commit('mosaicExchange/SET_EXCHANGE', value)
       this.$store.commit('mosaicExchange/SET_DATA_ASSETS', this.dataAssets)
+      this.$store.commit('mosaicExchange/SET_EXPIRE', val.infoExpire)
       if (this.$store.getters['accountStore/isLogged']) {
         this.$router.push({ path: '/take-offers' })
       } else {

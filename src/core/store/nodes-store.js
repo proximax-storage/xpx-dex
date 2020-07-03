@@ -4,6 +4,7 @@ export const nodeStore = {
   namespaced: true,
   state: {
     currentNode: null,
+    currentBlock: null,
     nodesList: null,
     nodeIsLive: null,
     nodeStatus: ''
@@ -22,6 +23,7 @@ export const nodeStore = {
     },
     SET_CURRENT_BLOCK (state, currentBlock) {
       state.currentNode.height = currentBlock
+      state.currentBlock = currentBlock
     },
     SET_STATUS_NODE (state, status) {
       // empty is without use, 0 is down, 1 is up, 2 is connecting
