@@ -8,11 +8,9 @@ import {
  * @param {*} items
  */
 function getAllOffer (items) {
-  // const items = JSON.parse(JSON.stringify(itemsValue))
-  // console.log('items fet', items)
   const pass = []
   const x = items.filter(x => x.data.length > 0)
-  // console.log('xxxx')
+  Object.freeze(x)
   if (x.length > 0) {
     x.forEach(element => {
       // console.log('element.info.mosaicInfo', element.info.mosaicInfo)
@@ -53,7 +51,6 @@ function getAllOffer (items) {
       }
     })
   }
-  // console.log('pass', pass)
   store.commit('offersStore/SET_OFFER_ALL', pass)
   return pass
 }

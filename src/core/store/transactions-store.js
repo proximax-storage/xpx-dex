@@ -59,7 +59,7 @@ export const transactionsStore = {
       }
     },
     SET_CONFIRMED (state, transaction) {
-      console.log('transaction', transaction)
+      // console.log('transaction', transaction)
       if (!state.confirmed.find(t => transaction.transactionInfo.hash === t.transactionInfo.hash)) {
         const d = state.confirmed
         d.unshift(transaction)
@@ -124,7 +124,7 @@ export const transactionsStore = {
       state.status = []
     },
     REMOVE_MONITOR_HASH (state, hash) {
-      console.log('REMOVE', hash)
+      // console.log('REMOVE', hash)
       const filtered = state.monitorHashs.filter(x => x.hash !== hash)
       state.monitorHashs = filtered
     }
