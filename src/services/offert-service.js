@@ -62,20 +62,20 @@ function removeOffer (offer, mosaicFilterUpEvent) {
   console.log('dataValue', dataValue)
 }
 function validateDeleteOffer (oferts) {
-  let nuevoArray = []
+  let newArray = []
   let arrayTemporal = []
   for (var i = 0; i < oferts.length; i++) {
-    arrayTemporal = nuevoArray.filter(resp => resp['mosaicIdHex'] === oferts[i]['info']['mosaicIdHex'])
+    arrayTemporal = newArray.filter(resp => resp['mosaicIdHex'] === oferts[i]['info']['mosaicIdHex'])
     if (arrayTemporal.length > 0) {
-      nuevoArray[nuevoArray.indexOf(arrayTemporal[0])]['validateDelete'].push(oferts[i]['type'])
+      newArray[newArray.indexOf(arrayTemporal[0])]['validateDelete'].push(oferts[i]['type'])
     } else {
-      nuevoArray.push({
+      newArray.push({
         'mosaicIdHex': oferts[i]['info']['mosaicIdHex'],
         'validateDelete': [oferts[i]['type']]
       })
     }
   }
-  return nuevoArray.map(x => {
+  return newArray.map(x => {
     return {
       mosaicIdHex: x.mosaicIdHex,
       deleteV: Boolean(x.validateDelete.length === 2)
