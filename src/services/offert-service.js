@@ -7,7 +7,7 @@ import {
  *
  * @param {*} items
  */
-function getAllOffer (items) {
+function getAllOffer (items, mosaicUpdate = null) {
   const pass = []
   const x = items.filter(x => x.data.length > 0)
   Object.freeze(x)
@@ -27,9 +27,8 @@ function getAllOffer (items) {
         const offersSell = items.filter(
           x => x.info.mosaicIdHex === element.info.mosaicIdHex && x.type === 'sell'
         )
-
         if (!pass.find(x => x.tableData.text === element.info.text)) {
-          pass.push({
+          const pas = {
             tableData: {
               text: element.info.text,
               type: element.type,
@@ -46,13 +45,59 @@ function getAllOffer (items) {
               sell: offersSell.length > 0 ? offersSell[0].data : offersSell,
               buy: offersBuy.length > 0 ? offersBuy[0].data : offersBuy
             }
-          })
+          }
+          updateAllOffer(pas, store.getters['offersStore/offerAll'])
         }
       }
     })
   }
-  store.commit('offersStore/SET_OFFER_ALL', pass)
-  return pass
+
+  const remove = items.filter(x => x.data.length === 0)
+  if (remove.length > 0) {
+    removeOffer(remove, mosaicUpdate)
+  }
+}
+function removeOffer (offer, mosaicFilterUpEvent) {
+  const dataValue = validateDeleteOffer(offer)
+  console.log('dataValue', dataValue)
+}
+function validateDeleteOffer (oferts) {
+  let nuevoArray = []
+  let arrayTemporal = []
+  for (var i = 0; i < oferts.length; i++) {
+    arrayTemporal = nuevoArray.filter(resp => resp['mosaicIdHex'] === oferts[i]['info']['mosaicIdHex'])
+    if (arrayTemporal.length > 0) {
+      nuevoArray[nuevoArray.indexOf(arrayTemporal[0])]['validateDelete'].push(oferts[i]['type'])
+    } else {
+      nuevoArray.push({
+        'mosaicIdHex': oferts[i]['info']['mosaicIdHex'],
+        'validateDelete': [oferts[i]['type']]
+      })
+    }
+  }
+  return nuevoArray.map(x => {
+    return {
+      mosaicIdHex: x.mosaicIdHex,
+      deleteV: Boolean(x.validateDelete.length === 2)
+    }
+  })
+}
+function updateAllOffer (newOffers, alloffert) {
+  console.log('newOffers', newOffers)
+  let newdata = []
+  store.commit('offersStore/SET_OFFER_ALL', newdata)
+  for (let x of alloffert) {
+    if (x.tableData.info.mosaicIdHex === newOffers.tableData.info.mosaicIdHex) {
+      store.commit('offersStore/PUSH_OFFER_ALL', newOffers)
+    } else {
+      store.commit('offersStore/PUSH_OFFER_ALL', x)
+    }
+  }
+  const valor = newdata.find(x => x.tableData.info.mosaicIdHex === newOffers.tableData.info.mosaicIdHex)
+  if (!valor) {
+    store.commit('offersStore/PUSH_OFFER_ALL', newOffers)
+  }
+  return newdata
 }
 /**
  *

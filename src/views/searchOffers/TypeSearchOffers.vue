@@ -84,7 +84,7 @@ export default {
     ...mapGetters('socketDbStore', ['mosaicsInfOffer', 'loadingInfo']),
     ...mapGetters('offersStore', ['offerAll']),
     myOffers () {
-      // console.log('offerAll', this.offerAll)
+      console.log('offerAll', this.offerAll)
       return []
     }
   }

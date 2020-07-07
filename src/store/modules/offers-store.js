@@ -16,6 +16,9 @@ export const offersStore = {
     },
     SET_OFFER_ALL (state, data) {
       state.offerAll = data
+    },
+    PUSH_OFFER_ALL (state, data) {
+      state.offerAll.push(data)
     }
   }
 }

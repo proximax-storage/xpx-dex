@@ -4,7 +4,7 @@ export default {
   data () {
     return {
       items: [],
-      mosaicFilterUp: null
+      mosaicFilterUp: { newValue: null, event: null }
     }
   },
   computed: {
@@ -16,11 +16,19 @@ export default {
       this.items = []
       console.log('filtersAssets', filtersAssets)
       console.log('this.mosaicFilterUp', this.mosaicFilterUp)
+
       filtersAssets.forEach(element => {
-        // if (element) {
-        this.getBuy(element)
-        this.getSell(element)
-        // }
+        // if (this.mosaicFilterUp.event) {
+        if (this.mosaicFilterUp.event === 'unchanged' || this.mosaicFilterUp.event === 'inserted') {
+          if (element.mosaicIdHex === this.mosaicFilterUp.newValue.mosaicIdHex) {
+            this.getBuy(element)
+            this.getSell(element)
+          }
+          // }
+        } else {
+          this.getBuy(element)
+          this.getSell(element)
+        }
       })
     },
     getBuy (data) {
@@ -70,7 +78,11 @@ export default {
     },
     items (newValue) {
       // console.log('items', newValue)
-      getAllOffer(newValue)
+      if (this.mosaicFilterUp.event) {
+
+      }
+      getAllOffer(newValue, this.mosaicFilterUp.newValue)
+      this.mosaicFilterUp = { newValue: null, event: null }
     }
   }
 }
