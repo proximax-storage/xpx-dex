@@ -38,7 +38,6 @@ export const socketDbStore = {
       state.inserted = data
     },
     EVENT_UNCHANGED (state, data) {
-      console.log('que fue ', data)
       state.unchanged = data
     },
     SOCKET_RETURN_INSERT_OFFERT (state, data) {
@@ -50,22 +49,18 @@ export const socketDbStore = {
     SOCKET_RETURN_INSERT_MOSAIC_INFO (state, data) {
       state.unchanged = null
       state.inserted = null
-      console.log('SOCKET_RETURN_INSERT_MOSAIC_INFO', data)
       const dataDb = data.dataDb
       // changes
       if (dataDb['inserted'] > 0) {
         for (let index = 0; index < dataDb['inserted']; index++) {
           const element = dataDb['changes'][index]
           if (element['new_val']) {
-            // state.unchanged.push(data.dataOffer)
-            // state.mosaicsInfOffer.push(element['new_val'])
             state.inserted = element['new_val']
           }
         }
       } else if (dataDb['unchanged'] > 0) {
         state.unchanged = data.dataOffer
       }
-      // console.log('SOCKET_RETURN_INSERT_MOSAIC_INFO', data)
     }
   },
   getters: {

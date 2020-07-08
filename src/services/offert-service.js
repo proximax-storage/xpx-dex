@@ -13,7 +13,6 @@ function getAllOffer (items, mosaicUpdate = null) {
   Object.freeze(x)
   if (x.length > 0) {
     x.forEach(element => {
-      // console.log('element.info.mosaicInfo', element.info.mosaicInfo)
       if (element.info.mosaicInfo) {
         const price = sumAllAmount(element.data.map(x => x.price)) / element.data.length
         const amount = sumAllAmount(element.data.map(x => x.amount.compact()))
@@ -59,7 +58,11 @@ function getAllOffer (items, mosaicUpdate = null) {
 }
 function removeOffer (offer, mosaicFilterUpEvent) {
   const dataValue = validateDeleteOffer(offer)
-  console.log('dataValue', dataValue)
+  dataValue.forEach(x => {
+    if (x.deleteV) {
+      store.commit('offersStore/DELETE_OFFER_ALL', x.mosaicIdHex)
+    }
+  })
 }
 function validateDeleteOffer (oferts) {
   let newArray = []
@@ -83,7 +86,6 @@ function validateDeleteOffer (oferts) {
   })
 }
 function updateAllOffer (newOffers, alloffert) {
-  console.log('newOffers', newOffers)
   let newdata = []
   store.commit('offersStore/SET_OFFER_ALL', newdata)
   for (let x of alloffert) {
@@ -138,7 +140,6 @@ function filtersAssetsFunc (data) {
  * @param {*} data
  */
 async function validateExpireOffer (data, typeOffer) {
-  console.log('dataaasss', data)
   try {
     const tx = await Vue.prototype.$blockchainProvider.getOutgoingTransactions(data.owner).toPromise()
     const txFilter = filterTxOfferForType(TransactionType.ADD_EXCHANGE_OFFER, tx)
@@ -162,7 +163,6 @@ async function validateExpireOffer (data, typeOffer) {
   } catch (error) {
     console.error('----Search namespaces from accoun ts error----', error)
   }
-  console.log('offer::ssss', data)
   return true
 }
 /**

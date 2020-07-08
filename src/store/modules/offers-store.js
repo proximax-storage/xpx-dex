@@ -19,6 +19,15 @@ export const offersStore = {
     },
     PUSH_OFFER_ALL (state, data) {
       state.offerAll.push(data)
+    },
+    DELETE_OFFER_ALL (state, idMosaic) {
+      for (var i = 0; i < state.offerAll.length; i++) {
+        if (state.offerAll[i].tableData.info.mosaicIdHex === idMosaic) {
+          state.offerAll.splice(i, 1)
+          break
+        }
+      }
     }
-  }
+  },
+  actions: {}
 }
