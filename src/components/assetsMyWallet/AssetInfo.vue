@@ -1,10 +1,15 @@
 <template>
-  <assets-info-balance />
+  <div>
+    <assets-info-balance />
+
+    <assets-list />
+  </div>
 </template>
 <script>
 export default {
   components: {
-    'assets-info-balance': () => import('@/components/assetsMyWallet/AssetInfoBalance')
+    'assets-info-balance': () => import('@/components/assetsMyWallet/AssetInfoBalance'),
+    'assets-list': () => import('@/components/assetsMyWallet/AssetsList')
   }
 }
 </script>

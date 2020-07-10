@@ -33,7 +33,7 @@
           <span class="subheading mr-1" v-text="getTotalBalance['part2']"></span>
           <span class="subheading text-uppercase">{{ nameMosaic}}</span>
         </div>
-        <div class="caption font-italic font-weight-thin mx-auto ">USD {{getTotalUsd | toCurrency}}</div>
+        <div class="caption font-italic font-weight-thin mx-auto">USD {{getTotalUsd | toCurrency}}</div>
       </div>
     </v-col>
     <v-col xs="12" sm="12" md="10" lg="4" xl="4" class="d-flex mx-auto">
@@ -54,6 +54,7 @@
         <div class="caption font-italic font-weight-thin mx-auto">USD {{getTotalUsd | toCurrency}}</div>
       </div>
     </v-col>
+    <v-divider class="mt-1" />
   </v-row>
 </template>
 <script>
