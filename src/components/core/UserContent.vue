@@ -4,7 +4,7 @@
       <v-list-item-content class>
         <v-list-item-title class="subtitle-1 pb-1 ml-1">
           <span>
-            <v-btn icon color="primary" @click="activity('myWallet', 0)">
+            <v-btn icon color="primary" @click="activity('myWallet', 2)">
               <v-icon>mdi-cog</v-icon>
             </v-btn>
           </span>
@@ -18,7 +18,10 @@
           <span class="caption mr-1" v-text="getTotalBalance['part2']"></span>
           <span class="subtitle-1 text-uppercase">{{ nameMosaic }}</span>
         </v-list-item-subtitle>
-        <v-list-item-subtitle class="pt-1 subtitle-2 ml-1">
+        <v-list-item-subtitle
+          class="pt-1 subtitle-2 ml-1 cursor-p"
+          @click="activity('myWallet', 0)"
+        >
           <img
             style="vertical-align: middle"
             :src="require(`@/assets/img/${theme}/icon-mosaic.svg`)"
@@ -37,6 +40,13 @@
             class="subtitle-2 primary--text"
             @click="activity('myWallet', 1)"
           >Activity</v-btn>
+          <br />
+          <v-btn
+            text
+            small
+            class="subtitle-2 primary--text"
+            @click="activity('myWallet', 3)"
+          >My offert</v-btn>
         </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
@@ -104,6 +114,9 @@ export default {
         this.environment.mosaic.id
       )
       return this.mosaicLength.length
+    },
+    mosaicList () {
+      console.log('lista de mosaic', this.mosaicLength)
     }
   }
 }

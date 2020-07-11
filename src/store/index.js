@@ -30,7 +30,8 @@ import {
 } from './modules/offers-store'
 import {
   nodeStore,
-  transactionsStore
+  transactionsStore,
+  coingeckoStore
 } from '@/core/store/'
 
 Vue.use(Vuex)
@@ -115,6 +116,7 @@ export default new Vuex.Store({
     appCoreStore,
     nodeStore,
     transactionsStore,
+    coingeckoStore,
     namespaceStore,
     mosaicStore,
     socketDbStore,

@@ -5,7 +5,7 @@
     </v-row>
     <!-- mosaicInfo -->
     <v-row class="pt-4">
-      <v-col sm="7" md="7" lg="9" col="9" class="pt-0">
+      <v-col sm="7" md="7" lg="10" col="10" class="pt-0">
         <v-tabs v-model="tab" background-color="transparent" color="primary" grow slider-size="4">
           <div
             class="v-tabs-slider-wrapper"
@@ -24,9 +24,17 @@
         <v-tabs-items v-model="tab">
           <v-tab-item v-for="item in arrayItems" :key="item.item">
             <template v-if="tab === 0">
-              <account-setting/>
+              <!-- <account-setting/> -->
+              <assets-info />
             </template>
             <template v-if="tab === 1">
+              <!-- activity -->
+              <!-- <delete-offer-list /> -->
+            </template>
+            <template v-if="tab === 2">
+              <account-setting />
+            </template>
+            <template v-if="tab === 3">
               <delete-offer-list />
             </template>
           </v-tab-item>
@@ -42,25 +50,25 @@ export default {
     return {
       tab: 1,
       arrayItems: [
-        // {
-        //   items: 'assets',
-        //   name: 'Assets',
-        //   index: 0
-        // },
-        // {
-        //   items: 'activity',
-        //   name: 'Activity',
-        //   index: 1
-        // },
+        {
+          items: 'assets',
+          name: 'Assets',
+          index: 0
+        },
+        {
+          items: 'activity',
+          name: 'Activity',
+          index: 1
+        },
         {
           items: 'info',
           name: 'Info',
-          index: 0
+          index: 2
         },
         {
           items: 'myOffers',
           name: 'My offers',
-          index: 1
+          index: 3
         }
       ]
     }
@@ -70,6 +78,7 @@ export default {
   },
   components: {
     'delete-offer-list': () => import('@/components/deleteOffer/DeleteOfferList'),
+    'assets-info': () => import('@/components/assetsMyWallet/AssetInfo'),
     'account-setting': () => import('@/components/myWalletInfo/AccountSetting')
   },
   methods: {
