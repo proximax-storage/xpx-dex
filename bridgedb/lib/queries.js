@@ -1,6 +1,6 @@
 const r = require('rethinkdb')
 const DB = require('./db')
-
+//
 // const standardValue = { includeInitial: true, includeTypes: true, includeStates: true }
 // const standardQuery = {
 //   includeInitial: true,

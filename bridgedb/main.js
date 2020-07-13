@@ -65,7 +65,7 @@ function insertExecuteOffers (data) {
     io.emit('RETURN_INSERT_EXECUTE_OFFERS', result)
   })
 }
-// UPDATE QUERIES
+// UPDATE QUERIESs
 
 // ################ Listen http#############
 app.use(express.static(path.join(__dirname))) // use static dir

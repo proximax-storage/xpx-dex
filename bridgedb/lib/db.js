@@ -15,7 +15,7 @@ const DB = {
     try {
       Log.info('   >> Connecting to RethinkDB...')
       const host = process.env.db_host || DB.host // 192.168.3.242
-      const port = process.env.db_port || DB.port // '
+      const port = process.env.db_port || DB.port //
       const db = process.env.db_name || undefined
       const user = process.env.db_user || undefined
       const password = process.env.db_password || undefined

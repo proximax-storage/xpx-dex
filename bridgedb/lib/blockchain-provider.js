@@ -4,8 +4,8 @@ class BlockchainProvider {
   constructor (node) {
     console.log(node)
   }
+
   /**
-   *
    *
    * @param {(string | number[])} id
    * @returns {MosaicId}

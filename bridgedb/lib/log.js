@@ -24,6 +24,7 @@ const config = {
     custom: 'yellow'
   }
 }
+//
 winston.addColors(config.colors)
 const Log = winston.createLogger({
   levels: config.levels,
