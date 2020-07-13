@@ -143,7 +143,6 @@ export default {
     ...mapGetters('transactionsStore', ['confirmed', 'unconfirmedAdded', 'status']),
     getArrayBtn () {
       const arrayBtn = this.arrayBtn
-      console.log(arrayBtn)
       arrayBtn.delete.disabled = !this.valid || !this.form.checkbox
       arrayBtn.delete.loading = this.sendingForm
       return arrayBtn
@@ -199,9 +198,8 @@ export default {
                 )
                 this.SET_MONITOR_HASH(dataMonitorHash)
                 this.$blockchainProvider.announceTx(signedTransaction).subscribe(
-                  response => console.log(response),
-                  error => {
-                    console.error(error)
+                  response => {},
+                  () => {
                     this.sendingForm = false
                     this.REMOVE_MONITOR_HASH(dataMonitorHash)
                   }

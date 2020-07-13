@@ -129,7 +129,6 @@ export default {
     getArrayBtn () {
       const arrayBtn = this.arrayBtn
       arrayBtn[0]['showPK'].disabled = !this.passwordPkValid
-      console.log()
       arrayBtn[1]['downloadWLT'].disabled = !this.passwordWLTValid
       return arrayBtn
     }
@@ -174,7 +173,6 @@ export default {
         case 'showPK':
           this.showPK = null
           let common = decrypt(this.currentAccount.simpleWallet, this.form.passwordPk)
-          console.log('common', common)
           if (common) {
             this.showPK = common.privateKey
           }

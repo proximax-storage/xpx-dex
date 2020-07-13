@@ -116,7 +116,6 @@ export default {
       return this.mosaicLength.length
     },
     mosaicList () {
-      console.log('lista de mosaic', this.mosaicLength)
     }
   }
 }

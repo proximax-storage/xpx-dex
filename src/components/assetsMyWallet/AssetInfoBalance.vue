@@ -69,7 +69,6 @@ export default {
   computed: {
     ...mapGetters('coingeckoStore', ['xpxInformation']),
     getTotalUsd () {
-      console.log('xpxInformation', this.xpxInformation)
       if (this.xpxInformation) {
         return this.coingecko(this.xpxInformation, this.totalBalance(), 'usd')
       } else {

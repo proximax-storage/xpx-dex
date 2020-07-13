@@ -146,8 +146,7 @@ export default {
       this.SHOW_LOADING(true)
       const val = await validateExpireOffer(value, this.form.active === 'buy' ? 1 : 0)
       this.SHOW_LOADING(false)
-      console.log('validateExpireOffer', val)
-      if (val.expire) return console.log('offer expire')
+      if (val.expire) return
       this.dataAssets.form.active = this.form.active
       this.$store.commit('mosaicExchange/SET_EXCHANGE', value)
       this.$store.commit('mosaicExchange/SET_DATA_ASSETS', this.dataAssets)
@@ -160,8 +159,6 @@ export default {
     }
   },
   beforeMount () {
-    console.log(this.offerSelected)
-
     if (this.offerSelected) {
       this.propertiesMosaic = this.mosaicInfoProperties(
         this.offerSelected.tableData.info.mosaicInfo

@@ -77,7 +77,7 @@ Vue.use(money)
 Vue.use(
   new VueSocketIO({
     debug: false,
-    // connection: 'http://ec2-54-233-223-194.sa-east-1.compute.amazonaws.com:900/',
+    // connection: 'http://ec2-18-230-69-90.sa-east-1.compute.amazonaws.com:900',
     connection: 'http://localhost:900',
     vuex: {
       store,

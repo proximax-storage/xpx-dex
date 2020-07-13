@@ -447,9 +447,8 @@ export default {
       // this.sendingForm = false
       this.SET_MONITOR_HASH(dataMonitorHash)
       this.$blockchainProvider.announceTx(signedTransaction).subscribe(
-        response => console.log(response),
-        error => {
-          console.error(error)
+        response => {},
+        () => {
           this.sendingForm = false
           this.REMOVE_MONITOR_HASH(dataMonitorHash)
         }

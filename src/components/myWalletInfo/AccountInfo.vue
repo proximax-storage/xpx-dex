@@ -61,7 +61,6 @@ export default {
   },
   methods: {
     copy (action) {
-      console.log('action', action)
     }
   }
 }

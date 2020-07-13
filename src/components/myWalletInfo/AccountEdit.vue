@@ -17,7 +17,6 @@ export default {
   },
   methods: {
     edit () {
-      console.log('edit')
     }
   }
 }

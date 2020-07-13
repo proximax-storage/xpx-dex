@@ -32,7 +32,6 @@ export default {
     action (exchange) {},
     buildDataTable (assets) {
       let assetsBuild = []
-      console.log('assets', assets)
       assetsBuild = assets.map(f => {
         return {
           assets: 'cafe',

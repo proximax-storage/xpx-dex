@@ -87,7 +87,6 @@ export default {
       return value
     },
     action (item) {
-      console.log(item)
     }
   },
   beforeMount () {

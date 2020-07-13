@@ -263,7 +263,6 @@ export default {
       )
       this.form.priceForAmount = this.calcPrice(this.exchange.price, amountValue)
       // console.log(this.form.priceForAmount)
-      console.log('this.form.priceForAmount', this.form.priceForAmount)
       const amountx = this.exchange.amount.compact()
       if (amountValue !== 0) {
         if (amountValue <= amountx) {
