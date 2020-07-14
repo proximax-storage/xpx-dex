@@ -4,11 +4,14 @@ export const offersStore = {
   namespaced: true,
   state: {
     offerSelected: [],
-    offerAll: []
+    offerAll: [],
+    type: ['buy', 'sell']
   },
   getters: {
     offerSelected: state => state.offerSelected,
-    offerAll: state => state.offerAll
+    offerAll: state => state.offerAll,
+    offersForPublicKey: state => state.offersForPublicKey,
+    type: state => state.type
   },
   mutations: {
     SET_OFFER_SELECTED (state, data) {

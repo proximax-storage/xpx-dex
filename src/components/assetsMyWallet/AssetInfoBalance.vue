@@ -11,8 +11,8 @@
             class="pr-1"
             height="20"
           />
-          <span class="subheading" v-text="getTotalBalance['part1']"></span>
-          <span class="subheading mr-1" v-text="getTotalBalance['part2']"></span>
+          <span class="subheading" v-text="getAvailableBalance['part1']"></span>
+          <span class="subheading mr-1" v-text="getAvailableBalance['part2']"></span>
           <span class="subheading text-uppercase">{{ nameMosaic}}</span>
         </div>
         <div class="caption font-italic font-weight-thin mx-auto">USD {{getTotalUsd | toCurrency}}</div>
@@ -29,8 +29,8 @@
             class="pr-1"
             height="20"
           />
-          <span class="subheading" v-text="getTotalBalance['part1']"></span>
-          <span class="subheading mr-1" v-text="getTotalBalance['part2']"></span>
+          <span class="subheading mr-1">{{$generalService.amountFormatter(getOnHoldBalance, 6)}}</span>
+          <!-- <span class="subheading mr-1" v-text="getTotalBalance['part2']"></span> -->
           <span class="subheading text-uppercase">{{ nameMosaic}}</span>
         </div>
         <div class="caption font-italic font-weight-thin mx-auto">USD {{getTotalUsd | toCurrency}}</div>
@@ -47,8 +47,8 @@
             class="pr-1"
             height="20"
           />
-          <span class="subheading" v-text="getTotalBalance['part1']"></span>
-          <span class="subheading mr-1" v-text="getTotalBalance['part2']"></span>
+
+          <span class="subheading mr-1">{{$generalService.amountFormatter(getTotalBalance, 6)}}</span>
           <span class="subheading text-uppercase">{{ nameMosaic}}</span>
         </div>
         <div class="caption font-italic font-weight-thin mx-auto">USD {{getTotalUsd | toCurrency}}</div>
@@ -68,6 +68,8 @@ export default {
   },
   computed: {
     ...mapGetters('coingeckoStore', ['xpxInformation']),
+    ...mapGetters('offersStore', ['offerAll', 'type']),
+    ...mapGetters('accountStore', ['currentAccount']),
     getTotalUsd () {
       if (this.xpxInformation) {
         return this.coingecko(this.xpxInformation, this.totalBalance(), 'usd')
@@ -75,11 +77,25 @@ export default {
         return 0
       }
     },
-    getTotalBalance () {
+    getAvailableBalance () {
       return this.$generalService.getDataPart(
         this.totalBalance(),
         this.$store.getters.environment.mosaic.divisibility
       )
+    },
+    getOnHoldBalance () {
+      return this.onHoldBalance(this.offerAll)
+    },
+
+    getTotalBalance () {
+      let totalBalance = 0
+      let OnHoldBalance = 0
+      totalBalance = this.$store.getters['accountStore/totalBalance'](
+        this.$store.getters.environment.mosaic.id
+      )
+      OnHoldBalance = this.onHoldBalance(this.offerAll)
+      const total = totalBalance + OnHoldBalance
+      return total
     }
   },
   beforeMount () {
@@ -89,6 +105,18 @@ export default {
   },
   methods: {
     ...mapActions('coingeckoStore', ['searchInformationXPX']),
+    onHoldBalance (offerAll) {
+      const offerts = this.filtersOfferts(offerAll, this.currentAccount.publicKey, 'buy')
+      let totalCost = 0
+      if (offerts && offerts.length > 0) {
+        for (let i of offerts) {
+          totalCost = totalCost + i.initialCost.compact()
+        }
+      }
+      // initialCost.compact()
+      console.log('offerts', offerts)
+      return totalCost
+    },
     totalBalance () {
       const total = this.$generalService.amountFormatter(
         this.$store.getters['accountStore/totalBalance'](this.$store.getters.environment.mosaic.id),
@@ -105,6 +133,22 @@ export default {
         usdValue = 0
       }
       return usdValue
+    },
+    filtersOfferts (offerts, publicKey, type) {
+      let offersForPublicKey = []
+      offerts.forEach(offer => {
+        console.log(offer.allOffers[type])
+        // this.type.forEach(t => {
+        if (offer.allOffers[type].length > 0) {
+          if (offer.allOffers[type][0].owner.publicKey === publicKey) {
+            console.log('offer.allOffers[t]')
+            offersForPublicKey.push(offer.allOffers[type][0])
+          }
+          // && offer.allOffers[t].owner.publicKey === publicKey
+        }
+        // })
+      })
+      return offersForPublicKey
     }
   }
 }
