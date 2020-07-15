@@ -17,9 +17,7 @@ async function buildCurrentAccountInfo (accountInfo) {
   const mosaicsSelect = []
   if (accountInfo !== undefined && accountInfo !== null) {
     if (accountInfo.mosaics.length > 0) {
-      // console.log('\n\n -----> accountInfo', accountInfo.mosaics)
       const mosaics = await filterMosaics(accountInfo.mosaics.map(n => n.id))
-      // console.log('\n\n -----> mosaicsId', mosaics)
       if (mosaics.length > 0) {
         for (const mosaic of mosaics) {
           const configInput = {
@@ -44,13 +42,11 @@ async function buildCurrentAccountInfo (accountInfo) {
               mosaic.mosaicInfo.properties.divisibility
             )
             balanceValidate = currentMosaic.amount.compact()
-            // console.log('balanceValidate', balanceValidate)
             const durationMosaic = Vue.prototype.$blockchainProvider.getUint64([
               mosaic.mosaicInfo['properties']['duration']['lower'],
               mosaic.mosaicInfo['properties']['duration']['higher']
             ])
 
-            // console.log('durationMosaic', durationMosaic)
             configInput.precision = mosaic.mosaicInfo['properties']['divisibility']
             const createdBlock = Vue.prototype.$blockchainProvider.getUint64([
               mosaic.mosaicInfo.height.lower,
@@ -72,7 +68,6 @@ async function buildCurrentAccountInfo (accountInfo) {
           }
           const idMosaic = Vue.prototype.$blockchainProvider.getMosaicId(mosaic.idMosaic).id.toHex()
           const x = idMosaic !== store.getters.environment.mosaic.id
-          // console.log('xxxxxxxxxxxxxxxxx', x)
           if (x) {
             const mosaicId = Vue.prototype.$blockchainProvider.getMosaicId(mosaic.idMosaic).toHex()
             const nameMosaic = mosaic.mosaicNames.names.length > 0 ? mosaic.mosaicNames.names[0].name : mosaicId
@@ -267,7 +262,6 @@ function decrypt (account, password) {
  * @param {*} account
  */
 function exportAccount (accountValue = null) {
-  console.log('accountValue ', accountValue)
   const account = {
     address: accountValue.simpleWallet.address.address,
     algo: 'pass:bip32',
@@ -286,7 +280,6 @@ function exportAccount (accountValue = null) {
 
   }
 
-  console.log('account', account)
   const acc = Object.assign({}, account)
   const accounts = []
   accounts.push(acc)
@@ -297,7 +290,6 @@ function exportAccount (accountValue = null) {
   wallet.accounts[0].name = 'Primary_Account'
   wallet.accounts[0].firstAccount = true
   wallet.accounts[0].default = true
-  console.log('wallet', wallet)
   const wordArray = CryptoJS.enc.Utf8.parse(JSON.stringify(wallet))
   const file = CryptoJS.enc.Base64.stringify(wordArray)
   // Word array to base64
@@ -383,7 +375,6 @@ function logIn (wallet, password) {
     if (currentAccount) {
       if (decrypt(currentAccount.simpleWallet, password)) {
         const connectionNodes = store.getters.environment.connectionNodes
-        console.log('connectionNodes', connectionNodes)
         const network = Vue.prototype.$blockchainProvider.filterNetworkTypeFromString(connectionNodes.networkType)
         if (!wallet.accounts.find(element => element.simpleWallet.network !== network)) {
           const defaultAccount = filterAccountDefault(wallet)

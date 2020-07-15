@@ -78,7 +78,6 @@ function instanceConnectionApi (randomNode, protocol) {
  * @returns
  */
 function announceTx (signedTransaction) {
-  console.log('signedTransaction', signedTransaction)
   return connection.transactionHttp.announce(signedTransaction)
 }
 
@@ -233,8 +232,6 @@ function decryptPrivateKey (common, account) {
           msg: 'Invalid Private Key'
         }
       }
-
-      console.log(common)
       if (common.privateKey !== '') {
         return {
           status: true,
@@ -250,7 +247,6 @@ function decryptPrivateKey (common, account) {
       }
     }
   } catch (error) {
-    console.log('error', error)
     return {
       status: false,
       msg: 'Has ocurred a error to decrypt your account.'
@@ -350,7 +346,6 @@ function getAccountInfo (address) {
  * @memberof BlockchainProvider
  */
 function getExchangeOffersfromId (Idmosaic, type) {
-  // console.log('tipe:', type)
   const id = new MosaicId(Idmosaic)
   return connection.exchangeHttp.getExchangeOffers(type, id)
 }

@@ -162,7 +162,6 @@ function formatterPrice (price) {
  * @returns
  */
 function getDataPart (data, cantPart) {
-  console.log('data', data)
   return {
     part1: data.slice(0, data.length - cantPart),
     part2: data.slice(-cantPart)

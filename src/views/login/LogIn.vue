@@ -33,6 +33,7 @@
                   <!-- Password -->
                   <v-col cols="12">
                     <v-text-field
+                      autocomplete="on"
                       dense
                       v-model="password"
                       :append-icon="configForm.password.show ? 'mdi-eye' : 'mdi-eye-off'"

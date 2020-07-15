@@ -42,8 +42,6 @@ async function filterMosaics (mosaicsId = null) {
           })
         }
       }
-
-      // console.log('dataReturn', dataReturn)
       return filterMosaicToReturn(dataReturn)
     } else {
       const infoMosaics = await searchInfoMosaics(mosaicsId)
@@ -148,7 +146,7 @@ async function searchInfoMosaics (mosaicsId, mosaicsInfOffer = false) {
       return mosaicsTosaved
     }
   } catch (error) {
-    console.error('Has ocurred a error with search mosaics', error)
+    console.error('Has ocurred a error with search mosaics')
     return null
   }
 }
