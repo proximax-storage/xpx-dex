@@ -34,7 +34,7 @@
                   ></td>
                 </template>
 
-                <td class="pr-3" style="border:0">
+                <td class="pr-3" style="border:0" v-if="typeOfferColor">
                   <v-chip
                     :color="typeOfferColor"
                     small

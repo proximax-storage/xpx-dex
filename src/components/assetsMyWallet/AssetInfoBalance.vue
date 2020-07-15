@@ -101,7 +101,6 @@ export default {
   beforeMount () {
     this.nameMosaic = this.$store.getters.environment.mosaic.name
     this.searchInformationXPX(this.$store.getters)
-    // this.searchInformation()
   },
   methods: {
     ...mapActions('coingeckoStore', ['searchInformationXPX']),
@@ -113,8 +112,6 @@ export default {
           totalCost = totalCost + i.initialCost.compact()
         }
       }
-      // initialCost.compact()
-      console.log('offerts', offerts)
       return totalCost
     },
     totalBalance () {
@@ -137,16 +134,11 @@ export default {
     filtersOfferts (offerts, publicKey, type) {
       let offersForPublicKey = []
       offerts.forEach(offer => {
-        console.log(offer.allOffers[type])
-        // this.type.forEach(t => {
         if (offer.allOffers[type].length > 0) {
           if (offer.allOffers[type][0].owner.publicKey === publicKey) {
-            console.log('offer.allOffers[t]')
             offersForPublicKey.push(offer.allOffers[type][0])
           }
-          // && offer.allOffers[t].owner.publicKey === publicKey
         }
-        // })
       })
       return offersForPublicKey
     }
