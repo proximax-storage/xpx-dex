@@ -15,7 +15,9 @@
           <span class="subheading mr-1" v-text="getAvailableBalance['part2']"></span>
           <span class="subheading text-uppercase">{{ nameMosaic}}</span>
         </div>
-        <div class="caption font-italic font-weight-thin mx-auto">USD {{getTotalUsd | toCurrency}}</div>
+        <div
+          class="caption font-italic font-weight-thin mx-auto"
+        >USD {{getBalanceUsd.availableBalance | toCurrency}}</div>
       </div>
     </v-col>
     <v-col xs="12" sm="12" md="10" lg="4" xl="4" class="d-flex mx-auto">
@@ -29,11 +31,12 @@
             class="pr-1"
             height="20"
           />
-          <span class="subheading mr-1">{{$generalService.amountFormatter(getOnHoldBalance, 6)}}</span>
-          <!-- <span class="subheading mr-1" v-text="getTotalBalance['part2']"></span> -->
+          <span class="subheading mr-1">{{getOnHoldBalance}}</span>
           <span class="subheading text-uppercase">{{ nameMosaic}}</span>
         </div>
-        <div class="caption font-italic font-weight-thin mx-auto">USD {{getTotalUsd | toCurrency}}</div>
+        <div
+          class="caption font-italic font-weight-thin mx-auto"
+        >USD {{getBalanceUsd.onHoldBalance | toCurrency}}</div>
       </div>
     </v-col>
     <v-col xs="12" sm="12" md="10" lg="4" xl="4" class="d-flex mx-auto">
@@ -47,14 +50,15 @@
             class="pr-1"
             height="20"
           />
-
-          <span class="subheading mr-1">{{$generalService.amountFormatter(getTotalBalance, 6)}}</span>
+          <span class="subheading mr-1">{{getTotalBalance}}</span>
           <span class="subheading text-uppercase">{{ nameMosaic}}</span>
         </div>
-        <div class="caption font-italic font-weight-thin mx-auto">USD {{getTotalUsd | toCurrency}}</div>
+        <div
+          class="caption font-italic font-weight-thin mx-auto"
+        >USD {{getBalanceUsd.totalBalance | toCurrency}}</div>
       </div>
     </v-col>
-    <v-divider class="mt-1" />
+
   </v-row>
 </template>
 <script>
@@ -70,12 +74,31 @@ export default {
     ...mapGetters('coingeckoStore', ['xpxInformation']),
     ...mapGetters('offersStore', ['offerAll', 'type']),
     ...mapGetters('accountStore', ['currentAccount']),
-    getTotalUsd () {
-      if (this.xpxInformation) {
-        return this.coingecko(this.xpxInformation, this.totalBalance(), 'usd')
-      } else {
-        return 0
+    getBalanceUsd () {
+      const currency = 'usd'
+      let balanceUsd = {
+        availableBalance: 0,
+        onHoldBalance: 0,
+        totalBalance: 0
       }
+      if (this.xpxInformation) {
+        balanceUsd.availableBalance = this.coingecko(
+          this.xpxInformation,
+          this.totalBalance(),
+          currency
+        )
+        balanceUsd.onHoldBalance = this.coingecko(
+          this.xpxInformation,
+          this.getOnHoldBalance,
+          currency
+        )
+        balanceUsd.totalBalance = this.coingecko(
+          this.xpxInformation,
+          this.getTotalBalance,
+          currency
+        )
+      }
+      return balanceUsd
     },
     getAvailableBalance () {
       return this.$generalService.getDataPart(
@@ -84,7 +107,7 @@ export default {
       )
     },
     getOnHoldBalance () {
-      return this.onHoldBalance(this.offerAll)
+      return this.$generalService.amountFormatter(this.onHoldBalance(this.offerAll), this.$store.getters.environment.mosaic.divisibility)
     },
 
     getTotalBalance () {
@@ -95,7 +118,7 @@ export default {
       )
       OnHoldBalance = this.onHoldBalance(this.offerAll)
       const total = totalBalance + OnHoldBalance
-      return total
+      return this.$generalService.amountFormatter(total, this.$store.getters.environment.mosaic.divisibility)
     }
   },
   beforeMount () {

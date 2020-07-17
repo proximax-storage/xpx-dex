@@ -33,8 +33,7 @@ export default {
       const value =
         this.loadingInfoWallet.type === 'mosaicsInfo' ? this.loadingInfoWallet.show : false
       if (value) {
-        const accountFiltered = this.accountInfoByNameAccount(this.currentAccount.name)
-        buildCurrentAccountInfo(accountFiltered.accountInfo)
+        this.accountFiltered()
       }
       return value
     }
@@ -44,6 +43,10 @@ export default {
   },
   methods: {
     action (exchange) {},
+    accountFiltered () {
+      const accountFiltered = this.accountInfoByNameAccount(this.currentAccount.name)
+      if (accountFiltered) buildCurrentAccountInfo(accountFiltered.accountInfo)
+    },
     buildDataTable (assets) {
       let assetsBuild = []
       if (assets.length > 0) {
@@ -56,6 +59,9 @@ export default {
       }
       return assetsBuild
     }
+  },
+  beforeMount () {
+    this.accountFiltered()
   }
 }
 </script>
