@@ -93,6 +93,7 @@ export default {
     'simple-table': () => import('@/components/AllOfferBoard/SimpleTable')
   },
   computed: {
+    ...mapGetters('accountStore', ['currentAccount']),
     ...mapGetters('socketDbStore', ['mosaicsInfOffer', 'mosaicsInfOfferFromIdHex']),
     ...mapGetters('offersStore', ['offerSelected']),
     nameMosaicInfo () {
@@ -118,18 +119,18 @@ export default {
     resultsOffer (data = [], type = null) {
       if (data.sell.length > 0) {
         for (let item of data.sell) {
-          // item.priceForAmount = item.amount.compact() * item.price
-          item.priceForAmount = item.initialCost.compact()
-          // item.price = this.$generalService.formatterPrice(item.price)
-          this.data.sell.push(item)
+          if (item.owner.publicKey !== this.currentAccount.publicKey) {
+            item.priceForAmount = item.initialCost.compact()
+            this.data.sell.push(item)
+          }
         }
       }
       if (data.buy.length > 0) {
         for (let item of data.buy) {
-          // item.priceForAmount = item.amount.compact() * item.price
-          item.priceForAmount = item.initialCost.compact()
-          // item.price = this.$generalService.formatterPrice(item.price)
-          this.data.buy.push(item)
+          if (item.owner.publicKey !== this.currentAccount.publicKey) {
+            item.priceForAmount = item.initialCost.compact()
+            this.data.buy.push(item)
+          }
         }
       }
     },
