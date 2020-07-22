@@ -21,10 +21,19 @@ const routes = [
     }
   },
   {
+    path: '/newAsset',
+    name: 'new Asset',
+    component: () =>
+      import(/* webpackChunkName: "newAsset" */ '../views/newAsset/createNewAsset.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/newOffer',
     name: 'new Offer',
     component: () =>
-      import(/* webpackChunkName: "searchOfferts" */ '../views/newOffer/createNewOffer.vue'),
+      import(/* webpackChunkName: "newOffer" */ '../views/newOffer/createNewOffer.vue'),
     meta: {
       requiresAuth: true
     }

@@ -140,6 +140,16 @@ export default {
       {
         icon: 'mdi-storefront',
         type: 'icon-group',
+        title: 'New assets',
+        class: 'primary white-text',
+        action: 'newAsset',
+        viewLogged: true,
+        sublinks: [],
+        orderby: 4
+      },
+      {
+        icon: 'mdi-storefront',
+        type: 'icon-group',
         title: 'New offerts',
         class: 'primary white-text',
         action: 'newOffer',
@@ -151,7 +161,7 @@ export default {
       {
         icon: 'mdi-storefront',
         type: 'icon-group',
-        title: 'Search 0fferts',
+        title: 'Search offerts',
         class: 'primary white-text',
         action: 'searchOfferts',
         viewLogged: true,

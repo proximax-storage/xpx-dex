@@ -16,6 +16,9 @@ import {
   ExchangeOfferTransaction
 } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/ExchangeOfferTransaction'
 import {
+  AggregateTransaction
+} from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/AggregateTransaction'
+import {
   Deadline
 } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/Deadline'
 import {
@@ -43,8 +46,22 @@ import {
   MosaicId
 } from 'tsjs-xpx-chain-sdk/dist/src/model/mosaic/MosaicId'
 import {
+  MosaicProperties
+} from 'tsjs-xpx-chain-sdk/dist/src/model/mosaic/MosaicProperties'
+import {
+  MosaicDefinitionTransaction
+} from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/MosaicDefinitionTransaction'
+import {
+  MosaicSupplyChangeTransaction
+} from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/MosaicSupplyChangeTransaction'
+import { MosaicNonce }
+  from 'tsjs-xpx-chain-sdk/dist/src/model/mosaic/MosaicNonce'
+import {
   NamespaceId
 } from 'tsjs-xpx-chain-sdk/dist/src/model/namespace/NamespaceId'
+import {
+  RegisterNamespaceTransaction
+} from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/RegisterNamespaceTransaction'
 import {
   TransactionType
 } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/TransactionType'
@@ -80,7 +97,20 @@ function instanceConnectionApi (randomNode, protocol) {
 function announceTx (signedTransaction) {
   return connection.transactionHttp.announce(signedTransaction)
 }
-
+/**
+ *
+ * @param {*} innerTransaction
+ * @param {*} cosignatures
+ */
+function aggregateTransaction (innerTransaction = [], cosignatures = []) {
+  const network = store.getters['nodeStore/networkType']
+  return AggregateTransaction.createComplete(
+    Deadline.create(10),
+    innerTransaction,
+    network,
+    cosignatures
+  )
+}
 /**
  *
  *
@@ -555,6 +585,71 @@ function getUint64 (value) {
 
 /**
  *
+ * @param {*} deadline
+ * @param {*} ownerAddress
+ * @param {*} isSupplyMutable
+ * @param {*} isTransferable
+ * @param {*} isRestrictable
+ */
+function mosaicDefinitionTransaction (ownerPublicKey, duration, divisibility, isSupplyMutable, isTransferable) {
+  const randomNonce = MosaicNonce.createRandom()
+  const network = store.getters['nodeStore/networkType']
+  const publicAccount = PublicAccount.createFromPublicKey(ownerPublicKey, network)
+  const mosaicId = MosaicId.createFromNonce(randomNonce, publicAccount)
+  return MosaicDefinitionTransaction.create(
+    Deadline.create(10),
+    randomNonce,
+    mosaicId,
+    MosaicProperties.create({
+      supplyMutable: isSupplyMutable,
+      transferable: isTransferable,
+      divisibility: divisibility,
+      duration: (duration) ? UInt64.fromUint(duration) : undefined
+    }),
+    network
+  )
+}
+
+/**
+ *
+ * @param {*} mosaicId
+ * @param {*} mosaicSupplyType
+ * @param {*} delta
+ */
+function mosaicSupplyChangeTransaction (mosaicId, mosaicSupplyType, delta) {
+  const network = store.getters['nodeStore/networkType']
+  console.log('network', network)
+  return MosaicSupplyChangeTransaction.create(
+    Deadline.create(10),
+    mosaicId,
+    mosaicSupplyType,
+    delta,
+    network
+  )
+}
+
+function registerNamespaceTransaction (namespaceName, durationValue, type = 'rootNamespaceName') {
+  const network = store.getters['nodeStore/networkType']
+  let registerNamespaceTx = []
+  const duration = UInt64.fromUint(durationValue)
+  const deadline = Deadline.create(10)
+  if (type === 'rootNamespaceName') {
+    registerNamespaceTx = RegisterNamespaceTransaction.createRootNamespace(
+      deadline,
+      namespaceName,
+      duration,
+      network)
+  }
+  if (type === 'subNamespaceName') {
+    registerNamespaceTx = RegisterNamespaceTransaction.createRootNamespace(deadline,
+      namespaceName,
+      duration,
+      network)
+  }
+  return registerNamespaceTx
+}
+/**
+ *
  *
  * @param {*} publicKey
  * @param {*} network
@@ -682,6 +777,7 @@ export {
   instanceConnectionApi,
   addExchangeOffer,
   announceTx,
+  aggregateTransaction,
   createPublicAccount,
   createRawAddress,
   createSimpleWallet,
@@ -706,6 +802,10 @@ export {
   getEnvironmentByNetworkType,
   getExchangeOffersfromId,
   getUint64,
+  getOutgoingTransactions,
+  mosaicDefinitionTransaction,
+  mosaicSupplyChangeTransaction,
+  registerNamespaceTransaction,
   publicAccountFromPublicKey,
   removeExchangeOffer,
   getTransactionsFromAccount,
@@ -716,6 +816,6 @@ export {
   getTransactionId,
   typeTransactions,
   dateFormatUTC,
-  signedTransaction,
-  getOutgoingTransactions
+  signedTransaction
+
 }

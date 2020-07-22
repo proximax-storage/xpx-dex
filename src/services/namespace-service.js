@@ -1,6 +1,20 @@
 import Vue from 'vue'
 import store from '@/store'
 
+function buildRegisterNamespaceTransaction (namespaceName, duration, type) {
+  const durationsend = Vue.prototype.$generalService.calculateDurationforDay(Number(duration))
+  console.log('durationsend', durationsend)
+  let dataRequired = []
+  const action = 'registerNamespaceTx'
+  const transaction = Vue.prototype.$blockchainProvider.registerNamespaceTransaction(namespaceName, durationsend, type)
+
+  return {
+    transaction,
+    dataRequired,
+    action
+  }
+}
+
 async function searchNamespacesFromAccounts (accounts) {
   const allNamespaces = []
   for (const account of accounts) {
@@ -54,5 +68,6 @@ async function saveNamespace (namespaceInfo) {
 }
 
 export {
+  buildRegisterNamespaceTransaction,
   searchNamespacesFromAccounts
 }

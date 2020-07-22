@@ -3,6 +3,35 @@ import store from '@/store'
 
 /**
  *
+ * @param {*} ownerPublicKey
+ * @param {*} duration
+ * @param {*} divisibility
+ * @param {*} isSupplyMutable
+ * @param {*} isTransferable
+ */
+function buildMosaicDefinitionTransaction (ownerPublicKey, duration, divisibility, isSupplyMutable, isTransferable) {
+  let dataRequired = []
+  const action = 'mosaicDefinitionTx'
+  const transaction = Vue.prototype.$blockchainProvider.mosaicDefinitionTransaction(ownerPublicKey, duration, divisibility, isSupplyMutable, isTransferable)
+  return {
+    transaction,
+    dataRequired,
+    action
+  }
+}
+function buildMosaicSupplyChangeTransaction (mosaicId, mosaicSupplyType, delta) {
+  let dataRequired = []
+  const action = 'mosaicSupplyChangeTx'
+  const transaction = Vue.prototype.$blockchainProvider.mosaicSupplyChangeTransaction(mosaicId, mosaicSupplyType, delta)
+  return {
+    transaction,
+    dataRequired,
+    action
+  }
+}
+
+/**
+ *
  *
  * @param {*} [mosaicsId=null]
  * @param {string} [byAccount='']
@@ -63,7 +92,7 @@ function filterMosaicToReturn (infoMosaics) {
       if (returned.length > 0) {
         const existByNamespace = returned.find(x =>
           x.isNamespace && element.isNamespace ? Vue.prototype.$blockchainProvider.getMosaicId(x.isNamespace).toHex() ===
-          Vue.prototype.$blockchainProvider.getMosaicId(element.isNamespace).toHex() : undefined
+            Vue.prototype.$blockchainProvider.getMosaicId(element.isNamespace).toHex() : undefined
         )
 
         // search by mosaic
@@ -226,7 +255,7 @@ async function saveMosaicStorage (mosaicsTosaved) {
               if (mosaicIdLinked && mosaicIdLinked.toHex() === mosaicIdToSaved) {
                 element.isNamespace = elementStorage.isNamespace
               }
-            } catch (error) {}
+            } catch (error) { }
           }
         }
         // reemplazo la información del mosaico
@@ -244,6 +273,8 @@ async function saveMosaicStorage (mosaicsTosaved) {
 }
 
 export {
+  buildMosaicDefinitionTransaction,
+  buildMosaicSupplyChangeTransaction,
   filterMosaics,
   searchInfoMosaics
 }
