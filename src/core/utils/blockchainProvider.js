@@ -623,7 +623,7 @@ function mosaicSupplyChangeTransaction (mosaicId, mosaicSupplyType, delta) {
     Deadline.create(10),
     mosaicId,
     mosaicSupplyType,
-    delta,
+    UInt64.fromUint(delta),
     network
   )
 }
