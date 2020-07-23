@@ -19,10 +19,32 @@ function buildMosaicDefinitionTransaction (ownerPublicKey, duration, divisibilit
     action
   }
 }
+/**
+ *
+ * @param {*} mosaicId
+ * @param {*} mosaicSupplyType
+ * @param {*} delta
+ */
 function buildMosaicSupplyChangeTransaction (mosaicId, mosaicSupplyType, delta) {
   let dataRequired = []
   const action = 'mosaicSupplyChangeTx'
   const transaction = Vue.prototype.$blockchainProvider.mosaicSupplyChangeTransaction(mosaicId, mosaicSupplyType, delta)
+  return {
+    transaction,
+    dataRequired,
+    action
+  }
+}
+/**
+ *
+ * @param {*} aliasActionType
+ * @param {*} namespaceId
+ * @param {*} mosaicId
+ */
+function buildMosaicAliasTransaction (aliasActionType, namespaceId, mosaicId) {
+  let dataRequired = []
+  const action = 'mosaicAliasTx'
+  const transaction = Vue.prototype.$blockchainProvider.mosaicAliasTransaction(aliasActionType, namespaceId, mosaicId)
   return {
     transaction,
     dataRequired,
@@ -275,6 +297,7 @@ async function saveMosaicStorage (mosaicsTosaved) {
 export {
   buildMosaicDefinitionTransaction,
   buildMosaicSupplyChangeTransaction,
+  buildMosaicAliasTransaction,
   filterMosaics,
   searchInfoMosaics
 }

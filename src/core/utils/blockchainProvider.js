@@ -57,6 +57,9 @@ import {
 import { MosaicNonce }
   from 'tsjs-xpx-chain-sdk/dist/src/model/mosaic/MosaicNonce'
 import {
+  MosaicAliasTransaction
+} from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/MosaicAliasTransaction'
+import {
   NamespaceId
 } from 'tsjs-xpx-chain-sdk/dist/src/model/namespace/NamespaceId'
 import {
@@ -618,12 +621,29 @@ function mosaicDefinitionTransaction (ownerPublicKey, duration, divisibility, is
  */
 function mosaicSupplyChangeTransaction (mosaicId, mosaicSupplyType, delta) {
   const network = store.getters['nodeStore/networkType']
-  console.log('network', network)
   return MosaicSupplyChangeTransaction.create(
     Deadline.create(10),
     mosaicId,
     mosaicSupplyType,
     UInt64.fromUint(delta),
+    network
+  )
+}
+
+/**
+ *
+ * @param {*} aliasActionType
+ * @param {*} namespaceId
+ * @param {*} mosaicId
+ */
+
+function mosaicAliasTransaction (aliasActionType, namespaceId, mosaicId) {
+  const network = store.getters['nodeStore/networkType']
+  return MosaicAliasTransaction.create(
+    Deadline.create(10),
+    aliasActionType,
+    namespaceId,
+    mosaicId,
     network
   )
 }
@@ -684,6 +704,10 @@ function removeExchangeOffer (mosaicId, type) {
 function signedTransaction (privateKey, transaction, network) {
   const currentNode = store.getters['nodeStore/currentNode']
   const account = getAccountFromPrivateKey(privateKey, currentNode.networkType)
+  console.log('blockchainpro::: privateKey:', privateKey)
+  console.log('blockchainpro::: account:', account)
+  console.log('blockchainpro::: transaction:', transaction)
+  console.log('blockchainpro::: currentNode:', currentNode)
   return account.sign(transaction, currentNode.generationHash)
 }
 
@@ -805,6 +829,7 @@ export {
   getOutgoingTransactions,
   mosaicDefinitionTransaction,
   mosaicSupplyChangeTransaction,
+  mosaicAliasTransaction,
   registerNamespaceTransaction,
   publicAccountFromPublicKey,
   removeExchangeOffer,

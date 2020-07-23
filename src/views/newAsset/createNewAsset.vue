@@ -18,7 +18,8 @@ import { PublicAccount } from 'tsjs-xpx-chain-sdk/dist/src/model/account/PublicA
 import { decrypt } from '@/services/account-wallet-service'
 import {
   buildMosaicDefinitionTransaction,
-  buildMosaicSupplyChangeTransaction
+  buildMosaicSupplyChangeTransaction,
+  buildMosaicAliasTransaction
 } from '@/services/mosaics-service'
 import { buildRegisterNamespaceTransaction } from '@/services/namespace-service'
 import { MosaicSupplyType } from 'tsjs-xpx-chain-sdk/dist/src/model/mosaic/MosaicSupplyType'
@@ -37,13 +38,16 @@ export default {
           supply: 500000000
         },
         namespace: {
-          name: 'one',
+          name: 'onep',
           duration: 1,
           type: 'rootNamespaceName'
         },
         password: 'qazwsxedc'
       },
-      hashTx: null
+      hashMosaicDefinition: null,
+      hashMosaicAlias: null,
+      namespaceIdLink: null,
+      mosaicIdLink: null
     }
   },
   beforeMount () {
@@ -69,7 +73,7 @@ export default {
   },
   methods: {
     ...mapMutations('transactionsStore', ['SET_MONITOR_HASH', 'REMOVE_MONITOR_HASH']),
-    announceTx (transaction) {
+    announceTx (transaction, type) {
       let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
       const signedTransaction = this.$blockchainProvider.signedTransaction(
         common.privateKey,
@@ -77,8 +81,8 @@ export default {
         this.currentAccount.simpleWallet.network
       )
       common = null
-      console.log('signedTransaction', signedTransaction)
-      this.hashTx = signedTransaction.hash
+      if (type === 0) this.hashMosaicDefinition = signedTransaction.hash
+      if (type === 3) this.hashMosaicAlias = signedTransaction.hash
 
       const dataMonitorHash = this.$generalService.buildMonitorHash(
         'createNewAsset',
@@ -106,6 +110,15 @@ export default {
     typeCreatetxs (action) {
       switch (action) {
         case 0:
+          console.log('CASE #0')
+          /**
+           * type tx : Aggregate transaction
+           * Mosaic definition transaction
+           * Mosaic supplyChange transaction
+           * Register namespace transaction
+           */
+
+          // Mosaic definition transaction
           const mosaicDefinitionTransaction = buildMosaicDefinitionTransaction(
             this.currentAccount.publicKey,
             this.form.mosaic.duration,
@@ -113,12 +126,13 @@ export default {
             this.form.mosaic.supplyMutable,
             this.form.mosaic.transferable
           ).transaction
+          // Mosaic supplyChange transaction
           const mosaicSupplyChangeTransaction = buildMosaicSupplyChangeTransaction(
             mosaicDefinitionTransaction.mosaicId,
             MosaicSupplyType.Increase,
             this.form.mosaic.supply
           ).transaction
-
+          // Register namespace transaction
           const registerNamespaceTransaction = buildRegisterNamespaceTransaction(
             this.form.namespace.name,
             this.form.namespace.duration,
@@ -128,30 +142,56 @@ export default {
             this.currentAccount.publicKey,
             this.currentAccount.simpleWallet.network
           )
-          console.log(
-            mosaicDefinitionTransaction.toAggregate(publicAccount),
-            mosaicSupplyChangeTransaction.toAggregate(publicAccount)
-          )
           const innerTransaction = [
             mosaicDefinitionTransaction.toAggregate(publicAccount),
             registerNamespaceTransaction.toAggregate(publicAccount),
             mosaicSupplyChangeTransaction.toAggregate(publicAccount)
           ]
-          console.log(this.$blockchainProvider.aggregateTransaction(innerTransaction))
-          this.announceTx(this.$blockchainProvider.aggregateTransaction(innerTransaction))
+          this.setMosaicIdAndNamespace(
+            mosaicDefinitionTransaction.mosaicId.toHex(),
+            this.form.namespace.name
+          )
+          // announce Tx
+          this.announceTx(this.$blockchainProvider.aggregateTransaction(innerTransaction), action)
+          break
+        // type action : 3
+        case 3:
+          console.log('CASE #3')
+          /**
+           * Link = 0, Unlink = 1
+           * type : Linking a namespace to a mosaic
+           * AliasTransaction create for Mosaic
+           */
+
+          // AliasTransaction create for Mosaic
+          const mosaicAliasTransaction = buildMosaicAliasTransaction(
+            0,
+            this.namespaceIdLink,
+            this.mosaicIdLink
+          ).transaction
+          // announce Tx
+          this.announceTx(mosaicAliasTransaction, action)
       }
     },
+    setMosaicIdAndNamespace (mosaicId, namespaceId) {
+      this.mosaicIdLink = this.$blockchainProvider.getMosaicId(mosaicId)
+      this.namespaceIdLink = this.$blockchainProvider.getNamespaceId(namespaceId)
+    },
     validateTxHash (transactions) {
-      this.sendingForm = false
-      if (this.hashTx) {
-        if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashTx)) {
-        }
+      // this.sendingForm = false
+      if (
+        transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicDefinition)
+      ) {
+        console.log('hash Mosaic Definition...')
+        this.typeCreatetxs(3)
+      }
+      if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicAlias)) {
+        console.log('hash Mosaic Alias...')
       }
     }
   },
   watch: {
     confirmed (transactions) {
-      console.log('confir')
       this.validateTxHash(transactions)
     },
     unconfirmedAdded (transactions) {
