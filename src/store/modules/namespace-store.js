@@ -1,6 +1,7 @@
 export const namespaceStore = {
   namespaced: true,
   state: {
+    loading: true,
     namespaces: [
       {
         id: null,
@@ -11,6 +12,7 @@ export const namespaceStore = {
     ]
   },
   getters: {
+    loading: state => state.loading,
     namespaces: state => state.namespaces,
     namespacesFromAddress: state => address => {
       return state.namespaces.sort((a, b) => {
@@ -28,8 +30,12 @@ export const namespaceStore = {
     }
   },
   mutations: {
+    LOADING (state, data) {
+      state.loading = data
+    },
     SET_NAMESPACES (state, data) {
       state.namespaces = data
+      state.loading = false
     }
   }
 }

@@ -6,7 +6,7 @@
     </v-row>
     <!-- formulario -->
     <v-row class="pt-4">
-      <select-namespace />
+      <select-namespace @action="selectActionNamespace"></select-namespace>
       <v-col col="12" class="pt-0">asd</v-col>
       <v-col cols="12" class="ma-0 mx-auto caption d-flex justify-center align-center">
         <custom-button @action="action" :align="'center'" :arrayBtn="getArrayBtn"></custom-button>
@@ -178,6 +178,9 @@ export default {
     setMosaicIdAndNamespace (mosaicId, namespaceId) {
       this.mosaicIdLink = this.$blockchainProvider.getMosaicId(mosaicId)
       this.namespaceIdLink = this.$blockchainProvider.getNamespaceId(namespaceId)
+    },
+    selectActionNamespace (data) {
+      console.log('quelo que ', data)
     },
     validateTxHash (transactions) {
       // this.sendingForm = false

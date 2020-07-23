@@ -16,6 +16,7 @@ function buildRegisterNamespaceTransaction (namespaceName, duration, type) {
 }
 
 async function searchNamespacesFromAccounts (accounts) {
+  store.commit('namespaceStore/LOADING', true)
   const allNamespaces = []
   for (const account of accounts) {
     const address = Vue.prototype.$blockchainProvider.createRawAddress(account.simpleWallet.address['address'])

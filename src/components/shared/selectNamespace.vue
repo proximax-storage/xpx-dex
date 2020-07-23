@@ -5,14 +5,15 @@
       v-model="form.selectNamespace"
       :items="itemsNamespace"
       :item-disabled="itemsNamespace.disabled"
-      @change="changeSelectNamespace($event)"
+      @change="triggerClick($event)"
       item-text="namespaceName.name"
       item-value="idToHex"
+      :loading="loading"
       attach
       dense
       :rules="[]"
       :color="inputStyle"
-      label="namespace"
+      label="Name"
     ></v-select>
   </v-col>
 </template>
@@ -31,22 +32,20 @@ export default {
             name: 'New Root Namespace'
           },
           idToHex: null,
+          type: 0,
           disabled: false
         }
       ]
     }
   },
   computed: {
-    ...mapGetters('namespaceStore', ['namespacesFromAddress']),
+    ...mapGetters('namespaceStore', ['namespacesFromAddress', 'loading']),
     ...mapGetters('accountStore', ['currentAccount']),
     itemsNamespace () {
       return this.getNamespacesFromAddress()
     }
   },
   methods: {
-    changeSelectNamespace (event) {
-      console.log('changeSelectNamespace:', event)
-    },
     disabledNamespaceList (listNamespace) {
       const list = listNamespace.map(x => {
         return {
@@ -54,7 +53,8 @@ export default {
             name: x.namespaceName.name
           },
           disabled: Boolean(!x.namespaceInfo.active || x.namespaceInfo.depth === 3),
-          idToHex: x.idToHex
+          idToHex: x.idToHex,
+          type: 1
         }
       })
       return list
@@ -67,10 +67,15 @@ export default {
         arrayNamespace = this.rootNamespace.concat(this.disabledNamespaceList(namespace))
       }
       return arrayNamespace
+    },
+    triggerClick (event) {
+      const namespaceSelect = this.itemsNamespace.find(x => x.idToHex === event)
+      this.$emit('action', namespaceSelect)
     }
   },
   beforeMount () {
-    console.log(this.namespacesFromAddress(this.currentAccount.simpleWallet.address.address))
+    this.form.selectNamespace = this.rootNamespace[0]
+    this.$emit('action', this.form.selectNamespace)
   }
 }
 </script>
