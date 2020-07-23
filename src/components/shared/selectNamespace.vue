@@ -11,13 +11,17 @@
       :loading="loading"
       attach
       dense
-      :rules="[]"
+      :error="errorSelect"
       :color="inputStyle"
-      label="Name"
+      :hint="`${form.selectNamespace.namespaceName.name}, alias: (${form.selectNamespace.aliasType})`"
+      persistent-hint
+      return-object
+      label="Select name "
     ></v-select>
   </v-col>
 </template>
 <script>
+import { aliasType } from '@/services/namespace-service'
 import { mapGetters } from 'vuex'
 export default {
   data () {
@@ -28,12 +32,13 @@ export default {
       },
       rootNamespace: [
         {
+          namespaceInfo: null,
           namespaceName: {
             name: 'New Root Namespace'
           },
           idToHex: null,
-          type: 0,
-          disabled: false
+          disabled: false,
+          aliasType: 'none'
         }
       ]
     }
@@ -43,6 +48,13 @@ export default {
     ...mapGetters('accountStore', ['currentAccount']),
     itemsNamespace () {
       return this.getNamespacesFromAddress()
+    },
+    errorSelect () {
+      let error = false
+      if (this.form.selectNamespace.namespaceInfo) {
+        error = this.form.selectNamespace.namespaceInfo.hasAlias()
+      }
+      return error
     }
   },
   methods: {
@@ -54,7 +66,8 @@ export default {
           },
           disabled: Boolean(!x.namespaceInfo.active || x.namespaceInfo.depth === 3),
           idToHex: x.idToHex,
-          type: 1
+          namespaceInfo: x.namespaceInfo,
+          aliasType: x.namespaceInfo.hasAlias() ? aliasType(x.namespaceInfo.alias.type) : 'none'
         }
       })
       return list
@@ -69,8 +82,7 @@ export default {
       return arrayNamespace
     },
     triggerClick (event) {
-      const namespaceSelect = this.itemsNamespace.find(x => x.idToHex === event)
-      this.$emit('action', namespaceSelect)
+      this.$emit('action', event)
     }
   },
   beforeMount () {

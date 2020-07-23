@@ -1,6 +1,19 @@
 import Vue from 'vue'
 import store from '@/store'
-
+/**
+* The alias type
+*
+* - 0 : No alias
+* - 1 : Mosaic id alias
+* - 2 : Address alias
+*/
+function aliasType (type) {
+  let typeAlias = null
+  if (type === 0) { typeAlias = 'none' }
+  if (type === 1) { typeAlias = 'mosaic' }
+  if (type === 2) { typeAlias = 'address' }
+  return typeAlias
+}
 function buildRegisterNamespaceTransaction (namespaceName, duration, type) {
   const durationsend = Vue.prototype.$generalService.calculateDurationforDay(Number(duration))
   console.log('durationsend', durationsend)
@@ -69,6 +82,7 @@ async function saveNamespace (namespaceInfo) {
 }
 
 export {
+  aliasType,
   buildRegisterNamespaceTransaction,
   searchNamespacesFromAccounts
 }
