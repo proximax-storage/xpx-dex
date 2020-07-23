@@ -7,6 +7,15 @@ const generalConfig = {
     min: 3,
     max: 30
   },
+  divisibility: {
+    min: 0,
+    max: 6
+  },
+
+  supply: {
+    min: 1,
+    max: 9000000000000000
+  },
   namespace: {
     min: 1,
     max: 30
@@ -146,6 +155,34 @@ function namespace (label = 'Namespace') {
 
 /**
  *
+ * @param {*} label
+ */
+function divisibility (label = 'Divisibility') {
+  const min = generalConfig.divisibility.min
+  const max = generalConfig.divisibility.max
+  const rules = {
+    required: value => !!value || `${label} is required`,
+    min: v => (v && Number(v) >= min) || `${label} must be less than ${min}`,
+    max: v => (v && Number(v) <= max) || `${label} must be a maximum of ${max}`
+  }
+  return assemblyConfig(label, '', 'number', min, max, rules)
+}
+/**
+ *
+ * @param {*} label
+ */
+function supply (label = 'Supply') {
+  const min = generalConfig.supply.min
+  const max = generalConfig.supply.max
+  const rules = {
+    required: value => !!value || `${label} is required`,
+    min: v => (v && Number(v) >= min) || `${label} must be less than ${min}`,
+    max: v => (v && Number(v) <= max) || `${label} must be a maximum of ${max}`
+  }
+  return assemblyConfig(label, '', 'number', min, max, rules)
+}
+/**
+ *
  *
  * @returns
  */
@@ -196,6 +233,8 @@ export {
   buildButton,
   getConfigMoney,
   isMatch,
+  divisibility,
+  supply,
   namespace,
   password,
   privateKey,

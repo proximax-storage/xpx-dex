@@ -4,13 +4,67 @@
     <v-row>
       <v-col cols="12" class="headline font-weight-regular text-left primary--text">New asset</v-col>
     </v-row>
-    <!-- formulario -->
-    <v-row class="pt-4">
-      <select-namespace @action="selectActionNamespace"></select-namespace>
-      <v-col col="12" class="pt-0">asd</v-col>
-      <v-col cols="12" class="ma-0 mx-auto caption d-flex justify-center align-center">
-        <custom-button @action="action" :align="'center'" :arrayBtn="getArrayBtn"></custom-button>
+    <v-row class="pt-4 ma-3">
+      <v-col sm="12" md="6" lg="8" col="8" class="pt-0">
+        <v-form v-model="valid" ref="form">
+        <!-- Supply -->
+        <v-row>
+          <v-col cols="12">
+            <v-text-field
+              :type="configForm.supply.type"
+              name="Supply"
+              class="pt-0 text-right"
+              :min="configForm.supply.min"
+              :max="configForm.supply.max"
+              v-model="form.mosaic.supply"
+              :label="configForm.supply.label"
+              :color="inputStyle"
+              :rules="[
+                configForm.supply.rules.required,
+                configForm.supply.rules.min,
+                configForm.supply.rules.max,
+              ]"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <!-- Divisibility -->
+        <v-row>
+          <v-col cols="12">
+            <v-text-field
+              :type="configForm.divisibility.type"
+              name="divisibility"
+              class="pt-0 text-right"
+              :min="configForm.divisibility.min"
+              :max="configForm.divisibility.max"
+              v-model="form.mosaic.divisibility"
+              :label="configForm.divisibility.label"
+              :color="inputStyle"
+              :rules="[
+                configForm.divisibility.rules.required,
+                configForm.divisibility.rules.min,
+                configForm.divisibility.rules.max,
+              ]"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <!-- Transferable and  supply mutable-->
+        <v-row class="d-flex mx-auto justify-space-around align-center">
+          <v-col col="12" class="pt-0 d-flex mx-auto justify-space-around align-center">
+            <v-checkbox v-model="form.mosaic.transferable" label="Transferable"></v-checkbox>
+            <v-checkbox v-model="form.mosaic.supplyMutable" label="Supply Mutable"></v-checkbox>
+          </v-col>
+        </v-row>
+        <v-row>
+          <select-namespace @action="selectActionNamespace"></select-namespace>
+        </v-row>
+        <v-row>
+          <v-col cols="12" class="ma-0 mx-auto caption d-flex justify-center align-center">
+            <custom-button @action="action" :align="'center'" :arrayBtn="getArrayBtn"></custom-button>
+          </v-col>
+        </v-row>
+        </v-form>
       </v-col>
+      <v-col sm="12" md="6" lg="4" col="4" class="pt-0">informacion</v-col>
     </v-row>
   </v-col>
 </template>
@@ -29,14 +83,15 @@ export default {
   data: () => {
     return {
       arrayBtn: null,
+      configForm: null,
       form: {
         mosaic: {
           duration: undefined,
-          divisibility: 6,
-          supplyMutable: true,
+          divisibility: 0,
+          supplyMutable: false,
           transferable: true,
           restrictable: false,
-          supply: 500000000
+          supply: 800000000
         },
         namespace: {
           name: 'onep',
@@ -48,12 +103,17 @@ export default {
       hashMosaicDefinition: null,
       hashMosaicAlias: null,
       namespaceIdLink: null,
-      mosaicIdLink: null
+      mosaicIdLink: null,
+      inputStyle: 'inputStyle'
     }
   },
   beforeMount () {
     this.arrayBtn = {
       place: this.$configForm.buildButton('Create', 'create', 'create', 'primary', 'white--text')
+    }
+    this.configForm = {
+      divisibility: this.$configForm.divisibility('Divisibility'),
+      supply: this.$configForm.supply('Supply')
     }
   },
   components: {

@@ -1,5 +1,5 @@
 <template>
-  <v-col cols="6">
+  <v-col cols="12">
     <v-select
       class="pt-1"
       v-model="form.selectNamespace"
