@@ -186,12 +186,7 @@
                 </p>
               </v-col>
             </v-row>
-            <v-row>
-              <v-col
-                cols="10"
-                class="ma-0 mx-auto body-2 d-flex justify-center align-center"
-              >This transaction will have a fee: 0.002020 XPX</v-col>
-            </v-row>
+            <tx-fee />
             <v-row>
               <v-col cols="9" class="ma-0 pb-0 mx-auto caption d-flex justify-center align-center">
                 <v-text-field
@@ -298,7 +293,8 @@ export default {
     'congratulations-offer': () => import('@/components/shared/CongratulationsOffer'),
     'custom-button': () => import('@/components/shared/Buttons'),
     'card-assets-market': () => import('@/components/shared/CardAssetsMarket'),
-    'merching-offert': () => import('@/components/newOffer/MerchingOffer')
+    'merching-offert': () => import('@/components/newOffer/MerchingOffer'),
+    'tx-fee': () => import('@/components/shared/TxFee')
   },
   beforeMount () {
     this.mountBuildCurrentAccountInfo(this.type)

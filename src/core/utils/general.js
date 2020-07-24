@@ -147,7 +147,22 @@ function doCopy (itemName, text) {
     }
   )
 }
+/**
+ *
+ * @param {*} stringOne
+ * @param {*} stringTwo
+ */
+function differString (a, b) {
+  let i = 0
+  let j = 0
+  let result = ''
 
+  while (j < b.length) {
+    if (a[i] !== b[j] || i === a.length) { result += b[j] } else { i++ }
+    j++
+  }
+  return result
+}
 function formatterPrice (price) {
   const priceFormatte = price.toString().split(',').join('').split('.').join('')
 
@@ -318,6 +333,7 @@ export {
   buildMonitorHash,
   calculateDurationforDay,
   calculateDurationExpire,
+  differString,
   doCopy,
   formatterPrice,
   getDataPart,

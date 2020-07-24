@@ -47,7 +47,28 @@ async function searchNamespacesFromAccounts (accounts) {
     saveNamespace(allNamespaces)
   }
 }
-
+/**
+ * validate name namespace
+ * @param {*} value
+ */
+function validateNamespaceName (value) {
+  let isvalid = null
+  if (value) {
+    const formatter = value
+      .toLowerCase()
+      .replace(/[^a-z0-9]/gi, '')
+      .trim()
+    if (formatter !== value) {
+      isvalid = `Format not allowed, characters (${Vue.prototype.$generalService.differString(
+        formatter,
+        value
+      )}) not valid`
+    } else {
+      isvalid = true
+    }
+  }
+  return isvalid
+}
 /**
  *
  *
@@ -84,5 +105,6 @@ async function saveNamespace (namespaceInfo) {
 export {
   aliasType,
   buildRegisterNamespaceTransaction,
-  searchNamespacesFromAccounts
+  searchNamespacesFromAccounts,
+  validateNamespaceName
 }

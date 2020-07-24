@@ -11,7 +11,10 @@ const generalConfig = {
     min: 0,
     max: 6
   },
-
+  duration: {
+    min: 1,
+    max: 365
+  },
   supply: {
     min: 1,
     max: 9000000000000000
@@ -19,6 +22,10 @@ const generalConfig = {
   namespace: {
     min: 1,
     max: 30
+  },
+  namespaceName: {
+    min: 2,
+    max: 16
   },
   password: {
     min: 8,
@@ -142,6 +149,22 @@ function isMatch (value1, value2, nameValidation = '') {
  * @param {string} [label='Namespace']
  * @returns
  */
+function namespaceName (label = 'namespaceName') {
+  const min = generalConfig.namespaceName.min
+  const max = generalConfig.namespaceName.max
+  const rules = {
+    required: value => !!value || `${label} is required`,
+    min: v => (v && v.length >= min) || `${label} must be less than ${min} characters`,
+    max: v => (v && v.length <= max) || `${label} must be a maximum of ${max} characters`
+  }
+  return assemblyConfig(label, '', '', min, max, rules)
+}
+/**
+ *
+ *
+ * @param {string} [label='Namespace']
+ * @returns
+ */
 function namespace (label = 'Namespace') {
   const min = generalConfig.namespace.min
   const max = generalConfig.namespace.max
@@ -153,6 +176,20 @@ function namespace (label = 'Namespace') {
   return assemblyConfig(label, '', '', min, max, rules)
 }
 
+/**
+ *
+ * @param {*} label
+ */
+function duration (label = 'Duration') {
+  const min = generalConfig.duration.min
+  const max = generalConfig.duration.max
+  const rules = {
+    required: value => !!value || `${label} is required`,
+    min: v => (v && Number(v) >= min) || `${label} must be less than ${min}`,
+    max: v => (v && Number(v) <= max) || `${label} must be a maximum of ${max}`
+  }
+  return assemblyConfig(label, '', 'number', min, max, rules)
+}
 /**
  *
  * @param {*} label
@@ -231,10 +268,12 @@ function walletAccountName (label = 'Wallet') {
 export {
   amount,
   buildButton,
+  duration,
   getConfigMoney,
   isMatch,
   divisibility,
   supply,
+  namespaceName,
   namespace,
   password,
   privateKey,
