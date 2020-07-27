@@ -648,7 +648,7 @@ function mosaicAliasTransaction (aliasActionType, namespaceId, mosaicId) {
   )
 }
 
-function registerNamespaceTransaction (namespaceName, durationValue, type = 'rootNamespaceName') {
+function registerNamespaceTransaction (rootNamespaceName, subnamespaceName = null, durationValue, type = 'rootNamespaceName') {
   const network = store.getters['nodeStore/networkType']
   let registerNamespaceTx = []
   const duration = UInt64.fromUint(durationValue)
@@ -656,13 +656,14 @@ function registerNamespaceTransaction (namespaceName, durationValue, type = 'roo
   if (type === 'rootNamespaceName') {
     registerNamespaceTx = RegisterNamespaceTransaction.createRootNamespace(
       deadline,
-      namespaceName,
+      rootNamespaceName,
       duration,
       network)
   }
   if (type === 'subNamespaceName') {
-    registerNamespaceTx = RegisterNamespaceTransaction.createRootNamespace(deadline,
-      namespaceName,
+    registerNamespaceTx = RegisterNamespaceTransaction.createSubNamespace(deadline,
+      subnamespaceName,
+      rootNamespaceName,
       duration,
       network)
   }
@@ -704,10 +705,6 @@ function removeExchangeOffer (mosaicId, type) {
 function signedTransaction (privateKey, transaction, network) {
   const currentNode = store.getters['nodeStore/currentNode']
   const account = getAccountFromPrivateKey(privateKey, currentNode.networkType)
-  console.log('blockchainpro::: privateKey:', privateKey)
-  console.log('blockchainpro::: account:', account)
-  console.log('blockchainpro::: transaction:', transaction)
-  console.log('blockchainpro::: currentNode:', currentNode)
   return account.sign(transaction, currentNode.generationHash)
 }
 

@@ -14,12 +14,12 @@ function aliasType (type) {
   if (type === 2) { typeAlias = 'address' }
   return typeAlias
 }
-function buildRegisterNamespaceTransaction (namespaceName, duration, type) {
+function buildRegisterNamespaceTransaction (rootNamespaceName, subnamespaceName, duration, type) {
   const durationsend = Vue.prototype.$generalService.calculateDurationforDay(Number(duration))
   console.log('durationsend', durationsend)
   let dataRequired = []
   const action = 'registerNamespaceTx'
-  const transaction = Vue.prototype.$blockchainProvider.registerNamespaceTransaction(namespaceName, durationsend, type)
+  const transaction = Vue.prototype.$blockchainProvider.registerNamespaceTransaction(rootNamespaceName, subnamespaceName, durationsend, type)
 
   return {
     transaction,
@@ -71,6 +71,26 @@ function validateNamespaceName (value) {
 }
 /**
  *
+ * @param {*} parantName
+ * @param {*} childName
+ */
+function validateRootAndSubNamespace (parantName, childName, typeNamespace = 'rootNamespaceName') {
+  let returnValue = {
+    rootNamespaceName: null,
+    subNamespaceName: null
+
+  }
+  if (typeNamespace === 'rootNamespaceName') {
+    returnValue.rootNamespaceName = parantName
+    returnValue.subNamespaceName = parantName
+  } else {
+    returnValue.rootNamespaceName = childName
+    returnValue.subNamespaceName = parantName
+  }
+  return returnValue
+}
+/**
+ *
  *
  * @param {*} namespaceInfo
  */
@@ -106,5 +126,6 @@ export {
   aliasType,
   buildRegisterNamespaceTransaction,
   searchNamespacesFromAccounts,
-  validateNamespaceName
+  validateNamespaceName,
+  validateRootAndSubNamespace
 }

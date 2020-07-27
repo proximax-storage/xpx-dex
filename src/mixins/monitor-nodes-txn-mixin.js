@@ -19,7 +19,7 @@ export default {
     confirmed (transactions) {
       const allAccounts = this.$store.getters['walletStore/currentWallet'].accounts
       getAccountsInfo(allAccounts)
-      console.log('----- WATCH CONFIRMED ------', transactions)
+      // console.log('----- WATCH CONFIRMED ------', transactions)
       const hashs = transactions.map(t => t.transactionInfo.hash)
       const monitorHashs = this.$store.getters['transactionsStore/getMonitorHashs']
       monitorHashs.forEach(element => {
