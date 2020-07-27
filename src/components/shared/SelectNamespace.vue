@@ -11,13 +11,13 @@
       :loading="loading"
       attach
       dense
-      :error="errorSelect"
       :color="inputStyle"
       :hint="`${form.selectNamespace.namespaceName.name}, alias: (${form.selectNamespace.aliasType})`"
       persistent-hint
       return-object
       label="Select name "
     ></v-select>
+    <!-- :error="errorSelect" -->
   </v-col>
 </template>
 <script>

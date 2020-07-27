@@ -664,7 +664,6 @@ function registerNamespaceTransaction (rootNamespaceName, subnamespaceName = nul
     registerNamespaceTx = RegisterNamespaceTransaction.createSubNamespace(deadline,
       subnamespaceName,
       rootNamespaceName,
-      duration,
       network)
   }
   return registerNamespaceTx
