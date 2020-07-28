@@ -227,29 +227,7 @@ export default {
   beforeMount () {
     this.regexNamespace = /^[0-9]{3}$/
     this.arrayBtn = {
-      create: this.$configForm.buildButton('Create', 'create', 'create', 'primary', 'white--text'),
-      confirMos: this.$configForm.buildButton(
-        'confirMos',
-        'confirMos',
-        'confirMos',
-        'primary',
-        'white--text'
-      )
-      // ,
-      // confalias: this.$configForm.buildButton(
-      //   'confalias',
-      //   'confalias',
-      //   'confalias',
-      //   'primary',
-      //   'white--text'
-      // ),
-      // mostrar: this.$configForm.buildButton(
-      //   'mostrar',
-      //   'mostrar',
-      //   'mostrar',
-      //   'primary',
-      //   'white--text'
-      // )
+      create: this.$configForm.buildButton('Create', 'create', 'create', 'primary', 'white--text')
     }
     this.configForm = {
       divisibility: this.$configForm.divisibility('Divisibility'),
@@ -329,16 +307,6 @@ export default {
       switch (action) {
         case 'create':
           this.typeCreatetxs(this.typeAction())
-        //   break
-        // case 'mostrar':
-        //   this.validateLoadingTX(true)
-        //   break
-        // case 'confirMos':
-        //   this.validateLoadingTX(true, true)
-        //   break
-        // case 'confalias':
-        //   this.validateLoadingTX(true, false, true)
-        //   break
       }
     },
     nameToAssetExample (nameForm = null, nameNamespace = null) {
