@@ -7,7 +7,7 @@
     <!-- Template form-->
     <template v-if="dataTx.length === 0 || dataTx.length === 1 ">
       <v-row class="ma-3">
-        <v-col sm="12" md="6" lg="8" col="8" class="pt-0">
+        <v-col sm="12" md="6" lg="7" col="7" class="pt-0">
           <v-form v-model="valid" ref="form">
             <!-- name asset -->
             <v-row>
@@ -149,7 +149,16 @@
             </v-row>
           </v-form>
         </v-col>
-        <v-col sm="12" md="6" lg="4" col="4" class="pt-0">informacion sasd dd</v-col>
+        <v-col sm="12" md="6" lg="5" col="5" class="pt-0">
+          <features-mosaic-namespace :supply="configForm.supply.max"></features-mosaic-namespace>
+          <div v-if="showLoading">
+            <progress-status
+              :showLoading="showLoading"
+              :progressMosaicDefi="progressMosaicDefi"
+              :progressMosaicAlias="progressMosaicAlias"
+            ></progress-status>
+          </div>
+        </v-col>
       </v-row>
     </template>
     <!-- Template congratulations-->
@@ -206,16 +215,41 @@ export default {
       fullNameNamespace: null,
       mosaicIdLink: null,
       sendingForm: false,
+      showLoading: false,
       inputStyle: 'inputStyle',
       valid: null,
       isValidNamespaceName: true,
-      isValidateBalance: false
+      isValidateBalance: false,
+      progressMosaicDefi: false,
+      progressMosaicAlias: false
     }
   },
   beforeMount () {
     this.regexNamespace = /^[0-9]{3}$/
     this.arrayBtn = {
-      create: this.$configForm.buildButton('Create', 'create', 'create', 'primary', 'white--text')
+      create: this.$configForm.buildButton('Create', 'create', 'create', 'primary', 'white--text'),
+      confirMos: this.$configForm.buildButton(
+        'confirMos',
+        'confirMos',
+        'confirMos',
+        'primary',
+        'white--text'
+      )
+      // ,
+      // confalias: this.$configForm.buildButton(
+      //   'confalias',
+      //   'confalias',
+      //   'confalias',
+      //   'primary',
+      //   'white--text'
+      // ),
+      // mostrar: this.$configForm.buildButton(
+      //   'mostrar',
+      //   'mostrar',
+      //   'mostrar',
+      //   'primary',
+      //   'white--text'
+      // )
     }
     this.configForm = {
       divisibility: this.$configForm.divisibility('Divisibility'),
@@ -230,7 +264,9 @@ export default {
     'congratulations-Assets': () => import('@/components/shared/CongratulationsAssets'),
     'select-namespace': () => import('@/components/shared/SelectNamespace'),
     'tx-fee': () => import('@/components/shared/TxFee'),
-    'rental-fee': () => import('@/components/shared/TxRentalFee')
+    'rental-fee': () => import('@/components/shared/TxRentalFee'),
+    'features-mosaic-namespace': () => import('@/components/newAsset/featuresMosaicNamespace'),
+    'progress-status': () => import('@/components/newAsset/progressStatusTx')
   },
   computed: {
     ...mapGetters('accountStore', ['currentAccount']),
@@ -293,6 +329,16 @@ export default {
       switch (action) {
         case 'create':
           this.typeCreatetxs(this.typeAction())
+        //   break
+        // case 'mostrar':
+        //   this.validateLoadingTX(true)
+        //   break
+        // case 'confirMos':
+        //   this.validateLoadingTX(true, true)
+        //   break
+        // case 'confalias':
+        //   this.validateLoadingTX(true, false, true)
+        //   break
       }
     },
     nameToAssetExample (nameForm = null, nameNamespace = null) {
@@ -360,6 +406,7 @@ export default {
           )
           console.log('innerTransaction', innerTransaction)
           // announce Tx
+          this.validateLoadingTX(true)
           this.announceTx(this.$blockchainProvider.aggregateTransaction(innerTransaction), action)
           break
         // type action : 3
@@ -408,6 +455,7 @@ export default {
         transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicDefinition)
       ) {
         this.dataTx.push({ hash: this.hashMosaicDefinition })
+        this.validateLoadingTX(true, true)
         console.log('hash Mosaic Definition...')
         this.sendingForm = false
         this.typeCreatetxs(3)
@@ -416,10 +464,22 @@ export default {
     validateTxHashMosaicAlias (transactions) {
       // this.sendingForm = false
       if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicAlias)) {
-        this.dataTx.push({ hash: this.hashMosaicAlias })
+        this.validateLoadingTX(true, false, true)
+        setTimeout(() => {
+          this.dataTx.push({ hash: this.hashMosaicAlias })
+        }, 1000)
         console.log('hash Mosaic Alias...')
         this.sendingForm = false
       }
+    },
+    validateLoadingTX (
+      showLoading = false,
+      progressMosaicDefiV = false,
+      progressMosaicAliasV = false
+    ) {
+      this.showLoading = showLoading
+      this.progressMosaicDefi = progressMosaicDefiV
+      this.progressMosaicAlias = progressMosaicAliasV
     }
   },
   watch: {
@@ -432,6 +492,7 @@ export default {
     },
     status (hashs) {
       this.sendingForm = false
+      this.validateLoadingTX(false, false, false)
       // this.sendingForm = false
     }
   }
