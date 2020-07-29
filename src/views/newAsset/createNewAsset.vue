@@ -9,7 +9,14 @@
       <v-row class="ma-3">
         <v-col sm="12" md="6" lg="7" col="7" class="pt-0">
           <v-form v-model="valid" ref="form">
-            <!-- name asset -->
+            <!-- File  icon mosaic -->
+            <v-row>
+              <file-icon-mosaic
+                @validIconMosaic="validIconMosaic"
+                @arrayToBase64Img="actionArrayToBase64Img"
+              ></file-icon-mosaic>
+            </v-row>
+            <!-- Name asset -->
             <v-row>
               <v-col cols="12">
                 <v-text-field
@@ -220,6 +227,7 @@ export default {
       valid: null,
       isValidNamespaceName: true,
       isValidateBalance: false,
+      isValidIconMosaic: false,
       progressMosaicDefi: false,
       progressMosaicAlias: false
     }
@@ -244,6 +252,7 @@ export default {
     'tx-fee': () => import('@/components/shared/TxFee'),
     'rental-fee': () => import('@/components/shared/TxRentalFee'),
     'features-mosaic-namespace': () => import('@/components/newAsset/featuresMosaicNamespace'),
+    'file-icon-mosaic': () => import('@/components/newAsset/fileIconMosaic'),
     'progress-status': () => import('@/components/newAsset/progressStatusTx')
   },
   computed: {
@@ -265,7 +274,8 @@ export default {
     },
     getArrayBtn () {
       const arrayBtn = this.arrayBtn
-      arrayBtn['create'].disabled = !this.valid || !this.form.checkbox || this.isValidateBalance
+      arrayBtn['create'].disabled =
+        !this.isValidIconMosaic || !this.valid || !this.form.checkbox || this.isValidateBalance
       arrayBtn['create'].loading = this.sendingForm
       arrayBtn['create'].color = 'white'
       arrayBtn['create'].textColor = 'white--text'
@@ -309,6 +319,9 @@ export default {
           this.typeCreatetxs(this.typeAction())
       }
     },
+    actionArrayToBase64Img (data) {
+      console.log('data', data)
+    },
     nameToAssetExample (nameForm = null, nameNamespace = null) {
       let name = null
       if (nameForm && nameNamespace) {
@@ -319,7 +332,7 @@ export default {
       return (this.fullNameNamespace = name)
     },
     typeAction () {
-      return 0
+      return 4
     },
     typeCreatetxs (action) {
       switch (action) {
@@ -440,6 +453,9 @@ export default {
         this.sendingForm = false
       }
     },
+    validIconMosaic (event) {
+      this.isValidIconMosaic = event
+    },
     validateLoadingTX (
       showLoading = false,
       progressMosaicDefiV = false,
@@ -462,6 +478,12 @@ export default {
       this.sendingForm = false
       this.validateLoadingTX(false, false, false)
       // this.sendingForm = false
+    },
+    '$refs.iconMosaic': {
+      immediate: true,
+      handler (value) {
+        console.log('$refs.iconMosaic', value)
+      }
     }
   }
 }

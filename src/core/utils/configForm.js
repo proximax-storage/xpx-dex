@@ -3,6 +3,12 @@ import {
 } from '@/core/utils/blockchainProvider'
 
 const generalConfig = {
+  img: {
+    width: 35,
+    height: 35,
+    size: 2000,
+    typeForm: 'image/png'
+  },
   amount: {
     min: 3,
     max: 30
@@ -71,6 +77,18 @@ function assemblyConfig (label, icon, inputType, min, max, rules, showIcon = fal
     show,
     showConfirm
   }
+}
+/**
+ *
+ * @param {*} width
+ * @param {*} height
+ * @param {*} size
+ * @param {*} type
+ */
+function assemblyConfigFile (width, height, size, typeForm, assemblyConfig) {
+  const config = { width, height, size, typeForm }
+
+  return Object.assign(config, assemblyConfig)
 }
 
 /**
@@ -208,6 +226,22 @@ function divisibility (label = 'Divisibility') {
  *
  * @param {*} label
  */
+function iconMosaic (label = 'Image mosaic') {
+  const size = generalConfig.img.size
+  const typeForm = generalConfig.img.typeForm
+  const width = generalConfig.img.width
+  const height = generalConfig.img.height
+  const rules = {
+    required: v => !!v || `${label} is required`,
+    size: v => !v || v.size < size || 'Image size must be less than 2 kB!',
+    typeForm: v => !v || v.type === typeForm || `Allowed format (${typeForm})`
+  }
+  return assemblyConfigFile(width, height, size, typeForm, assemblyConfig(label, '', 'file', null, null, rules))
+}
+/**
+ *
+ * @param {*} label
+ */
 function supply (label = 'Supply') {
   const min = generalConfig.supply.min
   const max = generalConfig.supply.max
@@ -271,6 +305,7 @@ export {
   duration,
   getConfigMoney,
   isMatch,
+  iconMosaic,
   divisibility,
   supply,
   namespaceName,
