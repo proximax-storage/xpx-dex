@@ -9,7 +9,7 @@
             v-model="getFile"
             show-size
             counter
-            :rules="[configForm.iconMosaic.rules.required,
+            :rules="[
       configForm.iconMosaic.rules.size,
       configForm.iconMosaic.rules.typeForm,
       isValidImg]"
@@ -34,7 +34,6 @@
           <img v-if="base64File" :src="base64File" />
         </v-col>
       </v-row>
-      {{valid}}
     </v-form>
   </v-col>
 </template>
@@ -92,7 +91,10 @@ export default {
         })
       } else {
         this.$emit('arrayToBase64Img', null)
-        this.$emit('validIconMosaic', false)
+        if (this.$refs.form) {
+          this.$refs.form.reset()
+        }
+        this.$emit('validIconMosaic', true)
         this.base64File = null
       }
     }

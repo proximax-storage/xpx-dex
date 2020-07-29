@@ -227,7 +227,7 @@ export default {
       valid: null,
       isValidNamespaceName: true,
       isValidateBalance: false,
-      isValidIconMosaic: false,
+      isValidIconMosaic: true,
       progressMosaicDefi: false,
       progressMosaicAlias: false
     }
@@ -478,12 +478,6 @@ export default {
       this.sendingForm = false
       this.validateLoadingTX(false, false, false)
       // this.sendingForm = false
-    },
-    '$refs.iconMosaic': {
-      immediate: true,
-      handler (value) {
-        console.log('$refs.iconMosaic', value)
-      }
     }
   }
 }
