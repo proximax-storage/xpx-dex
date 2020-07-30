@@ -38,7 +38,7 @@
   </v-col>
 </template>
 <script>
-import { validateDimensionImg, arrayToBase64Img } from '@/services/icon-mosaic-services'
+import { validateDimensionImg, arrayToBase64Img } from '@/services/icon-mosaic-service'
 export default {
   data () {
     return {
@@ -72,8 +72,14 @@ export default {
     }
   },
   methods: {
+    reset () {
+      if (this.$refs.form) {
+        this.$refs.form.reset()
+      }
+    },
     readImage (file) {
       if (file) {
+        this.valid = true
         const reader = new FileReader()
         reader.readAsDataURL(file)
         reader.addEventListener('load', () => {
@@ -91,9 +97,7 @@ export default {
         })
       } else {
         this.$emit('arrayToBase64Img', null)
-        if (this.$refs.form) {
-          this.$refs.form.reset()
-        }
+        this.reset()
         this.$emit('validIconMosaic', true)
         this.base64File = null
       }

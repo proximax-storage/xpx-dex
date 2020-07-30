@@ -1,6 +1,17 @@
 import Vue from 'vue'
 import store from '@/store'
 
+function buildModifyMetadataTransactionMosaic (mosaicId, modifications) {
+  let dataRequired = []
+  const action = 'metadataMosaicTx'
+  const transaction = Vue.prototype.$blockchainProvider.modifyMetadataTransactionMosaic(mosaicId, modifications)
+  return {
+    transaction,
+    dataRequired,
+    action
+  }
+}
+
 /**
  *
  * @param {*} ownerPublicKey
@@ -9,10 +20,10 @@ import store from '@/store'
  * @param {*} isSupplyMutable
  * @param {*} isTransferable
  */
-function buildMosaicDefinitionTransaction (ownerPublicKey, duration, divisibility, isSupplyMutable, isTransferable) {
+function buildMosaicDefinitionTransaction (ownerPublicKey, randomNonce, duration, divisibility, isSupplyMutable, isTransferable) {
   let dataRequired = []
   const action = 'mosaicDefinitionTx'
-  const transaction = Vue.prototype.$blockchainProvider.mosaicDefinitionTransaction(ownerPublicKey, duration, divisibility, isSupplyMutable, isTransferable)
+  const transaction = Vue.prototype.$blockchainProvider.mosaicDefinitionTransaction(ownerPublicKey, randomNonce, duration, divisibility, isSupplyMutable, isTransferable)
   return {
     transaction,
     dataRequired,
@@ -298,6 +309,7 @@ export {
   buildMosaicDefinitionTransaction,
   buildMosaicSupplyChangeTransaction,
   buildMosaicAliasTransaction,
+  buildModifyMetadataTransactionMosaic,
   filterMosaics,
   searchInfoMosaics
 }

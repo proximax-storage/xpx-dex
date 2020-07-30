@@ -177,17 +177,20 @@
 
 <script>
 import { PublicAccount } from 'tsjs-xpx-chain-sdk/dist/src/model/account/PublicAccount'
+import { MosaicNonce } from 'tsjs-xpx-chain-sdk/dist/src/model/mosaic/MosaicNonce'
 import { decrypt } from '@/services/account-wallet-service'
 import {
   buildMosaicDefinitionTransaction,
   buildMosaicSupplyChangeTransaction,
-  buildMosaicAliasTransaction
+  buildMosaicAliasTransaction,
+  buildModifyMetadataTransactionMosaic
 } from '@/services/mosaics-service'
 import {
   buildRegisterNamespaceTransaction,
   validateNamespaceName,
   validateRootAndSubNamespace
 } from '@/services/namespace-service'
+import { aggregateTxFromArray } from '@/services/icon-mosaic-service'
 import { MosaicSupplyType } from 'tsjs-xpx-chain-sdk/dist/src/model/mosaic/MosaicSupplyType'
 import { mapGetters, mapMutations } from 'vuex'
 export default {
@@ -216,14 +219,20 @@ export default {
       regexNamespace: null,
       hashMosaicDefinition: null,
       hashMosaicAlias: null,
+      hashMosaicMetadata: null,
       namespaceIdLink: null,
       namespaceInfo: null,
       nameSubNamespace: null,
       fullNameNamespace: null,
       mosaicIdLink: null,
+      mosaic: {
+        mosaicId: null,
+        randomNonce: null
+      },
       sendingForm: false,
       showLoading: false,
       inputStyle: 'inputStyle',
+      txsTransferIcon: null,
       valid: null,
       isValidNamespaceName: true,
       isValidateBalance: false,
@@ -233,6 +242,8 @@ export default {
     }
   },
   beforeMount () {
+    // this.$blockchainProvider.mosaicNonceFromPublicKey()
+    this.mosaicNonceFromPublicKey()
     this.regexNamespace = /^[0-9]{3}$/
     this.arrayBtn = {
       create: this.$configForm.buildButton('Create', 'create', 'create', 'primary', 'white--text')
@@ -296,6 +307,7 @@ export default {
         this.sendingForm = true
         common = null
         if (type === 0) this.hashMosaicDefinition = signedTransaction.hash
+        if (type === 1) this.hashMosaicMetadata = signedTransaction.hash
         if (type === 3) this.hashMosaicAlias = signedTransaction.hash
         const dataMonitorHash = this.$generalService.buildMonitorHash(
           'createNewAsset',
@@ -320,7 +332,19 @@ export default {
       }
     },
     actionArrayToBase64Img (data) {
-      console.log('data', data)
+      if (data) {
+        this.txsTransferIcon = aggregateTxFromArray(data, this.currentAccount.publicKey)
+        console.log('this.txsTransferIcon', this.txsTransferIcon)
+      } else {
+        this.txsTransferIcon = null
+      }
+    },
+    mosaicNonceFromPublicKey () {
+      this.mosaic.randomNonce = MosaicNonce.createRandom()
+      this.mosaic.mosaicId = this.$blockchainProvider.mosaicNonceFromPublicKey(
+        this.currentAccount.publicKey,
+        this.mosaic.randomNonce
+      )
     },
     nameToAssetExample (nameForm = null, nameNamespace = null) {
       let name = null
@@ -332,7 +356,7 @@ export default {
       return (this.fullNameNamespace = name)
     },
     typeAction () {
-      return 4
+      return 0
     },
     typeCreatetxs (action) {
       switch (action) {
@@ -347,8 +371,10 @@ export default {
 
           // Mosaic definition transaction
           this.dataTx = []
+          let innerTransaction = []
           const mosaicDefinitionTransaction = buildMosaicDefinitionTransaction(
             this.currentAccount.publicKey,
+            this.mosaic.randomNonce,
             this.form.mosaic.duration,
             this.form.mosaic.divisibility,
             this.form.mosaic.supplyMutable,
@@ -376,11 +402,18 @@ export default {
             this.currentAccount.publicKey,
             this.currentAccount.simpleWallet.network
           )
-          const innerTransaction = [
+          innerTransaction = [
             mosaicDefinitionTransaction.toAggregate(publicAccount),
             registerNamespaceTransaction.toAggregate(publicAccount),
             mosaicSupplyChangeTransaction.toAggregate(publicAccount)
           ]
+          console.log('typeCreatetxs', this.txsTransferIcon)
+          // toAggregate innerTx icon Mosaic
+          if (this.txsTransferIcon) {
+            for (let x of this.txsTransferIcon) {
+              innerTransaction.push(x.toAggregate(publicAccount))
+            }
+          }
           this.setMosaicIdAndNamespace(
             mosaicDefinitionTransaction.mosaicId.toHex(),
             this.fullNameNamespace
@@ -391,7 +424,30 @@ export default {
           this.announceTx(this.$blockchainProvider.aggregateTransaction(innerTransaction), action)
           break
         // type action : 3
+        case 1:
+          console.log('CASE #1')
+          /**
+           * Metadata
+           **/
+          // const hash = this.hashMosaicDefinition
+          if (this.txsTransferIcon) {
+            let modifications = [
+              {
+                type: 0,
+                key: 'icon',
+                value: 'this.hashMosaicDefinition'
+              }
+            ]
+            const modifyMetadataTransactionMoisac = buildModifyMetadataTransactionMosaic(
+              this.mosaic.mosaicId,
+              modifications
+            ).transaction
+            console.log('modifyMetadataTransactionMoisac', modifyMetadataTransactionMoisac)
+            this.announceTx(modifyMetadataTransactionMoisac, action)
+          }
+          break
         case 3:
+          console.log('CASE #3')
           /**
            * Link = 0, Unlink = 1
            * type : Linking a namespace to a mosaic
@@ -403,7 +459,7 @@ export default {
           const mosaicAliasTransaction = buildMosaicAliasTransaction(
             0,
             this.namespaceIdLink,
-            this.mosaicIdLink
+            this.mosaic.mosaicId
           ).transaction
           console.log('innerTransaction', mosaicAliasTransaction)
           // announce Tx
@@ -411,7 +467,7 @@ export default {
       }
     },
     setMosaicIdAndNamespace (mosaicId, namespaceId) {
-      this.mosaicIdLink = this.$blockchainProvider.getMosaicId(mosaicId)
+      // this.mosaicIdLink = this.$blockchainProvider.getMosaicId(mosaicId)
       this.namespaceIdLink = this.$blockchainProvider.getNamespaceId(namespaceId)
     },
     selectActionNamespace (data) {
@@ -440,6 +496,13 @@ export default {
         console.log('hash Mosaic Definition...')
         this.sendingForm = false
         this.typeCreatetxs(3)
+        this.typeCreatetxs(1)
+      }
+    },
+    validateTxhashMosaicMetadata (transactions) {
+      if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicMetadata)) {
+        this.dataTx.push({ hash: this.hashMosaicMetadata })
+        console.log('hash Mosaic Metadata...')
       }
     },
     validateTxHashMosaicAlias (transactions) {

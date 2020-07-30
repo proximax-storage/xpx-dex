@@ -54,11 +54,12 @@ import {
 import {
   MosaicSupplyChangeTransaction
 } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/MosaicSupplyChangeTransaction'
-import { MosaicNonce }
-  from 'tsjs-xpx-chain-sdk/dist/src/model/mosaic/MosaicNonce'
 import {
   MosaicAliasTransaction
 } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/MosaicAliasTransaction'
+import {
+  ModifyMetadataTransaction
+} from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/ModifyMetadataTransaction'
 import {
   NamespaceId
 } from 'tsjs-xpx-chain-sdk/dist/src/model/namespace/NamespaceId'
@@ -68,6 +69,9 @@ import {
 import {
   TransactionType
 } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/TransactionType'
+import {
+  TransferTransaction
+} from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/TransferTransaction'
 import {
   SimpleWallet
 } from 'tsjs-xpx-chain-sdk/dist/src/model/wallet/SimpleWallet'
@@ -391,9 +395,19 @@ function getExchangeOffersfromId (Idmosaic, type) {
  * @returns
  */
 function getAccountFromPrivateKey (privateKey, network) {
-  return Account.createFromPrivateKey(privateKey, network)
+  const networkV = network || store.getters['nodeStore/networkType']
+  return Account.createFromPrivateKey(privateKey, networkV)
 }
 
+/**
+ *
+ * @param {*} publicKey
+ */
+
+function getAddressFromPublicKey (publicKey) {
+  const network = store.getters['nodeStore/networkType']
+  return Address.createFromPublicKey(publicKey, network)
+}
 /**
  *
  *
@@ -586,6 +600,11 @@ function getUint64 (value) {
   return new UInt64(value)
 }
 
+function mosaicNonceFromPublicKey (ownerPublicKey, randomNonce) {
+  // MosaicNonce.createRandom()
+  const network = store.getters['nodeStore/networkType']
+  return MosaicId.createFromNonce(randomNonce, PublicAccount.createFromPublicKey(ownerPublicKey, network))
+}
 /**
  *
  * @param {*} deadline
@@ -594,11 +613,10 @@ function getUint64 (value) {
  * @param {*} isTransferable
  * @param {*} isRestrictable
  */
-function mosaicDefinitionTransaction (ownerPublicKey, duration, divisibility, isSupplyMutable, isTransferable) {
-  const randomNonce = MosaicNonce.createRandom()
+function mosaicDefinitionTransaction (ownerPublicKey, randomNonce, duration, divisibility, isSupplyMutable, isTransferable) {
   const network = store.getters['nodeStore/networkType']
-  const publicAccount = PublicAccount.createFromPublicKey(ownerPublicKey, network)
-  const mosaicId = MosaicId.createFromNonce(randomNonce, publicAccount)
+  // const publicAccount = PublicAccount.createFromPublicKey(ownerPublicKey, network)
+  const mosaicId = mosaicNonceFromPublicKey(ownerPublicKey, randomNonce)
   return MosaicDefinitionTransaction.create(
     Deadline.create(10),
     randomNonce,
@@ -648,6 +666,16 @@ function mosaicAliasTransaction (aliasActionType, namespaceId, mosaicId) {
   )
 }
 
+function modifyMetadataTransactionMosaic (mosaicId, modifications) {
+  const network = store.getters['nodeStore/networkType']
+  return ModifyMetadataTransaction.createWithMosaicId(
+    network,
+    Deadline.create(10),
+    mosaicId,
+    modifications
+  )
+}
+
 function registerNamespaceTransaction (rootNamespaceName, subnamespaceName = null, durationValue, type = 'rootNamespaceName') {
   const network = store.getters['nodeStore/networkType']
   let registerNamespaceTx = []
@@ -676,7 +704,8 @@ function registerNamespaceTransaction (rootNamespaceName, subnamespaceName = nul
  * @returns
  */
 function publicAccountFromPublicKey (publicKey, network) {
-  return PublicAccount.createFromPublicKey(publicKey, network)
+  const networkV = network || store.getters['nodeStore/networkType']
+  return PublicAccount.createFromPublicKey(publicKey, networkV)
 }
 
 /**
@@ -793,6 +822,17 @@ function typeTransactions () {
   }
 }
 
+function transferTransaction (recipient, mosaics = [], message) {
+  const network = store.getters['nodeStore/networkType']
+  return TransferTransaction.create(
+    Deadline.create(10),
+    recipient,
+    mosaics,
+    message,
+    network
+  )
+}
+
 export {
   instanceConnectionApi,
   addExchangeOffer,
@@ -809,6 +849,7 @@ export {
   isHexadecimal,
   filterNetworkTypeFromString,
   filterNetworkTypeFromNumber,
+  getAddressFromPublicKey,
   getAccountFromPrivateKey,
   getAccountInfo,
   getMosaics,
@@ -823,9 +864,11 @@ export {
   getExchangeOffersfromId,
   getUint64,
   getOutgoingTransactions,
+  mosaicNonceFromPublicKey,
   mosaicDefinitionTransaction,
   mosaicSupplyChangeTransaction,
   mosaicAliasTransaction,
+  modifyMetadataTransactionMosaic,
   registerNamespaceTransaction,
   publicAccountFromPublicKey,
   removeExchangeOffer,
@@ -836,6 +879,7 @@ export {
   getBlockInfo,
   getTransactionId,
   typeTransactions,
+  transferTransaction,
   dateFormatUTC,
   signedTransaction
 
