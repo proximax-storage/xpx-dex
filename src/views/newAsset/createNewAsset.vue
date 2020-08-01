@@ -5,7 +5,7 @@
       <v-col cols="12" class="headline font-weight-regular text-left primary--text">New asset</v-col>
     </v-row>
     <!-- Template form-->
-    <template v-if="dataTx.length === 0 || dataTx.length === 1 ">
+    <template v-if="tempShow === 0">
       <v-row class="ma-3">
         <v-col sm="12" md="6" lg="7" col="7" class="pt-0">
           <v-form v-model="valid" ref="form">
@@ -169,7 +169,7 @@
       </v-row>
     </template>
     <!-- Template congratulations-->
-    <template v-if="dataTx.length === 2">
+    <template v-if="tempShow === 1">
       <congratulations-Assets :colorText="'dim--text'" :txInfo="dataTx"></congratulations-Assets>
     </template>
   </v-col>
@@ -199,6 +199,7 @@ export default {
       arrayBtn: null,
       configForm: null,
       dataTx: [],
+      dataAllTx: [],
       form: {
         mosaic: {
           duration: undefined,
@@ -292,6 +293,17 @@ export default {
       arrayBtn['create'].textColor = 'white--text'
       arrayBtn['create'].textColor = 'primary--text'
       return arrayBtn
+    },
+    tempShow () {
+      let tempType = 0
+      if (this.dataAllTx.length === 3 && this.dataTx.length === 3) {
+        tempType = 1
+      } else if (this.dataAllTx.length === 2 && this.dataTx.length === 2) {
+        tempType = 1
+      } else {
+        tempType = 0
+      }
+      return tempType
     }
   },
   methods: {
@@ -334,7 +346,6 @@ export default {
     actionArrayToBase64Img (data) {
       if (data) {
         this.txsTransferIcon = aggregateTxFromArray(data, this.currentAccount.publicKey)
-        console.log('this.txsTransferIcon', this.txsTransferIcon)
       } else {
         this.txsTransferIcon = null
       }
@@ -361,7 +372,7 @@ export default {
     typeCreatetxs (action) {
       switch (action) {
         case 0:
-          console.log('CASE #0')
+          this.pushAllDataTx(action)
           /**
            * type tx : Aggregate transaction
            * Mosaic definition transaction
@@ -407,7 +418,6 @@ export default {
             registerNamespaceTransaction.toAggregate(publicAccount),
             mosaicSupplyChangeTransaction.toAggregate(publicAccount)
           ]
-          console.log('typeCreatetxs', this.txsTransferIcon)
           // toAggregate innerTx icon Mosaic
           if (this.txsTransferIcon) {
             for (let x of this.txsTransferIcon) {
@@ -418,19 +428,19 @@ export default {
             mosaicDefinitionTransaction.mosaicId.toHex(),
             this.fullNameNamespace
           )
-          console.log('innerTransaction', innerTransaction)
           // announce Tx
+
           this.validateLoadingTX(true)
           this.announceTx(this.$blockchainProvider.aggregateTransaction(innerTransaction), action)
           break
         // type action : 3
         case 1:
-          console.log('CASE #1')
           /**
            * Metadata
            **/
           // const hash = this.hashMosaicDefinition
           if (this.txsTransferIcon) {
+            this.pushAllDataTx(action)
             let modifications = [
               {
                 type: 0,
@@ -442,12 +452,12 @@ export default {
               this.mosaic.mosaicId,
               modifications
             ).transaction
-            console.log('modifyMetadataTransactionMoisac', modifyMetadataTransactionMoisac)
+
             this.announceTx(modifyMetadataTransactionMoisac, action)
           }
           break
         case 3:
-          console.log('CASE #3')
+          this.pushAllDataTx(action)
           /**
            * Link = 0, Unlink = 1
            * type : Linking a namespace to a mosaic
@@ -461,9 +471,16 @@ export default {
             this.namespaceIdLink,
             this.mosaic.mosaicId
           ).transaction
-          console.log('innerTransaction', mosaicAliasTransaction)
           // announce Tx
           this.announceTx(mosaicAliasTransaction, action)
+      }
+    },
+    pushAllDataTx (action) {
+      const actionString = String(action)
+      if (actionString) {
+        this.dataAllTx.push(actionString)
+      } else {
+        this.dataAllTx = []
       }
     },
     setMosaicIdAndNamespace (mosaicId, namespaceId) {
@@ -495,24 +512,29 @@ export default {
         this.validateLoadingTX(true, true)
         console.log('hash Mosaic Definition...')
         this.sendingForm = false
+        setTimeout(() => {
+          this.sendingForm = false
+          this.typeCreatetxs(1)
+        }, 2000)
         this.typeCreatetxs(3)
-        this.typeCreatetxs(1)
       }
     },
-    validateTxhashMosaicMetadata (transactions) {
-      if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicMetadata)) {
-        this.dataTx.push({ hash: this.hashMosaicMetadata })
-        console.log('hash Mosaic Metadata...')
-      }
-    },
-    validateTxHashMosaicAlias (transactions) {
-      // this.sendingForm = false
+    validateTxHashMosaicAliasMosaicMetadata (transactions) {
       if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicAlias)) {
         this.validateLoadingTX(true, false, true)
         setTimeout(() => {
           this.dataTx.push({ hash: this.hashMosaicAlias })
+          this.hashMosaicAlias = null
         }, 1000)
         console.log('hash Mosaic Alias...')
+        this.sendingForm = false
+      }
+      if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicMetadata)) {
+        setTimeout(() => {
+          this.dataTx.push({ hash: this.hashMosaicMetadata })
+          this.hashMosaicMetadata = null
+        }, 1000)
+        console.log('hash Mosaic Metadata...')
         this.sendingForm = false
       }
     },
@@ -535,7 +557,7 @@ export default {
       // this.validateTxHashMosaicAlias(transactions)
     },
     unconfirmedAdded (transactions) {
-      this.validateTxHashMosaicAlias(transactions)
+      this.validateTxHashMosaicAliasMosaicMetadata(transactions)
     },
     status (hashs) {
       this.sendingForm = false
