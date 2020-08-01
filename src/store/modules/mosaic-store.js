@@ -13,7 +13,7 @@ export const mosaicStore = {
   },
   mutations: {
     SET_MOSAICS (state, data) {
-      // console.log('SET_MOSAICS', data)
+      console.log('SET_MOSAICS', data)
       state.mosaics = data
     }
   },
@@ -30,5 +30,11 @@ export const mosaicStore = {
       // console.log('othersMosaics', othersMosaics)
       return othersMosaics
     }
+  },
+  actions: {
+    GET_ICON_MOSAICS ({ commit }, data) {
+      console.log('GET_ICON_MOSAICS MSOIA', data)
+    }
+
   }
 }
