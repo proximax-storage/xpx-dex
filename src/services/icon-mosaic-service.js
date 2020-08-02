@@ -1,6 +1,11 @@
 import Vue from 'vue'
 // import { Convert } from 'tsjs-xpx-chain-sdk/dist/src/core/format/Convert'
 import { PlainMessage } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/PlainMessage'
+import { MessageType } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/MessageType'
+const config = {
+  format: 'data:image/png;base64,'
+}
+
 /**
  * get an array from a base64 image
  * @param {*} base64Img
@@ -23,30 +28,68 @@ function arrayToBase64Img (base64Img, lengthSubs = 1000) {
   return { arrayString: arrayString, type: type }
 }
 
-// function setIconFromMosaic () {
+/**
+ *
+ * @param {*} array
+ */
+function base64ImgFromArray (array) {
+  let base64Img = ''
+  const arraSort = array.sort((a, b) => { return a.i - b.i })
+  for (let t = 0; t < arraSort.length; t++) {
+    if (arraSort[t].s) { base64Img += arraSort[t].s }
+  }
+  if (!isBase64(base64Img)) {
+    throw new Error('not Base64')
+  }
+  return `${config.format}${base64Img}`
+}
 
-// }
+/**
+ *
+ * @param {*} innerTransactions
+ * @param {*} type
+ */
+function filtersInnerTx (innerTransactions = [], type = Vue.prototype.$blockchainProvider.typeTransactions().transfer.id) {
+  return innerTransactions.filter(l => l.type === type)
+}
 
-// function searchIconFromMosaic (mosaicHex) {
-//   const account = keyFromMosaic(mosaicHex)
-
-// }
-// /**
-//  *
-//  * @param {*} mosaic
-//  */
-// function keyFromMosaic (mosaicHex) {
-//   const mosaic = Convert.hexToUint8(mosaicHex)
-//   const tmp = new Uint32Array(32)
-//   tmp.set(new Uint8Array(mosaic), 0)
-//   return Convert.uint8ToHex(tmp)
-// }
+/**
+ *
+ * @param {*} aggregateTx
+ */
+function base64IconFromAggregateTx (aggregateTx) {
+  let messagePayload = []
+  if (aggregateTx) {
+    for (let i of filtersInnerTx(aggregateTx.innerTransactions)) {
+      messagePayload.push(arrayAggregateTxTransfer(i))
+    }
+  }
+  return base64ImgFromArray(messagePayload)
+}
+/**
+ *
+ * @param {*} txTransfer
+ */
+function arrayAggregateTxTransfer (txTransfer) {
+  let msjPayload = null
+  if (MessageType.PlainMessage === txTransfer.message.type) {
+    const valueJson = JSON.parse(txTransfer.message.payload)
+    if (('t' in valueJson)) {
+      msjPayload = valueJson
+    } else {
+      throw new Error('Type is not present in the Json (key = t )')
+    }
+  }
+  return msjPayload
+}
+/**
+ *
+ * @param {*} array
+ * @param {*} publicKey
+ */
 function aggregateTxFromArray (array, publicKey) {
   let txsTransfer = []
-  console.log('array', array)
-  console.log('publicKey', publicKey)
   const address = Vue.prototype.$blockchainProvider.getAddressFromPublicKey(publicKey)
-  console.log('address', address.plain())
   if (array) {
     for (let x of array.arrayString) {
       const msj = JSON.stringify(x)
@@ -97,4 +140,4 @@ function validateDimensionImg (base64Img) {
   })
 }
 
-export { validateDimensionImg, arrayToBase64Img, aggregateTxFromArray }
+export { config, validateDimensionImg, arrayToBase64Img, aggregateTxFromArray, base64IconFromAggregateTx }

@@ -374,6 +374,16 @@ function getBlockInfo (height = 1, url = '') {
 function getAccountInfo (address) {
   return connection.accountHttp.getAccountInfo(address)
 }
+
+/**
+ *
+ *
+ * @param {*} mosaicId
+ * @returns
+ */
+function getMosaicMetadata (mosaicId) {
+  return connection.metadataHttp.getMosaicMetadata(mosaicId)
+}
 /**
  *
  *
@@ -852,6 +862,7 @@ export {
   getAddressFromPublicKey,
   getAccountFromPrivateKey,
   getAccountInfo,
+  getMosaicMetadata,
   getMosaics,
   getMosaicId,
   getMosaicsName,

@@ -22,6 +22,9 @@ import {
 import {
   MosaicHttp
 } from 'tsjs-xpx-chain-sdk/dist/src/infrastructure/MosaicHttp'
+import {
+  MetadataHttp
+} from 'tsjs-xpx-chain-sdk/dist/src/infrastructure/MetadataHttp'
 
 import {
   NamespaceHttp
@@ -37,6 +40,7 @@ class Connections {
     this.accountHttp = new AccountHttp(this.url)
     this.blockHttp = new BlockHttp(this.url)
     this.mosaicHttp = new MosaicHttp(this.url)
+    this.metadataHttp = new MetadataHttp(this.url)
     this.namespaceHttp = new NamespaceHttp(this.url)
     this.transactionHttp = new TransactionHttp(this.url)
     this.exchangeHttp = new ExchangeHttp(this.url)

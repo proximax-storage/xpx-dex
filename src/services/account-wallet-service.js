@@ -417,7 +417,7 @@ function getAccountsInfo (accounts) {
   searchAccountsInfo(accounts).then(data => {
     updateBalance()
     if (data.mosaicsId && data.mosaicsId.length > 0) {
-      store.dispatch('mosaicStore/GET_ICON_MOSAICS', data.mosaicsId)
+      store.dispatch('mosaicStore/GET_MOSAICS_METADATA', data.mosaicsId)
       searchInfoMosaics(data.mosaicsId)
     }
   }).catch(error => console.error(error))

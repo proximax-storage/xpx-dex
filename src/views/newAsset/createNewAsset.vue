@@ -321,6 +321,8 @@ export default {
         if (type === 0) this.hashMosaicDefinition = signedTransaction.hash
         if (type === 1) this.hashMosaicMetadata = signedTransaction.hash
         if (type === 3) this.hashMosaicAlias = signedTransaction.hash
+        console.log('Case::: type', signedTransaction)
+        console.log('signedTransaction', signedTransaction)
         const dataMonitorHash = this.$generalService.buildMonitorHash(
           'createNewAsset',
           signedTransaction.hash,
@@ -372,6 +374,7 @@ export default {
     typeCreatetxs (action) {
       switch (action) {
         case 0:
+          console.log('CASE #0')
           this.pushAllDataTx(action)
           /**
            * type tx : Aggregate transaction
@@ -435,6 +438,7 @@ export default {
           break
         // type action : 3
         case 1:
+          console.log('CASE #1')
           /**
            * Metadata
            **/
@@ -445,9 +449,10 @@ export default {
               {
                 type: 0,
                 key: 'icon',
-                value: 'this.hashMosaicDefinition'
+                value: this.hashMosaicDefinition
               }
             ]
+            console.log('modifications', modifications)
             const modifyMetadataTransactionMoisac = buildModifyMetadataTransactionMosaic(
               this.mosaic.mosaicId,
               modifications
@@ -457,6 +462,7 @@ export default {
           }
           break
         case 3:
+          console.log('CASE #3')
           this.pushAllDataTx(action)
           /**
            * Link = 0, Unlink = 1
@@ -465,7 +471,6 @@ export default {
            */
 
           // AliasTransaction create for Mosaic
-          this.hashMosaicDefinition = null
           const mosaicAliasTransaction = buildMosaicAliasTransaction(
             0,
             this.namespaceIdLink,
