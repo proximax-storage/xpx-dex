@@ -5,10 +5,6 @@ export const mosaicStore = {
     mosaics: [],
     metadata: null,
     iconMosaic: [
-      {
-        mosaicId: null,
-        iconBase64: null
-      }
     ]
     // mosaics: [
     //   {
@@ -29,21 +25,23 @@ export const mosaicStore = {
       state.iconMosaic = data
     },
     PUSH_MOSAIC_ICON (state, data) {
-      const findMosaicIcon = state.iconMosaic.find(x => x.mosaicId.toHex() === data.mosaicId.toHex())
-      if (findMosaicIcon) {
-        for (var i in state.iconMosaic) {
-          if (state.iconMosaic[i].mosaicId.toHex() === data.mosaicId.toHex()) {
-            state.iconMosaic[i].iconBase64 = data.iconBase64
-            break // Stop this loop, we found it!
+      if (state.iconMosaic.length > 0) {
+        const findMosaicIcon = state.iconMosaic.find(x => x.mosaicId.toHex() === data.mosaicId.toHex())
+        if (findMosaicIcon) {
+          for (var i in state.iconMosaic) {
+            if (state.iconMosaic[i].mosaicId.toHex() === data.mosaicId.toHex()) {
+              state.iconMosaic[i].iconBase64 = data.iconBase64
+              break // Stop this loop, we found it!
+            }
           }
+        } else {
+          state.iconMosaic.push(data)
         }
       } else {
         state.iconMosaic.push(data)
       }
-      // state.iconMosaic.push(data)
     },
     SET_METADATA (state, data) {
-      // console.log('SET_METADATA', data)
       state.metadata = data
     }
 
@@ -77,8 +75,7 @@ export const mosaicStore = {
         }
       })()
     },
-    async GET_MOSAICS_ICON ({ commit, getters }, data) {
-      console.log('iconMosaic', getters.iconMosaic)
+    async GET_MOSAICS_ICON ({ commit }, data) {
       const fliterFields = data.fields.find(x => x.key === 'icon')
       if (fliterFields) {
         if (fliterFields.value.length === 64) {

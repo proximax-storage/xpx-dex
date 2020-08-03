@@ -24,14 +24,18 @@
             >
               <template v-if="commentIndex < dataTable.length">
                 <template v-for="i in Object.keys( dataTable[commentIndex])">
-                  <!-- {{i}} -->
                   <td
-                    v-if="i !== 'exchange'"
+                    v-if="(i !== 'exchange') && (i !== 'icon')"
                     class="pr-3"
                     style="border:0"
                     :key="i"
                     v-html="dataTable[commentIndex][i]"
                   ></td>
+                  <td v-if="i === 'icon'" class="pr-3" style="border:0" :key="i">
+                    <div v-if="dataTable[commentIndex][i]">
+                      <img :src="dataTable[commentIndex][i]" width="20" height="20" />
+                    </div>
+                  </td>
                 </template>
 
                 <td class="pr-3" style="border:0" v-if="typeOfferColor">
@@ -108,10 +112,13 @@ export default {
 }
 </script>
 <style >
-th, td {
+th,
+td {
   text-align: left;
   padding: 8px;
 }
 
-tr:nth-child(even) {background-color: #f2f2f2;}
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
 </style>

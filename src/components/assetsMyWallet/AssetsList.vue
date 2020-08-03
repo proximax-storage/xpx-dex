@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-divider class="mt-1" />
-
     <simple-table
       v-if="othersAssets"
       :dataTh="dataTh"
@@ -20,14 +19,15 @@ export default {
   data () {
     return {
       theme: 'light',
-      dataTh: ['Assets', 'Available']
+      dataTh: ['Assets', 'Available', 'Icon']
     }
   },
   computed: {
     ...mapState(['loadingInfoWallet']),
     ...mapGetters('accountStore', ['mosaicBuild', 'accountInfoByNameAccount', 'currentAccount']),
+    ...mapGetters('mosaicStore', ['iconMosaic']),
     othersAssets () {
-      return this.buildDataTable(this.mosaicBuild)
+      return this.buildDataTable(this.mosaicBuild, this.iconMosaic)
     },
     loadingInfo () {
       const value =
@@ -47,17 +47,26 @@ export default {
       const accountFiltered = this.accountInfoByNameAccount(this.currentAccount.name)
       if (accountFiltered) buildCurrentAccountInfo(accountFiltered.accountInfo)
     },
-    buildDataTable (assets) {
+    buildDataTable (assets, iconArray) {
       let assetsBuild = []
       if (assets.length > 0) {
         assetsBuild = assets.map(f => {
           return {
             assets: f.nameMosaic,
-            available: f.balance
+            available: f.balance,
+            icon: this.getIcon(f.mosaicIdHex, iconArray)
           }
         })
       }
       return assetsBuild
+    },
+    getIcon (mosaicIdHex, iconArray) {
+      let base64Img = ''
+      const icon = iconArray.find(x => x.mosaicId.toHex() === mosaicIdHex)
+      if (icon) {
+        base64Img = icon.iconBase64
+      }
+      return base64Img
     }
   },
   beforeMount () {
