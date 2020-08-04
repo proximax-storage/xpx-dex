@@ -14,6 +14,13 @@ function aliasType (type) {
   if (type === 2) { typeAlias = 'address' }
   return typeAlias
 }
+/**
+ *
+ * @param {*} rootNamespaceName
+ * @param {*} subnamespaceName
+ * @param {*} duration
+ * @param {*} type
+ */
 function buildRegisterNamespaceTransaction (rootNamespaceName, subnamespaceName, duration, type) {
   const durationsend = Vue.prototype.$generalService.calculateDurationforDay(Number(duration))
   console.log('durationsend', durationsend)
@@ -28,6 +35,14 @@ function buildRegisterNamespaceTransaction (rootNamespaceName, subnamespaceName,
   }
 }
 
+function getCalRentalFee (duration) {
+  const durationByBlock = Vue.prototype.$generalService.calculateDurationforDay(duration)
+  return store.getters.environment.rentalFee.namespace * durationByBlock
+}
+/**
+ *
+ * @param {*} accounts
+ */
 async function searchNamespacesFromAccounts (accounts) {
   store.commit('namespaceStore/LOADING', true)
   const allNamespaces = []
@@ -80,12 +95,13 @@ function validateRootAndSubNamespace (parantName, childName, typeNamespace = 'ro
     subNamespaceName: null
 
   }
+  const defaultV = 'd'
   if (typeNamespace === 'rootNamespaceName') {
-    returnValue.rootNamespaceName = parantName
-    returnValue.subNamespaceName = parantName
+    returnValue.rootNamespaceName = parantName || defaultV
+    returnValue.subNamespaceName = parantName || defaultV
   } else {
-    returnValue.rootNamespaceName = childName
-    returnValue.subNamespaceName = parantName
+    returnValue.rootNamespaceName = childName || defaultV
+    returnValue.subNamespaceName = parantName || defaultV
   }
   return returnValue
 }
@@ -125,6 +141,7 @@ async function saveNamespace (namespaceInfo) {
 export {
   aliasType,
   buildRegisterNamespaceTransaction,
+  getCalRentalFee,
   searchNamespacesFromAccounts,
   validateNamespaceName,
   validateRootAndSubNamespace

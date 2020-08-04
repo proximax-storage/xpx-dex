@@ -63,10 +63,11 @@ export default {
   computed: {
     getFile: {
       get () {
-        this.readImage(this.form.file)
-        return this.form.file
+        const file = this.form.file ? this.form.file : null
+        return file
       },
       set (newValue) {
+        this.readImage(newValue)
         this.form.file = newValue
       }
     }
@@ -97,7 +98,7 @@ export default {
         })
       } else {
         this.$emit('arrayToBase64Img', null)
-        this.reset()
+        // this.reset()
         this.$emit('validIconMosaic', true)
         this.base64File = null
       }

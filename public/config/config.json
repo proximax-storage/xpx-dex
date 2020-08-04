@@ -7,6 +7,10 @@
   },
   "environment": {
     "TEST_NET": {
+      "rentalFee": {
+        "namespace": 4576,
+        "mosaic": 0
+      },
       "dataBase": {
         "name": "dex-wallet-db",
         "password": "qazwsxedc",
@@ -55,6 +59,10 @@
       "version": "0.4.13"
     },
     "MAIN_NET": {
+      "rentalFee": {
+        "namespace": 0,
+        "mosaic": 0
+      },
       "dataBase": {
         "name": "dex-wallet-db",
         "password": "qazwsxedc",
@@ -110,6 +118,10 @@
       "version": "0.0.1"
     },
     "PRIVATE": {
+      "rentalFee": {
+        "namespace": 0,
+        "mosaic": 0
+      },
       "dataBase": {
         "name": "dex-wallet-db",
         "password": "qazwsxedc",

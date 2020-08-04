@@ -119,6 +119,12 @@
             <!--Fee-->
             <tx-fee />
             <rental-fee />
+            <!-- <div>maxfeee al tx ::: {{maxFeeTxs}}</div>
+
+            <div>rental fee namespace::: {{rentalFeeNamespace}}</div>
+            <div>rental fee namespace::: {{rentalFeeMoisac}}</div>
+            <div>rental fee total::: {{$generalService.amountFormatter(totalRentalFee, 6)}}</div>
+            <div>rental fee total tx::: 20,000.755250</div>-->
             <!--Password -->
             <v-row>
               <v-col cols="9" class="ma-0 pb-0 mx-auto caption d-flex justify-center align-center">
@@ -187,6 +193,7 @@ import {
 } from '@/services/mosaics-service'
 import {
   buildRegisterNamespaceTransaction,
+  getCalRentalFee,
   validateNamespaceName,
   validateRootAndSubNamespace
 } from '@/services/namespace-service'
@@ -212,13 +219,14 @@ export default {
         namespace: {
           name: null,
           duration: 1,
-          type: ' '
+          type: 'rootNamespaceName'
         },
         password: null,
         checkbox: false
       },
       regexNamespace: null,
       hashMosaicDefinition: null,
+      hashFromMetadata: null,
       hashMosaicAlias: null,
       hashMosaicMetadata: null,
       namespaceIdLink: null,
@@ -229,6 +237,11 @@ export default {
       mosaic: {
         mosaicId: null,
         randomNonce: null
+      },
+      maxFeeTxs: {
+        maxFeeAggregate: 0,
+        maxFeeMetadataMosaic: 0,
+        maxFeeMosaicAlias: 0
       },
       sendingForm: false,
       showLoading: false,
@@ -272,7 +285,7 @@ export default {
     ...mapGetters('transactionsStore', ['confirmed', 'unconfirmedAdded', 'status']),
     namespaceName: {
       get () {
-        this.validNamespaceName()
+        this.watchComputedNamespaceName()
         return this.form.namespace.name
       },
       set (newValue) {
@@ -304,6 +317,17 @@ export default {
         tempType = 0
       }
       return tempType
+    },
+    rentalFeeNamespace () {
+      return getCalRentalFee(this.form.namespace.duration)
+    },
+    rentalFeeMoisac () {
+      return 10000000000
+    },
+    totalRentalFee: {
+      get () {
+        return getCalRentalFee(this.form.namespace.duration) + 10000000000
+      }
     }
   },
   methods: {
@@ -316,13 +340,15 @@ export default {
           transaction,
           this.currentAccount.simpleWallet.network
         )
+        console.log('signedTransaction', signedTransaction)
         this.sendingForm = true
         common = null
-        if (type === 0) this.hashMosaicDefinition = signedTransaction.hash
+        if (type === 0) {
+          this.hashMosaicDefinition = signedTransaction.hash
+          this.hashFromMetadata = signedTransaction.hash
+        }
         if (type === 1) this.hashMosaicMetadata = signedTransaction.hash
         if (type === 3) this.hashMosaicAlias = signedTransaction.hash
-        console.log('Case::: type', signedTransaction)
-        console.log('signedTransaction', signedTransaction)
         const dataMonitorHash = this.$generalService.buildMonitorHash(
           'createNewAsset',
           signedTransaction.hash,
@@ -371,11 +397,9 @@ export default {
     typeAction () {
       return 0
     },
-    typeCreatetxs (action) {
+    typeCreatetxs (action, calcMaxFee = false) {
       switch (action) {
         case 0:
-          console.log('CASE #0')
-          this.pushAllDataTx(action)
           /**
            * type tx : Aggregate transaction
            * Mosaic definition transaction
@@ -431,39 +455,53 @@ export default {
             mosaicDefinitionTransaction.mosaicId.toHex(),
             this.fullNameNamespace
           )
-          // announce Tx
 
-          this.validateLoadingTX(true)
-          this.announceTx(this.$blockchainProvider.aggregateTransaction(innerTransaction), action)
+          if (!calcMaxFee) {
+            console.log('CASE #0')
+            // announce Tx
+            this.pushAllDataTx(action)
+            this.validateLoadingTX(true)
+            this.announceTx(this.$blockchainProvider.aggregateTransaction(innerTransaction), action)
+          } else {
+            // calcMaxFee
+            return this.$blockchainProvider.aggregateTransaction(innerTransaction).maxFee.compact()
+          }
           break
         // type action : 3
         case 1:
-          console.log('CASE #1')
           /**
            * Metadata
            **/
           // const hash = this.hashMosaicDefinition
           if (this.txsTransferIcon) {
-            this.pushAllDataTx(action)
             let modifications = [
               {
                 type: 0,
                 key: 'icon',
-                value: this.hashMosaicDefinition
+                value: this.hashFromMetadata
               }
             ]
-            console.log('modifications', modifications)
             const modifyMetadataTransactionMoisac = buildModifyMetadataTransactionMosaic(
               this.mosaic.mosaicId,
               modifications
             ).transaction
 
-            this.announceTx(modifyMetadataTransactionMoisac, action)
+            // this.hashMosaicDefinition = null
+            if (!calcMaxFee) {
+              console.log('CASE #1')
+              // announce Tx
+
+              this.pushAllDataTx(action)
+              this.announceTx(modifyMetadataTransactionMoisac, action)
+            } else {
+              // calcMaxFee
+              return modifyMetadataTransactionMoisac.maxFee.compact()
+            }
+          } else {
+            return 0
           }
           break
         case 3:
-          console.log('CASE #3')
-          this.pushAllDataTx(action)
           /**
            * Link = 0, Unlink = 1
            * type : Linking a namespace to a mosaic
@@ -476,8 +514,15 @@ export default {
             this.namespaceIdLink,
             this.mosaic.mosaicId
           ).transaction
-          // announce Tx
-          this.announceTx(mosaicAliasTransaction, action)
+          if (!calcMaxFee) {
+            console.log('CASE #3')
+            // announce Tx
+            this.pushAllDataTx(action)
+            this.announceTx(mosaicAliasTransaction, action)
+          } else {
+            // calcMaxFee
+            return mosaicAliasTransaction.maxFee.compact()
+          }
       }
     },
     pushAllDataTx (action) {
@@ -489,8 +534,12 @@ export default {
       }
     },
     setMosaicIdAndNamespace (mosaicId, namespaceId) {
+      let name = null
       // this.mosaicIdLink = this.$blockchainProvider.getMosaicId(mosaicId)
-      this.namespaceIdLink = this.$blockchainProvider.getNamespaceId(namespaceId)
+      if (namespaceId) {
+        name = namespaceId
+      }
+      this.namespaceIdLink = this.$blockchainProvider.getNamespaceId(name)
     },
     selectActionNamespace (data) {
       if (data.idToHex && data.namespaceInfo) {
@@ -514,6 +563,7 @@ export default {
         transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicDefinition)
       ) {
         this.dataTx.push({ hash: this.hashMosaicDefinition })
+        this.hashMosaicDefinition = null
         this.validateLoadingTX(true, true)
         console.log('hash Mosaic Definition...')
         this.sendingForm = false
@@ -545,6 +595,7 @@ export default {
     },
     validIconMosaic (event) {
       this.isValidIconMosaic = event
+      this.getMaxFiiTx([0, 1, 3])
     },
     validateLoadingTX (
       showLoading = false,
@@ -554,6 +605,24 @@ export default {
       this.showLoading = showLoading
       this.progressMosaicDefi = progressMosaicDefiV
       this.progressMosaicAlias = progressMosaicAliasV
+    },
+    getMaxFiiTx (typeTxs = []) {
+      for (let i in typeTxs) {
+        const t = Number(typeTxs[i])
+        if (t === 3) {
+          this.maxFeeTxs.maxFeeMosaicAlias = Number(this.typeCreatetxs(t, true))
+        }
+        if (t === 0) {
+          this.maxFeeTxs.maxFeeAggregate = Number(this.typeCreatetxs(t, true))
+        }
+        if (t === 1) {
+          this.maxFeeTxs.maxFeeMetadataMosaic = Number(this.typeCreatetxs(t, true))
+        }
+      }
+    },
+    watchComputedNamespaceName () {
+      this.validNamespaceName()
+      this.getMaxFiiTx([0, 1, 3])
     }
   },
   watch: {
