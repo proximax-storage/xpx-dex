@@ -256,7 +256,6 @@ export default {
     }
   },
   beforeMount () {
-    // this.$blockchainProvider.mosaicNonceFromPublicKey()
     this.mosaicNonceFromPublicKey()
     this.regexNamespace = /^[0-9]{3}$/
     this.arrayBtn = {
@@ -558,7 +557,6 @@ export default {
       }
     },
     validateTxHashMosaicDefinition (transactions) {
-      // this.sendingForm = false
       if (
         transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicDefinition)
       ) {
@@ -628,7 +626,6 @@ export default {
   watch: {
     confirmed (transactions) {
       this.validateTxHashMosaicDefinition(transactions)
-      // this.validateTxHashMosaicAlias(transactions)
     },
     unconfirmedAdded (transactions) {
       this.validateTxHashMosaicAliasMosaicMetadata(transactions)
@@ -636,7 +633,6 @@ export default {
     status (hashs) {
       this.sendingForm = false
       this.validateLoadingTX(false, false, false)
-      // this.sendingForm = false
     }
   }
 }

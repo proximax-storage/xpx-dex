@@ -23,7 +23,6 @@ function aliasType (type) {
  */
 function buildRegisterNamespaceTransaction (rootNamespaceName, subnamespaceName, duration, type) {
   const durationsend = Vue.prototype.$generalService.calculateDurationforDay(Number(duration))
-  console.log('durationsend', durationsend)
   let dataRequired = []
   const action = 'registerNamespaceTx'
   const transaction = Vue.prototype.$blockchainProvider.registerNamespaceTransaction(rootNamespaceName, subnamespaceName, durationsend, type)
@@ -127,15 +126,12 @@ async function saveNamespace (namespaceInfo) {
   if (namespacesStorage.length > 0 && namespaceToSaved.length > 0) {
     for (const namespacesSaved of namespacesStorage) {
       const existNamespace = namespaceToSaved.find(b => b.idToHex === namespacesSaved.idToHex)
-      // console.log('----existe?----', existNamespace);
       if (!existNamespace) {
         namespaceToSaved.push(namespacesSaved)
       }
     }
   }
   store.commit('namespaceStore/SET_NAMESPACES', namespaceToSaved)
-  //   console.log('popopopop', store.getters['namespaceStore/namespacesFromAccount'](adddee))
-  //   console.log('namespaceToSaved', namespaceToSaved)
 }
 
 export {
