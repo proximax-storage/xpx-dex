@@ -17,7 +17,6 @@
               ></file-icon-mosaic>
             </v-row>
             <!-- Name asset -->
-            {{nameToAsset}}
             <v-row>
               <v-col cols="12">
                 <v-text-field
@@ -566,7 +565,11 @@ export default {
     },
     validNamespaceName () {
       if (this.form.namespace.name) {
+        console.log('vald', validateNamespaceName(this.form.namespace.name))
         this.isValidNamespaceName = validateNamespaceName(this.form.namespace.name)
+        if (this.isValidNamespaceName === true) {
+          this.getMaxFiiTx([0, 1, 3])
+        }
       }
     },
     validateTxHashMosaicDefinition (transactions) {
@@ -606,7 +609,7 @@ export default {
     },
     validIconMosaic (event) {
       this.isValidIconMosaic = event
-      this.getMaxFiiTx([0, 1, 3])
+      this.getMaxFiiTx([0, 3])
     },
     validateLoadingTX (
       showLoading = false,
@@ -619,7 +622,6 @@ export default {
     },
     watchComputedNamespaceName () {
       this.validNamespaceName()
-      this.getMaxFiiTx([0, 1, 3])
     }
   },
   watch: {
