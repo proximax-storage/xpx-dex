@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import store from '@/store'
+import { MosaicNonce } from 'tsjs-xpx-chain-sdk/dist/src/model/mosaic/MosaicNonce'
 
 function buildModifyMetadataTransactionMosaic (mosaicId, modifications) {
   let dataRequired = []
@@ -145,6 +146,21 @@ function filterMosaicToReturn (infoMosaics) {
     })
   }
   return returned
+}
+/**
+ *
+ * @param {*} publicKey
+ */
+function mosaicNonceFromPublicKey (publicKey) {
+  let mosaicNonce = {
+    randomNonce: null,
+    mosaicId: null
+  }
+  mosaicNonce.randomNonce = MosaicNonce.createRandom()
+  mosaicNonce.mosaicId = Vue.prototype.$blockchainProvider.mosaicNonceFromPublicKey(publicKey,
+    mosaicNonce.randomNonce
+  )
+  return mosaicNonce
 }
 
 /**
@@ -304,12 +320,22 @@ async function saveMosaicStorage (mosaicsTosaved) {
     store.commit('mosaicStore/SET_MOSAICS', mosaicsStorage)
   }
 }
+/**
+ * Done
+ * @param {*} duration
+ */
+function getCalRentalFeeMosaic (duration = 365) {
+  // return store.getters.environment.rentalFee.mosaic * Vue.prototype.$generalService.calculateDurationforDay(duration)
+  return store.getters.environment.rentalFee.mosaic
+}
 
 export {
   buildMosaicDefinitionTransaction,
   buildMosaicSupplyChangeTransaction,
   buildMosaicAliasTransaction,
   buildModifyMetadataTransactionMosaic,
+  mosaicNonceFromPublicKey,
   filterMosaics,
-  searchInfoMosaics
+  searchInfoMosaics,
+  getCalRentalFeeMosaic
 }

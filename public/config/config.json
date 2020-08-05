@@ -9,7 +9,7 @@
     "TEST_NET": {
       "rentalFee": {
         "namespace": 4576,
-        "mosaic": 0
+        "mosaic": 10000000000
       },
       "dataBase": {
         "name": "dex-wallet-db",

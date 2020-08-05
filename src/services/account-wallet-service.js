@@ -450,7 +450,17 @@ function setAccountsInfo (accountsInfo, pushed = false) {
     type: null
   })
 }
-
+function validBalance (ammount) {
+  if (Number(ammount) > store.getters['accountStore/balanceCurrentAccount']) {
+    store.commit('SHOW_SNACKBAR', {
+      snackbar: true,
+      text: 'Insufficient balance',
+      color: 'warning'
+    })
+    return false
+  }
+  return true
+}
 /**
  *
  *
@@ -478,5 +488,6 @@ export {
   getAccountsInfo,
   getWallets,
   getWalletByName,
+  validBalance,
   logIn
 }

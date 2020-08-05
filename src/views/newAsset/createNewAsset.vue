@@ -5,7 +5,7 @@
       <v-col cols="12" class="headline font-weight-regular text-left primary--text">New asset</v-col>
     </v-row>
     <!-- Template form-->
-    <template v-if="tempShow === 0">
+    <template v-if="getTempShow === 0">
       <v-row class="ma-3">
         <v-col sm="12" md="6" lg="7" col="7" class="pt-0">
           <v-form v-model="valid" ref="form">
@@ -17,6 +17,7 @@
               ></file-icon-mosaic>
             </v-row>
             <!-- Name asset -->
+            {{nameToAsset}}
             <v-row>
               <v-col cols="12">
                 <v-text-field
@@ -40,7 +41,7 @@
             <v-row>
               <v-col cols="12" sm="6">
                 <v-text-field
-                  :value="getNameToAsset"
+                  :value="nameToAsset"
                   label="Name to asset"
                   outlined
                   disabled
@@ -117,14 +118,9 @@
               </v-col>
             </v-row>
             <!--Fee-->
-            <tx-fee />
-            <rental-fee />
-            <!-- <div>maxfeee al tx ::: {{maxFeeTxs}}</div>
-
-            <div>rental fee namespace::: {{rentalFeeNamespace}}</div>
-            <div>rental fee namespace::: {{rentalFeeMoisac}}</div>
-            <div>rental fee total::: {{$generalService.amountFormatter(totalRentalFee, 6)}}</div>
-            <div>rental fee total tx::: 20,000.755250</div>-->
+            <tx-fee :arrayFee="getMaxFeeTxs" />
+            <rental-fee :rentalFee="getRentalFee" />
+            <div>rental fee total tx::: 20,000.755250</div>
             <!--Password -->
             <v-row>
               <v-col cols="9" class="ma-0 pb-0 mx-auto caption d-flex justify-center align-center">
@@ -175,25 +171,27 @@
       </v-row>
     </template>
     <!-- Template congratulations-->
-    <template v-if="tempShow === 1">
+    <template v-if="getTempShow === 1">
       <congratulations-Assets :colorText="'dim--text'" :txInfo="dataTx"></congratulations-Assets>
     </template>
   </v-col>
 </template>
-
 <script>
+// import { dataComponent } from './dataViews.js'
 import { PublicAccount } from 'tsjs-xpx-chain-sdk/dist/src/model/account/PublicAccount'
-import { MosaicNonce } from 'tsjs-xpx-chain-sdk/dist/src/model/mosaic/MosaicNonce'
-import { decrypt } from '@/services/account-wallet-service'
+import { decrypt, validBalance } from '@/services/account-wallet-service'
 import {
   buildMosaicDefinitionTransaction,
   buildMosaicSupplyChangeTransaction,
   buildMosaicAliasTransaction,
-  buildModifyMetadataTransactionMosaic
+  buildModifyMetadataTransactionMosaic,
+  getCalRentalFeeMosaic,
+  mosaicNonceFromPublicKey
 } from '@/services/mosaics-service'
 import {
   buildRegisterNamespaceTransaction,
   getCalRentalFee,
+  nameToAssetExample,
   validateNamespaceName,
   validateRootAndSubNamespace
 } from '@/services/namespace-service'
@@ -225,6 +223,8 @@ export default {
         checkbox: false
       },
       regexNamespace: null,
+      rentalFee: 0,
+      maxFee: 0,
       hashMosaicDefinition: null,
       hashFromMetadata: null,
       hashMosaicAlias: null,
@@ -273,8 +273,8 @@ export default {
     'custom-button': () => import('@/components/shared/Buttons'),
     'congratulations-Assets': () => import('@/components/shared/CongratulationsAssets'),
     'select-namespace': () => import('@/components/shared/SelectNamespace'),
-    'tx-fee': () => import('@/components/shared/TxFee'),
-    'rental-fee': () => import('@/components/shared/TxRentalFee'),
+    'tx-fee': () => import('@/components/newAsset/txFee'),
+    'rental-fee': () => import('@/components/newAsset/txRentalFee'),
     'features-mosaic-namespace': () => import('@/components/newAsset/featuresMosaicNamespace'),
     'file-icon-mosaic': () => import('@/components/newAsset/fileIconMosaic'),
     'progress-status': () => import('@/components/newAsset/progressStatusTx')
@@ -291,13 +291,31 @@ export default {
         this.form.namespace.name = newValue
       }
     },
-    getNameToAsset: {
-      get () {
-        return this.nameToAssetExample(this.form.namespace.name, this.nameSubNamespace)
-      }
+    nameToAsset () {
+      return this.nameToAssetFuc(
+        nameToAssetExample(this.form.namespace.name, this.nameSubNamespace)
+      )
     },
     getArrayBtn () {
+      return this.arrayBtnFuc()
+    },
+    getTempShow () {
+      return this.tempShow()
+    },
+    getMaxFeeTxs () {
+      return this.calMaxFeeTxs(this.maxFeeTxs)
+    },
+    getRentalFee () {
+      return this.calRentalFee(
+        getCalRentalFee(this.form.namespace.duration) + getCalRentalFeeMosaic()
+      )
+    }
+  },
+  methods: {
+    ...mapMutations('transactionsStore', ['SET_MONITOR_HASH', 'REMOVE_MONITOR_HASH']),
+    arrayBtnFuc () {
       const arrayBtn = this.arrayBtn
+      console.log('arrayBtn', arrayBtn)
       arrayBtn['create'].disabled =
         !this.isValidIconMosaic || !this.valid || !this.form.checkbox || this.isValidateBalance
       arrayBtn['create'].loading = this.sendingForm
@@ -306,31 +324,6 @@ export default {
       arrayBtn['create'].textColor = 'primary--text'
       return arrayBtn
     },
-    tempShow () {
-      let tempType = 0
-      if (this.dataAllTx.length === 3 && this.dataTx.length === 3) {
-        tempType = 1
-      } else if (this.dataAllTx.length === 2 && this.dataTx.length === 2) {
-        tempType = 1
-      } else {
-        tempType = 0
-      }
-      return tempType
-    },
-    rentalFeeNamespace () {
-      return getCalRentalFee(this.form.namespace.duration)
-    },
-    rentalFeeMoisac () {
-      return 10000000000
-    },
-    totalRentalFee: {
-      get () {
-        return getCalRentalFee(this.form.namespace.duration) + 10000000000
-      }
-    }
-  },
-  methods: {
-    ...mapMutations('transactionsStore', ['SET_MONITOR_HASH', 'REMOVE_MONITOR_HASH']),
     announceTx (transaction, type) {
       if (this.valid && !this.sendingForm) {
         let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
@@ -367,7 +360,7 @@ export default {
     action (action) {
       switch (action) {
         case 'create':
-          this.typeCreatetxs(this.typeAction())
+          if (validBalance(this.rentalFee + this.maxFee)) this.typeCreatetxs(this.typeAction())
       }
     },
     actionArrayToBase64Img (data) {
@@ -377,21 +370,46 @@ export default {
         this.txsTransferIcon = null
       }
     },
-    mosaicNonceFromPublicKey () {
-      this.mosaic.randomNonce = MosaicNonce.createRandom()
-      this.mosaic.mosaicId = this.$blockchainProvider.mosaicNonceFromPublicKey(
-        this.currentAccount.publicKey,
-        this.mosaic.randomNonce
-      )
+    calRentalFee (val) {
+      return (this.rentalFee = val)
     },
-    nameToAssetExample (nameForm = null, nameNamespace = null) {
-      let name = null
-      if (nameForm && nameNamespace) {
-        name = `${nameNamespace}.${nameForm}`
-      } else {
-        name = nameForm
+    calMaxFeeTxs (v) {
+      this.maxFee = this.$generalService.sumObject(v)
+      return v
+    },
+    getMaxFiiTx (typeTxs = []) {
+      for (let i in typeTxs) {
+        const t = Number(typeTxs[i])
+        if (t === 3) {
+          this.maxFeeTxs.maxFeeMosaicAlias = Number(this.typeCreatetxs(t, true))
+        }
+        if (t === 0) {
+          this.maxFeeTxs.maxFeeAggregate = Number(this.typeCreatetxs(t, true))
+        }
+        if (t === 1) {
+          this.maxFeeTxs.maxFeeMetadataMosaic = Number(this.typeCreatetxs(t, true))
+        }
       }
-      return (this.fullNameNamespace = name)
+    },
+    mosaicNonceFromPublicKey () {
+      console.log('this.currentAccount', this.currentAccount)
+      const mosaicNonce = mosaicNonceFromPublicKey(this.currentAccount.publicKey)
+      this.mosaic.randomNonce = mosaicNonce.randomNonce
+      this.mosaic.mosaicId = mosaicNonce.mosaicId
+    },
+    nameToAssetFuc (value) {
+      return (this.fullNameNamespace = value)
+    },
+    tempShow () {
+      let tempType = 0
+      if (this.dataAllTx.length === 3 && this.dataTx.length === 3) {
+        tempType = 1
+      } else if (this.dataAllTx.length === 2 && this.dataTx.length === 2) {
+        tempType = 1
+      } else {
+        tempType = 0
+      }
+      return tempType
     },
     typeAction () {
       return 0
@@ -533,12 +551,7 @@ export default {
       }
     },
     setMosaicIdAndNamespace (mosaicId, namespaceId) {
-      let name = null
-      // this.mosaicIdLink = this.$blockchainProvider.getMosaicId(mosaicId)
-      if (namespaceId) {
-        name = namespaceId
-      }
-      this.namespaceIdLink = this.$blockchainProvider.getNamespaceId(name)
+      if (namespaceId) this.namespaceIdLink = this.$blockchainProvider.getNamespaceId(namespaceId)
     },
     selectActionNamespace (data) {
       if (data.idToHex && data.namespaceInfo) {
@@ -603,20 +616,6 @@ export default {
       this.showLoading = showLoading
       this.progressMosaicDefi = progressMosaicDefiV
       this.progressMosaicAlias = progressMosaicAliasV
-    },
-    getMaxFiiTx (typeTxs = []) {
-      for (let i in typeTxs) {
-        const t = Number(typeTxs[i])
-        if (t === 3) {
-          this.maxFeeTxs.maxFeeMosaicAlias = Number(this.typeCreatetxs(t, true))
-        }
-        if (t === 0) {
-          this.maxFeeTxs.maxFeeAggregate = Number(this.typeCreatetxs(t, true))
-        }
-        if (t === 1) {
-          this.maxFeeTxs.maxFeeMetadataMosaic = Number(this.typeCreatetxs(t, true))
-        }
-      }
     },
     watchComputedNamespaceName () {
       this.validNamespaceName()

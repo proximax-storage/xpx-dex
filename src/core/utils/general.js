@@ -163,6 +163,24 @@ function differString (a, b) {
   }
   return result
 }
+/**
+ *  obj type number
+ * @param {*} obj
+ */
+function sumObject (obj) {
+  let sum = 0
+  if (obj) {
+    for (const p in obj) {
+      sum = sum + obj[p]
+    }
+  }
+  return sum
+}
+
+/**
+ *
+ * @param {*} price
+ */
 function formatterPrice (price) {
   const priceFormatte = price.toString().split(',').join('').split('.').join('')
 
@@ -334,6 +352,7 @@ export {
   calculateDurationforDay,
   calculateDurationExpire,
   differString,
+  sumObject,
   doCopy,
   formatterPrice,
   getDataPart,

@@ -33,11 +33,25 @@ function buildRegisterNamespaceTransaction (rootNamespaceName, subnamespaceName,
     action
   }
 }
-
+/**
+ *
+ * @param {*} duration
+ */
 function getCalRentalFee (duration) {
   const durationByBlock = Vue.prototype.$generalService.calculateDurationforDay(duration)
   return store.getters.environment.rentalFee.namespace * durationByBlock
 }
+
+function nameToAssetExample (nameForm = null, nameNamespace = null) {
+  let name = null
+  if (nameForm && nameNamespace) {
+    name = `${nameNamespace}.${nameForm}`
+  } else {
+    name = nameForm
+  }
+  return name
+}
+
 /**
  *
  * @param {*} accounts
@@ -138,6 +152,7 @@ export {
   aliasType,
   buildRegisterNamespaceTransaction,
   getCalRentalFee,
+  nameToAssetExample,
   searchNamespacesFromAccounts,
   validateNamespaceName,
   validateRootAndSubNamespace
