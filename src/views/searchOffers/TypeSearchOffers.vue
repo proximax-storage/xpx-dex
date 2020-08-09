@@ -8,7 +8,7 @@
     <v-row class="mt-5">
       <v-col cols="12">
         <v-card-title>
-          Filter Assets
+          Filter Assets s
           <v-spacer></v-spacer>
           <v-text-field
             v-model="search"

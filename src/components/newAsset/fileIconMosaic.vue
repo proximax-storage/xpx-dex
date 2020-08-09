@@ -3,23 +3,23 @@
   <v-col cols="12">
     <v-form ref="form" v-model="valid">
       <v-row>
-        <v-col sm="12" md="9" lg="9" col="9">
+        <v-col sm="8" md="8" lg="8" col="8">
           <v-file-input
             id="getFile"
             v-model="getFile"
             show-size
             counter
             :rules="[
-      configForm.iconMosaic.rules.size,
-      configForm.iconMosaic.rules.typeForm,
-      isValidImg]"
+                      configForm.iconMosaic.rules.size,
+                      configForm.iconMosaic.rules.typeForm,
+                      isValidImg]"
             :accept="'image/png'"
             dense
+            hide-input
             :color="inputStyle"
-            placeholder="Select your files"
             :label="configForm.iconMosaic.label"
           >
-            <template v-slot:selection="{ index, text }">
+            <template v-slot:selection="{ index, text}">
               <v-chip :color="inputStyle" dark label small>{{ text }}</v-chip>
             </template>
           </v-file-input>
@@ -31,7 +31,7 @@
           col="3"
           class="d-flex mx-auto justify-space-around align-center"
         >
-          <img v-if="base64File" :src="base64File" />
+          <!-- <img v-if="base64File" width="35" height="35" :src="base64File" /> -->
         </v-col>
       </v-row>
     </v-form>

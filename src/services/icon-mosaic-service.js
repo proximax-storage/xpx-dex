@@ -35,6 +35,18 @@ function arrayToBase64Img (base64Img, lengthSubs = 1000) {
 function base64ImgFromArray (array) {
   let base64Img = ''
   const arraSort = array.sort((a, b) => { return a.i - b.i })
+  console.log('arraSort', arraSort)
+  for (let t = 0; t < arraSort.length; t++) {
+    if (arraSort[t].s) { base64Img += arraSort[t].s }
+  }
+  if (!isBase64(base64Img)) {
+    throw new Error('not Base64')
+  }
+  return `${config.format}${base64Img}`
+}
+function base64ImgFromArrayCom (array) {
+  let base64Img = ''
+  const arraSort = array.sort((a, b) => { return a.i - b.i })
   for (let t = 0; t < arraSort.length; t++) {
     if (arraSort[t].s) { base64Img += arraSort[t].s }
   }
@@ -140,4 +152,4 @@ function validateDimensionImg (base64Img) {
   })
 }
 
-export { config, validateDimensionImg, arrayToBase64Img, aggregateTxFromArray, base64IconFromAggregateTx }
+export { config, validateDimensionImg, arrayToBase64Img, base64ImgFromArrayCom, aggregateTxFromArray, base64IconFromAggregateTx }

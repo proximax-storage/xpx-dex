@@ -172,8 +172,8 @@ function namespaceName (label = 'namespaceName') {
   const max = generalConfig.namespaceName.max
   const rules = {
     required: value => !!value || `${label} is required`,
-    min: v => (v && v.length >= min) || `${label} must be less than ${min} characters`,
-    max: v => (v && v.length <= max) || `${label} must be a maximum of ${max} characters`
+    min: v => (v && v.length >= min) || `${label} min length ${min} alphanumerico characters`,
+    max: v => (v && v.length <= max) || `${label} max length ${max} alphanumerico characters`
   }
   return assemblyConfig(label, '', '', min, max, rules)
 }
@@ -226,14 +226,14 @@ function divisibility (label = 'Divisibility') {
  *
  * @param {*} label
  */
-function iconMosaic (label = 'Image mosaic') {
+function iconMosaic (label = `Select a image to  identify your  mosaic (Max. ${generalConfig.img.width}x${generalConfig.img.height})`) {
   const size = generalConfig.img.size
   const typeForm = generalConfig.img.typeForm
   const width = generalConfig.img.width
   const height = generalConfig.img.height
   const rules = {
     required: v => !!v || `${label} is required`,
-    size: v => !v || v.size < size || 'Image size must be less than 2 kB!',
+    size: v => !v || v.size < size || 'Icon size must be less than 2 kB!',
     typeForm: v => !v || v.type === typeForm || `Allowed format (${typeForm})`
   }
   return assemblyConfigFile(width, height, size, typeForm, assemblyConfig(label, '', 'file', null, null, rules))

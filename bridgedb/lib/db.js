@@ -5,12 +5,13 @@ const DB = {
   conn: null,
   connStruc: null,
   name: 'dexWallet',
-  host: '192.168.1.70',
+  host: 'localhost',
   port: 32769,
   tables: [
     { table: 'executeOffers', options: {} },
     { table: 'mosaicInfo', options: { primaryKey: 'mosaicIdHex' } }
   ],
+  // host: '192.168.1.70',
   async connect () {
     try {
       Log.info('   >> Connecting to RethinkDB...')

@@ -46,8 +46,10 @@ function nameToAssetExample (nameForm = null, nameNamespace = null) {
   let name = null
   if (nameForm && nameNamespace) {
     name = `${nameNamespace}.${nameForm}`
-  } else {
+  } else if (nameForm) {
     name = nameForm
+  } else {
+    name = nameNamespace
   }
   return name
 }

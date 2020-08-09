@@ -15,7 +15,7 @@
       :hint="`${form.selectNamespace.namespaceName.name}, alias: (${form.selectNamespace.aliasType})`"
       persistent-hint
       return-object
-      label="Select name "
+      label="Select name (optional)"
     ></v-select>
     <!-- :error="errorSelect" -->
   </v-col>
