@@ -54,7 +54,7 @@ export default {
     }
   },
   beforeMount () {
-    this.$emit('validIconMosaic', false)
+    this.$emit('validIconMosaic', true)
 
     this.configForm = {
       iconMosaic: this.$configForm.iconMosaic()
@@ -79,6 +79,7 @@ export default {
       }
     },
     readImage (file) {
+      this.isValidImg = true
       if (file) {
         this.valid = true
         const reader = new FileReader()

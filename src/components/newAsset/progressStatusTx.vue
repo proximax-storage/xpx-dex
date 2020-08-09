@@ -1,17 +1,25 @@
 <template>
-  <v-row>
-    <v-col col="12" class="ma-2">
-      <div class="text-center">
-        <v-progress-circular
-          :rotate="-90"
-          :size="150"
-          :width="5"
-          :value="value"
-          color="teal"
-        >Loading...</v-progress-circular>
-      </div>
-    </v-col>
-  </v-row>
+  <div>
+    <v-row>
+      <v-col col="12" class>
+        <div class="text-center">
+          <v-progress-circular :rotate="-90" :size="190" :width="10" :value="value" color="primary">
+            <span class="title font-weight-bold">Processing...</span>
+          </v-progress-circular>
+        </div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12" class>
+        <div class="text-center">
+        <span class="body-1 font-weight-medium grey--text">Don't close your browser until </span>
+         </div>
+         <div class="text-center">
+           <span class="body-1 font-weight-medium grey--text">finish the process</span>
+           </div>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 <script>
 export default {
