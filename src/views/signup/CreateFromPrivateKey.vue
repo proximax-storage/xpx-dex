@@ -154,7 +154,7 @@ export default {
   beforeMount () {
     const networks = this.$blockchainProvider.getNetworkTypes()
     this.networkSelected = networks[0]
-    this.debouncedValidateWalletName = this.lodash.debounce(this.validateWalletName, 500)
+    // this.debouncedValidateWalletName = this.lodash.debounce(this.validateWalletName, 500)
     this.configForm = {
       accountName: this.$configForm.walletAccountName('Account name'),
       privateKey: this.$configForm.privateKey(),
@@ -248,7 +248,7 @@ export default {
   },
   watch: {
     accountName (newVal) {
-      this.debouncedValidateWalletName()
+      this.validateWalletName()
     }
   }
 }
