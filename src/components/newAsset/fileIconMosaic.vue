@@ -15,7 +15,6 @@
                       isValidImg]"
             :accept="'image/png'"
             dense
-            hide-input
             :color="inputStyle"
             :label="configForm.iconMosaic.label"
           >
