@@ -11,7 +11,7 @@ const DB = {
     { table: 'executeOffers', options: {} },
     { table: 'mosaicInfo', options: { primaryKey: 'mosaicIdHex' } }
   ],
-  // host: '192.168.1.70',
+  // host: '192.168.1.70's,
   async connect () {
     try {
       Log.info('   >> Connecting to RethinkDB...')
