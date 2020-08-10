@@ -1,66 +1,65 @@
 <template>
-  <div>
-    <v-row justify="center" align="center">
-      <v-col cols="8" justify="center" align="center" class="pt-12">
-        <span class="font-italic font-weight-bold display-3">Sports</span>
-        <span class="font-italic font-weight-bold display-3">Bet</span>
-      </v-col>
-      <v-col cols="10" sm="8" md="7" lg="7" justify="center" align="center">
-        <v-card elevation="10" class="elevation-2">
-          <v-row>
-            <template v-for="(item, key) of items">
-              <v-col :key="key" cols="10" sm="6" md="6" lg="6" class="text-center mx-auto pb-12">
-                <div class="d-flex justify-center pb-2 pt-8">
-                  <v-img
-                    :src="require(`@/assets/img/${theme}/${item.icon}`)"
-                    width="45"
-                    height="45"
-                    max-width="45"
-                    max-height="45"
-                  ></v-img>
-                </div>
-                <div class="text-center pb-1">
-                  <span class="subtitle-1">{{item.title}}</span>
-                </div>
-                <v-btn
-                  rounded
-                  color="primary"
-                  class="pl-8 pr-8 body-2 sky white--text"
-                  router
-                  :to="item.route"
-                >{{item.nameButton}}</v-btn>
-              </v-col>
-            </template>
-          </v-row>
-          <v-card-actions class="leve pt-0 pb-0">
-            <v-row class="darkness--text">
-              <v-col class="d-flex justify-start ma-2">I'm already have a account</v-col>
-              <v-col class="d-flex justify-end">
-                <v-chip small link class="sky white--text pt-1 pb-1 ma-2 mr-10">Sign In</v-chip>
-              </v-col>
-            </v-row>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
-    <!-- <v-row >
-    <v-col cols="8" justify="center" align="center" class="body-1 pt-1">
-      <a class="leve--text" link>
-        <u>Go to back</u>
-      </a>
-    </v-col>
-    </v-row>-->
-  </div>
+  <v-container class="fill-height">
+    <v-container>
+      <v-row class="d-flex justify-center align-center mb-8 mt-1">
+        <img :src="require('@/assets/img/logo-dex-color.svg')" alt="logo" height="70" />
+      </v-row>
+      <v-row class="d-flex justify-center align-center">
+        <v-col xl="6" lg="6" md="7" sm="8" xs="12">
+          <v-card elevation="1" class="elevation-2 leve">
+            <v-card-text>
+              <v-row>
+                <template v-for="(item, key) of items">
+                  <v-col :key="key" cols="10" sm="6" md="6" lg="6" class="text-center mx-auto">
+                    <div class="d-flex justify-center pb-2 pt-8">
+                      <v-img
+                        :src="require(`@/assets/img/${theme}/${item.icon}`)"
+                        max-width="80"
+                        max-height="80"
+                      ></v-img>
+                    </div>
+                    <div class="text-center pb-1">
+                      <span class="subtitle-1">{{ item.title }}</span>
+                    </div>
+                    <v-btn
+                      block
+                      text
+                      large
+                      color="primary"
+                      class="pl-8 pr-8 subtitle-1 font-weight-bold white--text"
+                      router
+                      :to="item.route"
+                    >{{ item.nameButton }}</v-btn>
+                  </v-col>
+                </template>
+              </v-row>
+            </v-card-text>
+            <v-card-actions class="white pa-0">
+              <v-row class>
+                <v-col class="d-flex justify-start darkness--text">I'm already have a account</v-col>
+                <v-col class="d-flex justify-end">
+                  <v-btn text small color="primary" class="font-weight-bold pt-1 pb-1 mr-4">Sign In</v-btn>
+                </v-col>
+              </v-row>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row class="d-flex justify-center align-center ma-4">
+        <router-link class="font-italic font-weight-medium" to="/">Go to home page</router-link>
+      </v-row>
+    </v-container>
+  </v-container>
 </template>
 <script>
 export default {
   data: () => {
     return {
       title: 'Select Wallet Creation Type',
-      theme: 'dark',
+      theme: 'light',
       items: [
         {
-          title: 'New',
+          title: 'New account',
           nameButton: 'Create',
           icon: 'icon-add.svg',
           route: '/create-new-signup'
@@ -69,7 +68,7 @@ export default {
           title: 'From a Private Key',
           nameButton: 'Create',
           icon: 'icon-private-key.svg',
-          route: '/create-from-private-key'
+          route: '/create-from-privateKey'
         }
       ]
     }
