@@ -5,7 +5,8 @@
     </v-row>
     <!-- mosaicInfo -->
     <v-row class="pt-4">
-      <v-col sm="7" md="7" lg="10" col="10" class="pt-0">
+      <!-- <v-col sm="7" md="7" lg="10" col="10" class="pt-0"> -->
+      <v-col sm="12" md="12" lg="12" col="12" class="pt-0">
         <v-tabs v-model="tab" background-color="transparent" color="primary" grow slider-size="4">
           <div
             class="v-tabs-slider-wrapper"

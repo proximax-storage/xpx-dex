@@ -1,6 +1,6 @@
 <template>
-  <v-row class="ml-3">
-    <v-col xs="12" sm="12" md="10" lg="4" xl="4" class="d-flex mx-auto">
+  <v-row class="ml-3 d-flex mx-auto  justify-lg-end">
+    <v-col xs="12" sm="6" md="6" lg="4" xl="4" class="d-flex  ">
       <div>
         <div class="subtitle-1 font-weight-black">Available balances</div>
         <div class="subtitle-1 ma-0 pa-0">
@@ -20,7 +20,7 @@
         >USD {{getBalanceUsd.availableBalance | toCurrency}}</div>
       </div>
     </v-col>
-    <v-col xs="12" sm="12" md="10" lg="4" xl="4" class="d-flex mx-auto">
+    <v-col xs="12" sm="6" md="6" lg="4" xl="4" class="d-flex ">
       <div>
         <div class="subtitle-1 font-weight-black">On hold balances</div>
         <div class="subtitle-1 ma-0 pa-0">
@@ -39,7 +39,7 @@
         >USD {{getBalanceUsd.onHoldBalance | toCurrency}}</div>
       </div>
     </v-col>
-    <v-col xs="12" sm="12" md="10" lg="4" xl="4" class="d-flex mx-auto">
+    <v-col xs="12" sm="6" md="6" lg="4" xl="4" class="d-flex ">
       <div>
         <div class="subtitle-1 font-weight-black">Total balance</div>
         <div class="subtitle-1 ma-0 pa-0">
