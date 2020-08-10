@@ -729,7 +729,7 @@ export default {
           )
 
           if (!calcMaxFee) {
-            console.log('CASE #0')
+            // console.log('CASE #0')
             // announce Tx
             this.pushAllDataTx(action)
             this.validateLoadingTX(true)
@@ -760,7 +760,7 @@ export default {
 
             // this.hashMosaicDefinition = null
             if (!calcMaxFee) {
-              console.log('CASE #1')
+              // console.log('CASE #1')
               // announce Tx
 
               this.pushAllDataTx(action)
@@ -787,7 +787,7 @@ export default {
             this.mosaic.mosaicId
           ).transaction
           if (!calcMaxFee) {
-            console.log('CASE #3')
+            // console.log('CASE #3')
             // announce Tx
             this.pushAllDataTx(action)
             this.announceTx(mosaicAliasTransaction, action)
@@ -834,7 +834,7 @@ export default {
         this.dataTx.push({ hash: this.hashMosaicDefinition })
         this.hashMosaicDefinition = null
         this.validateLoadingTX(true, true)
-        console.log('hash Mosaic Definition...')
+        // console.log('hash Mosaic Definition...')
         this.sendingForm = false
         setTimeout(() => {
           this.sendingForm = false
@@ -850,7 +850,7 @@ export default {
           this.dataTx.push({ hash: this.hashMosaicAlias })
           this.hashMosaicAlias = null
         }, 1000)
-        console.log('hash Mosaic Alias...')
+        // console.log('hash Mosaic Alias...')
         this.sendingForm = false
       }
       if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicMetadata)) {
@@ -858,12 +858,12 @@ export default {
           this.dataTx.push({ hash: this.hashMosaicMetadata })
           this.hashMosaicMetadata = null
         }, 1000)
-        console.log('hash Mosaic Metadata...')
+        // console.log('hash Mosaic Metadata...')
         this.sendingForm = false
       }
     },
     validIconMosaic (event) {
-      console.log('validIconMosaic event', event)
+      // console.log('validIconMosaic event', event)
       this.isValidIconMosaic = event
       this.getMaxFiiTx([0, 3])
     },
