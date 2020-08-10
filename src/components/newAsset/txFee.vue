@@ -13,9 +13,6 @@ export default {
     fee: {
       get: function (newValue) {
         return this.$generalService.amountFormatter(this.$generalService.sumObject(this.arrayFee))
-      },
-      set: function (newValue) {
-        console.log('asdads', newValue)
       }
     }
   }
