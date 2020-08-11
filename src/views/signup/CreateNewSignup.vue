@@ -224,7 +224,9 @@ export default {
   },
   watch: {
     accountName (newVal) {
-      this.validateWalletName()
+      setTimeout(() => {
+        this.validateWalletName()
+      }, 1000)
     }
   }
 }
