@@ -329,6 +329,17 @@ function filterAccountDefault (wallet = null) {
   }
 }
 
+function changeName (oldName, newName) {
+  const wallets = getWallets()
+  wallets.forEach(x => {
+    if (x.username === oldName) {
+      store.commit('walletStore/SET_NAME_CURRENT_WALLET', newName)
+      x.username = newName
+    }
+  })
+  console.log('wallets', wallets)
+  Vue.prototype.$browserStorage.set(`wallets-${store.getters.pseudonymApp}`, JSON.stringify(wallets))
+}
 /**
  *
  *
@@ -451,6 +462,8 @@ function setAccountsInfo (accountsInfo, pushed = false) {
   })
 }
 function validBalance (ammount) {
+  console.log('ammountd', ammount)
+  console.log('balanceCurrentAccount', store.getters['accountStore/balanceCurrentAccount'])
   if (Number(ammount) > store.getters['accountStore/balanceCurrentAccount']) {
     store.commit('SHOW_SNACKBAR', {
       snackbar: true,
@@ -488,6 +501,7 @@ export {
   getAccountsInfo,
   getWallets,
   getWalletByName,
+  changeName,
   validBalance,
   logIn
 }

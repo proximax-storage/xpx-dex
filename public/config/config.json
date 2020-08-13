@@ -9,6 +9,7 @@
     "TEST_NET": {
       "rentalFee": {
         "namespace": 4576,
+        "subnamespace": 10000000000,
         "mosaic": 10000000000
       },
       "dataBase": {
@@ -60,8 +61,9 @@
     },
     "MAIN_NET": {
       "rentalFee": {
-        "namespace": 0,
-        "mosaic": 0
+        "namespace": 4576,
+        "subnamespace": 10000000000,
+        "mosaic": 10000000000
       },
       "dataBase": {
         "name": "dex-wallet-db",
@@ -119,8 +121,9 @@
     },
     "PRIVATE": {
       "rentalFee": {
-        "namespace": 0,
-        "mosaic": 0
+        "namespace": 4576,
+        "subnamespace": 10000000000,
+        "mosaic": 10000000000
       },
       "dataBase": {
         "name": "dex-wallet-db",
