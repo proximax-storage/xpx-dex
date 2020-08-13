@@ -149,6 +149,13 @@ async function saveNamespace (namespaceInfo) {
   }
   store.commit('namespaceStore/SET_NAMESPACES', namespaceToSaved)
 }
+/**
+ *
+ * @param {*} duration
+ */
+function getCalRentalFeeSubNamespace () {
+  return store.getters.environment.rentalFee.subnamespace
+}
 
 export {
   aliasType,
@@ -157,5 +164,6 @@ export {
   nameToAssetExample,
   searchNamespacesFromAccounts,
   validateNamespaceName,
-  validateRootAndSubNamespace
+  validateRootAndSubNamespace,
+  getCalRentalFeeSubNamespace
 }

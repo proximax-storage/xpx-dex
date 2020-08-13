@@ -124,7 +124,8 @@ export default {
       arrayBtn: null,
       dataWalletCreated: null,
       networkSelected: null,
-      inputStyle: 'inputStyle'
+      inputStyle: 'inputStyle',
+      timeGetvalidateWalletName: null
     }
   },
   beforeMount () {
@@ -224,7 +225,8 @@ export default {
   },
   watch: {
     accountName (newVal) {
-      setTimeout(() => {
+      if (this.timeGetvalidateWalletName) clearTimeout(this.timeGetvalidateWalletName)
+      this.timeGetvalidateWalletName = setTimeout(() => {
         this.validateWalletName()
       }, 1000)
     }

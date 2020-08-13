@@ -16,6 +16,7 @@
         class="headline font-weight-regular text-left primary--text"
       >Create your own asset</v-col>
     </v-row>
+    showLoading ::{{showLoading}} | getTempShow :: {{getTempShow}}
     <!-- Template form-->
     <template v-if="getTempShow === 0">
       <v-row>
@@ -427,6 +428,7 @@ import {
 import {
   buildRegisterNamespaceTransaction,
   getCalRentalFee,
+  getCalRentalFeeSubNamespace,
   nameToAssetExample,
   validateNamespaceName,
   validateRootAndSubNamespace
@@ -545,9 +547,7 @@ export default {
       return this.calMaxFeeTxs(this.maxFeeTxs)
     },
     getRentalFee () {
-      return this.calRentalFee(
-        getCalRentalFee(this.form.namespace.duration) + getCalRentalFeeMosaic()
-      )
+      return this.calRentalFee()
     }
   },
   methods: {
@@ -610,7 +610,12 @@ export default {
         this.txsTransferIcon = null
       }
     },
-    calRentalFee (val) {
+    calRentalFee () {
+      const isSubnamespace = this.form.namespace.type
+      let val = getCalRentalFee(this.form.namespace.duration) + getCalRentalFeeMosaic()
+      if (isSubnamespace === 'subNamespaceName') {
+        val = val + getCalRentalFeeSubNamespace()
+      }
       return (this.rentalFee = val)
     },
     calMaxFeeTxs (v) {
@@ -733,8 +738,16 @@ export default {
             // announce Tx
             this.pushAllDataTx(action)
             this.validateLoadingTX(true)
+            console.log(
+              'aggregateTransaction fee send',
+              this.$blockchainProvider.aggregateTransaction(innerTransaction).maxFee.compact()
+            )
             this.announceTx(this.$blockchainProvider.aggregateTransaction(innerTransaction), action)
           } else {
+            console.log(
+              'aggregateTransaction fee',
+              this.$blockchainProvider.aggregateTransaction(innerTransaction).maxFee.compact()
+            )
             // calcMaxFee
             return this.$blockchainProvider.aggregateTransaction(innerTransaction).maxFee.compact()
           }
@@ -767,6 +780,7 @@ export default {
               this.announceTx(modifyMetadataTransactionMoisac, action)
             } else {
               // calcMaxFee
+              console.log('icon fee', modifyMetadataTransactionMoisac.maxFee.compact())
               return modifyMetadataTransactionMoisac.maxFee.compact()
             }
           } else {
