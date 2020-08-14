@@ -16,7 +16,6 @@
         class="headline font-weight-regular text-left primary--text"
       >Create your own asset</v-col>
     </v-row>
-    showLoading ::{{showLoading}} | getTempShow :: {{getTempShow}}
     <!-- Template form-->
     <template v-if="getTempShow === 0">
       <v-row>
@@ -597,7 +596,10 @@ export default {
     action (action) {
       switch (action) {
         case 'create':
-          if (validBalance(this.rentalFee + this.maxFee)) this.typeCreatetxs(this.typeAction())
+          if (
+            validBalance(this.rentalFee + this.maxFee) &&
+            this.$generalService.showMsgStatusNode()
+          ) { this.typeCreatetxs(this.typeAction()) }
       }
     },
     actionArrayToBase64Img (data) {

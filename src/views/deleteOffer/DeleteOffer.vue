@@ -158,7 +158,7 @@ export default {
     action (action) {
       switch (action) {
         case 'delete':
-          if (this.valid && !this.sendingForm) {
+          if (this.valid && !this.sendingForm && this.$generalService.showMsgStatusNode()) {
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
               if (this.exchangeDelete) {

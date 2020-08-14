@@ -371,7 +371,7 @@ export default {
     action (action) {
       switch (action) {
         case 'place':
-          if (this.valid && !this.sendingForm) {
+          if (this.valid && !this.sendingForm && this.$generalService.showMsgStatusNode()) {
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
               common = null
