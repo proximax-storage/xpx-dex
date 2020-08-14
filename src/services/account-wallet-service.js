@@ -52,8 +52,6 @@ async function buildCurrentAccountInfo (accountInfo) {
               mosaic.mosaicInfo.height.lower,
               mosaic.mosaicInfo.height.higher
             ])
-
-            // console.log('createdBlock', createdBlock)
             if (durationMosaic.compact() > 0) {
               if (this.currentBlock >= durationMosaic.compact() + createdBlock.compact()) {
                 expired = true
@@ -138,8 +136,7 @@ async function searchAccountsInfo (accounts) {
             }
           }
         },
-        error => {
-          console.error(error)
+        () => {
           const accountInfoBuilded = {
             name: element.name,
             accountInfo: null,
@@ -337,7 +334,6 @@ function changeName (oldName, newName) {
       x.username = newName
     }
   })
-  console.log('wallets', wallets)
   Vue.prototype.$browserStorage.set(`wallets-${store.getters.pseudonymApp}`, JSON.stringify(wallets))
 }
 /**
@@ -431,7 +427,7 @@ function getAccountsInfo (accounts) {
       store.dispatch('mosaicStore/GET_MOSAICS_METADATA', data.mosaicsId)
       searchInfoMosaics(data.mosaicsId)
     }
-  }).catch(error => console.error(error))
+  }).catch(() => { })
 }
 
 /**
@@ -462,8 +458,6 @@ function setAccountsInfo (accountsInfo, pushed = false) {
   })
 }
 function validBalance (ammount) {
-  console.log('ammountd', ammount)
-  console.log('balanceCurrentAccount', store.getters['accountStore/balanceCurrentAccount'])
   if (Number(ammount) > store.getters['accountStore/balanceCurrentAccount']) {
     store.commit('SHOW_SNACKBAR', {
       snackbar: true,

@@ -738,16 +738,8 @@ export default {
             // announce Tx
             this.pushAllDataTx(action)
             this.validateLoadingTX(true)
-            console.log(
-              'aggregateTransaction fee send',
-              this.$blockchainProvider.aggregateTransaction(innerTransaction).maxFee.compact()
-            )
             this.announceTx(this.$blockchainProvider.aggregateTransaction(innerTransaction), action)
           } else {
-            console.log(
-              'aggregateTransaction fee',
-              this.$blockchainProvider.aggregateTransaction(innerTransaction).maxFee.compact()
-            )
             // calcMaxFee
             return this.$blockchainProvider.aggregateTransaction(innerTransaction).maxFee.compact()
           }
@@ -780,7 +772,6 @@ export default {
               this.announceTx(modifyMetadataTransactionMoisac, action)
             } else {
               // calcMaxFee
-              console.log('icon fee', modifyMetadataTransactionMoisac.maxFee.compact())
               return modifyMetadataTransactionMoisac.maxFee.compact()
             }
           } else {

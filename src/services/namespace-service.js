@@ -71,8 +71,8 @@ async function searchNamespacesFromAccounts (accounts) {
           allNamespaces.push(element)
         })
       }
-    } catch (error) {
-      console.error('----Search namespaces from accoun ts error----', error)
+    } catch {
+      return
     }
     saveNamespace(allNamespaces)
   }

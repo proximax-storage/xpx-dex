@@ -84,7 +84,7 @@ export const accountStore = {
       state.currentAccount = data
     },
     SET_TOTAL_BALANCE (state, data) {
-      console.log('SET_TOTAL_BALANCE', data)
+      // console.log('SET_TOTAL_BALANCE', data)
       state.totalBalance = data
     },
     UPDATE_DATA_USER (state, data) {
@@ -94,7 +94,7 @@ export const accountStore = {
       state.dataUser.name = name
     },
     SET_BUILD_CURRENT_ACCOUNT_MOSAIC (state, data) {
-      console.log('\n\n SET_BUILD_CURRENT_ACCOUNT_MOSAIC \n', data)
+      // console.log('\n\n SET_BUILD_CURRENT_ACCOUNT_MOSAIC \n', data)
       state.mosaicBuild = data
     }
   },
