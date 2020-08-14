@@ -71,7 +71,6 @@
                     ></v-select>
                   </template>
                   <template v-if="type === 'sell'">
-                    {{assetsSell}}
                     <v-select
                       class="pt-1"
                       v-model="form.asset"

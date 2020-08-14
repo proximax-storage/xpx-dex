@@ -57,7 +57,6 @@ export const nodeStore = {
         else commit('SET_STATUS_NODE', 1)
       }, () => {
         commit('SET_STATUS_NODE', 0)
-        console.log('show msg, no connected to node.')
       })
     },
     closeWebsocket ({

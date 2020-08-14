@@ -113,7 +113,7 @@ import { getWalletByName, createWallet } from '@/services/account-wallet-service
 export default {
   data: () => {
     return {
-      accountName: '',
+      accountName: null,
       title: 'New account',
       valid: false,
       configForm: null,
@@ -124,13 +124,13 @@ export default {
       arrayBtn: null,
       dataWalletCreated: null,
       networkSelected: null,
-      inputStyle: 'inputStyle'
+      inputStyle: 'inputStyle',
+      timeGetvalidateWalletName: null
     }
   },
   beforeMount () {
     const networks = this.$blockchainProvider.getNetworkTypes()
     this.networkSelected = networks[0]
-    this.debouncedValidateWalletName = this.lodash.debounce(this.validateWalletName, 500)
     this.configForm = {
       accountName: this.$configForm.walletAccountName('Account name'),
       password: this.$configForm.password(),
@@ -210,7 +210,7 @@ export default {
         setTimeout(() => {
           if (getWalletByName(usr, this.networkSelected.value)) {
             this.searchingWalletName = false
-            this.walletIsRepeat = `${usr} already exists, try another wallet name.`
+            this.walletIsRepeat = `${usr} already exists, try another wallet name`
             return
           }
 
@@ -225,7 +225,10 @@ export default {
   },
   watch: {
     accountName (newVal) {
-      this.debouncedValidateWalletName()
+      if (this.timeGetvalidateWalletName) clearTimeout(this.timeGetvalidateWalletName)
+      this.timeGetvalidateWalletName = setTimeout(() => {
+        this.validateWalletName()
+      }, 1000)
     }
   }
 }

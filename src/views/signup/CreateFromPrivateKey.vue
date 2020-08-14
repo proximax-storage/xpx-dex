@@ -148,13 +148,14 @@ export default {
       networkSelected: null,
       privateKey: '',
       walletIsRepeat: true,
-      inputStyle: 'inputStyle'
+      inputStyle: 'inputStyle',
+      timeGetvalidateWalletName: null
     }
   },
   beforeMount () {
     const networks = this.$blockchainProvider.getNetworkTypes()
     this.networkSelected = networks[0]
-    this.debouncedValidateWalletName = this.lodash.debounce(this.validateWalletName, 500)
+    // this.debouncedValidateWalletName = this.lodash.debounce(this.validateWalletName, 500)
     this.configForm = {
       accountName: this.$configForm.walletAccountName('Account name'),
       privateKey: this.$configForm.privateKey(),
@@ -217,8 +218,7 @@ export default {
             }
           }, 500)
         }
-      } catch (error) {
-        console.log('error', error)
+      } catch {
         this.SHOW_LOADING(false)
         this.clear()
         this.sendingForm = false
@@ -248,7 +248,10 @@ export default {
   },
   watch: {
     accountName (newVal) {
-      this.debouncedValidateWalletName()
+      if (this.timeGetvalidateWalletName) clearTimeout(this.timeGetvalidateWalletName)
+      this.timeGetvalidateWalletName = setTimeout(() => {
+        this.validateWalletName()
+      }, 1000)
     }
   }
 }

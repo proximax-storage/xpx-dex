@@ -12,6 +12,9 @@ export const walletStore = {
   mutations: {
     SET_CURRENT_WALLET (state, data) {
       state.currentWallet = data
+    },
+    SET_NAME_CURRENT_WALLET (state, data) {
+      state.currentWallet.username = data
     }
   }
 }

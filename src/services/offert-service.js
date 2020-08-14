@@ -160,8 +160,7 @@ async function validateExpireOffer (data, typeOffer) {
       }
     }
     return dataRet
-  } catch (error) {
-    console.error('----Search namespaces from accoun ts error----', error)
+  } catch {
   }
   return true
 }

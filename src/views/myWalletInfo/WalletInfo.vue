@@ -21,7 +21,6 @@
             :value="item.name"
           >{{ item.name }}</v-tab>
         </v-tabs>
-
         <v-tabs-items v-model="tab">
           <v-tab-item v-for="item in arrayItems" :key="item.item">
             <template v-if="tab === 0">
@@ -49,7 +48,7 @@ import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      tab: 1,
+      tab1: 0,
       arrayItems: [
         {
           items: 'assets',
@@ -75,7 +74,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('offersStore', ['offerAll'])
+    ...mapGetters('offersStore', ['offerAll']),
+    tab: {
+      get () {
+        return this.indexTab(this.$route.query.item)
+      },
+      set (value) {
+        this.activity('myWallet', value)
+      }
+    }
   },
   components: {
     'delete-offer-list': () => import('@/components/deleteOffer/DeleteOfferList'),
@@ -83,16 +90,18 @@ export default {
     'account-setting': () => import('@/components/myWalletInfo/AccountSetting')
   },
   methods: {
+    activity (action, item) {
+      this.$router.push({ path: `${action}`, query: { item: item } }).catch(e => {})
+    },
+
     filterItems (param = null, arrayItems = []) {
       const value = arrayItems.filter(x => x.index === param)[0]
       return value
     },
-    action (item) {
+    indexTab (items) {
+      const item = this.filterItems(items, this.arrayItems)
+      return item.index
     }
-  },
-  beforeMount () {
-    const item = this.filterItems(this.$route.query.item, this.arrayItems)
-    this.tab = item.index
   }
 }
 </script>
