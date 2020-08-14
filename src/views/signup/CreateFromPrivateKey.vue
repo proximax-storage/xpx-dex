@@ -218,8 +218,7 @@ export default {
             }
           }, 500)
         }
-      } catch (error) {
-        console.log('error', error)
+      } catch {
         this.SHOW_LOADING(false)
         this.clear()
         this.sendingForm = false

@@ -102,7 +102,7 @@ function closeConnection () {
     connector.close()
     connector.terminate()
     clearTimeOutTime()
-    console.log('connection closed!')
+    // console.log('connection closed!')
   }
 }
 
@@ -124,7 +124,7 @@ function clearTimeOutTime () {
  */
 function getBlocks () {
   connector.newBlock().subscribe(block => {
-    console.log('----NEW BLOCK -----', block.height.compact())
+    // console.log('----NEW BLOCK -----', block.height.compact())
     checkNodeIsLive(block.height.compact())
     store.commit('nodeStore/SET_CURRENT_BLOCK', block.height.compact())
   }, () => {
@@ -143,9 +143,9 @@ function getAggregateBondedAdded (arrayAddress) {
     arrayAddress.forEach(address => {
       connector.aggregateBondedAdded(address).subscribe(transaction => {
         showMsgAndChangeStatus(messages.aggregateBondedAdded, 'success')
-        console.log('--------------------AGGREGATE_BONDED_ADDED------------------------')
-        console.log(transaction.transactionInfo.hash)
-        console.log('------------------------------------------------------------------\n\n')
+        // console.log('--------------------AGGREGATE_BONDED_ADDED------------------------')
+        // console.log(transaction.transactionInfo.hash)
+        // console.log('------------------------------------------------------------------\n\n')
         store.commit('transactionsStore/SET_AGGREGATE_BONDED_ADDED', transaction)
       })
     })
@@ -163,9 +163,9 @@ function getAggregateBondedRemoved (arrayAddress) {
     arrayAddress.forEach(address => {
       connector.aggregateBondedRemoved(address).subscribe(transaction => {
         showMsgAndChangeStatus(messages.aggregateBondedRemoved, 'success')
-        console.log('-----------------------AGGREGATE_BONDED_REMOVED--------------------------')
-        console.log(transaction.transactionInfo.hash)
-        console.log('------------------------------------------------------------------\n\n')
+        // console.log('-----------------------AGGREGATE_BONDED_REMOVED--------------------------')
+        // console.log(transaction.transactionInfo.hash)
+        // console.log('------------------------------------------------------------------\n\n')
         store.commit('transactionsStore/SET_AGGREGATE_BONDED_REMOVED', transaction)
       })
     })
@@ -241,7 +241,7 @@ function getUnconfirmedRemoved (arrayAddress) {
     // console.log('MONITOR ACCOUNTS --->', arrayAddress)
     arrayAddress.forEach(address => {
       connector.unconfirmedRemoved(address).subscribe(hash => {
-        // showMsgAndChangeStatus(messages.unconfirmedRemoved, 'success')
+        showMsgAndChangeStatus(messages.unconfirmedRemoved, 'success')
         // console.log('-----------------------UNCONFIRMED_REMOVED--------------------------')
         // console.log(hash)
         // console.log('------------------------------------------------------------------\n\n')

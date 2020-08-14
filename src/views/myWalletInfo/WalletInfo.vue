@@ -99,7 +99,7 @@ export default {
       return value
     },
     indexTab (items) {
-      const item = this.filterItems(items, this.arrayItems)
+      const item = this.filterItems(Number(items), this.arrayItems)
       return item.index
     }
   }

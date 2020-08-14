@@ -131,8 +131,7 @@ const configIntegration = async function () {
       vuetify,
       render: h => h(AppVue)
     }).$mount('#app')
-  } catch (e) {
-    console.error(e)
+  } catch {
   }
 }
 /*

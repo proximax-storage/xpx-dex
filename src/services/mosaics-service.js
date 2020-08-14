@@ -223,8 +223,7 @@ async function searchInfoMosaics (mosaicsId, mosaicsInfOffer = false) {
       if (!mosaicsInfOffer) saveMosaicStorage(mosaicsTosaved)
       return mosaicsTosaved
     }
-  } catch (error) {
-    console.error('Has ocurred a error with search mosaics')
+  } catch {
     return null
   }
 }

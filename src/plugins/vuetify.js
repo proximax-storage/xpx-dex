@@ -24,6 +24,7 @@ export default new Vuetify({
         success: '#4caf50',
         darkness: '#222222', // CUMSTON
         errorIntense: colors.red.darken1,
+        orange: colors.orange,
         pin: '604CC0', //
         dim: '#00B938',
         sky: '062B39',

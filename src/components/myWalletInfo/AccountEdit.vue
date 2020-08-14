@@ -111,7 +111,6 @@ export default {
     this.configForm = {
       accountName: this.$configForm.walletAccountName('Account name')
     }
-    console.log(this.configForm)
   },
   watch: {
     accountNewName (newVal) {

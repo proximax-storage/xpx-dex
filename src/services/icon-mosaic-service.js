@@ -35,7 +35,7 @@ function arrayToBase64Img (base64Img, lengthSubs = 1000) {
 function base64ImgFromArray (array) {
   let base64Img = ''
   const arraSort = array.sort((a, b) => { return a.i - b.i })
-  console.log('arraSort', arraSort)
+  // console.log('arraSort', arraSort)
   for (let t = 0; t < arraSort.length; t++) {
     if (arraSort[t].s) { base64Img += arraSort[t].s }
   }

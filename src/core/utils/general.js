@@ -341,7 +341,25 @@ function verifyTypeOfferName (itemType) {
   const nameType = type.find(x => x.type === itemType).name
   return nameType
 }
-
+function showMsgStatusNode () {
+  if (store.getters['nodeStore/nodeStatus'] === 0) {
+    store.commit('SHOW_SNACKBAR', {
+      snackbar: true,
+      text: 'The connection node is down',
+      color: 'errorIntense'
+    })
+    return false
+  } else if (store.getters['nodeStore/nodeStatus'] === 2) {
+    store.commit('SHOW_SNACKBAR', {
+      snackbar: true,
+      text: 'Reconnect node',
+      color: 'orange'
+    })
+    return false
+  } else {
+    return true
+  }
+}
 export {
   amountFormatter,
   priceFormatter,
@@ -361,5 +379,6 @@ export {
   replaceData,
   validateMatch,
   validateZero,
-  verifyTypeOfferName
+  verifyTypeOfferName,
+  showMsgStatusNode
 }

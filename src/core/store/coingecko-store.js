@@ -45,8 +45,7 @@ export const coingeckoStore = {
       const coinToSearch = 'proximax'
       this._vm.$http.get(`${url}${coinToSearch}`).then(x => {
         commit('SET_XPX_INFORMATION', x.data)
-      }, error => {
-        console.log('Has ocurred a error....', error)
+      }, () => {
       })
     }
   }
