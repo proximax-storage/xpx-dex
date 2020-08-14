@@ -189,7 +189,7 @@ export default {
     action (action) {
       switch (action) {
         case 'place':
-          if (this.valid && !this.sendingForm) {
+          if (this.valid && !this.sendingForm && this.$generalService.showMsgStatusNode()) {
             // this.exchangeOffer = null
             const mosaicAmount = this.$generalService.quantityStringToInt(
               this.form.amount,
