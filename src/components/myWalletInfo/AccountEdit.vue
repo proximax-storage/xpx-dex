@@ -9,9 +9,8 @@
               <v-col cols="4">
                 <v-text-field
                   v-model.trim="accountNewName"
-                  :loading="searchingWalletName"
-                  :disabled="searchingWalletName"
                   :label="configForm.accountName.label"
+                  v-on:keyup="validateWalletName"
                   :minlength="configForm.accountName.min"
                   :maxlength="configForm.accountName.max"
                   :counter="configForm.accountName.max"
@@ -29,7 +28,7 @@
                   medium
                   class="font-weight-regular"
                   @click="editNameF('editChange')"
-                >mdi-pencil</v-icon>
+                >mdi-content-save-edit</v-icon>
               </v-col>
             </v-row>
           </v-col>
@@ -61,11 +60,9 @@ export default {
       valid: false,
       editName: false,
       accountNewName: null,
-      searchingWalletName: false,
       walletIsRepeat: true,
       configForm: null,
-      inputStyle: 'inputStyle',
-      timeGetvalidateWalletName: null
+      inputStyle: 'inputStyle'
     }
   },
   computed: {
@@ -77,33 +74,23 @@ export default {
         this.accountNewName = this.nameCurrentWallet
         this.editName = !this.editName
       } else {
-        setTimeout(() => {
-          if (
-            this.accountNewName &&
-            this.walletIsRepeat &&
-            !this.searchingWalletName &&
-            this.valid
-          ) {
-            changeName(this.nameCurrentWallet, this.accountNewName)
-            this.editName = false
-          }
-        }, 500)
+        // setTimeout(() => {
+        if (this.accountNewName && this.walletIsRepeat && this.valid) {
+          changeName(this.nameCurrentWallet, this.accountNewName)
+          this.editName = false
+        }
+        // }, 500)
       }
     },
     validateWalletName () {
       const usr = this.accountNewName
       if (usr && usr !== '' && usr.length >= this.configForm.accountName.min) {
-        this.searchingWalletName = true
-        setTimeout(() => {
-          if (getWalletByName(usr)) {
-            this.searchingWalletName = false
-            this.walletIsRepeat = `${usr} already exists, try another wallet name`
-            return
-          }
+        if (getWalletByName(usr)) {
+          this.walletIsRepeat = `${usr} already exists, try another wallet name`
+          return
+        }
 
-          this.walletIsRepeat = true
-          this.searchingWalletName = false
-        }, 500)
+        this.walletIsRepeat = true
       }
     }
   },
@@ -111,16 +98,16 @@ export default {
     this.configForm = {
       accountName: this.$configForm.walletAccountName('Account name')
     }
-  },
-  watch: {
-    accountNewName (newVal) {
-      if (newVal !== this.nameCurrentWallet) {
-        if (this.timeGetvalidateWalletName) clearTimeout(this.timeGetvalidateWalletName)
-        this.timeGetvalidateWalletName = setTimeout(() => {
-          this.validateWalletName()
-        }, 500)
-      }
-    }
   }
+  // watch: {
+  //   accountNewName (newVal) {
+  //     if (newVal !== this.nameCurrentWallet) {
+  //       if (this.timeGetvalidateWalletName) clearTimeout(this.timeGetvalidateWalletName)
+  //       this.timeGetvalidateWalletName = setTimeout(() => {
+  //         this.validateWalletName()
+  //       }, 500)
+  //     }
+  //   }
+  // }
 }
 </script>
