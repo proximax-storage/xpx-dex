@@ -350,6 +350,7 @@ function showMsgAndChangeStatus (msg, color, status = null) {
 }
 
 export {
+  reconnect,
   closeConnection,
   selectNode,
   monitorAllChannels,
