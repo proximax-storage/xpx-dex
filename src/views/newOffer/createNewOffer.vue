@@ -402,6 +402,8 @@ export default {
                   this.typeOffer,
                   this.form.duration
                 )
+
+                returnBuild.transaction.version = 4
                 this.announceTx(returnBuild, true)
               }
             }
@@ -418,12 +420,12 @@ export default {
         const mosaicId = this.$blockchainProvider.getMosaicId(this.idHex)
         const type = this.typeOffer === 0 ? 1 : 0
         const returnBuild = buildExchangeOffer(mosaicId, mosaicAmount, costTotal, type, data.owner)
+        returnBuild.transaction.version = 2
         this.announceTx(returnBuild)
       }
     },
     announceTx (buildTx, clear = false) {
       let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
-      buildTx.transaction.version = 3
       const signedTransaction = this.$blockchainProvider.signedTransaction(
         common.privateKey,
         buildTx.transaction,
@@ -508,6 +510,7 @@ export default {
           this.typeOffer,
           this.form.duration
         )
+        returnBuild.transaction.version = 4
         this.announceTx(returnBuild)
       }
     },
@@ -545,13 +548,19 @@ export default {
       let offerts = []
       const typeInvert = type === 0 ? 1 : 0
       const typeName = this.$generalService.verifyTypeOfferName(typeInvert)
-      if (data[0]) {
-        offerts = data[0].allOffers[typeName.toLowerCase()].filter(
-          x =>
-            x.mosaicId.toHex() === mosaicMerge &&
-            x.amount.compact() >= mosaicAmount &&
-            this.form.bidPrice === this.$generalService.formatterPrice(x.price)
-        )
+      if (data.length > 0) {
+        for (let index = 0; index < data.length; index++) {
+          const element = data[index]
+          offerts = element.allOffers[typeName.toLowerCase()].filter(
+            x =>
+              x.mosaicId.toHex() === mosaicMerge &&
+              x.amount.compact() >= mosaicAmount &&
+              this.form.bidPrice === this.$generalService.formatterPrice(x.price)
+          )
+          if (offerts > 0) {
+            break
+          }
+        }
       }
       return offerts
     },

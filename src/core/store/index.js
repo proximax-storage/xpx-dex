@@ -9,3 +9,6 @@ export {
 export {
   coingeckoStore
 } from '@/core/store/coingecko-store'
+export {
+  onLineStore
+} from '@/core/store/onLine-store'

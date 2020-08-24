@@ -99,5 +99,13 @@ export default {
           break
       }
     }
+  },
+  created () {
+    window.addEventListener('offline', () => {
+      this.$store.dispatch('onLineStore/setConnected', false)
+    })
+    window.addEventListener('online', () => {
+      this.$store.dispatch('onLineStore/setConnected', true)
+    })
   }
 }
