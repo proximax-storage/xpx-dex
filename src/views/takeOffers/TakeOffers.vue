@@ -75,8 +75,9 @@
               </v-col>
               <v-col cols="12" class="caption font-italic font-weight-light">
                 <!-- <div > -->
-                  <span class="font-weight-black">Offer expire in : </span>{{expireOffer}}
-                  <!-- </div> -->
+                <span class="font-weight-black">Offer expire in :</span>
+                {{expireOffer}}
+                <!-- </div> -->
               </v-col>
             </v-row>
             <v-row>
@@ -202,6 +203,7 @@ export default {
               this.type,
               this.exchange.owner
             )
+            returnBuild.transaction.version = 2
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
               const signedTransaction = this.$blockchainProvider.signedTransaction(

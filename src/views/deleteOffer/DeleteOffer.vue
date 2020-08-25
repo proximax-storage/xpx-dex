@@ -167,6 +167,8 @@ export default {
                   this.exchangeDelete.exchange.mosaicId,
                   type
                 )
+                // console.log('removeExchangeOffer', removeExchangeOffer)
+                removeExchangeOffer.version = 2
                 const signedTransaction = this.$blockchainProvider.signedTransaction(
                   common.privateKey,
                   removeExchangeOffer,
