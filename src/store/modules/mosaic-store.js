@@ -5,7 +5,10 @@ export const mosaicStore = {
     mosaics: [],
     metadata: null,
     iconMosaic: [
+    ],
+    mosaicDescription: [
     ]
+
     // mosaics: [
     //   {
     //     idMosaic: null,
@@ -41,6 +44,23 @@ export const mosaicStore = {
         state.iconMosaic.push(data)
       }
     },
+    PUSH_MOSAICS_DESCRIPTION (state, data) {
+      if (state.mosaicDescription.length > 0) {
+        const mosaicDescription = state.mosaicDescription.find(x => x.mosaicId.toHex() === data.mosaicId.toHex())
+        if (mosaicDescription) {
+          for (var i in state.mosaicDescription) {
+            if (state.mosaicDescription[i].mosaicId.toHex() === data.mosaicId.toHex()) {
+              state.mosaicDescription[i].description = data.description
+              break // Stop this loop, we found it!
+            }
+          }
+        } else {
+          state.mosaicDescription.push(data)
+        }
+      } else {
+        state.mosaicDescription.push(data)
+      }
+    },
     SET_METADATA (state, data) {
       state.metadata = data
     }
@@ -52,6 +72,9 @@ export const mosaicStore = {
     },
     iconMosaic: state => {
       return state.iconMosaic
+    },
+    mosaicDescription: state => {
+      return state.mosaicDescription
     },
     othersMosaics: state => idFilter => {
       let othersMosaics = []
@@ -69,6 +92,7 @@ export const mosaicStore = {
             const metadata = await this._vm.$blockchainProvider.getMosaicMetadata(x).toPromise()
             commit('SET_METADATA', metadata)
             dispatch('GET_MOSAICS_ICON', metadata)
+            dispatch('GET_MOSAICS_DESCRIPTION', metadata)
           } catch {
             // console.error('Not metadata mosaic')
           }
@@ -84,6 +108,12 @@ export const mosaicStore = {
             commit('PUSH_MOSAIC_ICON', { iconBase64: base64IconFromAggregateTx(tx), mosaicId: data.metadataId })
           }
         }
+      }
+    },
+    async GET_MOSAICS_DESCRIPTION ({ commit }, data) {
+      const fliterFields = data.fields.find(x => x.key === 'desc')
+      if (fliterFields) {
+        commit('PUSH_MOSAICS_DESCRIPTION', { description: fliterFields.value, mosaicId: data.metadataId })
       }
     }
 
