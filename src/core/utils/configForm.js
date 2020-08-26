@@ -33,6 +33,10 @@ const generalConfig = {
     min: 2,
     max: 16
   },
+  descriptionAsset: {
+    min: 4,
+    max: 30
+  },
   password: {
     min: 8,
     max: 30
@@ -183,6 +187,23 @@ function namespaceName (label = 'namespaceName') {
  * @param {string} [label='Namespace']
  * @returns
  */
+function descriptionAsset (label = 'Description asset') {
+  const min = generalConfig.descriptionAsset.min
+  const max = generalConfig.descriptionAsset.max
+  const rules = {
+    required: value => !!value || `${label} is required`,
+    min: v => (v && v.length >= min) || `${label} min length ${min} alphanumerico characters`,
+    max: v => (v && v.length <= max) || `${label} max length ${max} alphanumerico characters`
+  }
+  return assemblyConfig(label, '', '', min, max, rules)
+}
+
+/**
+ *
+ *
+ * @param {string} [label='Namespace']
+ * @returns
+ */
 function namespace (label = 'Namespace') {
   const min = generalConfig.namespace.min
   const max = generalConfig.namespace.max
@@ -309,6 +330,7 @@ export {
   divisibility,
   supply,
   namespaceName,
+  descriptionAsset,
   namespace,
   password,
   privateKey,

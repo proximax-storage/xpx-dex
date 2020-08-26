@@ -71,13 +71,14 @@ export default {
     actions (data) {
       switch (data.action) {
         case 'insertMoisaicsInfo':
+          console.log('I N S E R T    MOSAIC INFO ', JSON.stringify(data.dataRequired.moisaicsInfo))
           this.$store.dispatch('socketDbStore/insertMoisaicsInfo', {
             io: this.$socket,
             data: data.dataRequired
           })
           break
         case 'insertExecuteOffers':
-          // console.log('I N S E R T    EXECUE ', data.dataRequired.dataRequiredDb)
+          console.log('I N S E R T    EXECUE ', JSON.stringify(data.dataRequired.dataRequiredDb))
           this.$store.dispatch('socketDbStore/insertExecuteOffers', {
             io: this.$socket,
             data: data.dataRequired.dataRequiredDb

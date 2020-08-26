@@ -88,6 +88,21 @@
                           ></v-text-field>
                         </v-col>
                       </v-row>
+                      <!-- Description asset -->
+                      <v-row>
+                        <v-col cols="12">
+                          <v-text-field
+                            name="description"
+                            class="pt-0 text-right"
+                            v-model="descriptionAsset"
+                            :label="configForm.description.label"
+                            :color="inputStyle"
+                            :rules="[configForm.description.rules.required ,
+                                    configForm.description.rules.max,
+                                    configForm.description.rules.min]"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
                       <!-- File  icon mosaic -->
                       <v-row>
                         <file-icon-mosaic
@@ -446,6 +461,7 @@ export default {
       dataAllTx: [],
       form: {
         mosaic: {
+          description: null,
           duration: undefined,
           divisibility: 1,
           supplyMutable: false,
@@ -505,6 +521,7 @@ export default {
       divisibility: this.$configForm.divisibility('Divisibility'),
       supply: this.$configForm.supply('Supply'),
       namespaceName: this.$configForm.namespaceName('Name asset'),
+      description: this.$configForm.descriptionAsset('Description asset'),
       durationAsset: this.$configForm.duration('Duration (number of days)'),
       password: this.$configForm.password()
     }
@@ -529,6 +546,15 @@ export default {
       },
       set (newValue) {
         this.form.namespace.name = newValue
+      }
+    },
+    descriptionAsset: {
+      get () {
+        this.watchComputedDescriptionAssets()
+        return this.form.mosaic.description
+      },
+      set (newValue) {
+        this.form.mosaic.description = newValue
       }
     },
     nameToAsset () {
@@ -599,7 +625,9 @@ export default {
           if (
             validBalance(this.rentalFee + this.maxFee) &&
             this.$generalService.showMsgStatusNode()
-          ) { this.typeCreatetxs(this.typeAction()) }
+          ) {
+            this.typeCreatetxs(this.typeAction())
+          }
       }
     },
     actionArrayToBase64Img (data) {
@@ -752,33 +780,40 @@ export default {
            * Metadata
            **/
           // const hash = this.hashMosaicDefinition
-          if (this.txsTransferIcon) {
-            let modifications = [
-              {
-                type: 0,
-                key: 'icon',
-                value: this.hashFromMetadata
-              }
-            ]
-            const modifyMetadataTransactionMoisac = buildModifyMetadataTransactionMosaic(
-              this.mosaic.mosaicId,
-              modifications
-            ).transaction
-
-            // this.hashMosaicDefinition = null
-            if (!calcMaxFee) {
-              // console.log('CASE #1')
-              // announce Tx
-
-              this.pushAllDataTx(action)
-              this.announceTx(modifyMetadataTransactionMoisac, action)
-            } else {
-              // calcMaxFee
-              return modifyMetadataTransactionMoisac.maxFee.compact()
+          // if (this.txsTransferIcon) {
+          let modifications = [
+            {
+              type: 0,
+              key: 'desc',
+              value: this.form.mosaic.description
             }
-          } else {
-            return 0
+          ]
+          if (this.txsTransferIcon) {
+            modifications.push({
+              type: 0,
+              key: 'icon',
+              value: this.hashFromMetadata
+            })
           }
+          const modifyMetadataTransactionMoisac = buildModifyMetadataTransactionMosaic(
+            this.mosaic.mosaicId,
+            modifications
+          ).transaction
+
+          // this.hashMosaicDefinition = null
+          if (!calcMaxFee) {
+            // console.log('CASE #1')
+            // announce Tx
+
+            this.pushAllDataTx(action)
+            this.announceTx(modifyMetadataTransactionMoisac, action)
+          } else {
+            // calcMaxFee
+            return modifyMetadataTransactionMoisac.maxFee.compact()
+          }
+          // } else {
+          //   return 0
+          // }
           break
         case 3:
           /**
@@ -885,6 +920,9 @@ export default {
     },
     watchComputedNamespaceName () {
       this.validNamespaceName()
+    },
+    watchComputedDescriptionAssets () {
+      this.getMaxFiiTx([1])
     }
   },
   watch: {

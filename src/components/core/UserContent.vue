@@ -4,7 +4,7 @@
       <v-list-item-content class>
         <v-list-item-title class="subtitle-1 pb-1 ml-1">
           <span>
-            <v-btn icon color="primary" @click="activity('myWallet', 2)">
+            <v-btn icon color="primary" @click="activity('myWallet', 1)">
               <v-icon>mdi-cog</v-icon>
             </v-btn>
           </span>
@@ -34,18 +34,18 @@
         </v-list-item-subtitle>
         <v-divider class="mt-1" />
         <v-list-item-subtitle class="pt-2 subtitle-2 font-weight-medium primary--text">
-          <v-btn
+          <!-- <v-btn
             text
             small
             class="subtitle-2 primary--text"
             @click="activity('myWallet', 1)"
-          >Activity</v-btn>
-          <br />
+          >Activity</v-btn> -->
+          <!-- <br /> -->
           <v-btn
             text
             small
             class="subtitle-2 primary--text"
-            @click="activity('myWallet', 3)"
+            @click="activity('myWallet', 2)"
           >My offert</v-btn>
         </v-list-item-subtitle>
       </v-list-item-content>

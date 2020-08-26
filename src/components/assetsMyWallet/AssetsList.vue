@@ -19,15 +19,16 @@ export default {
   data () {
     return {
       theme: 'light',
-      dataTh: ['Assets', 'Available', 'Icon']
+      dataTh: ['Assets', 'Available', 'Icon', 'Description ']
     }
   },
   computed: {
     ...mapState(['loadingInfoWallet']),
     ...mapGetters('accountStore', ['mosaicBuild', 'accountInfoByNameAccount', 'currentAccount']),
     ...mapGetters('mosaicStore', ['iconMosaic']),
+    ...mapGetters('mosaicStore', ['mosaicDescription']),
     othersAssets () {
-      return this.buildDataTable(this.mosaicBuild, this.iconMosaic)
+      return this.buildDataTable(this.mosaicBuild, this.iconMosaic, this.mosaicDescription)
     },
     loadingInfo () {
       const value =
@@ -47,14 +48,15 @@ export default {
       const accountFiltered = this.accountInfoByNameAccount(this.currentAccount.name)
       if (accountFiltered) buildCurrentAccountInfo(accountFiltered.accountInfo)
     },
-    buildDataTable (assets, iconArray) {
+    buildDataTable (assets, iconArray, mosaicDescriptionArray) {
       let assetsBuild = []
       if (assets.length > 0) {
         assetsBuild = assets.map(f => {
           return {
             assets: f.nameMosaic,
             available: f.balance,
-            icon: this.getIcon(f.mosaicIdHex, iconArray)
+            icon: this.getIcon(f.mosaicIdHex, iconArray),
+            description: this.getDescription(f.mosaicIdHex, mosaicDescriptionArray)
           }
         })
       }
@@ -67,6 +69,14 @@ export default {
         base64Img = icon.iconBase64
       }
       return base64Img
+    },
+    getDescription (mosaicIdHex, mosaicDescriptionArray) {
+      let description = ''
+      const desc = mosaicDescriptionArray.find(x => x.mosaicId.toHex() === mosaicIdHex)
+      if (desc) {
+        description = desc.description
+      }
+      return description
     }
   },
   beforeMount () {
