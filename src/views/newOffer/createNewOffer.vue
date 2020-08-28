@@ -555,6 +555,19 @@ export default {
       }
       return valor
     },
+    calcRangeOffert (priceCalc = 0, priceProm = 0, range = 20) {
+      const x = (priceCalc * range) / 100
+      const y = priceCalc + x
+      const z = priceCalc - x
+      // console.log('20%y', y)
+      // console.log('20%z', z)
+      // console.log('priceProm', priceProm)
+      if (y >= priceProm && z <= priceProm) {
+        return true
+      } else {
+        return false
+      }
+    },
     filterMerching (data, type = null, mosaicMerge = null, mosaicAmount = null) {
       let offerts = []
       const typeInvert = type === 0 ? 1 : 0
@@ -567,7 +580,7 @@ export default {
               x.owner.publicKey !== this.currentAccount.publicKey &&
               x.mosaicId.toHex() === mosaicMerge &&
               x.amount.compact() >= mosaicAmount &&
-              this.form.bidPrice >= this.$generalService.formatterPrice(x.price)
+              this.calcRangeOffert(this.form.bidPrice, x.price)
           )
           if (offerts > 0) {
             break
