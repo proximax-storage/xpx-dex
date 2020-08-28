@@ -416,7 +416,8 @@ export default {
           this.form.amount,
           this.configMoneyAsset.precision
         )
-        const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
+        // const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
+        const costTotal = this.calcPriceMath(data.price, mosaicAmount)
         const mosaicId = this.$blockchainProvider.getMosaicId(this.idHex)
         const type = this.typeOffer === 0 ? 1 : 0
         const returnBuild = buildExchangeOffer(mosaicId, mosaicAmount, costTotal, type, data.owner)
@@ -454,6 +455,11 @@ export default {
     },
     calcPrice (price, amount) {
       return price / amount
+    },
+    calcPriceMath (price, amount) {
+      const power = Math.pow(10, 6)
+      const value = Math.round(price * power) / power
+      return Math.ceil(value * amount)
     },
     changeAssetIdBuy (event) {
       this.clearForm()
@@ -496,22 +502,27 @@ export default {
         ? this.$configForm.getConfigMoney('.', ',', '', '', divisibility, false)
         : this.$configForm.getConfigMoney()
     },
-    continueOffer () {
-      if (!this.sendingForm) {
-        const mosaicAmount = this.$generalService.quantityStringToInt(
-          this.form.amount,
-          this.configMoneyAsset.precision
-        )
-        const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
-        const returnBuild = buildAddExchangeOffer(
-          this.idHex,
-          mosaicAmount,
-          costTotal,
-          this.typeOffer,
-          this.form.duration
-        )
-        returnBuild.transaction.version = 4
-        this.announceTx(returnBuild)
+    continueOffer (action) {
+      if (action === 'continue') {
+        if (!this.sendingForm) {
+          const mosaicAmount = this.$generalService.quantityStringToInt(
+            this.form.amount,
+            this.configMoneyAsset.precision
+          )
+          const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
+          const returnBuild = buildAddExchangeOffer(
+            this.idHex,
+            mosaicAmount,
+            costTotal,
+            this.typeOffer,
+            this.form.duration
+          )
+          returnBuild.transaction.version = 4
+          this.announceTx(returnBuild)
+        }
+      } else {
+        this.dataTxOfferInfo = false
+        this.isMerchingoffer = false
       }
     },
     clearForm () {
@@ -553,9 +564,10 @@ export default {
           const element = data[index]
           offerts = element.allOffers[typeName.toLowerCase()].filter(
             x =>
+              x.owner.publicKey !== this.currentAccount.publicKey &&
               x.mosaicId.toHex() === mosaicMerge &&
               x.amount.compact() >= mosaicAmount &&
-              this.form.bidPrice === this.$generalService.formatterPrice(x.price)
+              this.form.bidPrice >= this.$generalService.formatterPrice(x.price)
           )
           if (offerts > 0) {
             break
