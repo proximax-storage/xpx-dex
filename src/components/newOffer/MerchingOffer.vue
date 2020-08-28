@@ -152,7 +152,7 @@ export default {
       this.$emit('actionMerching', data.exchange)
     },
     actionBtn (data) {
-      this.$emit('continueOffer', data.exchange)
+      this.$emit('continueOffer', data)
     },
     buildData (data = []) {
       const dataMap = data
