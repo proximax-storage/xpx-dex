@@ -24,7 +24,7 @@
                     <div class="caption font-italic font-weight-light mx-auto">BID Price</div>
                     <div
                       class="caption font-weight-black mx-auto"
-                    >{{ $generalService.amountFormatter(exchange.price, 6) }} xpx</div>
+                    >{{ $generalService.amountFormatter(exchange.bitPrice, 6) }} xpx</div>
                     <!-- <div class="caption font-weight-black mx-auto">{{ exchange.price }}</div> -->
                   </div>
                   <div class="ma-2 ml-7 mx-auto">

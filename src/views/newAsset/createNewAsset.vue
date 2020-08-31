@@ -873,7 +873,7 @@ export default {
       if (
         transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicDefinition)
       ) {
-        this.dataTx.push({ hash: this.hashMosaicDefinition })
+        this.dataTx.push({ hash: this.hashMosaicDefinition, name: 'Mosaic Definition' })
         this.hashMosaicDefinition = null
         this.validateLoadingTX(true, true)
         // console.log('hash Mosaic Definition...')
@@ -889,7 +889,7 @@ export default {
       if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicAlias)) {
         this.validateLoadingTX(true, false, true)
         setTimeout(() => {
-          this.dataTx.push({ hash: this.hashMosaicAlias })
+          this.dataTx.push({ hash: this.hashMosaicAlias, name: 'Mosaic Alias' })
           this.hashMosaicAlias = null
         }, 1000)
         // console.log('hash Mosaic Alias...')
@@ -897,7 +897,7 @@ export default {
       }
       if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicMetadata)) {
         setTimeout(() => {
-          this.dataTx.push({ hash: this.hashMosaicMetadata })
+          this.dataTx.push({ hash: this.hashMosaicMetadata, name: 'Mosaic Metadata' })
           this.hashMosaicMetadata = null
         }, 1000)
         // console.log('hash Mosaic Metadata...')

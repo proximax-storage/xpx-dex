@@ -15,6 +15,14 @@ function amountFormatter (amount, divisibility = 6) {
   })
 }
 
+function formValue (cant, divisibility = 6) {
+  return parseFloat(cant.toString().replace(/,/g, '')).toFixed(divisibility)
+}
+
+function formValueParse (cant, price, divisibility = 6) {
+  return quantityStringToInt(String(formValue(cant / price, divisibility)))
+}
+
 /**
  *
  *
@@ -361,6 +369,7 @@ function showMsgStatusNode () {
   }
 }
 export {
+  addZerosQuantity,
   amountFormatter,
   priceFormatter,
   buildBoxServices,
@@ -380,5 +389,7 @@ export {
   validateMatch,
   validateZero,
   verifyTypeOfferName,
-  showMsgStatusNode
+  showMsgStatusNode,
+  formValue,
+  formValueParse
 }

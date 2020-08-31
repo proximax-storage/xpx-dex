@@ -31,7 +31,7 @@
                   }}
                 </td>
                 <td class="pr-3 pl-3" style="border:0">
-                  {{ $generalService.amountFormatter(resultsOfferFilter[commentIndex].price,
+                  {{ $generalService.amountFormatter(resultsOfferFilter[commentIndex].bitPrice,
                   6
                   )
                   }}
