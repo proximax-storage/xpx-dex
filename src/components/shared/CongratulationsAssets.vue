@@ -12,7 +12,7 @@
       </div>
       <template>
         <div class="ma-2 pt-4 ml-4 mx-auto" v-for="i in txInfo" v-bind:key="i.hash">
-          <span class="body-1 font-weight-black">Hash :</span>
+          <span class="body-1 font-weight-black">{{i.name}} Hash :</span>
           <span class>{{ i.hash }}</span>
         </div>
       </template>
