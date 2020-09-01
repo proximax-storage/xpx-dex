@@ -31,8 +31,6 @@ function formValueParse (cant, price, divisibility = 6) {
  * @returns
  */
 function addZerosQuantity (cant, amount = '0') {
-  console.log('add cant', cant)
-  console.log('add amount', amount)
   const data = '0'
   if (amount === '0') {
     for (let index = 0; index < cant - 1; index++) {
