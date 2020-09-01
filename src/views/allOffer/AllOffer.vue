@@ -116,23 +116,36 @@ export default {
       if (mosaic) properties = mosaic[0].mosaicInfo.properties
       return properties
     },
+    calcPrice (price, amount) {
+      const power = Math.pow(10, 6)
+      const value = Math.round(price * power) / power
+      return Math.ceil(value * amount)
+    },
     resultsOffer (data = [], type = null) {
-      if (data.sell.length > 0) {
-        for (let item of data.sell) {
-          if (item.owner.publicKey !== this.currentAccount.publicKey) {
-            item.priceForAmount = item.initialCost.compact()
-            this.data.sell.push(item)
+      setTimeout(() => {
+        const amount = this.$generalService.addZerosQuantity(
+          this.dataAssets.configMoney.precision,
+          1
+        )
+        if (data.sell.length > 0) {
+          for (let item of data.sell) {
+            if (item.owner.publicKey !== this.currentAccount.publicKey) {
+              item.priceForAmount = item.initialCost.compact()
+              item.bitPrice = this.calcPrice(item.price, Number(amount))
+              this.data.sell.push(item)
+            }
           }
         }
-      }
-      if (data.buy.length > 0) {
-        for (let item of data.buy) {
-          if (item.owner.publicKey !== this.currentAccount.publicKey) {
-            item.priceForAmount = item.initialCost.compact()
-            this.data.buy.push(item)
+        if (data.buy.length > 0) {
+          for (let item of data.buy) {
+            if (item.owner.publicKey !== this.currentAccount.publicKey) {
+              item.priceForAmount = item.initialCost.compact()
+              item.bitPrice = this.calcPrice(item.price, Number(amount))
+              this.data.buy.push(item)
+            }
           }
         }
-      }
+      })
     },
     ownOffer () {
       if (this.$store.getters['accountStore/isLogged']) {

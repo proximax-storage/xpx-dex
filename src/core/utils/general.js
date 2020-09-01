@@ -15,6 +15,14 @@ function amountFormatter (amount, divisibility = 6) {
   })
 }
 
+function formValue (cant, divisibility = 6) {
+  return parseFloat(cant.toString().replace(/,/g, '')).toFixed(divisibility)
+}
+
+function formValueParse (cant, price, divisibility = 6) {
+  return quantityStringToInt(String(formValue(cant / price, divisibility)))
+}
+
 /**
  *
  *
@@ -23,6 +31,8 @@ function amountFormatter (amount, divisibility = 6) {
  * @returns
  */
 function addZerosQuantity (cant, amount = '0') {
+  console.log('add cant', cant)
+  console.log('add amount', amount)
   const data = '0'
   if (amount === '0') {
     for (let index = 0; index < cant - 1; index++) {
@@ -361,6 +371,7 @@ function showMsgStatusNode () {
   }
 }
 export {
+  addZerosQuantity,
   amountFormatter,
   priceFormatter,
   buildBoxServices,
@@ -380,5 +391,7 @@ export {
   validateMatch,
   validateZero,
   verifyTypeOfferName,
-  showMsgStatusNode
+  showMsgStatusNode,
+  formValue,
+  formValueParse
 }

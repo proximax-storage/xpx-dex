@@ -556,6 +556,9 @@ export default {
       return valor
     },
     calcRangeOffert (priceCalc = 0, priceProm = 0, range = 20) {
+      let val = false
+      // console.log('priceCalc', priceCalc)
+      // console.log('priceProm', priceProm)
       const x = (priceCalc * range) / 100
       const y = priceCalc + x
       const z = priceCalc - x
@@ -563,24 +566,28 @@ export default {
       // console.log('20%z', z)
       // console.log('priceProm', priceProm)
       if (y >= priceProm && z <= priceProm) {
-        return true
+        val = true
       } else {
-        return false
+        val = false
       }
+      // console.log('val', val)s
+      return val
     },
     filterMerching (data, type = null, mosaicMerge = null, mosaicAmount = null) {
+      // console.log(mosaicAmount)
       let offerts = []
       const typeInvert = type === 0 ? 1 : 0
       const typeName = this.$generalService.verifyTypeOfferName(typeInvert)
       if (data.length > 0) {
         for (let index = 0; index < data.length; index++) {
           const element = data[index]
+          const amount = this.$generalService.addZerosQuantity(this.configMoneyAsset.precision, 1)
           offerts = element.allOffers[typeName.toLowerCase()].filter(
             x =>
               x.owner.publicKey !== this.currentAccount.publicKey &&
               x.mosaicId.toHex() === mosaicMerge &&
               x.amount.compact() >= mosaicAmount &&
-              this.calcRangeOffert(this.form.bidPrice, x.price)
+              this.calcRangeOffert(this.form.bidPrice, this.calcPriceMath(x.price, Number(amount)))
           )
           if (offerts > 0) {
             break
@@ -648,12 +655,15 @@ export default {
       } else {
         this.validateBalanceXpx(costTotal)
       }
-
-      const mosaicAmount = this.$generalService.quantityStringToInt(
+      const mosaicAmount = this.$generalService.formValue(
         this.form.amount,
         this.configMoneyAsset.precision
       )
-      this.form.bidPrice = this.calcPrice(costTotal, mosaicAmount)
+      this.form.bidPrice = this.$generalService.formValueParse(
+        this.$generalService.formValue(this.form.totalCost, 6),
+        mosaicAmount
+      )
+      // console.log('this.form.bidPrice', this.form.bidPrice)
       if (amount === 0) {
         return 'Cannot enter amount zero'
       } else {

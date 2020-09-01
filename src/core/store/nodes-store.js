@@ -50,6 +50,7 @@ export const nodeStore = {
           generationHash: blockInfo.generationHash,
           networkType: blockInfo.networkType
         }
+        console.log('generationHash', currentNode)
         commit('SET_CURRENT_NODE', currentNode)
         commit('SET_NODES_LIST', connectionNodes.nodes)
         // add websocket id

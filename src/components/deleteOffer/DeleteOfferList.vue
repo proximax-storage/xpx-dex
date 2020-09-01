@@ -22,8 +22,7 @@ export default {
         'Assets',
         'Initial quantity',
         'Quantity Available',
-        'price (XPX)',
-        'Total (XPX)'
+        'Total Price (XPX)'
       ]
     }
   },
@@ -69,13 +68,14 @@ export default {
               data.tableData.info.mosaicInfo[0].mosaicInfo.properties.divisibility
             )
             const initialCost = this.$generalService.amountFormatter(f.initialCost.compact(), 6)
-            const price = f.price
+            console.log(f)
+            // const price = f.bitPrice
             return {
               type: type,
               assets: data.tableData.info.text,
               initialQuantity: initialQuantity,
               quantityAvailable: quantityAvailable,
-              price: price,
+              // price: price,
               initialCost: initialCost,
               exchange: f
             }

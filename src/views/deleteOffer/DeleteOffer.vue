@@ -35,10 +35,10 @@
                     cols="12"
                     class="subtitle-1 pt-0 font-weight-regular text-left primary--text"
                   >Costs</v-col>
-                  <div class="ma-2 ml-7 mx-auto">
+                  <!-- <div class="ma-2 ml-7 mx-auto">
                     <div class="caption font-italic font-weight-light">Price (XPX)</div>
                     <div class="caption font-weight-black">{{exchangeDelete.price}}</div>
-                  </div>
+                  </div> -->
                   <div class="ma-2 ml-7 mx-auto">
                     <div class="caption font-italic font-weight-light">Total (XPX)</div>
                     <div class="caption font-weight-black">{{exchangeDelete.initialCost}}</div>
