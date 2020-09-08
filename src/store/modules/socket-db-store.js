@@ -1,3 +1,7 @@
+import store from '@/store'
+import {
+  searchInfoMosaics
+} from '@/services/mosaics-service'
 export const socketDbStore = {
   namespaced: true,
   state: {
@@ -21,6 +25,7 @@ export const socketDbStore = {
     SOCKET_SET_MOSAIC_INFO (state, data) {
       // console.log('SOCKET_SET_MOSAIC_INFO', data)
       state.mosaicsInfOffer = data
+      store.dispatch('socketDbStore/GET_MOSAICS_INFO', data)
     },
     EVENT_SET_MOSAIC_INFO (state, data) {
       // console.log('EVENT_SET_MOSAIC_INFO', data)
@@ -33,6 +38,21 @@ export const socketDbStore = {
     EVENT_LOADING_MOSAIC_INFO (state, data) {
       // console.log('EVENT_LOADING_MOSAIC_INFO', data)
       state.loadingInfo = data
+    },
+    PUSH_MOSAICS_INFO_FOR_OFFER (state, data) {
+      if (state.mosaicsInfOffer.length > 0) {
+        const mosaicsInfOffer = state.mosaicsInfOffer.find(x => x.mosaicIdHex === this._vm.$blockchainProvider.getMosaicId(data[0].idMosaic).toHex())
+        if (mosaicsInfOffer) {
+          for (var i in state.mosaicsInfOffer) {
+            if (state.mosaicsInfOffer[i].mosaicIdHex === this._vm.$blockchainProvider.getMosaicId(data[0].idMosaic).toHex()) {
+              state.mosaicsInfOffer[i].mosaicInfo = data
+              break // Stop this loop, we found it!
+            }
+          }
+          state.loadingInfo = false
+          state.mosaicsInfOffer = JSON.parse(JSON.stringify(state.mosaicsInfOffer))
+        }
+      }
     },
     EVENT_INSERTED (state, data) {
       state.inserted = data
@@ -84,6 +104,24 @@ export const socketDbStore = {
     loadingInfo: state => state.loadingInfo
   },
   actions: {
+    GET_MOSAICS_INFO ({ commit, dispatch }, data) {
+      (async () => {
+        if (data.length > 0) {
+          for (let item of data) {
+            commit('EVENT_LOADING_MOSAIC_INFO', true)
+            if (item.mosaicInfo === undefined) {
+              try {
+                const mosaicId = this._vm.$blockchainProvider.getMosaicId(item.mosaicIdHex)
+                const mosaicInfo = await searchInfoMosaics([mosaicId], true)
+                // console.log(mosaicInfo)
+                commit('PUSH_MOSAICS_INFO_FOR_OFFER', mosaicInfo)
+              } catch (error) {
+              }
+            }
+          }
+        }
+      })()
+    },
     getOffertsTx: ({ commit, state }, params) => {
       params.io.emit('getOffertsTx', params.data)
     },
