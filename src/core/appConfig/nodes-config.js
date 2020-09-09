@@ -1,7 +1,7 @@
 const nodes = {
   'timeOutConnection': '',
   'connectToWebsocket': true,
-  'timeOutNewBlocks': 90,
+  'timeOutNewBlocks': 180,
   'timeValidateSynchronization': 6000
 }
 
