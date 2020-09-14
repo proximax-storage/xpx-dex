@@ -15,7 +15,7 @@ var messages = {
   'aggregateBondedRemoved': 'Transaction Aggregate Bonded Removed',
   'cosignatureAdded': 'Cosignature Added',
   'confirmed': 'Transaction confirmed',
-  'unconfirmed': 'Transaction unconfirmed',
+  'unconfirmed': 'Transaction send',
   'unconfirmedRemoved': 'Transaction unconfirmed removed'
 }
 
@@ -241,7 +241,7 @@ function getUnconfirmedRemoved (arrayAddress) {
     // console.log('MONITOR ACCOUNTS --->', arrayAddress)
     arrayAddress.forEach(address => {
       connector.unconfirmedRemoved(address).subscribe(hash => {
-        showMsgAndChangeStatus(messages.unconfirmedRemoved, 'success')
+        // showMsgAndChangeStatus(messages.unconfirmedRemoved, 'success')
         // console.log('-----------------------UNCONFIRMED_REMOVED--------------------------')
         // console.log(hash)
         // console.log('------------------------------------------------------------------\n\n')
