@@ -27,7 +27,27 @@
                   </v-btn>
                 </v-col>
               </v-row>
-              <v-row justify="center"></v-row>
+              <v-row>
+                <v-col cols="10" class="mx-auto">
+                  <span class="body-1 font-weight-black">Public key:</span>
+                  <br />
+                  <span class="body-2 d-flex">{{ publicKey }}</span>
+                </v-col>
+                <!-- Icon -->
+                <v-col cols="2" class="text-right pt-7">
+                  <v-btn text icon @click="$generalService.doCopy('Public key', publicKey)">
+                    <v-icon>mdi-content-copy</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col cols="12" class="mx-auto">
+                  <v-alert outlined type="warning" prominent>
+                    Make sure you store your private key in a safe place.
+                    Access to your digital assets cannot be recovered without it.
+                  </v-alert>
+                </v-col>
+              </v-row>
               <v-row v-if="showPrivateKey">
                 <v-col cols="10" class="mx-auto">
                   <span class="body-1 font-weight-black">Private key:</span>
@@ -58,6 +78,7 @@ export default {
   data: () => {
     return {
       address: '',
+      publicKey: '',
       arrayBtn: {
         showPvk: {
           key: 'showPvk',
@@ -107,6 +128,7 @@ export default {
   beforeMount () {
     const walletInfo = this.walletInfo.data
     this.address = walletInfo.accounts[0].simpleWallet.address.pretty()
+    this.publicKey = walletInfo.accounts[0].publicKey
     this.privateKey = this.walletInfo.pvk
     this.walletName = walletInfo.username
   }

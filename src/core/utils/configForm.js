@@ -23,7 +23,8 @@ const generalConfig = {
   },
   supply: {
     min: 1,
-    max: 9000000000000000
+    max: 9000000000000000,
+    maxTex: 9
   },
   namespace: {
     min: 1,
@@ -106,8 +107,8 @@ function amount (name = 'Amount') {
   const max = generalConfig.amount.max
   const rules = {
     required: v => !!v || `${name} is required`,
-    min: v => (v && v.length >= min) || `${name} must be less than ${min} characters`,
-    max: v => (v && v.length <= max) || `${name} must be a maximum of ${max} characters`
+    min: v => (v && v.length >= min) || `${name} must be at least ${min} characters.`,
+    max: v => (v && v.length <= max) || `${name} must be a maximum of ${max} characters.`
   }
   return assemblyConfig(name, '', 'number', min, max, rules)
 }
@@ -162,7 +163,7 @@ function getConfigMoney (decimal = '.', thousands = ',', prefix = '', suffix = '
  * @returns
  */
 function isMatch (value1, value2, nameValidation = '') {
-  return value1 === value2 || `${nameValidation} must match`
+  return value1 === value2 || `${nameValidation} must match.`
 }
 
 /**
@@ -175,9 +176,9 @@ function namespaceName (label = 'namespaceName') {
   const min = generalConfig.namespaceName.min
   const max = generalConfig.namespaceName.max
   const rules = {
-    required: value => !!value || `${label} is required`,
-    min: v => (v && v.length >= min) || `${label} min length ${min} alphanumerico characters`,
-    max: v => (v && v.length <= max) || `${label} max length ${max} alphanumerico characters`
+    required: value => !!value || `${label} is required.`,
+    min: v => (v && v.length >= min) || `${label} min length ${min} alphanumerico characters.`,
+    max: v => (v && v.length <= max) || `${label} max length ${max} alphanumerico characters.`
   }
   return assemblyConfig(label, '', '', min, max, rules)
 }
@@ -191,9 +192,9 @@ function descriptionAsset (label = 'Description asset') {
   const min = generalConfig.descriptionAsset.min
   const max = generalConfig.descriptionAsset.max
   const rules = {
-    required: value => !!value || `${label} is required`,
-    min: v => (v && v.length >= min) || `${label} min length ${min} alphanumerico characters`,
-    max: v => (v && v.length <= max) || `${label} max length ${max} alphanumerico characters`
+    required: value => !!value || `${label} is required.`,
+    min: v => (v && v.length >= min) || `${label} min length ${min} alphanumerico characters.`,
+    max: v => (v && v.length <= max) || `${label} max length ${max} alphanumerico characters.`
   }
   return assemblyConfig(label, '', '', min, max, rules)
 }
@@ -208,9 +209,9 @@ function namespace (label = 'Namespace') {
   const min = generalConfig.namespace.min
   const max = generalConfig.namespace.max
   const rules = {
-    required: value => !!value || `${label} is required`,
-    min: v => (v && v.length >= min) || `${label} must be less than ${min} characters`,
-    max: v => (v && v.length <= max) || `${label} must be a maximum of ${max} characters`
+    required: value => !!value || `${label} is required.`,
+    min: v => (v && v.length >= min) || `${label} must be at least ${min} characters.`,
+    max: v => (v && v.length <= max) || `${label} must be a maximum of ${max} characters.`
   }
   return assemblyConfig(label, '', '', min, max, rules)
 }
@@ -223,9 +224,10 @@ function duration (label = 'Duration') {
   const min = generalConfig.duration.min
   const max = generalConfig.duration.max
   const rules = {
-    required: value => !!value || `${label} is required`,
-    min: v => (v && Number(v) >= min) || `${label} must be less than ${min}`,
-    max: v => (v && Number(v) <= max) || `${label} must be a maximum of ${max}`
+    required: value => !!value || `${label} is required.`,
+    min: v => (v && Number(v) >= min) || `${label} must be at least ${min}.`,
+    // max: v => (v && Number(v) <= max) || `${label} must be a maximum of ${max}`
+    max: v => (v && Number(v) <= max) || `Maximum is ${max}.`
   }
   return assemblyConfig(label, '', 'number', min, max, rules)
 }
@@ -237,9 +239,9 @@ function divisibility (label = 'Divisibility') {
   const min = generalConfig.divisibility.min
   const max = generalConfig.divisibility.max
   const rules = {
-    required: value => !!value || `${label} is required`,
-    min: v => (v && Number(v) >= min) || `${label} must be less than ${min}`,
-    max: v => (v && Number(v) <= max) || `${label} must be a maximum of ${max}`
+    required: value => !!value || `${label} is required.`,
+    min: v => (v && Number(v) >= min) || `${label} must be at least ${min}.`,
+    max: v => (v && Number(v) <= max) || `Maximum is ${max}.`
   }
   return assemblyConfig(label, '', 'number', min, max, rules)
 }
@@ -247,15 +249,15 @@ function divisibility (label = 'Divisibility') {
  *
  * @param {*} label
  */
-function iconMosaic (label = `Select a image to  identify your  mosaic (Max. ${generalConfig.img.width}x${generalConfig.img.height})`) {
+function iconMosaic (label = `Select image icon (Max. ${generalConfig.img.width}x${generalConfig.img.height})`) {
   const size = generalConfig.img.size
   const typeForm = generalConfig.img.typeForm
   const width = generalConfig.img.width
   const height = generalConfig.img.height
   const rules = {
-    required: v => !!v || `${label} is required`,
-    size: v => !v || v.size < size || 'Icon size must be less than 2 kB!',
-    typeForm: v => !v || v.type === typeForm || `Allowed format (${typeForm})`
+    required: v => !!v || `${label} is required.`,
+    size: v => !v || v.size < size || 'Icon size must be at least 2 kB!',
+    typeForm: v => !v || v.type === typeForm || `Allowed format (${typeForm}).`
   }
   return assemblyConfigFile(width, height, size, typeForm, assemblyConfig(label, '', 'file', null, null, rules))
 }
@@ -266,10 +268,11 @@ function iconMosaic (label = `Select a image to  identify your  mosaic (Max. ${g
 function supply (label = 'Supply') {
   const min = generalConfig.supply.min
   const max = generalConfig.supply.max
+  const maxTex = generalConfig.supply.maxTex
   const rules = {
-    required: value => !!value || `${label} is required`,
-    min: v => (v && Number(v) >= min) || `${label} must be less than ${min}`,
-    max: v => (v && Number(v) <= max) || `${label} must be a maximum of ${max}`
+    required: value => !!value || `${label} is required.`,
+    min: v => (v && Number(v) >= min) || `${label} must be at least ${min}.`,
+    max: v => (v && Number(v) <= max) || `Maximum is ${maxTex} billion.`
   }
   return assemblyConfig(label, '', 'number', min, max, rules)
 }
@@ -282,9 +285,9 @@ function password (label = 'Password') {
   const min = generalConfig.password.min
   const max = generalConfig.password.max
   const rules = {
-    required: value => !!value || `${label} is required`,
-    min: v => (v && v.length >= min) || `${label} must be less than ${min} characters`,
-    max: v => (v && v.length <= max) || `${label} must be a maximum of ${max} characters`
+    required: value => !!value || `${label} is required.`,
+    min: v => (v && v.length >= min) || `${label} must be at least ${min} characters.`,
+    max: v => (v && v.length <= max) || `${label} must be a maximum of ${max} characters.`
   }
   return assemblyConfig(label, '', 'password', min, max, rules)
 }
@@ -297,10 +300,10 @@ function privateKey (label = 'Private key') {
   const min = generalConfig.privateKey.min
   const max = generalConfig.privateKey.max
   const rules = {
-    required: value => !!value || `${label} is required`,
-    min: v => (v && v.length >= min) || `${label} must be less than ${min} characters`,
-    max: v => (v && v.length <= max) || `${label} must be a maximum of ${max} characters`,
-    validatePvk: v => (isValidPrivateKey(v) || 'Private key must be Hexadecimal')
+    required: value => !!value || `${label} is required.`,
+    min: v => (v && v.length >= min) || `${label} must be at least ${min} characters.`,
+    max: v => (v && v.length <= max) || `${label} must be a maximum of ${max} characters.`,
+    validatePvk: v => (isValidPrivateKey(v) || 'Private key must be Hexadecimal.')
   }
   return assemblyConfig(label, '', 'password', min, max, rules)
 }
@@ -313,9 +316,9 @@ function walletAccountName (label = 'Wallet') {
   const min = generalConfig.walletAccountName.min
   const max = generalConfig.walletAccountName.max
   const rules = {
-    required: value => !!value || `${label} is required`,
-    min: v => (v && v.length >= min) || `${label} must be less than ${min} characters`,
-    max: v => (v && v.length <= max) || `${label} must be a maximum of ${max} characters`
+    required: value => !!value || `${label} is required.`,
+    min: v => (v && v.length >= min) || `${label} must be at least ${min} characters.`,
+    max: v => (v && v.length <= max) || `${label} must be a maximum of ${max} characters.`
   }
   return assemblyConfig(label, '', '', min, max, rules)
 }

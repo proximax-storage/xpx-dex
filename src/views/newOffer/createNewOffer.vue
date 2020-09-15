@@ -5,7 +5,7 @@
         cols="12"
         class="headline font-weight-regular text-left"
         v-bind:class="[typeOfferColorText]"
-      >Pleace your own offer for {{ type }}</v-col>
+      >Place you {{ type }} offer</v-col>
     </v-row>
     <!-- mosaicInfo -->
     <v-row>
@@ -170,7 +170,7 @@
             </v-col>
           </v-row>
           <v-form v-model="valid" ref="form">
-            <v-row>
+            <!-- <v-row>
               <v-col
                 sm="10"
                 md="10"
@@ -184,7 +184,7 @@
                   fermentum sed felis. Duis portito. purus a suscipit consequat
                 </p>
               </v-col>
-            </v-row>
+            </v-row> -->
             <tx-fee />
             <v-row>
               <v-col cols="9" class="ma-0 pb-0 mx-auto caption d-flex justify-center align-center">
@@ -209,11 +209,11 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-            <v-row>
+            <!-- <v-row>
               <v-col cols="12" class="ma-0 pa-0 mx-auto caption d-flex justify-center align-center">
                 <v-checkbox v-model="form.checkbox" class="pa-0"></v-checkbox>Accept terms and conditions
               </v-col>
-            </v-row>
+            </v-row> -->
           </v-form>
         </template>
         <template v-if="dataTxOfferInfo">
@@ -344,7 +344,8 @@ export default {
     },
     getArrayBtn () {
       const arrayBtn = this.arrayBtn
-      arrayBtn['place'].disabled = !this.valid || !this.form.checkbox || this.isValidateBalance
+      // arrayBtn['place'].disabled = !this.valid || !this.form.checkbox || this.isValidateBalance
+      arrayBtn['place'].disabled = !this.valid || this.isValidateBalance
       arrayBtn['place'].loading = this.sendingForm
       arrayBtn['place'].color = this.type === null ? 'white' : this.typeOfferColor
       arrayBtn['place'].textColor = 'white--text'
