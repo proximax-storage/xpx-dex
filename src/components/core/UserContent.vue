@@ -12,6 +12,8 @@
         </v-list-item-title>
         <v-divider class="mt-1" />
         <v-list-item-subtitle class="ml-1 pt-3">
+          <span class="caption font-weight-medium">Account number: 1</span>
+           <br />
           <span class="caption font-italic">Available balance</span>
           <br />
           <span class="subtitle-1" v-text="getTotalBalance['part1']"></span>
@@ -46,7 +48,7 @@
             small
             class="subtitle-2 primary--text"
             @click="activity('myWallet', 2)"
-          >My offert</v-btn>
+          >My offers</v-btn>
         </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>

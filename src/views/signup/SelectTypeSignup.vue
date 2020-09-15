@@ -35,8 +35,8 @@
               </v-row>
             </v-card-text>
             <v-card-actions class="white pa-0">
-              <v-row class>
-                <v-col class="d-flex justify-start darkness--text">I'm already have a account</v-col>
+              <v-row class =" ml-2">
+                <v-col class="d-flex justify-start darkness--text">  I already have an account</v-col>
                 <v-col class="d-flex justify-end">
                   <v-btn text small color="primary" class="font-weight-bold pt-1 pb-1 mr-4">Sign In</v-btn>
                 </v-col>

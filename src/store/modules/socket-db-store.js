@@ -119,6 +119,8 @@ export const socketDbStore = {
               }
             }
           }
+        } else {
+          commit('EVENT_LOADING_MOSAIC_INFO', false)
         }
       })()
     },

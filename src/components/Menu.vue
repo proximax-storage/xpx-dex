@@ -140,7 +140,7 @@ export default {
       {
         icon: 'mdi-storefront',
         type: 'icon-group',
-        title: 'New assets',
+        title: 'Create Asset',
         class: 'primary white-text',
         action: 'newAsset',
         viewLogged: true,
@@ -150,7 +150,7 @@ export default {
       {
         icon: 'mdi-storefront',
         type: 'icon-group',
-        title: 'New offerts',
+        title: 'Create Offert',
         class: 'primary white-text',
         action: 'newOffer',
         viewLogged: true,
@@ -161,7 +161,7 @@ export default {
       {
         icon: 'mdi-storefront',
         type: 'icon-group',
-        title: 'Search offerts',
+        title: 'Search',
         class: 'primary white-text',
         action: 'searchOfferts',
         viewLogged: true,

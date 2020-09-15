@@ -16,7 +16,7 @@
                         <v-col
                           cols=" 12 pt-0"
                           class="mx-auto title font-italic font-weight-medium pb-0"
-                        >{{ title }}</v-col>ddd
+                        >{{ title }}</v-col>
                         <!-- Wallet name -->
                         <v-col cols="12">
                           <v-text-field
@@ -179,6 +179,7 @@ export default {
           network: this.networkSelected.value,
           password: this.passwords.password
         })
+        console.log('response', response)
         const snackbars = {
           snackbar: true,
           text: response.msg,

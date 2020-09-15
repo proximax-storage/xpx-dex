@@ -2,6 +2,7 @@
   <v-row class="ml-3 d-flex mx-auto  justify-lg-end">
     <v-col xs="12" sm="6" md="6" lg="4" xl="4" class="d-flex  ">
       <div>
+        <!-- <div class="subtitle-1 font-weight-black">Available balances</div> -->
         <div class="subtitle-1 font-weight-black">Available balances</div>
         <div class="subtitle-1 ma-0 pa-0">
           <img

@@ -11,10 +11,7 @@
       </div>
     </v-overlay>
     <v-row>
-      <v-col
-        cols="12"
-        class="headline font-weight-regular text-left primary--text"
-      >Create your own asset</v-col>
+      <v-col cols="12" class="headline font-weight-regular text-left primary--text">Create asset</v-col>
     </v-row>
     <!-- Template form-->
     <template v-if="getTempShow === 0">
@@ -162,7 +159,7 @@
                             chips
                             multiple
                             dense
-                            label="Mosaic feature"
+                            label="Asset feature"
                           ></v-select>
                           <div class="v-messages">
                             <div
@@ -170,9 +167,9 @@
                               class="v-messages__message text-right subtitle-1 font-italic font-weight-medium text--secondary"
                             >
                               <span class="primary--text">Transferable,</span>
-                              <span class>mosaic can be transferred.</span>
+                              <span class>asset can be transferred.</span>
                               <span class="primary--text">Supply mutable,</span>
-                              <span class>supply can be changed.</span>
+                              <span class>asset supply can be changed.</span>
                               <!-- <span>dos</span>
                               <span>tres</span>-->
                             </div>
@@ -202,7 +199,7 @@
                               style="line-height: 0.80rem;"
                               class="v-messages__message text-right subtitle-1 font-italic font-weight-medium text--secondary"
                             >
-                              <span>Max. rental duration 365 days (1 year).</span>
+                              <span>Maximum. rental duration 365 days (1 year).</span>
                               <!-- <span>dos</span>
                               <span>tres</span>-->
                             </div>
@@ -261,7 +258,7 @@
                               style="line-height: 0.80rem;"
                               class="v-messages__message text-right subtitle-1 font-italic font-weight-medium text--secondary"
                             >
-                              <span>Maximum supply is 900T.</span>
+                              <span>Maximum supply is 9 billion.</span>
                               <!-- <span>dos</span>
                               <span>tres</span>-->
                             </div>
@@ -397,14 +394,14 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
-                  <v-row>
+                  <!-- <v-row>
                     <v-col
                       cols="12"
                       class="ma-0 pa-0 mx-auto caption d-flex justify-center align-center"
                     >
                       <v-checkbox v-model="form.checkbox" class="pa-0"></v-checkbox>Accept terms and conditions
                     </v-col>
-                  </v-row>
+                  </v-row>-->
 
                   <v-row>
                     <v-col
@@ -580,7 +577,8 @@ export default {
     arrayBtnFuc () {
       const arrayBtn = this.arrayBtn
       arrayBtn['create'].disabled =
-        !this.isValidIconMosaic || !this.valid || !this.form.checkbox || this.isValidateBalance
+        // !this.isValidIconMosaic || !this.valid || !this.form.checkbox || this.isValidateBalance
+        !this.isValidIconMosaic || !this.valid || this.isValidateBalance
       arrayBtn['create'].loading = this.sendingForm
       arrayBtn['create'].color = 'white'
       arrayBtn['create'].textColor = 'primary--text'
