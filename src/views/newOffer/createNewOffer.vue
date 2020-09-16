@@ -5,7 +5,7 @@
         cols="12"
         class="headline font-weight-regular text-left"
         v-bind:class="[typeOfferColorText]"
-      >Place you {{ type }} offer</v-col>
+      >Place your {{ type }} offer</v-col>
     </v-row>
     <!-- mosaicInfo -->
     <v-row>
@@ -664,7 +664,7 @@ export default {
         this.$generalService.formValue(this.form.totalCost, 6),
         mosaicAmount
       )
-      // console.log('this.form.bidPrice', this.form.bidPrice)
+      console.log('this.form.bidPrice', this.form.bidPrice)
       if (amount === 0) {
         return 'Cannot enter amount zero'
       } else {

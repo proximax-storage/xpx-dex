@@ -109,6 +109,10 @@
                       </v-row>
                     </v-col>
                   </v-row>
+                     <!--Fee-->
+                  <tx-fee :arrayFee="getMaxFeeTxs" />
+                  <rental-fee :rentalFee="getRentalFee" />
+                  <!--Password -->
 
                   <v-row>
                     <v-col
@@ -267,6 +271,10 @@
                       </v-row>
                     </v-col>
                   </v-row>
+                     <!--Fee-->
+                  <tx-fee :arrayFee="getMaxFeeTxs" />
+                  <rental-fee :rentalFee="getRentalFee" />
+                  <!--Password -->
                   <v-row>
                     <v-col
                       cols="12"

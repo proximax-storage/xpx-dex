@@ -150,7 +150,7 @@ export default {
       {
         icon: 'mdi-storefront',
         type: 'icon-group',
-        title: 'Create Offert',
+        title: 'Create Offer',
         class: 'primary white-text',
         action: 'newOffer',
         viewLogged: true,

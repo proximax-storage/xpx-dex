@@ -5,7 +5,7 @@
         <v-card-title
           style="position: relative"
           class="title d-flex justify-center align-center"
-        >None of these offers is useful for you?</v-card-title>
+        >None of these offers is useful for you ?</v-card-title>
 
         <v-card-actions class="d-flex justify-center align-center">
           <custom-buttons
@@ -50,7 +50,7 @@ export default {
             color: 'primary',
             textColor: 'white--text',
             loading: false,
-            text: 'Pleace your own offer'
+            text: 'Place your offer '
           }
         }
       }
@@ -77,7 +77,7 @@ export default {
         color: 'primary',
         textColor: 'white--text',
         loading: false,
-        text: 'Pleace your own offer'
+        text: 'Place your offer'
       }
     }
   },
