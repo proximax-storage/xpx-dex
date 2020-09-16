@@ -9,7 +9,7 @@
       color="leveint"
     >
       <v-toolbar-title>
-        <img :src="require('@/assets/img/logo-dex-color.svg')" alt="logo" height="35" />
+        <img :src="require('@/assets/img/logo-dex-blanco.svg')" alt="logo" height="35" />
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <!-- <v-btn icon color="primary" @click="activity('myWallet', 0)">
