@@ -244,10 +244,15 @@ export default {
       // this.$refs['password'].reset()
     },
     calcPrice (price, amount) {
-      const power = Math.pow(10, 6)
-      const value = Math.round(price * power) / power
-      return Math.ceil(value * amount)
+      // const power = Math.pow(10, 6)
+      // const value = Math.round(price * power) / power
+      return price * amount
     },
+    // calcPrice (price, amount) {
+    //   const power = Math.pow(10, 6)
+    //   const value = Math.round(price * power) / power
+    //   return Math.ceil(value * amount)
+    // },
     calcExpire (block) {
       const rest = block - this.expire.blockHeight
       const expireIn = this.expire.duration - rest
@@ -265,7 +270,6 @@ export default {
         this.dataAssets.configMoney.precision
       )
       this.form.priceForAmount = this.calcPrice(this.exchange.price, amountValue)
-      // console.log(this.form.priceForAmount)
       const amountx = this.exchange.amount.compact()
       if (amountValue !== 0) {
         if (amountValue <= amountx) {

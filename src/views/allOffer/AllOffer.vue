@@ -116,10 +116,15 @@ export default {
       if (mosaic) properties = mosaic[0].mosaicInfo.properties
       return properties
     },
+    // calcPrice (price, amount) {
+    //   const power = Math.pow(10, 6)
+    //   const value = Math.round(price * power) / power
+    //   return Math.ceil(value * amount)
+    // },
     calcPrice (price, amount) {
-      const power = Math.pow(10, 6)
-      const value = Math.round(price * power) / power
-      return Math.ceil(value * amount)
+      // const power = Math.pow(10, 6)
+      // const value = Math.round(price * power) / power
+      return price * amount
     },
     resultsOffer (data = [], type = null) {
       setTimeout(() => {
@@ -130,7 +135,8 @@ export default {
         if (data.sell.length > 0) {
           for (let item of data.sell) {
             // if (item.owner.publicKey !== this.currentAccount.publicKey) {
-            item.priceForAmount = item.initialCost.compact()
+            // item.priceForAmount = item.initialCost.compact()
+            item.priceForAmount = Math.round(this.calcPrice(item.price, Number(amount))) * item.initialAmount.compact()
             item.bitPrice = this.calcPrice(item.price, Number(amount))
             this.data.sell.push(item)
             // }
@@ -139,7 +145,8 @@ export default {
         if (data.buy.length > 0) {
           for (let item of data.buy) {
             // if (item.owner.publicKey !== this.currentAccount.publicKey) {
-            item.priceForAmount = item.initialCost.compact()
+            // item.priceForAmount = item.initialCost.compact()
+            item.priceForAmount = Math.round(this.calcPrice(item.price, Number(amount))) * item.initialAmount.compact()
             item.bitPrice = this.calcPrice(item.price, Number(amount))
             this.data.buy.push(item)
             // }

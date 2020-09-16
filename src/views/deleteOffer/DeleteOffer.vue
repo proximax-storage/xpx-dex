@@ -4,7 +4,8 @@
       <v-col cols="12" class="headline font-weight-regular text-left primary--text">Delete offer</v-col>
     </v-row>
     <v-row>
-      <v-col sm="7" md="7" lg="9" col="9" class="pt-0">
+      <!-- <v-col sm="7" md="7" lg="9" col="9" class="pt-0"> -->
+        <v-col sm="7" md="7" lg="9" col="9" class="pt-0">
         <v-divider class="pb-5"></v-divider>
         <!-- {{exchangeDelete}} -->
         <template v-if="!dataTxOfferInfo">
@@ -46,18 +47,18 @@
                 </v-row>
               </v-col>
             </v-row>
-            <v-row>
-              <v-col cols="10" class="mx-auto caption d-flex justify-center align-center">
+            <v-row class="pt-7">
+              <!-- <v-col cols="10" class="mx-auto caption d-flex justify-center align-center">
                 <p>
                   Disclosure: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce quis
                   varius mauris, non aliquet libero. Pellentesque est eros. pharetra non finibus et,
                   fermentum sed felis. Duis portito. purus a suscipit consequat
                 </p>
-              </v-col>
+              </v-col> -->
               <v-col
                 cols="10"
                 class="ma-0 mx-auto caption d-flex justify-center align-center"
-              >this transaction will have a fee: 0.002020 XPX</v-col>
+              >Transaction fee: 0.002020 XPX</v-col>
             </v-row>
 
             <v-row>
@@ -83,11 +84,11 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-            <v-row>
+            <!-- <v-row>
               <v-col cols="12" class="ma-0 pa-0 mx-auto caption d-flex justify-center align-center">
                 <v-checkbox v-model="form.checkbox" class="pa-0"></v-checkbox>Accept terms and conditions
               </v-col>
-            </v-row>
+            </v-row> -->
           </v-form>
         </template>
         <template v-if="dataTxOfferInfo">
@@ -143,7 +144,7 @@ export default {
     ...mapGetters('transactionsStore', ['confirmed', 'unconfirmedAdded', 'status']),
     getArrayBtn () {
       const arrayBtn = this.arrayBtn
-      arrayBtn.delete.disabled = !this.valid || !this.form.checkbox
+      arrayBtn.delete.disabled = !this.valid
       arrayBtn.delete.loading = this.sendingForm
       return arrayBtn
     }
