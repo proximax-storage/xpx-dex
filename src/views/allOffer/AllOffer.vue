@@ -135,8 +135,10 @@ export default {
         if (data.sell.length > 0) {
           for (let item of data.sell) {
             // if (item.owner.publicKey !== this.currentAccount.publicKey) {
-            // item.priceForAmount = item.initialCost.compact()
-            item.priceForAmount = Math.round(this.calcPrice(item.price, Number(amount))) * item.initialAmount.compact()
+            item.priceForAmount = this.priceForAmount(
+              item.initialAmount.compact(),
+              this.calcPrice(item.price, Number(amount))
+            )
             item.bitPrice = this.calcPrice(item.price, Number(amount))
             this.data.sell.push(item)
             // }
@@ -144,15 +146,29 @@ export default {
         }
         if (data.buy.length > 0) {
           for (let item of data.buy) {
-            // if (item.owner.publicKey !== this.currentAccount.publicKey) {
-            // item.priceForAmount = item.initialCost.compact()
-            item.priceForAmount = Math.round(this.calcPrice(item.price, Number(amount))) * item.initialAmount.compact()
+            item.priceForAmount = this.priceForAmount(
+              item.initialAmount.compact(),
+              this.calcPrice(item.price, Number(amount))
+            )
             item.bitPrice = this.calcPrice(item.price, Number(amount))
             this.data.buy.push(item)
             // }
           }
         }
       })
+    },
+    priceForAmount (amount, priceV) {
+      const initialAmount = this.$generalService.amountFormatter(
+        amount,
+        this.propertiesMosaic.divisibility
+      )
+      const price = this.$generalService.amountFormatter(priceV)
+      const calPrice = parseFloat(
+        price.replace(/,/g, '') * initialAmount.replace(/,/g, '')
+      ).toFixed(6)
+      return String(calPrice)
+        .replace(/,/g, '')
+        .replace(/\./g, '')
     },
     ownOffer () {
       if (this.$store.getters['accountStore/isLogged']) {
