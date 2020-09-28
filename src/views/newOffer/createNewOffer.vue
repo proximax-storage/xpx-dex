@@ -5,7 +5,8 @@
         cols="12"
         class="headline font-weight-regular text-left"
         v-bind:class="[typeOfferColorText]"
-      >Place your {{ type }} offer</v-col>
+        >Place your {{ type }} offer</v-col
+      >
     </v-row>
     <!-- mosaicInfo -->
     <v-row>
@@ -40,10 +41,10 @@
                       attach
                       dense
                       :rules="[
-                          configForm.assets.rules.required,
-                          configForm.assets.rules.min,
-                          configForm.assets.rules.max
-                        ]"
+                        configForm.assets.rules.required,
+                        configForm.assets.rules.min,
+                        configForm.assets.rules.max
+                      ]"
                       :color="inputStyle"
                       label="Offer type"
                     ></v-select>
@@ -62,12 +63,12 @@
                       dense
                       :loading="loadingInfo"
                       :rules="[
-                          configForm.assets.rules.required,
-                          configForm.assets.rules.min,
-                          configForm.assets.rules.max
-                        ]"
+                        configForm.assets.rules.required,
+                        configForm.assets.rules.min,
+                        configForm.assets.rules.max
+                      ]"
                       :color="inputStyle"
-                      label="Select assets"
+                      label="Select asset"
                     ></v-select>
                   </template>
                   <template v-if="type === 'sell'">
@@ -82,12 +83,12 @@
                       dense
                       :loading="loadingInfo"
                       :rules="[
-                          configForm.assets.rules.required,
-                          configForm.assets.rules.min,
-                          configForm.assets.rules.max
-                        ]"
+                        configForm.assets.rules.required,
+                        configForm.assets.rules.min,
+                        configForm.assets.rules.max
+                      ]"
                       :color="inputStyle"
-                      label="Select your assets"
+                      label="Select your asset"
                     ></v-select>
                   </template>
                 </v-col>
@@ -111,12 +112,12 @@
                         :counter="configForm.amount.max"
                         :color="inputStyle"
                         :rules="[
-                            configForm.amount.rules.required,
-                            configForm.amount.rules.min,
-                            configForm.amount.rules.max,
-                            isValidateQuantityAmount,
-                            isValidateAssets
-                          ]"
+                          configForm.amount.rules.required,
+                          configForm.amount.rules.min,
+                          configForm.amount.rules.max,
+                          isValidateQuantityAmount,
+                          isValidateAssets
+                        ]"
                       ></v-text-field>
                     </v-col>
                     <v-col sm="12" md="4" col="4" lg="4">
@@ -134,20 +135,20 @@
                         :counter="configForm.totalCost.max"
                         :color="inputStyle"
                         :rules="[
-                            configForm.totalCost.rules.required,
-                            configForm.totalCost.rules.min,
-                            configForm.totalCost.rules.max,
-                            isValidateQuantityTotalCost,
-                            isValidateBalance
-                          ]"
+                          configForm.totalCost.rules.required,
+                          configForm.totalCost.rules.min,
+                          configForm.totalCost.rules.max,
+                          isValidateQuantityTotalCost,
+                          isValidateBalance
+                        ]"
                       ></v-text-field>
                     </v-col>
                     <v-col sm="12" md="4" col="4" lg="4" class="pa-0">
                       <div class="ml-7">
-                        <div class="caption font-italic font-weight-light">Per Unit:</div>
-                        <div
-                          class="subtitle-1 font-weight-black"
-                        >{{ $generalService.amountFormatter(form.bidPrice,6) }} XPX</div>
+                        <div class="caption font-italic font-weight-light">Per unit:</div>
+                        <div class="subtitle-1 font-weight-black">
+                          {{ $generalService.amountFormatter(form.bidPrice, 6) }} XPX
+                        </div>
                       </div>
                     </v-col>
                   </v-row>
@@ -225,7 +226,11 @@
         </template>
         <v-row v-if="!dataTxOfferInfo && !isMerchingoffer">
           <v-col cols="5" class="ma-0 mx-auto caption d-flex justify-center align-center">
-            <custom-button @action="action" :align="'center'" :arrayBtn="getArrayBtn"></custom-button>
+            <custom-button
+              @action="action"
+              :align="'center'"
+              :arrayBtn="getArrayBtn"
+            ></custom-button>
           </v-col>
         </v-row>
       </v-col>
@@ -300,7 +305,7 @@ export default {
     this.typeOfferColorFuc(this.type)
     this.configForm = {
       assets: this.$configForm.amount('Asset'),
-      amount: this.$configForm.amount('Amount you will send '),
+      amount: this.$configForm.amount(`Amount you will`),
       totalCost: this.$configForm.amount('Total cost (XPX)'),
       durationOffer: this.$configForm.namespace('Duration (number of days)'),
       password: this.$configForm.password()
@@ -454,14 +459,19 @@ export default {
         }
       )
     },
-    calcPrice (price, amount) {
-      return price / amount
-    },
     calcPriceMath (price, amount) {
       const power = Math.pow(10, 6)
       const value = Math.round(price * power) / power
       return Math.ceil(value * amount)
     },
+    changeAssetId (type) {
+      if (type === 'buy') {
+        this.changeAssetIdBuy(this.idHex)
+      } else {
+        this.changeAssetIdSell(this.idHex)
+      }
+    },
+
     changeAssetIdBuy (event) {
       this.clearForm()
       this.idHex = event
@@ -494,8 +504,10 @@ export default {
     changeTypeoffer (event) {
       this.configOtherMoneyAsset()
       this.type = event
+      this.changeAssetId(event)
       this.mountBuildCurrentAccountInfo(this.type)
       this.typeOfferColorFuc(this.type)
+      this.configForm.amount = this.$configForm.amount(`Amount you will ${this.type}`)
       this.clearForm()
     },
     configOtherMoneyAsset (divisibility) {
@@ -556,26 +568,19 @@ export default {
       }
       return valor
     },
-    calcRangeOffert (priceCalc = 0, priceProm = 0, range = 20) {
+    calcRangeOffert (priceCalc = 0, priceProm = 0, range = 40) {
       let val = false
-      // console.log('priceCalc', priceCalc)
-      // console.log('priceProm', priceProm)
       const x = (priceCalc * range) / 100
       const y = priceCalc + x
       const z = priceCalc - x
-      // console.log('20%y', y)
-      // console.log('20%z', z)
-      // console.log('priceProm', priceProm)
       if (y >= priceProm && z <= priceProm) {
         val = true
       } else {
         val = false
       }
-      // console.log('val', val)s
       return val
     },
     filterMerching (data, type = null, mosaicMerge = null, mosaicAmount = null) {
-      // console.log(mosaicAmount)
       let offerts = []
       const typeInvert = type === 0 ? 1 : 0
       const typeName = this.$generalService.verifyTypeOfferName(typeInvert)
@@ -664,7 +669,6 @@ export default {
         this.$generalService.formValue(this.form.totalCost, 6),
         mosaicAmount
       )
-      console.log('this.form.bidPrice', this.form.bidPrice)
       if (amount === 0) {
         return 'Cannot enter amount zero'
       } else {

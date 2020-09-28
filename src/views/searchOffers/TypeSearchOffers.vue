@@ -54,7 +54,7 @@ export default {
     search: '',
     headers: [
       { text: 'Asset', value: 'tableData.text' },
-      { text: 'Average price (XPX)', value: 'tableData.averagePrice' },
+      { text: 'Average Price (XPX)', value: 'tableData.averagePrice' },
       { text: '24h Change', value: 'tableData.twentyFourChange' },
       { text: 'Price Graph', value: 'tableData.graphic' }
     ],

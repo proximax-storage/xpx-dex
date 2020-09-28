@@ -10,9 +10,9 @@
         />
         {{ name }}
       </div>
-      <div class="font-weight-regular pt-1" style="font-size: 0.7rem;">
+      <!-- <div class="font-weight-regular pt-1" style="font-size: 0.7rem;">
         Avg Price: 0.00032 pxp
-      </div>
+      </div> -->
     </v-col>
     <v-col clos="6">
       <sparkline :value="value" :height="height" />

@@ -5,58 +5,67 @@
         <template v-slot:default>
           <thead>
             <tr style="border:0">
-              <th style="border:0" class="text-left subtitle-1 font-weight-bold">Initial quantity</th>
-              <th style="border:0" class="text-left subtitle-1 font-weight-bold">Quantity Available</th>
+              <th style="border:0" class="text-right subtitle-1 font-weight-bold">
+                Initial Quantity
+              </th>
+              <th  style="border:0" class="text-right subtitle-1 font-weight-bold">
+                Quantity Available
+              </th>
               <!-- <th style="border:0" class="text-left subtitle-1 font-weight-bold">price</th> -->
-              <th style="border:0" class="text-left subtitle-1 font-weight-bold">Price (XPX)</th>
-              <th style="border:0" class="text-left subtitle-1 font-weight-bold">Total (XPX)</th>
+              <th style="border:0" class="text-right subtitle-1 font-weight-bold">Price (XPX)</th>
+              <th style="border:0" class="text-right subtitle-1 font-weight-bold">Total (XPX)</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(n, commentIndex) in commentsToShow" :key="commentIndex">
               <template v-if="commentIndex < resultsOfferFilter.length">
                 <!-- {{divisibility}} -->
-                <td class="pr-3 pl-3" style="border:0">
+                <td style="border:0" class="text-right">
                   {{
-                  $generalService.amountFormatter(
-                  resultsOfferFilter[commentIndex].initialAmount.compact(),divisibility
-                  )
+                    $generalService.amountFormatter(
+                      resultsOfferFilter[commentIndex].initialAmount.compact(),
+                      divisibility
+                    )
                   }}
                 </td>
-                <td class="pr-3 pl-3" style="border:0">
+                <td  style="border:0" class="text-right">
                   {{
-                  $generalService.amountFormatter(
-                  resultsOfferFilter[commentIndex].amount.compact(),divisibility
-                  )
+                    $generalService.amountFormatter(
+                      resultsOfferFilter[commentIndex].amount.compact(),
+                      divisibility
+                    )
                   }}
                 </td>
-                <td class="pr-3 pl-3" style="border:0">
-                  {{ $generalService.amountFormatter(resultsOfferFilter[commentIndex].bitPrice,
-                  6
-                  )
+                <td  style="border:0" class="text-right" >
+                  {{
+                    $generalService.amountFormatter(resultsOfferFilter[commentIndex].bitPrice, 6)
                   }}
                 </td>
-                <td class="pr-3 pl-3" style="border:0 ">
+                <td  style="border:0 " class="text-right">
                   {{
-                  $generalService.amountFormatter(
-                  resultsOfferFilter[commentIndex].priceForAmount,
-                  6
-                  )
+                    $generalService.amountFormatter(
+                      resultsOfferFilter[commentIndex].priceForAmount,
+                      6
+                    )
                   }}
                 </td>
 
-                <td class="pr-3" align="center" style="border:0">
+                <td   style="border:0" class="text-right">
                   <v-chip
-                    v-if="resultsOfferFilter[commentIndex].owner.publicKey !== currentAccount.publicKey"
+                    v-if="
+                      resultsOfferFilter[commentIndex].owner.publicKey !== currentAccount.publicKey
+                    "
                     :color="typeOfferColor"
                     small
                     class="ma-2 text-capitalize text-center"
                     @click="triggerClick(resultsOfferFilter[commentIndex])"
                   >
-                    <span class="pa-2 white--text">{{ type }}</span>
+                    <span class="pa-2 white--text">{{ $generalService.typeInvert(type) }}</span>
                   </v-chip>
                   <v-chip
-                    v-if="resultsOfferFilter[commentIndex].owner.publicKey === currentAccount.publicKey"
+                    v-if="
+                      resultsOfferFilter[commentIndex].owner.publicKey === currentAccount.publicKey
+                    "
                     color="white"
                     small
                     class="ma-2 text-capitalize text-center"
@@ -77,7 +86,8 @@
           commentsToShow < resultsOfferFilter.length || resultsOfferFilter.length > commentsToShow
         "
         @click="commentsToShow += 5"
-      >Load more</a>
+        >Load more</a
+      >
     </v-col>
   </v-row>
 </template>
@@ -85,10 +95,9 @@
 import { mapGetters } from 'vuex'
 export default {
   props: ['resultsOfferFilter', 'divisibility', 'type'],
-  data: () => ({
-    typeOfferColor: null,
-    commentsToShow: 5
-  }),
+  data () {
+    return { typeOfferColor: null, commentsToShow: 5 }
+  },
   watch: {
     resultsOfferFilter: function (newExrDay) {
       this.commentsToShow = 5

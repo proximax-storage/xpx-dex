@@ -18,11 +18,11 @@ export default {
   data () {
     return {
       dataTh: [
-        'type',
+        'Type',
         'Assets',
-        'Initial quantity',
+        'Initial Quantity',
         'Quantity Available',
-        'Total Price (XPX)'
+        'Total (XPX)'
       ]
     }
   },
