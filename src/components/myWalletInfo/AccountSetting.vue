@@ -2,13 +2,13 @@
   <v-col class="pa-3 12">
     <account-edit />
     <v-row class="pt-1 ml-1">
-      <v-col cols="12" class="ml-3 mx-auto caption d-flex justify-center align-center">
+      <!-- <v-col cols="12" class="ml-3 mx-auto caption d-flex justify-center align-center">
         <p>
           Disclosure: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce quis
           varius mauris, non aliquet libero. Pellentesque est eros. pharetra non finibus et,
           fermentum sed felis. Duis portito. purus a suscipit consequat
         </p>
-      </v-col>
+      </v-col> -->
     </v-row>
     <account-info />
 
@@ -59,9 +59,9 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12" class="mx-auto caption d-flex justify-center align-center pr-12 pl-12">
+          <!-- <v-col cols="12" class="mx-auto caption d-flex justify-center align-center pr-12 pl-12">
             <p>Lorem ipsum dolor sit amer, consectetur adipiscing elit. Fusce quis varius mauris, non aliquer libero.</p>
-          </v-col>
+          </v-col> -->
         </v-row>
         <custom-button v-if="!showPK" @action="action" :align="'center'" :arrayBtn="getArrayBtn[0]"></custom-button>
         <custom-button v-if="showPK" @action="action" :align="'center'" :arrayBtn="getArrayBtn[2]"></custom-button>
@@ -97,9 +97,9 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12" class="mx-auto caption d-flex justify-center align-center pr-12 pl-12">
+          <!-- <v-col cols="12" class="mx-auto caption d-flex justify-center align-center pr-12 pl-12">
             <p>Lorem ipsum dolor sit amer, consectetur adipiscing elit. Fusce quis varius mauris, non aliquer libero.</p>
-          </v-col>
+          </v-col> -->
         </v-row>
         <custom-button @action="action" :align="'center'" :arrayBtn="getArrayBtn[1]"></custom-button>
       </v-col>

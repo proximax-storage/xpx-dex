@@ -16,7 +16,7 @@
                   <v-col
                     cols="12"
                     class="subtitle-1 pt-0 font-weight-regular text-left primary--text"
-                  >Quantitys</v-col>
+                  >Quantities</v-col>
                   <div class="ma-2 ml-7 mx-auto">
                     <div class="caption font-italic font-weight-light">Initial</div>
                     <div class="caption font-weight-black">{{exchangeDelete.initialQuantity}}</div>

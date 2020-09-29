@@ -12,10 +12,16 @@
                     <v-row class="mx-auto mr-0 pr-0">
                       <v-col class="mr-0 pr-0" justify="center" align="center">
                         <v-btn color="dim" min-width="200" @click="toggle()" text block>
-                          <span class="font-italic font-weight-bold headline text-capitalize">Buy</span>
+                          <span class="font-italic font-weight-bold headline text-capitalize"
+                            >Buy Offer
+                          </span>
                         </v-btn>
                         <v-scroll-y-transition>
-                          <v-sheet height="4" tile :color="active ? 'dim' : 'grey lighten-2'"></v-sheet>
+                          <v-sheet
+                            height="4"
+                            tile
+                            :color="active ? 'dim' : 'grey lighten-2'"
+                          ></v-sheet>
                         </v-scroll-y-transition>
                       </v-col>
                     </v-row>
@@ -26,10 +32,16 @@
                     <v-row class="mx-auto">
                       <v-col class="ml-0 pl-0" justify="center" align="center">
                         <v-btn color="pin" min-width="200" @click="toggle()" text block mall>
-                          <span class="font-italic font-weight-bold headline text-capitalize">Sell</span>
+                          <span class="font-italic font-weight-bold headline text-capitalize"
+                            >Sell Offer</span
+                          >
                         </v-btn>
                         <v-scroll-y-transition>
-                          <v-sheet height="4" tile :color="active ? 'pin' : 'grey lighten-2'"></v-sheet>
+                          <v-sheet
+                            height="4"
+                            tile
+                            :color="active ? 'pin' : 'grey lighten-2'"
+                          ></v-sheet>
                         </v-scroll-y-transition>
                       </v-col>
                     </v-row>
@@ -134,7 +146,14 @@ export default {
         )
         if (data.sell.length > 0) {
           for (let item of data.sell) {
+            console.log(item.price)
+            console.log('amount', amount)
+            console.log(this.calcPrice(item.price, Number(amount)))
             // if (item.owner.publicKey !== this.currentAccount.publicKey) {
+            console.log('ss', this.priceForAmount(
+              item.initialAmount.compact(),
+              this.calcPrice(item.price, Number(amount))
+            ))
             item.priceForAmount = this.priceForAmount(
               item.initialAmount.compact(),
               this.calcPrice(item.price, Number(amount))

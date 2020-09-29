@@ -5,7 +5,7 @@
         cols="12"
         class="headline font-weight-regular text-left"
         v-bind:class="[typeOfferColorText]"
-      >Take this offer - {{ dataAssets.form.active }} transaction</v-col>
+      >Take this offer - {{ $generalService.typeInvert(dataAssets.form.active) }} transaction</v-col>
     </v-row>
     <v-row>
       <v-col sm="7" md="7" lg="9" col="9" class="pt-0">
@@ -30,7 +30,7 @@
                   <div class="ma-2 ml-7 mx-auto">
                     <div
                       class="caption font-italic font-weight-light"
-                    >Quantity you will send to selle</div>
+                    >Quantity you will send to seller</div>
                     <div
                       class="caption font-weight-black"
                     >{{ $generalService.amountFormatter(form.priceForAmount, 6) }} XPX</div>
@@ -45,13 +45,13 @@
                     class="subtitle-1 pt-0 font-weight-regular text-left primary--text"
                   >My credit transaction</v-col>
                   <div class="ma-2 ml-7">
-                    <div class="caption font-italic font-weight-light">Asset selectd</div>
+                    <div class="caption font-italic font-weight-light">Asset Selected</div>
                     <div class="caption font-weight-black">{{ nameMosaicInfo }}</div>
                   </div>
                   <div class="ma-2 ml-7">
                     <div
                       class="caption font-italic font-weight-light"
-                    >Amount you will receave from seller</div>
+                    >Amount you will recieved from seller</div>
                     <div class="caption font-weight-black">
                       <v-text-field
                         @keyup="validateQuantityAmount()"
@@ -81,13 +81,13 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="10" class="mx-auto caption d-flex justify-center align-center">
+              <!-- <v-col cols="10" class="mx-auto caption d-flex justify-center align-center">
                 <p>
                   Disclosure: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce quis
                   varius mauris, non aliquet libero. Pellentesque est eros. pharetra non finibus et,
                   fermentum sed felis. Duis portito. purus a suscipit consequat
                 </p>
-              </v-col>
+              </v-col> -->
               <v-col
                 cols="10"
                 class="ma-0 mx-auto caption d-flex justify-center align-center"
@@ -174,7 +174,7 @@ export default {
     if (this.dataAssets) {
       this.typeOfferColorFuc(this.dataAssets.form.active)
       this.form.amount = this.exchange.amount.compact()
-      this.form.priceForAmount = this.exchange.priceForAmount
+      this.form.priceForAmount = this.calcPrice(this.exchange.price, this.exchange.amount.compact())
     }
     this.configForm = {
       amount: this.$configForm.amount('Quantity'),
@@ -270,6 +270,7 @@ export default {
         this.dataAssets.configMoney.precision
       )
       this.form.priceForAmount = this.calcPrice(this.exchange.price, amountValue)
+      console.log('this.form.priceForAmount', this.form.priceForAmount)
       const amountx = this.exchange.amount.compact()
       if (amountValue !== 0) {
         if (amountValue <= amountx) {

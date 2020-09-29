@@ -14,7 +14,7 @@ function getAllOffer (items, mosaicUpdate = null) {
   if (x.length > 0) {
     x.forEach(element => {
       if (element.info.mosaicInfo) {
-        const price = sumAllAmount(element.data.map(x => x.price)) / element.data.length
+        const price = calAverage(element.data.map(x => x.price), element.info.mosaicInfo[0].mosaicInfo.properties.divisibility)
         const amount = sumAllAmount(element.data.map(x => x.amount.compact()))
         const totalAssets = Vue.prototype.$generalService.amountFormatter(
           amount,
@@ -55,6 +55,16 @@ function getAllOffer (items, mosaicUpdate = null) {
   if (remove.length > 0) {
     removeOffer(remove, mosaicUpdate)
   }
+}
+
+function calAverage (data, divisibility = 1) {
+  let total = 0
+  const amount = Vue.prototype.$generalService.addZerosQuantity(divisibility, 1)
+  data.forEach(element => {
+    const priceUni = amount * element
+    total = total + priceUni
+  })
+  return Vue.prototype.$generalService.amountFormatter(total / data.length)
 }
 function removeOffer (offer, mosaicFilterUpEvent) {
   const dataValue = validateDeleteOffer(offer)

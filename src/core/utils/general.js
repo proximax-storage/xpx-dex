@@ -20,7 +20,7 @@ function formValue (cant, divisibility = 6) {
 }
 
 function formValueParse (cant, price, divisibility = 6) {
-  return quantityStringToInt(String(formValue(cant / price, divisibility)))
+  return quantityStringToInt(String(formValue(cant * price, divisibility)))
 }
 
 /**
@@ -130,7 +130,20 @@ function calculateDurationExpire (durationCompact) {
   const response = days + ' days, ' + hrs + ' Hrs, ' + mnts + ' Minutes, ' + seconds + ' Seconds'
   return response
 }
-
+/**
+ *  Invert type offert
+ * @param {*} durationCompact
+ */
+function typeInvert (type = null) {
+  let typeV = null
+  if (type === 'buy') {
+    typeV = 'sell'
+  }
+  if (type === 'sell') {
+    typeV = 'buy'
+  }
+  return typeV
+}
 /**
  *
  *
@@ -391,5 +404,6 @@ export {
   verifyTypeOfferName,
   showMsgStatusNode,
   formValue,
-  formValueParse
+  formValueParse,
+  typeInvert
 }
