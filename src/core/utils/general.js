@@ -20,7 +20,7 @@ function formValue (cant, divisibility = 6) {
 }
 
 function formValueParse (cant, price, divisibility = 6) {
-  return quantityStringToInt(String(formValue(cant / price, divisibility)))
+  return quantityStringToInt(String(formValue(cant * price, divisibility)))
 }
 
 /**

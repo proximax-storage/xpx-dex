@@ -73,7 +73,7 @@
                   <!--Amount you will send -->
                   <v-col sm="12" md="6" col="4" lg="4">
                     <div class="ml-7">
-                      <div class="caption font-italic font-weight-light">Amount you will send:</div>
+                      <div class="caption font-italic font-weight-light">Amount you will {{dataOffertActual.type}}:</div>
                       <div
                         class="subtitle-1 font-weight-black"
                       >{{ $generalService.amountFormatter(dataOffertActual.amount, divisibility) }}</div>
@@ -127,7 +127,7 @@ export default {
       arrayBtn: null,
       theme: 'light',
       name: 'face',
-      dataTh: ['Initial quantity', 'Quantity Available', 'price (XPX)', 'Total (XPX)']
+      dataTh: ['Initial quantity', 'Quantity Available', 'Price (XPX)', 'Total (XPX)']
     }
   },
   components: {

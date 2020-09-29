@@ -95,8 +95,7 @@
               </v-row>
               <v-row>
                 <v-col cols="12">
-                  <!-- Montos  -->
-                  <!-- <v-row>
+                  <v-row>
                     <v-col sm="12" md="4" col="4" lg="4">
                       <v-text-field
                         name="amountF"
@@ -149,71 +148,6 @@
                         <div class="caption font-italic font-weight-light">Per unit:</div>
                         <div class="subtitle-1 font-weight-black">
                           {{ $generalService.amountFormatter(form.bidPrice, 6) }} XPX
-                        </div>
-                      </div>
-                    </v-col>
-                  </v-row> -->
-
-                  <!-- MOntos test -->
-                  <v-row>
-                    <!-- ammount -->
-                    <v-col sm="12" md="4" col="4" lg="4">
-                      <v-text-field
-                        name="amountF"
-                        ref="amountF"
-                        id="amountF"
-                        class="pt-0 text-right"
-                        @keyup="isValidateQuantityAmount = validateQuantity($event)"
-                        v-model="form.amount"
-                        v-money="configMoneyAsset"
-                        :disabled="loadingInfo"
-                        :label="configForm.amount.label"
-                        :minlength="configForm.amount.min"
-                        :maxlength="configForm.amount.max"
-                        :counter="configForm.amount.max"
-                        :color="inputStyle"
-                        :rules="[
-                          configForm.amount.rules.required,
-                          configForm.amount.rules.min,
-                          configForm.amount.rules.max,
-                          isValidateQuantityAmount,
-                          isValidateAssets
-                        ]"
-                      ></v-text-field>
-                    </v-col>
-                    <!-- total consto -->
-                    <v-col sm="12" md="4" col="4" lg="4">
-                      <v-text-field
-                        class="pt-0 text-align-field-right"
-                        name="bidPriceF"
-                        ref="bidPriceF"
-                        id="bidPriceF"
-                        @keyup="isValidateBidPrice = validateQuantity($event)"
-                        v-model="form.bidPrice"
-                        v-money="configMoney"
-                        :label="configForm.bidPrice.label"
-                        :minlength="configForm.bidPrice.min"
-                        :maxlength="configForm.bidPrice.max"
-                        :counter="configForm.bidPrice.max"
-                        :color="inputStyle"
-                        :rules="[
-                          configForm.bidPrice.rules.required,
-                          configForm.bidPrice.rules.min,
-                          configForm.bidPrice.rules.max,
-                          isValidateBidPrice
-                        ]"
-                      ></v-text-field>
-                    </v-col>
-                    <!-- Per unit -->
-                    <!-- v-if="type === 'buy'" -->
-                    <v-col sm="12" md="4" col="4" lg="4" class="pa-0">
-                      <div class="ml-7">
-                        <div class="caption font-italic font-weight-light">Total (xpx):</div>
-                        <div class="subtitle-1 font-weight-black">
-                          {{ $generalService.amountFormatter(form.totalCost, 6) }} XPX
-                        </div>
-                        <div v-if="isValidateBalance" class="caption font-italic font-weight-black  red--text">
-                          insufficient balance
                         </div>
                       </div>
                     </v-col>
@@ -344,7 +278,7 @@ export default {
       configMoney: null,
       inputStyle: 'inputStyle',
       isValidateQuantityAmount: true,
-      isValidateBidPrice: true,
+      isValidateQuantityTotalCost: true,
       isValidateDuration: true,
       isValidateBalance: null,
       isValidateAssets: true,
@@ -372,7 +306,7 @@ export default {
     this.configForm = {
       assets: this.$configForm.amount('Asset'),
       amount: this.$configForm.amount(`Amount you will`),
-      bidPrice: this.$configForm.amount('Per unit (XPX)'),
+      totalCost: this.$configForm.amount('Total cost (XPX)'),
       durationOffer: this.$configForm.namespace('Duration (number of days)'),
       password: this.$configForm.password()
     }
@@ -451,7 +385,7 @@ export default {
                 this.form.amount,
                 this.configMoneyAsset.precision
               )
-              const costTotal = this.form.totalCost
+              const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
               let returnBuild = null
               this.offerMerching = this.filterMerching(
                 this.offerAll,
@@ -464,8 +398,7 @@ export default {
                 this.dataOffertActual = {
                   amount: mosaicAmount,
                   costTotal: costTotal,
-                  bidPrice: this.$generalService.quantityStringToInt(this.form.bidPrice, 6),
-                  type: this.type
+                  bidPrice: this.form.bidPrice
                 }
               } else {
                 returnBuild = buildAddExchangeOffer(
@@ -490,7 +423,7 @@ export default {
           this.configMoneyAsset.precision
         )
         // const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
-        const costTotal = this.form.totalCost
+        const costTotal = this.calcPriceMath(data.price, mosaicAmount)
         const mosaicId = this.$blockchainProvider.getMosaicId(this.idHex)
         const type = this.typeOffer === 0 ? 1 : 0
         const returnBuild = buildExchangeOffer(mosaicId, mosaicAmount, costTotal, type, data.owner)
@@ -526,10 +459,10 @@ export default {
         }
       )
     },
-    calcPrice (price, amount) {
-      // const power = Math.pow(10, 6)
-      // const value = Math.round(price * power) / power
-      return price * amount
+    calcPriceMath (price, amount) {
+      const power = Math.pow(10, 6)
+      const value = Math.round(price * power) / power
+      return Math.ceil(value * amount)
     },
     changeAssetId (type) {
       if (type === 'buy') {
@@ -608,9 +541,9 @@ export default {
     clearForm () {
       this.isValidateAssets = true
       this.isValidateBalance = null
-      this.isValidateBidPrice = false
+      this.isValidateQuantityTotalCost = false
       this.$refs.amountF.$el.getElementsByTagName('input')[0].value = ''
-      this.$refs.bidPriceF.$el.getElementsByTagName('input')[0].value = ''
+      this.$refs.totalCostF.$el.getElementsByTagName('input')[0].value = ''
       this.$refs.form.reset('assest')
       this.form.totalCost = 0
     },
@@ -636,14 +569,10 @@ export default {
       return valor
     },
     calcRangeOffert (priceCalc = 0, priceProm = 0, range = 40) {
-      console.log('priceCalc', priceCalc)
-      console.log('priceProm', priceProm)
       let val = false
       const x = (priceCalc * range) / 100
       const y = priceCalc + x
       const z = priceCalc - x
-      console.log('y mayor', y)
-      console.log('z menor', z)
       if (y >= priceProm && z <= priceProm) {
         val = true
       } else {
@@ -664,10 +593,7 @@ export default {
               x.owner.publicKey !== this.currentAccount.publicKey &&
               x.mosaicId.toHex() === mosaicMerge &&
               x.amount.compact() >= mosaicAmount &&
-              this.calcRangeOffert(
-                this.$generalService.quantityStringToInt(this.form.bidPrice, 6),
-                this.calcPrice(x.price, Number(amount))
-              )
+              this.calcRangeOffert(this.form.bidPrice, this.calcPriceMath(x.price, Number(amount)))
           )
           if (offerts > 0) {
             break
@@ -729,37 +655,25 @@ export default {
       } catch (error) {
         amount = Number(amountValue)
       }
-
-      // const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
-      this.form.totalCost = this.calTotalCost(this.form.amount, this.form.bidPrice)
-      console.log(this.form.totalCost)
+      const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
       if (this.type === 'sell') {
         if (e.target.name === 'amountF') this.validateBalanceAssets(amount)
       } else {
-        this.validateBalanceXpx(this.form.totalCost)
+        this.validateBalanceXpx(costTotal)
       }
-      // const mosaicAmount = this.$generalService.formValue(
-      //   this.form.amount,
-      //   this.configMoneyAsset.precision
-      // )
-      // this.form.costTotal = this.$generalService.formValueParse(
-      //   this.$generalService.formValue(this.form.bidPrice, 6),
-      //   mosaicAmount
-      // )
-      // console.log('this.form.costTotal', this.form.costTotal)
+      const mosaicAmount = this.$generalService.formValue(
+        this.form.amount,
+        this.configMoneyAsset.precision
+      )
+      this.form.bidPrice = this.$generalService.formValueParse(
+        this.$generalService.formValue(this.form.totalCost, 6),
+        mosaicAmount
+      )
       if (amount === 0) {
         return 'Cannot enter amount zero'
       } else {
         return true
       }
-    },
-    calTotalCost (amount, perUnit) {
-      const mosaicAmount = this.$generalService.formValue(amount, 1)
-      const priceUnit = this.$generalService.formValue(perUnit, 6)
-      console.log('mosaicAmount', mosaicAmount)
-      console.log('priceUnit', priceUnit)
-      console.log('total', this.$generalService.formValueParse(priceUnit, mosaicAmount))
-      return this.$generalService.formValueParse(priceUnit, mosaicAmount)
     },
     validateTxHash (transactions) {
       this.sendingForm = false
