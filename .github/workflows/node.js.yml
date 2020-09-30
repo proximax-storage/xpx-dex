@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [10.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -23,9 +23,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm install -g node-gyp@latest
     - run: npm i
     - run: npm audit fix
-    - run: npm run-script build
+    - run: npm run build
       
     
