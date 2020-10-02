@@ -96,65 +96,6 @@
               <v-row>
                 <v-col cols="12">
                   <!-- Montos  -->
-                  <!-- <v-row>
-                    <v-col sm="12" md="4" col="4" lg="4">
-                      <v-text-field
-                        name="amountF"
-                        ref="amountF"
-                        id="amountF"
-                        class="pt-0 text-right"
-                        @keyup="isValidateQuantityAmount = validateQuantity($event)"
-                        v-model="form.amount"
-                        v-money="configMoneyAsset"
-                        :disabled="loadingInfo"
-                        :label="configForm.amount.label"
-                        :minlength="configForm.amount.min"
-                        :maxlength="configForm.amount.max"
-                        :counter="configForm.amount.max"
-                        :color="inputStyle"
-                        :rules="[
-                          configForm.amount.rules.required,
-                          configForm.amount.rules.min,
-                          configForm.amount.rules.max,
-                          isValidateQuantityAmount,
-                          isValidateAssets
-                        ]"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col sm="12" md="4" col="4" lg="4">
-                      <v-text-field
-                        class="pt-0 text-align-field-right"
-                        name="totalCostF"
-                        ref="totalCostF"
-                        id="totalCostF"
-                        @keyup="isValidateQuantityTotalCost = validateQuantity($event)"
-                        v-model="form.totalCost"
-                        v-money="configMoney"
-                        :label="configForm.totalCost.label"
-                        :minlength="configForm.totalCost.min"
-                        :maxlength="configForm.totalCost.max"
-                        :counter="configForm.totalCost.max"
-                        :color="inputStyle"
-                        :rules="[
-                          configForm.totalCost.rules.required,
-                          configForm.totalCost.rules.min,
-                          configForm.totalCost.rules.max,
-                          isValidateQuantityTotalCost,
-                          isValidateBalance
-                        ]"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col sm="12" md="4" col="4" lg="4" class="pa-0">
-                      <div class="ml-7">
-                        <div class="caption font-italic font-weight-light">Per unit:</div>
-                        <div class="subtitle-1 font-weight-black">
-                          {{ $generalService.amountFormatter(form.bidPrice, 6) }} XPX
-                        </div>
-                      </div>
-                    </v-col>
-                  </v-row> -->
-
-                  <!-- MOntos test -->
                   <v-row>
                     <!-- ammount -->
                     <v-col sm="12" md="4" col="4" lg="4">
@@ -205,10 +146,9 @@
                       ></v-text-field>
                     </v-col>
                     <!-- Per unit -->
-                    <!-- v-if="type === 'buy'" -->
                     <v-col sm="12" md="4" col="4" lg="4" class="pa-0">
                       <div class="ml-7">
-                        <div class="caption font-italic font-weight-light">Total (xpx):</div>
+                        <div class="caption " style="color: rgba(0, 0, 0, 0.6);">Total (XPX):</div>
                         <div class="subtitle-1 font-weight-black">
                           {{ $generalService.amountFormatter(form.totalCost, 6) }} XPX
                         </div>
@@ -415,7 +355,6 @@ export default {
     },
     getArrayBtn () {
       const arrayBtn = this.arrayBtn
-      // arrayBtn['place'].disabled = !this.valid || !this.form.checkbox || this.isValidateBalance
       arrayBtn['place'].disabled = !this.valid || this.isValidateBalance
       arrayBtn['place'].loading = this.sendingForm
       arrayBtn['place'].color = this.type === null ? 'white' : this.typeOfferColor
@@ -489,7 +428,6 @@ export default {
           this.form.amount,
           this.configMoneyAsset.precision
         )
-        // const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
         const costTotal = this.form.totalCost
         const mosaicId = this.$blockchainProvider.getMosaicId(this.idHex)
         const type = this.typeOffer === 0 ? 1 : 0
@@ -516,7 +454,6 @@ export default {
         '',
         buildTx.dataRequired
       )
-      // this.sendingForm = false
       this.SET_MONITOR_HASH(dataMonitorHash)
       this.$blockchainProvider.announceTx(signedTransaction).subscribe(
         response => {},
@@ -527,8 +464,6 @@ export default {
       )
     },
     calcPrice (price, amount) {
-      // const power = Math.pow(10, 6)
-      // const value = Math.round(price * power) / power
       return price * amount
     },
     changeAssetId (type) {
@@ -636,14 +571,10 @@ export default {
       return valor
     },
     calcRangeOffert (priceCalc = 0, priceProm = 0, range = 40) {
-      console.log('priceCalc', priceCalc)
-      console.log('priceProm', priceProm)
       let val = false
       const x = (priceCalc * range) / 100
       const y = priceCalc + x
       const z = priceCalc - x
-      console.log('y mayor', y)
-      console.log('z menor', z)
       if (y >= priceProm && z <= priceProm) {
         val = true
       } else {
@@ -669,7 +600,7 @@ export default {
                 this.calcPrice(x.price, Number(amount))
               )
           )
-          if (offerts > 0) {
+          if (offerts.length > 0) {
             break
           }
         }
@@ -729,24 +660,12 @@ export default {
       } catch (error) {
         amount = Number(amountValue)
       }
-
-      // const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
       this.form.totalCost = this.calTotalCost(this.form.amount, this.form.bidPrice)
-      console.log(this.form.totalCost)
       if (this.type === 'sell') {
         if (e.target.name === 'amountF') this.validateBalanceAssets(amount)
       } else {
         this.validateBalanceXpx(this.form.totalCost)
       }
-      // const mosaicAmount = this.$generalService.formValue(
-      //   this.form.amount,
-      //   this.configMoneyAsset.precision
-      // )
-      // this.form.costTotal = this.$generalService.formValueParse(
-      //   this.$generalService.formValue(this.form.bidPrice, 6),
-      //   mosaicAmount
-      // )
-      // console.log('this.form.costTotal', this.form.costTotal)
       if (amount === 0) {
         return 'Cannot enter amount zero'
       } else {
@@ -756,9 +675,6 @@ export default {
     calTotalCost (amount, perUnit) {
       const mosaicAmount = this.$generalService.formValue(amount, 1)
       const priceUnit = this.$generalService.formValue(perUnit, 6)
-      console.log('mosaicAmount', mosaicAmount)
-      console.log('priceUnit', priceUnit)
-      console.log('total', this.$generalService.formValueParse(priceUnit, mosaicAmount))
       return this.$generalService.formValueParse(priceUnit, mosaicAmount)
     },
     validateTxHash (transactions) {

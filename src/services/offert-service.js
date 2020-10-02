@@ -3,60 +3,50 @@ import store from '@/store'
 import {
   TransactionType
 } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/TransactionType'
-/**
- *
- * @param {*} items
- */
-function getAllOffer (items, mosaicUpdate = null) {
-  const pass = []
-  const x = items.filter(x => x.data.length > 0)
-  Object.freeze(x)
-  if (x.length > 0) {
-    x.forEach(element => {
-      if (element.info.mosaicInfo) {
-        const price = calAverage(element.data.map(x => x.price), element.info.mosaicInfo[0].mosaicInfo.properties.divisibility)
-        const amount = sumAllAmount(element.data.map(x => x.amount.compact()))
-        const totalAssets = Vue.prototype.$generalService.amountFormatter(
-          amount,
-          element.info.mosaicInfo[0].mosaicInfo.properties.divisibility
-        )
-        const offersBuy = items.filter(
-          x => x.info.mosaicIdHex === element.info.mosaicIdHex && x.type === 'buy'
-        )
-        const offersSell = items.filter(
-          x => x.info.mosaicIdHex === element.info.mosaicIdHex && x.type === 'sell'
-        )
-        if (!pass.find(x => x.tableData.text === element.info.text)) {
-          const pas = {
-            tableData: {
-              text: element.info.text,
-              type: element.type,
-              totalAssetAvailable: totalAssets,
-              averagePrice: price,
-              info: element.info,
-              priceArray: element.data.map(x => x.price),
-              twentyFourChange: `${(
-                (Math.floor(Math.random() * 20) + Math.floor(Math.random() * 1000)) /
-                100
-              ).toFixed(2)}`
-            },
-            allOffers: {
-              sell: offersSell.length > 0 ? offersSell[0].data : offersSell,
-              buy: offersBuy.length > 0 ? offersBuy[0].data : offersBuy
-            }
-          }
-          updateAllOffer(pas, store.getters['offersStore/offerAll'])
-        }
-      }
-    })
-  }
 
-  const remove = items.filter(x => x.data.length === 0)
-  if (remove.length > 0) {
-    removeOffer(remove, mosaicUpdate)
+function getAllOffer (data, mosaicUpdate = null) {
+  let allOffers = {
+    sell: [],
+    buy: []
+  }
+  let priceBuy = []
+  let priceSell = []
+  const sell = data.items.itemBuy
+  const buy = data.items.itemSell
+  priceBuy = (buy) ? buy.data.map(x => x.price) : []
+  priceSell = (sell) ? sell.data.map(x => x.price) : []
+  if (buy) {
+    allOffers.buy = buy.data
+  }
+  if (sell) {
+    allOffers.sell = sell.data
+  }
+  const priceArray = priceBuy.concat(priceSell)
+  const price = calAverage(priceArray, data.info.mosaicInfo[0].mosaicInfo.properties.divisibility)
+  console.log('data', data)
+  const pas = {
+    tableData: {
+      text: data.info.text,
+      type: 'sell',
+      averagePrice: price,
+      info: data.info,
+      priceArray: priceArray,
+      twentyFourChange: `${(
+        (Math.floor(Math.random() * 20) + Math.floor(Math.random() * 1000)) /
+        100
+      ).toFixed(2)}`
+    },
+    allOffers: allOffers
+  }
+  const pass = store.getters['offersStore/offerAll']
+  if (!pass.find(x => x.tableData.text === data.info.text)) {
+    console.debug('PUSH')
+    store.commit('offersStore/PUSH_OFFER_ALL', pas)
+  } else {
+    console.debug('UPDATE')
+    store.commit('offersStore/UPDATE_OFFER_ALL', pas)
   }
 }
-
 function calAverage (data, divisibility = 1) {
   let total = 0
   const amount = Vue.prototype.$generalService.addZerosQuantity(divisibility, 1)
@@ -66,63 +56,48 @@ function calAverage (data, divisibility = 1) {
   })
   return Vue.prototype.$generalService.amountFormatter(total / data.length)
 }
-function removeOffer (offer, mosaicFilterUpEvent) {
-  const dataValue = validateDeleteOffer(offer)
-  dataValue.forEach(x => {
-    if (x.deleteV) {
-      store.commit('offersStore/DELETE_OFFER_ALL', x.mosaicIdHex)
-    }
-  })
-}
-function validateDeleteOffer (oferts) {
-  let newArray = []
-  let arrayTemporal = []
-  for (var i = 0; i < oferts.length; i++) {
-    arrayTemporal = newArray.filter(resp => resp['mosaicIdHex'] === oferts[i]['info']['mosaicIdHex'])
-    if (arrayTemporal.length > 0) {
-      newArray[newArray.indexOf(arrayTemporal[0])]['validateDelete'].push(oferts[i]['type'])
-    } else {
-      newArray.push({
-        'mosaicIdHex': oferts[i]['info']['mosaicIdHex'],
-        'validateDelete': [oferts[i]['type']]
-      })
-    }
-  }
-  return newArray.map(x => {
-    return {
-      mosaicIdHex: x.mosaicIdHex,
-      deleteV: Boolean(x.validateDelete.length === 2)
-    }
-  })
-}
-function updateAllOffer (newOffers, alloffert) {
-  let newdata = []
-  store.commit('offersStore/SET_OFFER_ALL', newdata)
-  for (let x of alloffert) {
-    if (x.tableData.info.mosaicIdHex === newOffers.tableData.info.mosaicIdHex) {
-      store.commit('offersStore/PUSH_OFFER_ALL', newOffers)
-    } else {
-      store.commit('offersStore/PUSH_OFFER_ALL', x)
-    }
-  }
-  const valor = newdata.find(x => x.tableData.info.mosaicIdHex === newOffers.tableData.info.mosaicIdHex)
-  if (!valor) {
-    store.commit('offersStore/PUSH_OFFER_ALL', newOffers)
-  }
-  return newdata
-}
+// function removeOffer (offer, mosaicFilterUpEvent) {
+//   const dataValue = validateDeleteOffer(offer)
+//   dataValue.forEach(x => {
+//     if (x.deleteV) {
+//       store.commit('offersStore/DELETE_OFFER_ALL', x.mosaicIdHex)
+//     }
+//   })
+// }
+// function validateDeleteOffer (oferts) {
+//   let newArray = []
+//   let arrayTemporal = []
+//   for (var i = 0; i < oferts.length; i++) {
+//     arrayTemporal = newArray.filter(resp => resp['mosaicIdHex'] === oferts[i]['info']['mosaicIdHex'])
+//     if (arrayTemporal.length > 0) {
+//       newArray[newArray.indexOf(arrayTemporal[0])]['validateDelete'].push(oferts[i]['type'])
+//     } else {
+//       newArray.push({
+//         'mosaicIdHex': oferts[i]['info']['mosaicIdHex'],
+//         'validateDelete': [oferts[i]['type']]
+//       })
+//     }
+//   }
+//   return newArray.map(x => {
+//     return {
+//       mosaicIdHex: x.mosaicIdHex,
+//       deleteV: Boolean(x.validateDelete.length === 2)
+//     }
+//   })
+// }
+
 /**
  *
  * @param {*} data
  */
-function sumAllAmount (data) {
-  let total = 0
-  data.forEach(element => {
-    total = total + element
-  })
+// function sumAllAmount (data) {
+//   let total = 0
+//   data.forEach(element => {
+//     total = total + element
+//   })
 
-  return total
-}
+//   return total
+// }
 /**
  *
  * @param {*} data
@@ -144,6 +119,20 @@ function filtersAssetsFunc (data) {
     })
   }
   return valor
+}
+function filterAssets (data) {
+  if (data) {
+    data.text = data.mosaicIdHex
+    if (
+      data.mosaicInfo !== null &&
+      data.mosaicInfo !== undefined &&
+      data.mosaicInfo[0] &&
+      data.mosaicInfo[0].mosaicNames.names.length > 0
+    ) {
+      data.text = data.mosaicInfo[0].mosaicNames.names[0].name
+    }
+    return data
+  }
 }
 /**
  *
@@ -221,9 +210,14 @@ function findOffer (tx, txCompare, typeOffer) {
   }
   return pushOffer
 }
+function update (mosaicInfodb) {
+  store.dispatch('socketDbStore/UPDATE_MOSAICS_INFO', mosaicInfodb)
+}
 export {
   getAllOffer,
   filtersAssetsFunc,
-  validateExpireOffer
+  filterAssets,
+  validateExpireOffer,
+  update
 
 }
