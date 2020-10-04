@@ -143,7 +143,7 @@ async function validateExpireOffer (data, typeOffer) {
     const tx = await Vue.prototype.$blockchainProvider.getOutgoingTransactions(data.owner).toPromise()
     const txFilter = filterTxOfferForType(TransactionType.ADD_EXCHANGE_OFFER, tx)
     const pushTx = filterTxOffer(txFilter, data, typeOffer)
-    const block = store.getters['nodeStore/currentBlock']
+    const block = store.getters['nodesStoreNew/currentHeight']
     const offer = findOffer(pushTx, data, typeOffer)
     const blockHeight = pushTx[0].transactionInfo.height.compact()
     let dataRet = null

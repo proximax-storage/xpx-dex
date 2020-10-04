@@ -270,7 +270,6 @@ export default {
         this.dataAssets.configMoney.precision
       )
       this.form.priceForAmount = this.calcPrice(this.exchange.price, amountValue)
-      console.log('this.form.priceForAmount', this.form.priceForAmount)
       const amountx = this.exchange.amount.compact()
       if (amountValue !== 0) {
         if (amountValue <= amountx) {
@@ -331,7 +330,7 @@ export default {
     ...mapGetters('socketDbStore', ['mosaicsInfOfferFromIdHex']),
     ...mapGetters('mosaicExchange', ['exchange', 'dataAssets', 'expire']),
     ...mapGetters('transactionsStore', ['confirmed', 'unconfirmedAdded', 'status']),
-    ...mapGetters('nodeStore', ['currentBlock']),
+    ...mapGetters('nodesStoreNew', ['currentHeight']),
     ...mapState('accountStore', ['currentAccount', 'accountInfoByNameAccount']),
     nameMosaicInfo () {
       let nameMosaic = null

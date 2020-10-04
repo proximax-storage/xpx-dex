@@ -37,7 +37,7 @@ export const nodesStoreNew = {
   },
   mutations: {
     ADD_NODES (state, data, toServer) {
-      console.log('data', data)
+      // console.log('data', data)
       const n = state.nodesList.slice()
       const nToSave = []
       if (data.nodes.length > 0) {
@@ -50,7 +50,7 @@ export const nodesStoreNew = {
           }
         })
       }
-      console.log('Lista de nodos', n)
+      // console.log('Lista de nodos', n)
       if (!data.toServer) {
         state.nodesList = n
         // return
@@ -61,7 +61,7 @@ export const nodesStoreNew = {
       //   .catch(e => console.log('Error --->', e))
     },
     SET_DATA_NODE (state, data) {
-      console.log('data', data)
+      // console.log('data', data)
       state.currentNode = data.uri
       state.currentHeight = data.height
       state.generationHash = data.generationHash
@@ -83,6 +83,7 @@ export const nodesStoreNew = {
       state.nodesList = data
     },
     SET_STATUS_NODE (state, status) {
+      // console.log('SET_STATUS_NODE', status)
       state.nodeStatus = status
     }
   },

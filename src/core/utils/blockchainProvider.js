@@ -110,7 +110,7 @@ function announceTx (signedTransaction) {
  * @param {*} cosignatures
  */
 function aggregateTransaction (innerTransaction = [], cosignatures = []) {
-  const network = store.getters['nodeStore/networkType']
+  const network = store.getters['nodesStoreNew/networkType']
   return AggregateTransaction.createComplete(
     Deadline.create(10),
     innerTransaction,
@@ -132,7 +132,7 @@ function addExchangeOffer (mosaicId, mosaicAmount, costValue, type, durationValu
   const amount = UInt64.fromUint(mosaicAmount)
   const cost = UInt64.fromUint(costValue)
   const duration = UInt64.fromUint(durationValue)
-  const network = store.getters['nodeStore/networkType']
+  const network = store.getters['nodesStoreNew/networkType']
   return AddExchangeOfferTransaction.create(
     Deadline.create(10),
     [new AddExchangeOffer(mosaicId, amount, cost, type, duration)],
@@ -151,7 +151,7 @@ function addExchangeOffer (mosaicId, mosaicAmount, costValue, type, durationValu
 function exchangeOffer (mosaicId, mosaicAmount, costValue, type, publicAccount) {
   const amount = UInt64.fromUint(mosaicAmount)
   const cost = UInt64.fromUint(costValue)
-  const network = store.getters['nodeStore/networkType']
+  const network = store.getters['nodesStoreNew/networkType']
   return ExchangeOfferTransaction.create(
     Deadline.create(10),
     [new ExchangeOffer(mosaicId, amount, cost, type, publicAccount)],
@@ -405,7 +405,7 @@ function getExchangeOffersfromId (Idmosaic, type) {
  * @returns
  */
 function getAccountFromPrivateKey (privateKey, network) {
-  const networkV = network || store.getters['nodeStore/networkType']
+  const networkV = network || store.getters['nodesStoreNew/networkType']
   return Account.createFromPrivateKey(privateKey, networkV)
 }
 
@@ -415,7 +415,7 @@ function getAccountFromPrivateKey (privateKey, network) {
  */
 
 function getAddressFromPublicKey (publicKey) {
-  const network = store.getters['nodeStore/networkType']
+  const network = store.getters['nodesStoreNew/networkType']
   return Address.createFromPublicKey(publicKey, network)
 }
 /**
@@ -612,7 +612,7 @@ function getUint64 (value) {
 
 function mosaicNonceFromPublicKey (ownerPublicKey, randomNonce) {
   // MosaicNonce.createRandom()
-  const network = store.getters['nodeStore/networkType']
+  const network = store.getters['nodesStoreNew/networkType']
   return MosaicId.createFromNonce(randomNonce, PublicAccount.createFromPublicKey(ownerPublicKey, network))
 }
 /**
@@ -624,7 +624,7 @@ function mosaicNonceFromPublicKey (ownerPublicKey, randomNonce) {
  * @param {*} isRestrictable
  */
 function mosaicDefinitionTransaction (ownerPublicKey, randomNonce, duration, divisibility, isSupplyMutable, isTransferable) {
-  const network = store.getters['nodeStore/networkType']
+  const network = store.getters['nodesStoreNew/networkType']
   // const publicAccount = PublicAccount.createFromPublicKey(ownerPublicKey, network)
   const mosaicId = mosaicNonceFromPublicKey(ownerPublicKey, randomNonce)
   return MosaicDefinitionTransaction.create(
@@ -648,7 +648,7 @@ function mosaicDefinitionTransaction (ownerPublicKey, randomNonce, duration, div
  * @param {*} delta
  */
 function mosaicSupplyChangeTransaction (mosaicId, mosaicSupplyType, delta) {
-  const network = store.getters['nodeStore/networkType']
+  const network = store.getters['nodesStoreNew/networkType']
   return MosaicSupplyChangeTransaction.create(
     Deadline.create(10),
     mosaicId,
@@ -666,7 +666,7 @@ function mosaicSupplyChangeTransaction (mosaicId, mosaicSupplyType, delta) {
  */
 
 function mosaicAliasTransaction (aliasActionType, namespaceId, mosaicId) {
-  const network = store.getters['nodeStore/networkType']
+  const network = store.getters['nodesStoreNew/networkType']
   return MosaicAliasTransaction.create(
     Deadline.create(10),
     aliasActionType,
@@ -677,7 +677,7 @@ function mosaicAliasTransaction (aliasActionType, namespaceId, mosaicId) {
 }
 
 function modifyMetadataTransactionMosaic (mosaicId, modifications) {
-  const network = store.getters['nodeStore/networkType']
+  const network = store.getters['nodesStoreNew/networkType']
   return ModifyMetadataTransaction.createWithMosaicId(
     network,
     Deadline.create(10),
@@ -687,7 +687,7 @@ function modifyMetadataTransactionMosaic (mosaicId, modifications) {
 }
 
 function registerNamespaceTransaction (rootNamespaceName, subnamespaceName = null, durationValue, type = 'rootNamespaceName') {
-  const network = store.getters['nodeStore/networkType']
+  const network = store.getters['nodesStoreNew/networkType']
   let registerNamespaceTx = []
   const duration = UInt64.fromUint(durationValue)
   const deadline = Deadline.create(10)
@@ -714,7 +714,7 @@ function registerNamespaceTransaction (rootNamespaceName, subnamespaceName = nul
  * @returns
  */
 function publicAccountFromPublicKey (publicKey, network) {
-  const networkV = network || store.getters['nodeStore/networkType']
+  const networkV = network || store.getters['nodesStoreNew/networkType']
   return PublicAccount.createFromPublicKey(publicKey, networkV)
 }
 
@@ -724,7 +724,7 @@ function publicAccountFromPublicKey (publicKey, network) {
  * @param {*} type
  */
 function removeExchangeOffer (mosaicId, type) {
-  const network = store.getters['nodeStore/networkType']
+  const network = store.getters['nodesStoreNew/networkType']
   return RemoveExchangeOfferTransaction.create(
     Deadline.create(10),
     [new RemoveExchangeOffer(mosaicId, type)],
@@ -741,9 +741,10 @@ function removeExchangeOffer (mosaicId, type) {
  * @returns
  */
 function signedTransaction (privateKey, transaction, network) {
-  const currentNode = store.getters['nodeStore/currentNode']
-  const account = getAccountFromPrivateKey(privateKey, currentNode.networkType)
-  return account.sign(transaction, currentNode.generationHash)
+  const networkV = network || store.getters['nodesStoreNew/networkType']
+  const generationHash = store.getters['nodesStoreNew/generationHash']
+  const account = getAccountFromPrivateKey(privateKey, networkV)
+  return account.sign(transaction, generationHash)
 }
 
 /**
@@ -833,7 +834,7 @@ function typeTransactions () {
 }
 
 function transferTransaction (recipient, mosaics = [], message) {
-  const network = store.getters['nodeStore/networkType']
+  const network = store.getters['nodesStoreNew/networkType']
   return TransferTransaction.create(
     Deadline.create(10),
     recipient,

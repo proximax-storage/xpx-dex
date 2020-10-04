@@ -1,5 +1,6 @@
 
 import store from '@/store'
+import Msg from '@/services/messages'
 export class WebsocketService {
   static subscription = []
   /**
@@ -75,9 +76,8 @@ export class WebsocketService {
   static subscribeConfirmed (obj) {
     this.subscription.push(obj.confirmed.subscribe(transaction => {
       if (transaction) {
-        console.log('CONFIRMED', transaction)
-        // store.commit('transactionsStore/CONFIRMED', [transaction])
-        // TransactionServices.saveTransactionServer(transaction.transactionInfo.hash)
+        WebsocketService.showMsgAndChangeStatus(Msg.ws.confirmed, 'success')
+        store.commit('transactionsStore/SET_CONFIRMED', transaction)
       }
     }))
   }
@@ -90,9 +90,12 @@ export class WebsocketService {
    * @memberof TransactionService
    */
   static subscribeUnconfirmedAdded (obj) {
+    // console.log(Msg.ws)
     this.subscription.push(obj.unconfirmedAdded.subscribe(transaction => {
-      console.log('UNCONFIRMED', transaction)
-      // if (transaction) store.commit('transactionsStore/UNCONFIRMED', [transaction])
+      if (transaction) {
+        WebsocketService.showMsgAndChangeStatus(Msg.ws.unconfirmed, 'success')
+        store.commit('transactionsStore/SET_UNCONFIRMED_ADDED', transaction)
+      }
     }))
   }
 
@@ -117,10 +120,28 @@ export class WebsocketService {
    * @memberof TransactionService
    */
   static subscribeStatus (obj) {
-    this.subscription.push(obj.status.subscribe(hash => {
-      console.log('hash', hash)
-      // if (hash) store.commit('transactionsStore/STATUS', hash)
+    this.subscription.push(obj.status.subscribe(transaction => {
+      // console.log('transaction', transaction)
+      if (transaction) {
+        WebsocketService.showMsgAndChangeStatus(transaction.status.split('_').join(' '), 'errorIntense')
+        store.commit('transactionsStore/SET_STATUS', transaction.hash)
+      }
     }))
+  }
+  /**
+ *
+ *
+ * @param {*} msg
+ * @param {*} status
+ * @param {*} color
+ */
+  static showMsgAndChangeStatus (msg, color, status = null) {
+    if (status !== null) store.commit('nodeStore/SET_STATUS_NODE', status)
+    store.commit('SHOW_SNACKBAR', {
+      snackbar: true,
+      text: msg,
+      color: color
+    })
   }
 
   /**

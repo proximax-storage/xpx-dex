@@ -1,4 +1,12 @@
 export default {
+  ws: {
+    aggregateBondedAdded: 'Transaction Aggregate Bonded Added',
+    aggregateBondedRemoved: 'Transaction Aggregate Bonded Removed',
+    cosignatureAdded: 'Cosignature Added',
+    confirmed: 'Transaction confirmed',
+    unconfirmed: 'Transaction send',
+    unconfirmedRemoved: 'Transaction unconfirmed removed'
+  },
   login: {
     success: {
       welcomeToProxiEDI: 'Bienvenido al sistema ProxiEDI'
