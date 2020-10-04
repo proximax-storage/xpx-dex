@@ -46,6 +46,7 @@ function getAllOffer (data, mosaicUpdate = null) {
     console.debug('UPDATE')
     store.commit('offersStore/UPDATE_OFFER_ALL', pas)
   }
+  store.commit('offersStore/UPDATE_OFFER_BOOLEAN')
 }
 function calAverage (data, divisibility = 1) {
   let total = 0

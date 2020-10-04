@@ -16,7 +16,9 @@
                             class="text-capitalize mr-1 font-italic font-weight-bold title  title-size"
                             >Buy
                           </span>
-                          <span class="text-lowercase font-italic font-weight-bold title title-size">
+                          <span
+                            class="text-lowercase font-italic font-weight-bold title title-size"
+                          >
                             offers</span
                           >
                         </v-btn>
@@ -36,10 +38,13 @@
                     <v-row class="mx-auto">
                       <v-col class="ml-0 pl-0" justify="center" align="center">
                         <v-btn color="pin" min-width="200" @click="toggle()" text block mall>
-                          <span class="text-capitalize mr-1 font-italic font-weight-bold title title-size"
+                          <span
+                            class="text-capitalize mr-1 font-italic font-weight-bold title title-size"
                             >Sell
                           </span>
-                          <span class="text-lowercase font-italic font-weight-bold title title-size">
+                          <span
+                            class="text-lowercase font-italic font-weight-bold title title-size"
+                          >
                             offers</span
                           >
                         </v-btn>
@@ -114,7 +119,7 @@ export default {
   computed: {
     ...mapGetters('accountStore', ['currentAccount']),
     ...mapGetters('socketDbStore', ['mosaicsInfOffer', 'mosaicsInfOfferFromIdHex']),
-    ...mapGetters('offersStore', ['offerSelected']),
+    ...mapGetters('offersStore', ['offerSelected', 'updateBoolean', 'offerAll']),
     nameMosaicInfo () {
       return this.offerSelected.tableData.text
     },
@@ -160,6 +165,8 @@ export default {
             this.data.sell.push(item)
             // }
           }
+        } else {
+          this.data.sell = []
         }
         if (data.buy.length > 0) {
           for (let item of data.buy) {
@@ -171,6 +178,8 @@ export default {
             this.data.buy.push(item)
             // }
           }
+        } else {
+          this.data.buy = []
         }
       })
     },
@@ -227,16 +236,22 @@ export default {
         .toHex()
       this.$store.commit('mosaicExchange/SET_DATA_ASSETS', this.dataAssets)
     }
-
-    // this.progress = true
-    // this.$blockchainProvider
-    //   .getExchangeOffersfromId('2dad1fc91904b5af', this.form.active === 'buy' ? 1 : 0)
-    //   .subscribe(offer => {
-    //     this.progress = false
-    //     if (offer && offer.length > 0) {
-    //       this.resultsOffer(offer)
-    //     }
-    //   })
+  },
+  watch: {
+    // updateBoolean (newValue) {
+    //   console.log('loadingInfo', newValue)
+    //   const offerSelected = this.offerAll.find(
+    //     l => l.tableData.info.mosaicIdHex === this.offerSelected.tableData.info.mosaicIdHex
+    //   )
+    //   console.log('offerSelected', offerSelected)
+    //   if (offerSelected) {
+    //     this.resultsOffer(offerSelected.allOffers, this.form.active)
+    //     // this.data.buy = offerSelected.allOffers.buy
+    //     // this.data.sell = offerSelected.allOffers.sell
+    //   } else {
+    //     this.resultsOffer({ buy: [], sell: [] }, this.form.active)
+    //   }
+    // }
   }
 }
 </script>

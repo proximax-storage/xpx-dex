@@ -63,7 +63,7 @@ export const socketDbStore = {
         for (let index = 0; index < dataDb['inserted']; index++) {
           const element = dataDb['changes'][index]
           if (element['new_val']) {
-            console.log('UPDATE inserted', element['new_val'])
+            // console.log('UPDATE inserted', element['new_val'])
             update(element['new_val'])
           }
         }

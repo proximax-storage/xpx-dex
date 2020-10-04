@@ -8,17 +8,23 @@ export const offersStore = {
     offerSelected: [],
     offerAll: [],
     type: ['buy', 'sell'],
-    allOfferGet: []
+    allOfferGet: [],
+    updateBoolean: false
   },
   getters: {
     offerSelected: state => state.offerSelected,
     offerAll: state => state.offerAll,
     offersForPublicKey: state => state.offersForPublicKey,
-    type: state => state.type
+    type: state => state.type,
+    updateBoolean: state => state.updateBoolean
   },
   mutations: {
     SET_OFFER_SELECTED (state, data) {
       state.offerSelected = data
+    },
+    UPDATE_OFFER_BOOLEAN (state) {
+      state.updateBoolean = !state.updateBoolean
+      console.log(state.updateBoolean)
     },
     SET_OFFER_ALL (state, data) {
       state.offerAll = data

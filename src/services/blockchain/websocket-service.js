@@ -136,7 +136,7 @@ export class WebsocketService {
  * @param {*} color
  */
   static showMsgAndChangeStatus (msg, color, status = null) {
-    if (status !== null) store.commit('nodeStore/SET_STATUS_NODE', status)
+    // if (status !== null) store.commit('nodeStore/SET_STATUS_NODE', status)
     store.commit('SHOW_SNACKBAR', {
       snackbar: true,
       text: msg,

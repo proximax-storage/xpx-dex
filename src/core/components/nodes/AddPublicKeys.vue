@@ -149,7 +149,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('nodeStore', ['currentNode']),
+    ...mapGetters('nodeStoreNew', ['currentNode']),
     addPublicKeyBtn () {
       const buttons = this.buttonAddPbk
       buttons.addPbk.disabled = this.publicKeyField === '' || this.currentNode === null
