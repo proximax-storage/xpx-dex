@@ -24,7 +24,6 @@ export const offersStore = {
     },
     UPDATE_OFFER_BOOLEAN (state) {
       state.updateBoolean = !state.updateBoolean
-      console.log(state.updateBoolean)
     },
     SET_OFFER_ALL (state, data) {
       state.offerAll = data

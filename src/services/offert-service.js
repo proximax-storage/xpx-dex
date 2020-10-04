@@ -23,7 +23,6 @@ function getAllOffer (data, mosaicUpdate = null) {
   }
   const priceArray = priceBuy.concat(priceSell)
   const price = calAverage(priceArray, data.info.mosaicInfo[0].mosaicInfo.properties.divisibility)
-  console.log('data', data)
   const pas = {
     tableData: {
       text: data.info.text,
@@ -40,10 +39,10 @@ function getAllOffer (data, mosaicUpdate = null) {
   }
   const pass = store.getters['offersStore/offerAll']
   if (!pass.find(x => x.tableData.text === data.info.text)) {
-    console.debug('PUSH')
+    // console.debug('PUSH')
     store.commit('offersStore/PUSH_OFFER_ALL', pas)
   } else {
-    console.debug('UPDATE')
+    // console.debug('UPDATE')
     store.commit('offersStore/UPDATE_OFFER_ALL', pas)
   }
   store.commit('offersStore/UPDATE_OFFER_BOOLEAN')
