@@ -76,7 +76,6 @@ export default {
   methods: {
     ...mapMutations('offersStore', ['SET_OFFER_SELECTED']),
     searchResult ($event) {
-      console.log('SET_OFFER_SELECTED', $event)
       this.SET_OFFER_SELECTED($event)
       this.$router.push('allOffer').catch(e => {})
     }

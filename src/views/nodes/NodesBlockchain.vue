@@ -88,10 +88,6 @@ export default {
     statusNode: Messages.nodes.success.statusNode.offline
     // searching: false
   }),
-  beforeMount () {
-    console.log(Messages)
-    console.log(NodeService)
-  },
   methods: {
     ...mapMutations('nodesStoreNew', ['ADD_NODES']),
     // addNode () {
@@ -143,9 +139,7 @@ export default {
       }
     },
     splitURLs (item) {
-      console.log('item', item)
       const split = Utilities.splitURL(item)
-      console.log('split', item)
       return split.domainIp
     },
     filterCurrentNodeBlockchain () {

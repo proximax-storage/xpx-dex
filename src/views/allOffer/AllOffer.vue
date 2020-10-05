@@ -156,7 +156,6 @@ export default {
         )
         if (data.sell.length > 0) {
           for (let item of data.sell) {
-            console.log('item', item)
             item.priceForAmount = this.priceForAmount(
               item.initialAmount.compact(),
               this.calcPrice(item.price, Number(amount))

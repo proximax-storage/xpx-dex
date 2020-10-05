@@ -179,7 +179,6 @@ export default {
           network: this.networkSelected.value,
           password: this.passwords.password
         })
-        console.log('response', response)
         const snackbars = {
           snackbar: true,
           text: response.msg,
