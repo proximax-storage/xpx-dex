@@ -50,6 +50,7 @@ export default {
     testNode (node) {
       this.testing = true
       this.nodeInfo.uriSelected = node
+      console.log('inicializo el nodo')
       this.initNodes(this.nodeInfo)
     }
   }

@@ -2,10 +2,11 @@
   <v-container>
     <v-row>
       <v-col cols="12" md="10" class="mx-auto text-center pb-0">
-        <span class="headline font-weight-medium primary--text">{{title}}</span>
+        <span class="headline font-weight-medium primary--text">{{ title }}</span>
       </v-col>
     </v-row>
     <v-row class="mt-5">
+      <!-- {{offerAll}} -->
       <v-col cols="12">
         <v-card-title>
           Filter Assets
@@ -28,13 +29,12 @@
           @click:row="searchResult"
         >
           <template v-slot:item.tableData.twentyFourChange="{ item }">
-            <span
-              v-if="item.tableData.twentyFourChange > 8"
-              class="red--text accent-4"
-            >{{item.tableData.twentyFourChange}}%</span>
-            <span v-else class="green--text darken-1">{{item.tableData.twentyFourChange}}%</span>
+            <span v-if="item.tableData.twentyFourChange > 8" class="red--text accent-4"
+              >{{ item.tableData.twentyFourChange }}%</span
+            >
+            <span v-else class="green--text darken-1">{{ item.tableData.twentyFourChange }}%</span>
           </template>
-          <template v-slot:item.tableData.graphic="{ }">
+          <template v-slot:item.tableData.graphic="{}">
             <sparkline :value="value" :height="height" />
           </template>
         </v-data-table>

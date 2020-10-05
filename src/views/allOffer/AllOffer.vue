@@ -12,9 +12,15 @@
                     <v-row class="mx-auto mr-0 pr-0">
                       <v-col class="mr-0 pr-0" justify="center" align="center">
                         <v-btn color="dim" min-width="200" @click="toggle()" text block>
-                          <span class="font-italic font-weight-bold headline text-capitalize"
-                            >Buy Offer
+                          <span
+                            class="text-capitalize mr-1 font-italic font-weight-bold title  title-size"
+                            >Buy
                           </span>
+                          <span
+                            class="text-lowercase font-italic font-weight-bold title title-size"
+                          >
+                            offers</span
+                          >
                         </v-btn>
                         <v-scroll-y-transition>
                           <v-sheet
@@ -32,8 +38,14 @@
                     <v-row class="mx-auto">
                       <v-col class="ml-0 pl-0" justify="center" align="center">
                         <v-btn color="pin" min-width="200" @click="toggle()" text block mall>
-                          <span class="font-italic font-weight-bold headline text-capitalize"
-                            >Sell Offer</span
+                          <span
+                            class="text-capitalize mr-1 font-italic font-weight-bold title title-size"
+                            >Sell
+                          </span>
+                          <span
+                            class="text-lowercase font-italic font-weight-bold title title-size"
+                          >
+                            offers</span
                           >
                         </v-btn>
                         <v-scroll-y-transition>
@@ -107,7 +119,7 @@ export default {
   computed: {
     ...mapGetters('accountStore', ['currentAccount']),
     ...mapGetters('socketDbStore', ['mosaicsInfOffer', 'mosaicsInfOfferFromIdHex']),
-    ...mapGetters('offersStore', ['offerSelected']),
+    ...mapGetters('offersStore', ['offerSelected', 'updateBoolean', 'offerAll']),
     nameMosaicInfo () {
       return this.offerSelected.tableData.text
     },
@@ -134,8 +146,6 @@ export default {
     //   return Math.ceil(value * amount)
     // },
     calcPrice (price, amount) {
-      // const power = Math.pow(10, 6)
-      // const value = Math.round(price * power) / power
       return price * amount
     },
     resultsOffer (data = [], type = null) {
@@ -146,14 +156,6 @@ export default {
         )
         if (data.sell.length > 0) {
           for (let item of data.sell) {
-            console.log(item.price)
-            console.log('amount', amount)
-            console.log(this.calcPrice(item.price, Number(amount)))
-            // if (item.owner.publicKey !== this.currentAccount.publicKey) {
-            console.log('ss', this.priceForAmount(
-              item.initialAmount.compact(),
-              this.calcPrice(item.price, Number(amount))
-            ))
             item.priceForAmount = this.priceForAmount(
               item.initialAmount.compact(),
               this.calcPrice(item.price, Number(amount))
@@ -162,6 +164,8 @@ export default {
             this.data.sell.push(item)
             // }
           }
+        } else {
+          this.data.sell = []
         }
         if (data.buy.length > 0) {
           for (let item of data.buy) {
@@ -173,6 +177,8 @@ export default {
             this.data.buy.push(item)
             // }
           }
+        } else {
+          this.data.buy = []
         }
       })
     },
@@ -229,16 +235,27 @@ export default {
         .toHex()
       this.$store.commit('mosaicExchange/SET_DATA_ASSETS', this.dataAssets)
     }
-
-    // this.progress = true
-    // this.$blockchainProvider
-    //   .getExchangeOffersfromId('2dad1fc91904b5af', this.form.active === 'buy' ? 1 : 0)
-    //   .subscribe(offer => {
-    //     this.progress = false
-    //     if (offer && offer.length > 0) {
-    //       this.resultsOffer(offer)
-    //     }
-    //   })
+  },
+  watch: {
+    // updateBoolean (newValue) {
+    //   console.log('loadingInfo', newValue)
+    //   const offerSelected = this.offerAll.find(
+    //     l => l.tableData.info.mosaicIdHex === this.offerSelected.tableData.info.mosaicIdHex
+    //   )
+    //   console.log('offerSelected', offerSelected)
+    //   if (offerSelected) {
+    //     this.resultsOffer(offerSelected.allOffers, this.form.active)
+    //     // this.data.buy = offerSelected.allOffers.buy
+    //     // this.data.sell = offerSelected.allOffers.sell
+    //   } else {
+    //     this.resultsOffer({ buy: [], sell: [] }, this.form.active)
+    //   }
+    // }
   }
 }
 </script>
+<style>
+.title-size {
+  font-size: 1.5rem !important;
+}
+</style>

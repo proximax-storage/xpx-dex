@@ -18,7 +18,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <div class="subtitle-1 font-weight-black">Some offert match with your offers</div>
+        <div class="subtitle-1 font-weight-black">Some offer match with your offer</div>
         <!-- <div class="mx-auto caption">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce quis
           varius mauris, non aliquet libero. Pellentesque est eros. pharetra non finibus et,

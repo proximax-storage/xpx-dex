@@ -2,6 +2,9 @@ import store from '@/store'
 import {
   searchInfoMosaics
 } from '@/services/mosaics-service'
+import {
+  update
+} from '@/services/offert-service'
 export const socketDbStore = {
   namespaced: true,
   state: {
@@ -24,7 +27,7 @@ export const socketDbStore = {
     },
     SOCKET_SET_MOSAIC_INFO (state, data) {
       // console.log('SOCKET_SET_MOSAIC_INFO', data)
-      state.mosaicsInfOffer = data
+      // state.mosaicsInfOffer = data
       store.dispatch('socketDbStore/GET_MOSAICS_INFO', data)
     },
     EVENT_SET_MOSAIC_INFO (state, data) {
@@ -38,21 +41,6 @@ export const socketDbStore = {
     EVENT_LOADING_MOSAIC_INFO (state, data) {
       // console.log('EVENT_LOADING_MOSAIC_INFO', data)
       state.loadingInfo = data
-    },
-    PUSH_MOSAICS_INFO_FOR_OFFER (state, data) {
-      if (state.mosaicsInfOffer.length > 0) {
-        const mosaicsInfOffer = state.mosaicsInfOffer.find(x => x.mosaicIdHex === this._vm.$blockchainProvider.getMosaicId(data[0].idMosaic).toHex())
-        if (mosaicsInfOffer) {
-          for (var i in state.mosaicsInfOffer) {
-            if (state.mosaicsInfOffer[i].mosaicIdHex === this._vm.$blockchainProvider.getMosaicId(data[0].idMosaic).toHex()) {
-              state.mosaicsInfOffer[i].mosaicInfo = data
-              break // Stop this loop, we found it!
-            }
-          }
-          state.loadingInfo = false
-          state.mosaicsInfOffer = JSON.parse(JSON.stringify(state.mosaicsInfOffer))
-        }
-      }
     },
     EVENT_INSERTED (state, data) {
       state.inserted = data
@@ -75,11 +63,13 @@ export const socketDbStore = {
         for (let index = 0; index < dataDb['inserted']; index++) {
           const element = dataDb['changes'][index]
           if (element['new_val']) {
-            state.inserted = element['new_val']
+            // console.log('UPDATE inserted', element['new_val'])
+            update(element['new_val'])
           }
         }
       } else if (dataDb['unchanged'] > 0) {
-        state.unchanged = data.dataOffer
+        update(data.dataOffer)
+        // state.unchanged = data.dataOffer
       }
     }
   },
@@ -104,6 +94,16 @@ export const socketDbStore = {
     loadingInfo: state => state.loadingInfo
   },
   actions: {
+    UPDATE_MOSAICS_INFO ({ commit, dispatch, state }, data) {
+      (async () => {
+        const mosaicsInfOffer = state.mosaicsInfOffer.find(x => x.mosaicIdHex === data.mosaicIdHex)
+        if (mosaicsInfOffer) {
+          dispatch('offersStore/GET_EXCHANGE_OFFER', mosaicsInfOffer, { root: true })
+        } else {
+          dispatch('GET_MOSAICS_INFO', [data])
+        }
+      })()
+    },
     GET_MOSAICS_INFO ({ commit, dispatch }, data) {
       (async () => {
         if (data.length > 0) {
@@ -113,8 +113,7 @@ export const socketDbStore = {
               try {
                 const mosaicId = this._vm.$blockchainProvider.getMosaicId(item.mosaicIdHex)
                 const mosaicInfo = await searchInfoMosaics([mosaicId], true)
-                // console.log(mosaicInfo)
-                commit('PUSH_MOSAICS_INFO_FOR_OFFER', mosaicInfo)
+                dispatch('SET_MOSAICS_INFO_FOR_OFFER', mosaicInfo)
               } catch (error) {
               }
             }
@@ -123,6 +122,26 @@ export const socketDbStore = {
           commit('EVENT_LOADING_MOSAIC_INFO', false)
         }
       })()
+    },
+    SET_MOSAICS_INFO_FOR_OFFER ({ commit, dispatch, state }, data) {
+      const mosaicHex = this._vm.$blockchainProvider.getMosaicId(data[0].idMosaic).toHex()
+      const mosaicsInfOffer = state.mosaicsInfOffer.find(x => x.mosaicIdHex === mosaicHex)
+      if (mosaicsInfOffer) {
+        for (var i in state.mosaicsInfOffer) {
+          if (state.mosaicsInfOffer[i].mosaicIdHex === mosaicHex) {
+            state.mosaicsInfOffer[i].mosaicInfo = data
+            dispatch('offersStore/GET_EXCHANGE_OFFER', state.mosaicsInfOffer[i], { root: true })
+            break // Stop this loop, we found it!
+          }
+        }
+        state.loadingInfo = false
+        state.mosaicsInfOffer = JSON.parse(JSON.stringify(state.mosaicsInfOffer))
+      } else {
+        state.loadingInfo = false
+        const mosaicsInf = { mosaicIdHex: mosaicHex, mosaicInfo: data }
+        dispatch('offersStore/GET_EXCHANGE_OFFER', mosaicsInf, { root: true })
+        state.mosaicsInfOffer.push(mosaicsInf)
+      }
     },
     getOffertsTx: ({ commit, state }, params) => {
       params.io.emit('getOffertsTx', params.data)
