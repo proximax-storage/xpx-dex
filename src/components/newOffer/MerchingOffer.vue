@@ -18,7 +18,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <div class="subtitle-1 font-weight-black">Some offer match with your offer</div>
+        <div class="subtitle-1 font-weight-black">A offer match with your offer</div>
         <!-- <div class="mx-auto caption">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce quis
           varius mauris, non aliquet libero. Pellentesque est eros. pharetra non finibus et,
@@ -27,10 +27,9 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col
-        cols="12"
-        class="body-1 font-weight-regular primary--text mt-2"
-      >{{data.length}} Results match with your offers</v-col>
+      <v-col cols="12" class="body-1 font-weight-regular primary--text mt-2"
+        >{{ data.length }} Results match with your offers</v-col
+      >
     </v-row>
     <v-row>
       <v-col cols="12">
@@ -73,28 +72,30 @@
                   <!--Amount you will send -->
                   <v-col sm="12" md="6" col="4" lg="4">
                     <div class="ml-7">
-                      <div class="caption font-italic font-weight-light">Amount you will {{dataOffertActual.type}}:</div>
-                      <div
-                        class="subtitle-1 font-weight-black"
-                      >{{ $generalService.amountFormatter(dataOffertActual.amount, divisibility) }}</div>
+                      <div class="caption font-italic font-weight-light">
+                        Amount you will {{ dataOffertActual.type }}:
+                      </div>
+                      <div class="subtitle-1 font-weight-black">
+                        {{ $generalService.amountFormatter(dataOffertActual.amount, divisibility) }}
+                      </div>
                     </div>
                   </v-col>
                   <!-- Total cost -->
                   <v-col sm="12" md="6" col="6" lg="4">
                     <div class="ml-7">
                       <div class="caption font-italic font-weight-light">Total cost:</div>
-                      <div
-                        class="subtitle-1 font-weight-black"
-                      >{{ $generalService.amountFormatter(dataOffertActual.costTotal, 6) }} XPX</div>
+                      <div class="subtitle-1 font-weight-black">
+                        {{ $generalService.amountFormatter(dataOffertActual.costTotal, 6) }} XPX
+                      </div>
                     </div>
                   </v-col>
                   <!--Amount you will send -->
                   <v-col sm="12" md="4" col="4" lg="4">
                     <div class="ml-7">
                       <div class="caption font-italic font-weight-light">Per Unit:</div>
-                      <div
-                        class="subtitle-1 font-weight-black"
-                      >{{ $generalService.amountFormatter(dataOffertActual.bidPrice, 6) }} XPX</div>
+                      <div class="subtitle-1 font-weight-black">
+                        {{ $generalService.amountFormatter(dataOffertActual.bidPrice, 6) }} XPX
+                      </div>
                     </div>
                   </v-col>
                 </v-row>
@@ -106,7 +107,11 @@
     </v-row>
     <v-row>
       <v-col cols="5" class="ma-0 mx-auto caption d-flex justify-center align-center">
-        <custom-button @action="actionBtn" :align="'center'" :arrayBtn="getArrayBtn"></custom-button>
+        <custom-button
+          @action="actionBtn"
+          :align="'center'"
+          :arrayBtn="getArrayBtn"
+        ></custom-button>
       </v-col>
     </v-row>
   </div>
@@ -148,6 +153,9 @@ export default {
     }
   },
   methods: {
+    calcPrice (price, amount) {
+      return price * amount
+    },
     action (data) {
       this.$emit('actionMerching', data.exchange)
     },
@@ -167,11 +175,13 @@ export default {
             this.divisibility
           )
           const initialCost = this.$generalService.amountFormatter(f.initialCost.compact(), 6)
-          const price = this.$generalService.amountFormatter(f.price, 6)
+          // const price = f.bidPrice
+          // console.log(f.bidPrice)
+          const amount = this.$generalService.addZerosQuantity(this.divisibility, 1)
           return {
             initialQuantity: initialQuantity,
             quantityAvailable: quantityAvailable,
-            price: price,
+            price: this.$generalService.amountFormatter(this.calcPrice(f.price, Number(amount)), 6),
             initialCost: initialCost,
             exchange: f
           }

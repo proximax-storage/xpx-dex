@@ -1,7 +1,7 @@
 {
   "networkSelected": "TEST_NET",
   "infoApp": {
-    "version": "0.1.04",
+    "version": "0.1.06",
     "nameApp": "ProximaX Dex Wallet",
     "pseudonymApp": "dex-wallet"
   },
