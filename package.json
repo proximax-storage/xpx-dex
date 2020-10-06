@@ -16,7 +16,6 @@
     "rethinkdb": "^2.4.2",
     "socket.io-client": "^2.3.0",
     "tsjs-xpx-chain-sdk": "^0.8.0",
-    "tsjs-sirius-suite-wallet-library": "file:../tsjs-sirius-suite-wallet-library",
     "v-money": "^0.8.1",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.5",
