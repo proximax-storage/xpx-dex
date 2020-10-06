@@ -24,7 +24,7 @@
                     <div class="caption font-italic font-weight-light mx-auto">BID Price</div>
                     <div
                       class="caption font-weight-black mx-auto"
-                    >{{ $generalService.amountFormatter(exchange.bitPrice, 6) }} XPX</div>
+                    >{{ $generalService.amountFormatter(exchange.bitPrice, 6) }} xpx</div>
                     <!-- <div class="caption font-weight-black mx-auto">{{ exchange.price }}</div> -->
                   </div>
                   <div class="ma-2 ml-7 mx-auto">
@@ -270,6 +270,7 @@ export default {
         this.dataAssets.configMoney.precision
       )
       this.form.priceForAmount = this.calcPrice(this.exchange.price, amountValue)
+      console.log('this.form.priceForAmount', this.form.priceForAmount)
       const amountx = this.exchange.amount.compact()
       if (amountValue !== 0) {
         if (amountValue <= amountx) {
@@ -330,7 +331,7 @@ export default {
     ...mapGetters('socketDbStore', ['mosaicsInfOfferFromIdHex']),
     ...mapGetters('mosaicExchange', ['exchange', 'dataAssets', 'expire']),
     ...mapGetters('transactionsStore', ['confirmed', 'unconfirmedAdded', 'status']),
-    ...mapGetters('nodesStoreNew', ['currentHeight']),
+    ...mapGetters('nodeStore', ['currentBlock']),
     ...mapState('accountStore', ['currentAccount', 'accountInfoByNameAccount']),
     nameMosaicInfo () {
       let nameMosaic = null

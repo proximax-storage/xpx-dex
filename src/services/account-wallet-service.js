@@ -8,7 +8,6 @@ import {
   searchNamespacesFromAccounts
 } from '@/services/namespace-service'
 import * as CryptoJS from 'crypto-js'
-import { NodeService } from '@/services/blockchain/node-service'
 /**
  *
  *
@@ -393,12 +392,7 @@ function logIn (wallet, password) {
             store.commit('socketDbStore/EVENT_UNCHANGED', null)
             store.commit('socketDbStore/EVENT_INSERTED', null)
             store.commit('offersStore/SET_OFFER_ALL', [])
-            // inicializar Nodo
-            // store.dispatch('nodeStore/initNodes', connectionNodes)
-            // console.log('connectionNodes', connectionNodes)
-
-            store.commit('nodesStoreNew/ADD_NODES', connectionNodes, false, { root: true })
-            NodeService.connect()
+            store.dispatch('nodeStore/initNodes', connectionNodes)
             return true
           }
         } else {

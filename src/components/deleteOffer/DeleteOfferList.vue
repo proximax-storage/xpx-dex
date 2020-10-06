@@ -22,7 +22,6 @@ export default {
         'Assets',
         'Initial Quantity',
         'Quantity Available',
-        'Price (XPX)',
         'Total (XPX)'
       ]
     }
@@ -54,9 +53,6 @@ export default {
         return offerts
       }
     },
-    calcPrice (price, amount) {
-      return price * amount
-    },
     typeBuildData (type = null, data = []) {
       let offerts = []
       if (data.allOffers[type] && data.allOffers[type].length > 0) {
@@ -72,17 +68,14 @@ export default {
               data.tableData.info.mosaicInfo[0].mosaicInfo.properties.divisibility
             )
             const initialCost = this.$generalService.amountFormatter(f.initialCost.compact(), 6)
-            const amount = this.$generalService.addZerosQuantity(
-              data.tableData.info.mosaicInfo[0].mosaicInfo.properties.divisibility,
-              1
-            )
-            const price = this.$generalService.amountFormatter(this.calcPrice(f.price, Number(amount)), 6)
+            console.log(f)
+            // const price = f.bitPrice
             return {
               type: type,
               assets: data.tableData.info.text,
               initialQuantity: initialQuantity,
               quantityAvailable: quantityAvailable,
-              price: price,
+              // price: price,
               initialCost: initialCost,
               exchange: f
             }

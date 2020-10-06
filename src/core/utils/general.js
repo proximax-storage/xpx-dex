@@ -363,14 +363,14 @@ function verifyTypeOfferName (itemType) {
   return nameType
 }
 function showMsgStatusNode () {
-  if (store.getters['nodesStoreNew/nodeStatus'] === 0) {
+  if (store.getters['nodeStore/nodeStatus'] === 0) {
     store.commit('SHOW_SNACKBAR', {
       snackbar: true,
       text: 'The connection node is down',
       color: 'errorIntense'
     })
     return false
-  } else if (store.getters['nodesStoreNew/nodeStatus'] === 1) {
+  } else if (store.getters['nodeStore/nodeStatus'] === 2) {
     store.commit('SHOW_SNACKBAR', {
       snackbar: true,
       text: 'Reconnect node',

@@ -21,15 +21,6 @@ const routes = [
     }
   },
   {
-    path: '/nodes',
-    name: 'nodes',
-    component: () =>
-      import(/* webpackChunkName: "searchOfferts" */ '../views/nodes/NodesBlockchain.vue'),
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
     path: '/newAsset',
     name: 'new Asset',
     component: () =>

@@ -13,6 +13,7 @@ export const onLineStore = {
   },
   actions: {
     setConnected ({ commit }, payload) {
+      console.log('SET_CONNECTED', payload)
       commit('SET_CONNECTED', payload)
     }
   }

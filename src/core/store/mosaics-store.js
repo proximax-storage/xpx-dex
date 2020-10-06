@@ -37,13 +37,12 @@ export const mosaicsStore = {
   },
   mutations: {
     SET_MOSAICS (state, mosaics) {
-      console.log('SET_MOSAICS')
       const filtered = state.mosaicsInfo
       mosaics.forEach(element => {
         const current = state.mosaicsInfo.find(x => x.mosaicId.toHex() === element.mosaicId.toHex())
         if (!current) filtered.push(element)
       })
-      console.log('SET_MOSAICS', filtered)
+
       state.mosaicsInfo = filtered
     },
     SET_MOSAICS_NAMES (state, mosaicsName) {

@@ -225,7 +225,7 @@ function getUnconfirmedAdded (arrayAddress) {
         // console.log('-----------------------UNCONFIRMED_ADDED--------------------------')
         // console.log(transaction.transactionInfo.hash)
         // console.log('------------------------------------------------------------------\n\n')
-        // store.commit('transactionsStore/SET_UNCONFIRMED_ADDED', transaction)
+        store.commit('transactionsStore/SET_UNCONFIRMED_ADDED', transaction)
       })
     })
   }
