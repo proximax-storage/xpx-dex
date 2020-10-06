@@ -27,14 +27,14 @@
               <!-- <account-setting/> -->
               <assets-info />
             </template>
+            <!-- activity -->
+            <!-- <template v-if="tab === 1">
+              <delete-offer-list />
+            </template> -->
             <template v-if="tab === 1">
-              <!-- activity -->
-              <!-- <delete-offer-list /> -->
-            </template>
-            <template v-if="tab === 2">
               <account-setting />
             </template>
-            <template v-if="tab === 3">
+            <template v-if="tab === 2">
               <delete-offer-list />
             </template>
           </v-tab-item>
@@ -55,20 +55,20 @@ export default {
           name: 'Assets',
           index: 0
         },
-        {
-          items: 'activity',
-          name: 'Activity',
-          index: 1
-        },
+        // {
+        //   items: 'activity',
+        //   name: 'Activity',
+        //   index: 1
+        // },
         {
           items: 'info',
           name: 'Info',
-          index: 2
+          index: 1
         },
         {
           items: 'myOffers',
           name: 'My offers',
-          index: 3
+          index: 2
         }
       ]
     }

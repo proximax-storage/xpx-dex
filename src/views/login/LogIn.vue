@@ -3,7 +3,7 @@
     <v-container>
       <template>
         <v-row class="d-flex justify-center align-center mb-8 mt-1">
-          <img :src="require('@/assets/img/logo-dex-color.svg')" alt="logo" height="70" />
+          <img :src="require('@/assets/img/logo-dex-blanco.svg')" alt="logo" height="70" />
         </v-row>
         <v-row class="d-flex justify-center align-center">
           <v-col xl="6" lg="6" md="7" sm="8" xs="12">

@@ -11,10 +11,7 @@
       </div>
     </v-overlay>
     <v-row>
-      <v-col
-        cols="12"
-        class="headline font-weight-regular text-left primary--text"
-      >Create your own asset</v-col>
+      <v-col cols="12" class="headline font-weight-regular text-left primary--text">Create asset</v-col>
     </v-row>
     <!-- Template form-->
     <template v-if="getTempShow === 0">
@@ -88,6 +85,21 @@
                           ></v-text-field>
                         </v-col>
                       </v-row>
+                      <!-- Description asset -->
+                      <v-row>
+                        <v-col cols="12">
+                          <v-text-field
+                            name="description"
+                            class="pt-0 text-right"
+                            v-model="descriptionAsset"
+                            :label="configForm.description.label"
+                            :color="inputStyle"
+                            :rules="[configForm.description.rules.required ,
+                                    configForm.description.rules.max,
+                                    configForm.description.rules.min]"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
                       <!-- File  icon mosaic -->
                       <v-row>
                         <file-icon-mosaic
@@ -97,6 +109,10 @@
                       </v-row>
                     </v-col>
                   </v-row>
+                  <!--Fee-->
+                  <tx-fee :arrayFee="getMaxFeeTxs" />
+                  <rental-fee :rentalFee="getRentalFee" />
+                  <!--Password -->
 
                   <v-row>
                     <v-col
@@ -147,7 +163,7 @@
                             chips
                             multiple
                             dense
-                            label="Mosaic feature"
+                            label="Asset feature"
                           ></v-select>
                           <div class="v-messages">
                             <div
@@ -155,9 +171,9 @@
                               class="v-messages__message text-right subtitle-1 font-italic font-weight-medium text--secondary"
                             >
                               <span class="primary--text">Transferable,</span>
-                              <span class>mosaic can be transferred.</span>
+                              <span class>asset can be transferred.</span>
                               <span class="primary--text">Supply mutable,</span>
-                              <span class>supply can be changed.</span>
+                              <span class>asset supply can be changed.</span>
                               <!-- <span>dos</span>
                               <span>tres</span>-->
                             </div>
@@ -187,7 +203,7 @@
                               style="line-height: 0.80rem;"
                               class="v-messages__message text-right subtitle-1 font-italic font-weight-medium text--secondary"
                             >
-                              <span>Max. rental duration 365 days (1 year).</span>
+                              <span>Maximum. rental duration 365 days (1 year).</span>
                               <!-- <span>dos</span>
                               <span>tres</span>-->
                             </div>
@@ -246,7 +262,7 @@
                               style="line-height: 0.80rem;"
                               class="v-messages__message text-right subtitle-1 font-italic font-weight-medium text--secondary"
                             >
-                              <span>Maximum supply is 900T.</span>
+                              <span>Maximum supply is 9 billion.</span>
                               <!-- <span>dos</span>
                               <span>tres</span>-->
                             </div>
@@ -255,6 +271,10 @@
                       </v-row>
                     </v-col>
                   </v-row>
+                  <!--Fee-->
+                  <tx-fee :arrayFee="getMaxFeeTxs" />
+                  <rental-fee :rentalFee="getRentalFee" />
+                  <!--Password -->
                   <v-row>
                     <v-col
                       cols="12"
@@ -382,14 +402,14 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
-                  <v-row>
+                  <!-- <v-row>
                     <v-col
                       cols="12"
                       class="ma-0 pa-0 mx-auto caption d-flex justify-center align-center"
                     >
                       <v-checkbox v-model="form.checkbox" class="pa-0"></v-checkbox>Accept terms and conditions
                     </v-col>
-                  </v-row>
+                  </v-row>-->
 
                   <v-row>
                     <v-col
@@ -446,6 +466,7 @@ export default {
       dataAllTx: [],
       form: {
         mosaic: {
+          description: null,
           duration: undefined,
           divisibility: 1,
           supplyMutable: false,
@@ -505,6 +526,7 @@ export default {
       divisibility: this.$configForm.divisibility('Divisibility'),
       supply: this.$configForm.supply('Supply'),
       namespaceName: this.$configForm.namespaceName('Name asset'),
+      description: this.$configForm.descriptionAsset('Description asset'),
       durationAsset: this.$configForm.duration('Duration (number of days)'),
       password: this.$configForm.password()
     }
@@ -531,6 +553,15 @@ export default {
         this.form.namespace.name = newValue
       }
     },
+    descriptionAsset: {
+      get () {
+        this.watchComputedDescriptionAssets()
+        return this.form.mosaic.description
+      },
+      set (newValue) {
+        this.form.mosaic.description = newValue
+      }
+    },
     nameToAsset () {
       return this.nameToAssetFuc(
         nameToAssetExample(this.form.namespace.name, this.nameSubNamespace)
@@ -554,7 +585,8 @@ export default {
     arrayBtnFuc () {
       const arrayBtn = this.arrayBtn
       arrayBtn['create'].disabled =
-        !this.isValidIconMosaic || !this.valid || !this.form.checkbox || this.isValidateBalance
+        // !this.isValidIconMosaic || !this.valid || !this.form.checkbox || this.isValidateBalance
+        !this.isValidIconMosaic || !this.valid || this.isValidateBalance
       arrayBtn['create'].loading = this.sendingForm
       arrayBtn['create'].color = 'white'
       arrayBtn['create'].textColor = 'primary--text'
@@ -599,7 +631,9 @@ export default {
           if (
             validBalance(this.rentalFee + this.maxFee) &&
             this.$generalService.showMsgStatusNode()
-          ) { this.typeCreatetxs(this.typeAction()) }
+          ) {
+            this.typeCreatetxs(this.typeAction())
+          }
       }
     },
     actionArrayToBase64Img (data) {
@@ -752,33 +786,40 @@ export default {
            * Metadata
            **/
           // const hash = this.hashMosaicDefinition
-          if (this.txsTransferIcon) {
-            let modifications = [
-              {
-                type: 0,
-                key: 'icon',
-                value: this.hashFromMetadata
-              }
-            ]
-            const modifyMetadataTransactionMoisac = buildModifyMetadataTransactionMosaic(
-              this.mosaic.mosaicId,
-              modifications
-            ).transaction
-
-            // this.hashMosaicDefinition = null
-            if (!calcMaxFee) {
-              // console.log('CASE #1')
-              // announce Tx
-
-              this.pushAllDataTx(action)
-              this.announceTx(modifyMetadataTransactionMoisac, action)
-            } else {
-              // calcMaxFee
-              return modifyMetadataTransactionMoisac.maxFee.compact()
+          // if (this.txsTransferIcon) {
+          let modifications = [
+            {
+              type: 0,
+              key: 'desc',
+              value: this.form.mosaic.description
             }
-          } else {
-            return 0
+          ]
+          if (this.txsTransferIcon) {
+            modifications.push({
+              type: 0,
+              key: 'icon',
+              value: this.hashFromMetadata
+            })
           }
+          const modifyMetadataTransactionMoisac = buildModifyMetadataTransactionMosaic(
+            this.mosaic.mosaicId,
+            modifications
+          ).transaction
+
+          // this.hashMosaicDefinition = null
+          if (!calcMaxFee) {
+            // console.log('CASE #1')
+            // announce Tx
+
+            this.pushAllDataTx(action)
+            this.announceTx(modifyMetadataTransactionMoisac, action)
+          } else {
+            // calcMaxFee
+            return modifyMetadataTransactionMoisac.maxFee.compact()
+          }
+          // } else {
+          //   return 0
+          // }
           break
         case 3:
           /**
@@ -838,7 +879,7 @@ export default {
       if (
         transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicDefinition)
       ) {
-        this.dataTx.push({ hash: this.hashMosaicDefinition })
+        this.dataTx.push({ hash: this.hashMosaicDefinition, name: 'Mosaic Definition' })
         this.hashMosaicDefinition = null
         this.validateLoadingTX(true, true)
         // console.log('hash Mosaic Definition...')
@@ -854,7 +895,7 @@ export default {
       if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicAlias)) {
         this.validateLoadingTX(true, false, true)
         setTimeout(() => {
-          this.dataTx.push({ hash: this.hashMosaicAlias })
+          this.dataTx.push({ hash: this.hashMosaicAlias, name: 'Mosaic Alias' })
           this.hashMosaicAlias = null
         }, 1000)
         // console.log('hash Mosaic Alias...')
@@ -862,7 +903,7 @@ export default {
       }
       if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicMetadata)) {
         setTimeout(() => {
-          this.dataTx.push({ hash: this.hashMosaicMetadata })
+          this.dataTx.push({ hash: this.hashMosaicMetadata, name: 'Mosaic Metadata' })
           this.hashMosaicMetadata = null
         }, 1000)
         // console.log('hash Mosaic Metadata...')
@@ -885,6 +926,9 @@ export default {
     },
     watchComputedNamespaceName () {
       this.validNamespaceName()
+    },
+    watchComputedDescriptionAssets () {
+      this.getMaxFiiTx([1])
     }
   },
   watch: {

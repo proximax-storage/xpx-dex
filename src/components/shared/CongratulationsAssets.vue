@@ -8,21 +8,21 @@
       <div class="ma-2 ml-4 mx-auto">
         <div
           class="caption font-weight-black pt-3"
-        >You trasaction has beet successfully registered into blockchain.</div>
+        >Your transaction has been successfully registered into blockchain.</div>
       </div>
       <template>
         <div class="ma-2 pt-4 ml-4 mx-auto" v-for="i in txInfo" v-bind:key="i.hash">
-          <span class="body-1 font-weight-black">Hash :</span>
+          <span class="body-1 font-weight-black">{{i.name}} Hash :</span>
           <span class>{{ i.hash }}</span>
         </div>
       </template>
-      <div class="ma-2 pt-4 ml-4 mx-auto">
+      <!-- <div class="ma-2 pt-4 ml-4 mx-auto">
         <p class="caption">
           Disclosure: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce quis varius
           mauris, non aliquet libero. Pellentesque est eros. pharetra non finibus et, fermentum sed
           felis. Duis portito. purus a suscipit consequat
         </p>
-      </div>
+      </div> -->
     </v-col>
     <v-col cols="6" class="caption d-flex">
       <custom-buttons @action="action" :align="'start'" :arrayBtn="getArrayBtn[0]"></custom-buttons>

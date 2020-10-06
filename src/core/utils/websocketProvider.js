@@ -15,7 +15,7 @@ var messages = {
   'aggregateBondedRemoved': 'Transaction Aggregate Bonded Removed',
   'cosignatureAdded': 'Cosignature Added',
   'confirmed': 'Transaction confirmed',
-  'unconfirmed': 'Transaction unconfirmed',
+  'unconfirmed': 'Transaction send',
   'unconfirmedRemoved': 'Transaction unconfirmed removed'
 }
 
@@ -225,7 +225,7 @@ function getUnconfirmedAdded (arrayAddress) {
         // console.log('-----------------------UNCONFIRMED_ADDED--------------------------')
         // console.log(transaction.transactionInfo.hash)
         // console.log('------------------------------------------------------------------\n\n')
-        store.commit('transactionsStore/SET_UNCONFIRMED_ADDED', transaction)
+        // store.commit('transactionsStore/SET_UNCONFIRMED_ADDED', transaction)
       })
     })
   }
@@ -241,7 +241,7 @@ function getUnconfirmedRemoved (arrayAddress) {
     // console.log('MONITOR ACCOUNTS --->', arrayAddress)
     arrayAddress.forEach(address => {
       connector.unconfirmedRemoved(address).subscribe(hash => {
-        showMsgAndChangeStatus(messages.unconfirmedRemoved, 'success')
+        // showMsgAndChangeStatus(messages.unconfirmedRemoved, 'success')
         // console.log('-----------------------UNCONFIRMED_REMOVED--------------------------')
         // console.log(hash)
         // console.log('------------------------------------------------------------------\n\n')
@@ -350,6 +350,7 @@ function showMsgAndChangeStatus (msg, color, status = null) {
 }
 
 export {
+  reconnect,
   closeConnection,
   selectNode,
   monitorAllChannels,

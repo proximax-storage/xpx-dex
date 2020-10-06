@@ -15,6 +15,14 @@ function amountFormatter (amount, divisibility = 6) {
   })
 }
 
+function formValue (cant, divisibility = 6) {
+  return parseFloat(cant.toString().replace(/,/g, '')).toFixed(divisibility)
+}
+
+function formValueParse (cant, price, divisibility = 6) {
+  return quantityStringToInt(String(formValue(cant * price, divisibility)))
+}
+
 /**
  *
  *
@@ -122,7 +130,20 @@ function calculateDurationExpire (durationCompact) {
   const response = days + ' days, ' + hrs + ' Hrs, ' + mnts + ' Minutes, ' + seconds + ' Seconds'
   return response
 }
-
+/**
+ *  Invert type offert
+ * @param {*} durationCompact
+ */
+function typeInvert (type = null) {
+  let typeV = null
+  if (type === 'buy') {
+    typeV = 'sell'
+  }
+  if (type === 'sell') {
+    typeV = 'buy'
+  }
+  return typeV
+}
 /**
  *
  *
@@ -342,14 +363,14 @@ function verifyTypeOfferName (itemType) {
   return nameType
 }
 function showMsgStatusNode () {
-  if (store.getters['nodeStore/nodeStatus'] === 0) {
+  if (store.getters['nodesStoreNew/nodeStatus'] === 0) {
     store.commit('SHOW_SNACKBAR', {
       snackbar: true,
       text: 'The connection node is down',
       color: 'errorIntense'
     })
     return false
-  } else if (store.getters['nodeStore/nodeStatus'] === 2) {
+  } else if (store.getters['nodesStoreNew/nodeStatus'] === 1) {
     store.commit('SHOW_SNACKBAR', {
       snackbar: true,
       text: 'Reconnect node',
@@ -361,6 +382,7 @@ function showMsgStatusNode () {
   }
 }
 export {
+  addZerosQuantity,
   amountFormatter,
   priceFormatter,
   buildBoxServices,
@@ -380,5 +402,8 @@ export {
   validateMatch,
   validateZero,
   verifyTypeOfferName,
-  showMsgStatusNode
+  showMsgStatusNode,
+  formValue,
+  formValueParse,
+  typeInvert
 }

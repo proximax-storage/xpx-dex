@@ -12,10 +12,22 @@
                     <v-row class="mx-auto mr-0 pr-0">
                       <v-col class="mr-0 pr-0" justify="center" align="center">
                         <v-btn color="dim" min-width="200" @click="toggle()" text block>
-                          <span class="font-italic font-weight-bold headline text-capitalize">Buy</span>
+                          <span
+                            class="text-capitalize mr-1 font-italic font-weight-bold title  title-size"
+                            >Buy
+                          </span>
+                          <span
+                            class="text-lowercase font-italic font-weight-bold title title-size"
+                          >
+                            offers</span
+                          >
                         </v-btn>
                         <v-scroll-y-transition>
-                          <v-sheet height="4" tile :color="active ? 'dim' : 'grey lighten-2'"></v-sheet>
+                          <v-sheet
+                            height="4"
+                            tile
+                            :color="active ? 'dim' : 'grey lighten-2'"
+                          ></v-sheet>
                         </v-scroll-y-transition>
                       </v-col>
                     </v-row>
@@ -26,10 +38,22 @@
                     <v-row class="mx-auto">
                       <v-col class="ml-0 pl-0" justify="center" align="center">
                         <v-btn color="pin" min-width="200" @click="toggle()" text block mall>
-                          <span class="font-italic font-weight-bold headline text-capitalize">Sell</span>
+                          <span
+                            class="text-capitalize mr-1 font-italic font-weight-bold title title-size"
+                            >Sell
+                          </span>
+                          <span
+                            class="text-lowercase font-italic font-weight-bold title title-size"
+                          >
+                            offers</span
+                          >
                         </v-btn>
                         <v-scroll-y-transition>
-                          <v-sheet height="4" tile :color="active ? 'pin' : 'grey lighten-2'"></v-sheet>
+                          <v-sheet
+                            height="4"
+                            tile
+                            :color="active ? 'pin' : 'grey lighten-2'"
+                          ></v-sheet>
                         </v-scroll-y-transition>
                       </v-col>
                     </v-row>
@@ -95,7 +119,7 @@ export default {
   computed: {
     ...mapGetters('accountStore', ['currentAccount']),
     ...mapGetters('socketDbStore', ['mosaicsInfOffer', 'mosaicsInfOfferFromIdHex']),
-    ...mapGetters('offersStore', ['offerSelected']),
+    ...mapGetters('offersStore', ['offerSelected', 'updateBoolean', 'offerAll']),
     nameMosaicInfo () {
       return this.offerSelected.tableData.text
     },
@@ -116,23 +140,60 @@ export default {
       if (mosaic) properties = mosaic[0].mosaicInfo.properties
       return properties
     },
+    // calcPrice (price, amount) {
+    //   const power = Math.pow(10, 6)
+    //   const value = Math.round(price * power) / power
+    //   return Math.ceil(value * amount)
+    // },
+    calcPrice (price, amount) {
+      return price * amount
+    },
     resultsOffer (data = [], type = null) {
-      if (data.sell.length > 0) {
-        for (let item of data.sell) {
-          if (item.owner.publicKey !== this.currentAccount.publicKey) {
-            item.priceForAmount = item.initialCost.compact()
+      setTimeout(() => {
+        const amount = this.$generalService.addZerosQuantity(
+          this.dataAssets.configMoney.precision,
+          1
+        )
+        if (data.sell.length > 0) {
+          for (let item of data.sell) {
+            item.priceForAmount = this.priceForAmount(
+              item.initialAmount.compact(),
+              this.calcPrice(item.price, Number(amount))
+            )
+            item.bitPrice = this.calcPrice(item.price, Number(amount))
             this.data.sell.push(item)
+            // }
           }
+        } else {
+          this.data.sell = []
         }
-      }
-      if (data.buy.length > 0) {
-        for (let item of data.buy) {
-          if (item.owner.publicKey !== this.currentAccount.publicKey) {
-            item.priceForAmount = item.initialCost.compact()
+        if (data.buy.length > 0) {
+          for (let item of data.buy) {
+            item.priceForAmount = this.priceForAmount(
+              item.initialAmount.compact(),
+              this.calcPrice(item.price, Number(amount))
+            )
+            item.bitPrice = this.calcPrice(item.price, Number(amount))
             this.data.buy.push(item)
+            // }
           }
+        } else {
+          this.data.buy = []
         }
-      }
+      })
+    },
+    priceForAmount (amount, priceV) {
+      const initialAmount = this.$generalService.amountFormatter(
+        amount,
+        this.propertiesMosaic.divisibility
+      )
+      const price = this.$generalService.amountFormatter(priceV)
+      const calPrice = parseFloat(
+        price.replace(/,/g, '') * initialAmount.replace(/,/g, '')
+      ).toFixed(6)
+      return String(calPrice)
+        .replace(/,/g, '')
+        .replace(/\./g, '')
     },
     ownOffer () {
       if (this.$store.getters['accountStore/isLogged']) {
@@ -174,16 +235,27 @@ export default {
         .toHex()
       this.$store.commit('mosaicExchange/SET_DATA_ASSETS', this.dataAssets)
     }
-
-    // this.progress = true
-    // this.$blockchainProvider
-    //   .getExchangeOffersfromId('2dad1fc91904b5af', this.form.active === 'buy' ? 1 : 0)
-    //   .subscribe(offer => {
-    //     this.progress = false
-    //     if (offer && offer.length > 0) {
-    //       this.resultsOffer(offer)
-    //     }
-    //   })
+  },
+  watch: {
+    // updateBoolean (newValue) {
+    //   console.log('loadingInfo', newValue)
+    //   const offerSelected = this.offerAll.find(
+    //     l => l.tableData.info.mosaicIdHex === this.offerSelected.tableData.info.mosaicIdHex
+    //   )
+    //   console.log('offerSelected', offerSelected)
+    //   if (offerSelected) {
+    //     this.resultsOffer(offerSelected.allOffers, this.form.active)
+    //     // this.data.buy = offerSelected.allOffers.buy
+    //     // this.data.sell = offerSelected.allOffers.sell
+    //   } else {
+    //     this.resultsOffer({ buy: [], sell: [] }, this.form.active)
+    //   }
+    // }
   }
 }
 </script>
+<style>
+.title-size {
+  font-size: 1.5rem !important;
+}
+</style>

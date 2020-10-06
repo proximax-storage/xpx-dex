@@ -9,7 +9,16 @@
       color="leveint"
     >
       <v-toolbar-title>
-        <img :src="require('@/assets/img/logo-dex-color.svg')" alt="logo" height="35" />
+        <img
+          class="pt-1"
+          :src="require('@/assets/img/logo-dex-color.svg')"
+          alt="logo"
+          height="35"
+        />
+      </v-toolbar-title>
+
+      <v-toolbar-title class="caption font-weight-regular pt-2">
+        v{{$store.getters.version}}
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <!-- <v-btn icon color="primary" @click="activity('myWallet', 0)">
@@ -31,21 +40,17 @@
             v-if="item.type === 'icon-group'"
           >
             <v-btn text small :value="item.action" @click="actions(item.action)" :to="item.action">
-              <div v-if="!responsive" class="font-weight-bold text-capitalize">{{ item.title }}</div>
+              <div v-if="!responsive" class="font-weight-bold text-capitalize">
+                {{ item.title }}
+              </div>
               <div v-if="responsive">
                 <v-icon>{{ item.icon }}</v-icon>
               </div>
             </v-btn>
           </v-btn-toggle>
 
-          <div v-if="(item.type === 'menu') ||(item.type === 'menuIcon')">
-            <v-menu
-              transition="slide-y-transition"
-              bottom
-              right
-              offset-y
-              max-width="200"
-            >
+          <div v-if="item.type === 'menu' || item.type === 'menuIcon'">
+            <v-menu transition="slide-y-transition" bottom right offset-y max-width="200">
               <template v-slot:activator="{ on }" v-if="item.type === 'menuIcon'">
                 <v-btn text small color="primary" v-on="on">
                   <div v-if="loadingInfo">
@@ -140,7 +145,7 @@ export default {
       {
         icon: 'mdi-storefront',
         type: 'icon-group',
-        title: 'New assets',
+        title: 'Create Asset',
         class: 'primary white-text',
         action: 'newAsset',
         viewLogged: true,
@@ -150,7 +155,7 @@ export default {
       {
         icon: 'mdi-storefront',
         type: 'icon-group',
-        title: 'New offerts',
+        title: 'Create Offer',
         class: 'primary white-text',
         action: 'newOffer',
         viewLogged: true,
@@ -161,7 +166,7 @@ export default {
       {
         icon: 'mdi-storefront',
         type: 'icon-group',
-        title: 'Search offerts',
+        title: 'Search',
         class: 'primary white-text',
         action: 'searchOfferts',
         viewLogged: true,

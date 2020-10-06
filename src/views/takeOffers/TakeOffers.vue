@@ -5,7 +5,7 @@
         cols="12"
         class="headline font-weight-regular text-left"
         v-bind:class="[typeOfferColorText]"
-      >Take this offer - {{ dataAssets.form.active }} transaction</v-col>
+      >Take this offer - {{ $generalService.typeInvert(dataAssets.form.active) }} transaction</v-col>
     </v-row>
     <v-row>
       <v-col sm="7" md="7" lg="9" col="9" class="pt-0">
@@ -24,13 +24,13 @@
                     <div class="caption font-italic font-weight-light mx-auto">BID Price</div>
                     <div
                       class="caption font-weight-black mx-auto"
-                    >{{ $generalService.amountFormatter(exchange.price, 6) }} pxp</div>
+                    >{{ $generalService.amountFormatter(exchange.bitPrice, 6) }} XPX</div>
                     <!-- <div class="caption font-weight-black mx-auto">{{ exchange.price }}</div> -->
                   </div>
                   <div class="ma-2 ml-7 mx-auto">
                     <div
                       class="caption font-italic font-weight-light"
-                    >Quantity you will send to selle</div>
+                    >Quantity you will send to seller</div>
                     <div
                       class="caption font-weight-black"
                     >{{ $generalService.amountFormatter(form.priceForAmount, 6) }} XPX</div>
@@ -45,13 +45,13 @@
                     class="subtitle-1 pt-0 font-weight-regular text-left primary--text"
                   >My credit transaction</v-col>
                   <div class="ma-2 ml-7">
-                    <div class="caption font-italic font-weight-light">Asset selectd</div>
+                    <div class="caption font-italic font-weight-light">Asset Selected</div>
                     <div class="caption font-weight-black">{{ nameMosaicInfo }}</div>
                   </div>
                   <div class="ma-2 ml-7">
                     <div
                       class="caption font-italic font-weight-light"
-                    >Amount you will receave from seller</div>
+                    >Amount you will recieved from seller</div>
                     <div class="caption font-weight-black">
                       <v-text-field
                         @keyup="validateQuantityAmount()"
@@ -75,18 +75,19 @@
               </v-col>
               <v-col cols="12" class="caption font-italic font-weight-light">
                 <!-- <div > -->
-                  <span class="font-weight-black">Offer expire in : </span>{{expireOffer}}
-                  <!-- </div> -->
+                <span class="font-weight-black">Offer expire in :</span>
+                {{expireOffer}}
+                <!-- </div> -->
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="10" class="mx-auto caption d-flex justify-center align-center">
+              <!-- <v-col cols="10" class="mx-auto caption d-flex justify-center align-center">
                 <p>
                   Disclosure: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce quis
                   varius mauris, non aliquet libero. Pellentesque est eros. pharetra non finibus et,
                   fermentum sed felis. Duis portito. purus a suscipit consequat
                 </p>
-              </v-col>
+              </v-col> -->
               <v-col
                 cols="10"
                 class="ma-0 mx-auto caption d-flex justify-center align-center"
@@ -173,7 +174,7 @@ export default {
     if (this.dataAssets) {
       this.typeOfferColorFuc(this.dataAssets.form.active)
       this.form.amount = this.exchange.amount.compact()
-      this.form.priceForAmount = this.exchange.priceForAmount
+      this.form.priceForAmount = this.calcPrice(this.exchange.price, this.exchange.amount.compact())
     }
     this.configForm = {
       amount: this.$configForm.amount('Quantity'),
@@ -202,6 +203,7 @@ export default {
               this.type,
               this.exchange.owner
             )
+            returnBuild.transaction.version = 2
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
               const signedTransaction = this.$blockchainProvider.signedTransaction(
@@ -232,6 +234,7 @@ export default {
           }
           break
         case 'cancel':
+          this.$router.push({ path: '/searchOfferts' })
           // this.showPrivateKey = !this.showPrivateKey
           break
       }
@@ -241,10 +244,15 @@ export default {
       // this.$refs['password'].reset()
     },
     calcPrice (price, amount) {
-      const power = Math.pow(10, 6)
-      const value = Math.round(price * power) / power
-      return Math.ceil(value * amount)
+      // const power = Math.pow(10, 6)
+      // const value = Math.round(price * power) / power
+      return price * amount
     },
+    // calcPrice (price, amount) {
+    //   const power = Math.pow(10, 6)
+    //   const value = Math.round(price * power) / power
+    //   return Math.ceil(value * amount)
+    // },
     calcExpire (block) {
       const rest = block - this.expire.blockHeight
       const expireIn = this.expire.duration - rest
@@ -262,7 +270,6 @@ export default {
         this.dataAssets.configMoney.precision
       )
       this.form.priceForAmount = this.calcPrice(this.exchange.price, amountValue)
-      // console.log(this.form.priceForAmount)
       const amountx = this.exchange.amount.compact()
       if (amountValue !== 0) {
         if (amountValue <= amountx) {
@@ -323,7 +330,7 @@ export default {
     ...mapGetters('socketDbStore', ['mosaicsInfOfferFromIdHex']),
     ...mapGetters('mosaicExchange', ['exchange', 'dataAssets', 'expire']),
     ...mapGetters('transactionsStore', ['confirmed', 'unconfirmedAdded', 'status']),
-    ...mapGetters('nodeStore', ['currentBlock']),
+    ...mapGetters('nodesStoreNew', ['currentHeight']),
     ...mapState('accountStore', ['currentAccount', 'accountInfoByNameAccount']),
     nameMosaicInfo () {
       let nameMosaic = null

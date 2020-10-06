@@ -3,7 +3,7 @@
     <v-col
       cols="10"
       class="ma-0 mx-auto body-2 d-flex justify-center align-center"
-    >This transaction will have a fee: {{fee}} XPX</v-col>
+    >Transaction fee: {{fee}} XPX</v-col>
   </v-row>
 </template>
 <script>

@@ -31,7 +31,9 @@ import {
 import {
   nodeStore,
   transactionsStore,
-  coingeckoStore
+  coingeckoStore,
+  onLineStore,
+  nodesStoreNew
 } from '@/core/store/'
 
 Vue.use(Vuex)
@@ -122,6 +124,8 @@ export default new Vuex.Store({
     socketDbStore,
     mosaicExchange,
     socketBcStore,
-    offersStore
+    offersStore,
+    onLineStore,
+    nodesStoreNew
   }
 })

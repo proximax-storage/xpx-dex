@@ -2,7 +2,7 @@
   <v-container class="fill-height">
     <v-container>
       <v-row class="d-flex justify-center align-center mb-8 mt-1">
-        <img :src="require('@/assets/img/logo-dex-color.svg')" alt="logo" height="70" />
+        <img :src="require('@/assets/img/logo-dex-blanco.svg')" alt="logo" height="70" />
       </v-row>
       <v-row class="d-flex justify-center align-center">
         <v-col xl="6" lg="6" md="7" sm="8" xs="12">
@@ -35,8 +35,8 @@
               </v-row>
             </v-card-text>
             <v-card-actions class="white pa-0">
-              <v-row class>
-                <v-col class="d-flex justify-start darkness--text">I'm already have a account</v-col>
+              <v-row class =" ml-2">
+                <v-col class="d-flex justify-start darkness--text">  I already have an account</v-col>
                 <v-col class="d-flex justify-end">
                   <v-btn text small color="primary" class="font-weight-bold pt-1 pb-1 mr-4">Sign In</v-btn>
                 </v-col>

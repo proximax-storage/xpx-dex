@@ -4,7 +4,7 @@
   "rules": {
     "prettier / prettier": ["error"],
     "space-before-function-paren": [
-      false,
+      true,
       { "anonymous": "always", "named": "never", "asyncArrow": "always" }
     ]
   }

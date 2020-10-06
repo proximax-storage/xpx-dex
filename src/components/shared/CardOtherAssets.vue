@@ -7,7 +7,7 @@
           <v-sheet elevation="2" color="leve" class="mb-2">
             <v-row class="ma-1">
               <v-col cols="8" class="pr-0 pt-1 pb-0 pl-1">
-                <span class="font-weight-bold">zombie.boe</span>
+                <span class="font-weight-bold">test.test1</span>
                 <br />
                 <span>= 0.23456 xpx</span>
               </v-col>
@@ -19,7 +19,7 @@
           <v-sheet elevation="2" color="leve" class="mb-2">
             <v-row class="ma-1">
               <v-col cols="8" class="pr-0 pt-1 pb-1 pl-1">
-                <span class="font-weight-bold">zombie.boe</span>
+                <span class="font-weight-bold">test.test2</span>
                 <br />
                 <span>= 0.23456 xpx</span>
               </v-col>

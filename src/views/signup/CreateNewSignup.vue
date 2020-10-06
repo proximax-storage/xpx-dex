@@ -2,7 +2,7 @@
   <v-container class="fill-height">
     <v-container>
       <v-row class="d-flex justify-center align-center mb-8 mt-1">
-        <img :src="require('@/assets/img/logo-dex-color.svg')" alt="logo" height="70" />
+        <img :src="require('@/assets/img/logo-dex-blanco.svg')" alt="logo" height="70" />
       </v-row>
       <template v-if="!dataWalletCreated">
         <v-row class="d-flex justify-center align-center">
@@ -20,9 +20,8 @@
                         <!-- Wallet name -->
                         <v-col cols="12">
                           <v-text-field
+                            v-on:keyup="validateWalletName"
                             v-model.trim="accountName"
-                            :loading="searchingWalletName"
-                            :disabled="searchingWalletName"
                             :label="configForm.accountName.label"
                             :minlength="configForm.accountName.min"
                             :maxlength="configForm.accountName.max"
@@ -119,13 +118,11 @@ export default {
       configForm: null,
       walletIsRepeat: true,
       passwords: { password: '', confirmPassword: '' },
-      searchingWalletName: false,
       sendingForm: false,
       arrayBtn: null,
       dataWalletCreated: null,
       networkSelected: null,
-      inputStyle: 'inputStyle',
-      timeGetvalidateWalletName: null
+      inputStyle: 'inputStyle'
     }
   },
   beforeMount () {
@@ -145,7 +142,7 @@ export default {
     getArrayBtn () {
       const arrayBtn = this.arrayBtn
       arrayBtn['clear'].disabled = this.sendingForm
-      arrayBtn['create'].disabled = !this.valid || this.sendingForm || this.searchingWalletName
+      arrayBtn['create'].disabled = !this.valid || this.sendingForm
       arrayBtn['create'].loading = this.sendingForm
       return arrayBtn
     }
@@ -165,7 +162,6 @@ export default {
     },
     clear () {
       this.walletIsRepeat = true
-      this.searchingWalletName = false
       this.sendingForm = false
       this.$refs.form.reset()
     },
@@ -206,29 +202,15 @@ export default {
     validateWalletName () {
       const usr = this.accountName
       if (usr && usr !== '' && usr.length >= this.configForm.accountName.min) {
-        this.searchingWalletName = true
-        setTimeout(() => {
-          if (getWalletByName(usr, this.networkSelected.value)) {
-            this.searchingWalletName = false
-            this.walletIsRepeat = `${usr} already exists, try another wallet name`
-            return
-          }
-
-          this.walletIsRepeat = true
-          this.searchingWalletName = false
-        }, 500)
+        if (getWalletByName(usr, this.networkSelected.value)) {
+          this.walletIsRepeat = `${usr} already exists, try another wallet name`
+          return
+        }
+        this.walletIsRepeat = true
       }
     },
     isMatch (value1, value2, nameValidation = '') {
       return this.$configForm.isMatch(value1, value2, nameValidation)
-    }
-  },
-  watch: {
-    accountName (newVal) {
-      if (this.timeGetvalidateWalletName) clearTimeout(this.timeGetvalidateWalletName)
-      this.timeGetvalidateWalletName = setTimeout(() => {
-        this.validateWalletName()
-      }, 1000)
     }
   }
 }
