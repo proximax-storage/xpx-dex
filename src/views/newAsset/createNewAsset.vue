@@ -1,7 +1,7 @@
 <template >
   <!-- <div>CREATE NEW ASSETS</div> -->
   <v-col class="pa-3">
-    <v-overlay :value="showLoading && getTempShow===0" opacity="0.9" color="white">
+    <v-overlay :value="showLoading && getTempShow === 0" opacity="0.9" color="white">
       <div v-if="showLoading">
         <progress-status
           :showLoading="showLoading"
@@ -11,7 +11,9 @@
       </div>
     </v-overlay>
     <v-row>
-      <v-col cols="12" class="headline font-weight-regular text-left primary--text">Create asset</v-col>
+      <v-col cols="12" class="headline font-weight-regular text-left primary--text"
+        >Create asset</v-col
+      >
     </v-row>
     <!-- Template form-->
     <template v-if="getTempShow === 0">
@@ -59,7 +61,9 @@
                           :src="base64Img"
                         />
                         <span v-if="!nameToAsset">Asset</span>
-                        <span class="body-2 font-weight-black" v-if="nameToAsset">{{nameToAsset}}</span>
+                        <span class="body-2 font-weight-black" v-if="nameToAsset">{{
+                          nameToAsset
+                        }}</span>
                       </div>
                     </v-col>
                   </v-row>
@@ -78,10 +82,12 @@
                             v-model="namespaceName"
                             :label="configForm.namespaceName.label"
                             :color="inputStyle"
-                            :rules="[configForm.namespaceName.rules.required ,
-                                    configForm.namespaceName.rules.max,
-                                    configForm.namespaceName.rules.min,
-                                    isValidNamespaceName]"
+                            :rules="[
+                              configForm.namespaceName.rules.required,
+                              configForm.namespaceName.rules.max,
+                              configForm.namespaceName.rules.min,
+                              isValidNamespaceName
+                            ]"
                           ></v-text-field>
                         </v-col>
                       </v-row>
@@ -94,9 +100,11 @@
                             v-model="descriptionAsset"
                             :label="configForm.description.label"
                             :color="inputStyle"
-                            :rules="[configForm.description.rules.required ,
-                                    configForm.description.rules.max,
-                                    configForm.description.rules.min]"
+                            :rules="[
+                              configForm.description.rules.required,
+                              configForm.description.rules.max,
+                              configForm.description.rules.min
+                            ]"
                           ></v-text-field>
                         </v-col>
                       </v-row>
@@ -124,7 +132,8 @@
                         color="primary"
                         class="pl-8 pr-8 mt-2 body-2 mx-auto white--text"
                         @click="newsTep(2)"
-                      >Next</v-btn>
+                        >Next</v-btn
+                      >
                     </v-col>
                   </v-row>
                 </v-stepper-content>
@@ -142,7 +151,9 @@
                           :src="base64Img"
                         />
                         <span v-if="!nameToAsset">Asset</span>
-                        <span class="body-2 font-weight-black" v-if="nameToAsset">{{nameToAsset}}</span>
+                        <span class="body-2 font-weight-black" v-if="nameToAsset">{{
+                          nameToAsset
+                        }}</span>
                       </div>
                     </v-col>
                     <v-col cols="6" class="mx-auto d-flex justify-end align-center">
@@ -157,7 +168,10 @@
                           <v-select
                             v-model="moisaicFeature"
                             @change="triggerMoisaicFeature($event)"
-                            :items="[{text: 'Transferable', value:'transferable'}, {text: 'Supply mutable', value:'supplyMutable'}]"
+                            :items="[
+                              { text: 'Transferable', value: 'transferable' },
+                              { text: 'Supply mutable', value: 'supplyMutable' }
+                            ]"
                             item-text="text"
                             item-value="value"
                             chips
@@ -193,10 +207,10 @@
                             :label="configForm.durationAsset.label"
                             :color="inputStyle"
                             :rules="[
-                                    configForm.durationAsset.rules.required,
-                                    configForm.durationAsset.rules.min,
-                                    configForm.durationAsset.rules.max,
-                                  ]"
+                              configForm.durationAsset.rules.required,
+                              configForm.durationAsset.rules.min,
+                              configForm.durationAsset.rules.max
+                            ]"
                           ></v-text-field>
                           <div class="v-messages">
                             <div
@@ -222,10 +236,11 @@
                             v-model="form.mosaic.divisibility"
                             :label="configForm.divisibility.label"
                             :color="inputStyle"
-                            :rules="[configForm.divisibility.rules.required,
-                                    configForm.divisibility.rules.min,
-                                    configForm.divisibility.rules.max,
-                                  ]"
+                            :rules="[
+                              configForm.divisibility.rules.required,
+                              configForm.divisibility.rules.min,
+                              configForm.divisibility.rules.max
+                            ]"
                           ></v-text-field>
                           <div class="v-messages">
                             <div
@@ -252,11 +267,21 @@
                             :label="configForm.supply.label"
                             :color="inputStyle"
                             :rules="[
-                                    configForm.supply.rules.required,
-                                    configForm.supply.rules.min,
-                                    configForm.supply.rules.max,
-                                  ]"
+                              configForm.supply.rules.required,
+                              configForm.supply.rules.min,
+                              configForm.supply.rules.max
+                            ]"
                           ></v-text-field>
+                          <div class="v-messages">
+                            <div
+                              style="line-height: 0.80rem;"
+                              class="v-messages__message text-left subtitle-1 font-italic font-weight-bold text--secondary"
+                            >
+                              <span>{{supplyFormV}}</span>
+                              <!-- <span>dos</span>
+                              <span>tres</span>-->
+                            </div>
+                          </div>
                           <div class="v-messages">
                             <div
                               style="line-height: 0.80rem;"
@@ -285,7 +310,8 @@
                         color="primary"
                         class="pl-8 pr-8 mt-2 body-2 mx-auto white--text"
                         @click="newsTep(3)"
-                      >Next</v-btn>
+                        >Next</v-btn
+                      >
                     </v-col>
                   </v-row>
                 </v-stepper-content>
@@ -303,7 +329,7 @@
                           :src="base64Img"
                         />
                         <span v-if="!nameToAsset">Asset</span>
-                        <span v-if="nameToAsset">{{nameToAsset}}</span>
+                        <span v-if="nameToAsset">{{ nameToAsset }}</span>
                       </div>
                     </v-col>
                     <v-col cols="6" class="mx-auto d-flex justify-end align-center">
@@ -322,7 +348,7 @@
                       class="leve d-flex justify-center align-center"
                     >
                       <span class="font-weight-bold mr-1">Supply:</span>
-                      <span class>{{form.mosaic.supply}}</span>
+                      <span class>{{ $generalService.amountFormatter(form.mosaic.supply,form.mosaic.divisibility)}}</span>
                     </v-col>
                     <v-col
                       xs="10"
@@ -333,7 +359,9 @@
                       class="leve margin-1px d-flex justify-center align-center"
                     >
                       <span class="font-weight-bold mr-1">Mutable:</span>
-                      <v-icon v-if="form.mosaic.supplyMutable" color="teal darken-2">mdi-check-bold</v-icon>
+                      <v-icon v-if="form.mosaic.supplyMutable" color="teal darken-2"
+                        >mdi-check-bold</v-icon
+                      >
                       <v-icon v-else color="red darken-1">mdi-close-thick</v-icon>
                     </v-col>
                     <v-col
@@ -345,7 +373,9 @@
                       class="leve margin-1px d-flex justify-center align-center"
                     >
                       <span class="font-weight-bold mr-1">Transferable:</span>
-                      <v-icon v-if="form.mosaic.transferable" color="teal darken-2">mdi-check-bold</v-icon>
+                      <v-icon v-if="form.mosaic.transferable" color="teal darken-2"
+                        >mdi-check-bold</v-icon
+                      >
                       <v-icon v-else color="red darken-1">mdi-close-thick</v-icon>
                     </v-col>
 
@@ -358,7 +388,7 @@
                       class="leve margin-1px d-flex justify-center align-center"
                     >
                       <span class="font-weight-bold mr-1">Divisibility:</span>
-                      {{form.mosaic.divisibility}}
+                      {{ form.mosaic.divisibility }}
                     </v-col>
                     <v-col
                       xs="10"
@@ -369,7 +399,7 @@
                       class="leve margin-1px d-flex justify-center align-center"
                     >
                       <span class="font-weight-bold mr-1">Duration:</span>
-                      {{form.namespace.duration}} days
+                      {{ form.namespace.duration }} days
                     </v-col>
                   </v-row>
                   <!--Fee-->
@@ -390,10 +420,10 @@
                         :counter="configForm.password.max"
                         :color="inputStyle"
                         :rules="[
-                    configForm.password.rules.required,
-                    configForm.password.rules.min,
-                    configForm.password.rules.max
-                  ]"
+                          configForm.password.rules.required,
+                          configForm.password.rules.min,
+                          configForm.password.rules.max
+                        ]"
                         :label="configForm.password.label"
                         :type="configForm.password.show ? 'text' : 'password'"
                         name="password"
@@ -416,7 +446,11 @@
                       cols="12"
                       class="ma-0 mx-auto caption d-flex justify-center align-center"
                     >
-                      <custom-button @action="action" :align="'center'" :arrayBtn="getArrayBtn"></custom-button>
+                      <custom-button
+                        @action="action"
+                        :align="'center'"
+                        :arrayBtn="getArrayBtn"
+                      ></custom-button>
                     </v-col>
                   </v-row>
                 </v-stepper-content>
@@ -464,6 +498,7 @@ export default {
       configForm: null,
       dataTx: [],
       dataAllTx: [],
+      supplyForm: null,
       form: {
         mosaic: {
           description: null,
@@ -544,6 +579,9 @@ export default {
   computed: {
     ...mapGetters('accountStore', ['currentAccount']),
     ...mapGetters('transactionsStore', ['confirmed', 'unconfirmedAdded', 'status']),
+    supplyFormV () {
+      return this.$generalService.amountFormatter(this.form.mosaic.supply, this.form.mosaic.divisibility)
+    },
     namespaceName: {
       get () {
         this.watchComputedNamespaceName()
