@@ -420,7 +420,7 @@ export default {
                 )
 
                 returnBuild.transaction.version = 4
-                // this.announceTx(returnBuild, true)
+                this.announceTx(returnBuild, true)
               }
             }
           }
@@ -538,7 +538,7 @@ export default {
             this.form.duration
           )
           returnBuild.transaction.version = 4
-          // this.announceTx(returnBuild)
+          this.announceTx(returnBuild)
         }
       } else {
         this.dataTxOfferInfo = false
