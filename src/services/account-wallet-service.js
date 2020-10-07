@@ -393,6 +393,8 @@ function logIn (wallet, password) {
             store.commit('socketDbStore/EVENT_UNCHANGED', null)
             store.commit('socketDbStore/EVENT_INSERTED', null)
             store.commit('offersStore/SET_OFFER_ALL', [])
+            store.commit('nodesStoreNew/RECONNECT', false)
+
             // inicializar Nodo
             // store.dispatch('nodeStore/initNodes', connectionNodes)
             // console.log('connectionNodes', connectionNodes)

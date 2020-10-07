@@ -14,7 +14,8 @@ export const nodesStoreNew = {
     networkType: null,
     nodesList: [],
     customNodes: [],
-    nodeStatus: TypeStatusNode.NODE_OFF
+    nodeStatus: TypeStatusNode.NODE_OFF,
+    reconnect: false
   },
   getters: {
     configHttp: (state, getters, rootState, rootGetters) => {
@@ -33,7 +34,8 @@ export const nodesStoreNew = {
     customNodes: state => state.customNodes,
     blockchainNodes: (state, getters) => {
       return getters.nodesList.filter(n => n.node && n.identification_type === 1)
-    }
+    },
+    reconnect: state => state.reconnect
   },
   mutations: {
     ADD_NODES (state, data, toServer) {
@@ -85,6 +87,9 @@ export const nodesStoreNew = {
     SET_STATUS_NODE (state, status) {
       // console.log('SET_STATUS_NODE', status)
       state.nodeStatus = status
+    },
+    RECONNECT (state, status) {
+      state.reconnect = status
     }
   },
   actions: {
