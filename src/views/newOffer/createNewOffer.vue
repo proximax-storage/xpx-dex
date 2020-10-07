@@ -394,7 +394,7 @@ export default {
                 this.configMoneyAsset.precision
               )
               const costTotal = this.form.totalCost
-              console.log('costTotal', costTotal)
+              // console.log('costTotal', costTotal)
               let returnBuild = null
               this.offerMerching = this.filterMerching(
                 this.offerAll,
@@ -420,7 +420,7 @@ export default {
                 )
 
                 returnBuild.transaction.version = 4
-                // this.announceTx(returnBuild, true)
+                this.announceTx(returnBuild, true)
               }
             }
           }
@@ -529,7 +529,7 @@ export default {
             this.configMoneyAsset.precision
           )
           const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
-          console.log('costTotal', costTotal)
+          // console.log('costTotal', costTotal)
           const returnBuild = buildAddExchangeOffer(
             this.idHex,
             mosaicAmount,
@@ -538,7 +538,7 @@ export default {
             this.form.duration
           )
           returnBuild.transaction.version = 4
-          // this.announceTx(returnBuild)
+          this.announceTx(returnBuild)
         }
       } else {
         this.dataTxOfferInfo = false
