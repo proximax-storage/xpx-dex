@@ -152,7 +152,10 @@
                         <div class="subtitle-1 font-weight-black">
                           {{ $generalService.amountFormatter(form.totalCost, 6) }} XPX
                         </div>
-                        <div v-if="isValidateBalance" class="caption font-italic font-weight-black  red--text">
+                        <div
+                          v-if="isValidateBalance"
+                          class="caption font-italic font-weight-black  red--text"
+                        >
                           insufficient balance
                         </div>
                       </div>
@@ -391,6 +394,7 @@ export default {
                 this.configMoneyAsset.precision
               )
               const costTotal = this.form.totalCost
+              console.log('costTotal', costTotal)
               let returnBuild = null
               this.offerMerching = this.filterMerching(
                 this.offerAll,
@@ -416,7 +420,7 @@ export default {
                 )
 
                 returnBuild.transaction.version = 4
-                this.announceTx(returnBuild, true)
+                // this.announceTx(returnBuild, true)
               }
             }
           }
@@ -428,7 +432,7 @@ export default {
           this.form.amount,
           this.configMoneyAsset.precision
         )
-        const costTotal = this.form.totalCost
+        const costTotal = mosaicAmount * data.price
         const mosaicId = this.$blockchainProvider.getMosaicId(this.idHex)
         const type = this.typeOffer === 0 ? 1 : 0
         const returnBuild = buildExchangeOffer(mosaicId, mosaicAmount, costTotal, type, data.owner)
@@ -525,6 +529,7 @@ export default {
             this.configMoneyAsset.precision
           )
           const costTotal = this.$generalService.quantityStringToInt(this.form.totalCost, 6)
+          console.log('costTotal', costTotal)
           const returnBuild = buildAddExchangeOffer(
             this.idHex,
             mosaicAmount,
@@ -533,7 +538,7 @@ export default {
             this.form.duration
           )
           returnBuild.transaction.version = 4
-          this.announceTx(returnBuild)
+          // this.announceTx(returnBuild)
         }
       } else {
         this.dataTxOfferInfo = false

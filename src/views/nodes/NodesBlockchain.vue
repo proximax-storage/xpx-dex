@@ -89,7 +89,7 @@ export default {
     // searching: false
   }),
   methods: {
-    ...mapMutations('nodesStoreNew', ['ADD_NODES']),
+    ...mapMutations('nodesStoreNew', ['ADD_NODES', 'RECONNECT']),
     // addNode () {
     //   if (this.nodeForm.node !== '') {
     //     this.searching = true
@@ -113,6 +113,7 @@ export default {
     },
     reconnect (node = this.currentNode) {
       NodeService.connect(node)
+      this.RECONNECT(true)
     },
     // deleteNodes (node) {
     //   NodeService.deleteNodes(node)
