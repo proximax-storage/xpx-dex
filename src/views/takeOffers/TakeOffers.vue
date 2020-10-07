@@ -91,7 +91,7 @@
               <v-col
                 cols="10"
                 class="ma-0 mx-auto caption d-flex justify-center align-center"
-              >this transaction will have a fee: 0.002020 XPX</v-col>
+              >This transaction will have a fee: 0.002020 XPX</v-col>
             </v-row>
             <v-row>
               <v-col cols="5" class="ma-0 mx-auto caption d-flex justify-center align-center">
