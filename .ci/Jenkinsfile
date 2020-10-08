@@ -6,7 +6,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'deploy/xpx-deploy.sh'
+        sh 'ls -la ; deploy/xpx-deploy.sh'
       }
     }
   }
