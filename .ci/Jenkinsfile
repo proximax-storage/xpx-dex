@@ -7,6 +7,8 @@ pipeline {
     stage('install packages and deps') {
       steps {
         sh 'npm i --force; npm audit fix ; npm update'
+	sh 'cp -rv deploy/tsjs-sirius-suite-wallet-library/ node_modules/'
+	sh 'npm run build'
       }
     }
   }
