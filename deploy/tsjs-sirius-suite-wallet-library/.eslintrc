@@ -1,0 +1,14 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 2017
+    },
+
+    "env": {
+        "es6": true
+    },
+    "rules": {
+        "no-explicit-any": "off",
+        "space-before-function-paren": ["error", "always"],
+        "no-non-null-assertion": "off"
+    }
+}

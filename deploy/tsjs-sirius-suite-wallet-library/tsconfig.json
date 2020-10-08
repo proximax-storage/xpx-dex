@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "ES6",
+        "removeComments": true,
+        "outDir": "./dist",
+        "noImplicitAny": true,
+        "preserveConstEnums": true,
+        "sourceMap": false,
+        "watch": true,
+        "rootDir": "src",
+        "experimentalDecorators": true,
+        "declaration": true,
+        "listEmittedFiles": true,
+        "noImplicitThis": true,
+        "preserveWatchOutput": true,
+        "pretty": true,
+        "version": true,
+        "alwaysStrict": true,
+        "noErrorTruncation": true,
+        "noEmitOnError": true
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "src/test",
+        "dist",
+        "node_modules"
+    ]
+}

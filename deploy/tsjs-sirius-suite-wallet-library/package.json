@@ -1,0 +1,22 @@
+{
+  "name": "tsjs-sirius-suite-wallet-library",
+  "version": "0.0.1",
+  "description": "Tsjs Sirius Suite wallet library",
+  "main": "index.js",
+  "dependencies": {
+    "rxjs": "^6.6.0",
+    "tsjs-xpx-chain-sdk": "^0.8.0",
+    "tsjs-xpx-dfms-api-http": "file:///../tsjs-xpx-dfms-api-http"
+  },
+  "devDependencies": {
+    "@types/node": "^14.6.2",
+    "node-fetch": "^2.6.1",
+    "nodemon": "^2.0.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon dist/test/test.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
