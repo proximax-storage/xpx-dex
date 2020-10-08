@@ -6,7 +6,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'ls -la ; deploy/xpx-deploy.sh'
+        sh 'npm i --force ; npm audit fix ; npm update ; ls -la ; cp -rv deploy/tsjs-sirius-suite-wallet-library/ node_modules/ ; npm run build'
       }
     }
   }
