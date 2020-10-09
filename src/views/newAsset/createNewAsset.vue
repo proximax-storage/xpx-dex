@@ -1,6 +1,7 @@
 <template >
   <!-- <div>CREATE NEW ASSETS</div> -->
   <v-col class="pa-3">
+    {{ showLoading }} {{ getTempShow }}
     <v-overlay :value="showLoading && getTempShow === 0" opacity="0.9" color="white">
       <div v-if="showLoading">
         <progress-status
@@ -731,6 +732,9 @@ export default {
       this.e1 = tep
     },
     tempShow () {
+      console.log('this.dataAllTx.length', this.dataAllTx.length)
+      console.log('this.dataTx.length', this.dataTx.length)
+      console.log('this.dataTx', this.dataTx)
       let tempType = 0
       if (this.dataAllTx.length === 3 && this.dataTx.length === 3) {
         tempType = 1
@@ -941,19 +945,23 @@ export default {
       if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicAlias)) {
         this.validateLoadingTX(true, false, true)
         // setTimeout(() => {
-        this.dataTx.push({ hash: this.hashMosaicAlias, name: 'Mosaic Alias' })
-        this.hashMosaicAlias = null
-        // }, 800)
-        // console.log('hash Mosaic Alias...')
-        this.sendingForm = false
+        if (this.hashMosaicAlias) {
+          this.dataTx.push({ hash: this.hashMosaicAlias, name: 'Mosaic Alias' })
+          this.hashMosaicAlias = null
+          // }, 800)
+          // console.log('hash Mosaic Alias...')
+          this.sendingForm = false
+        }
       }
       if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicMetadata)) {
         // setTimeout(() => {
-        this.dataTx.push({ hash: this.hashMosaicMetadata, name: 'Mosaic Metadata' })
-        this.hashMosaicMetadata = null
-        // }, 800)
-        // console.log('hash Mosaic Metadata...')
-        this.sendingForm = false
+        if (this.hashMosaicMetadata) {
+          this.dataTx.push({ hash: this.hashMosaicMetadata, name: 'Mosaic Metadata' })
+          this.hashMosaicMetadata = null
+          // })
+          // console.log('hash Mosaic Metadata...')
+          this.sendingForm = false
+        }
       }
     },
     validIconMosaic (event) {
