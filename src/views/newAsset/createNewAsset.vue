@@ -1,7 +1,6 @@
 <template >
   <!-- <div>CREATE NEW ASSETS</div> -->
   <v-col class="pa-3">
-    {{ showLoading }} {{ getTempShow }}
     <v-overlay :value="showLoading && getTempShow === 0" opacity="0.9" color="white">
       <div v-if="showLoading">
         <progress-status
@@ -115,6 +114,7 @@
                           @validIconMosaic="validIconMosaic"
                           @arrayToBase64Img="actionArrayToBase64Img"
                         ></file-icon-mosaic>
+
                       </v-row>
                     </v-col>
                   </v-row>
@@ -732,9 +732,6 @@ export default {
       this.e1 = tep
     },
     tempShow () {
-      console.log('this.dataAllTx.length', this.dataAllTx.length)
-      console.log('this.dataTx.length', this.dataTx.length)
-      console.log('this.dataTx', this.dataTx)
       let tempType = 0
       if (this.dataAllTx.length === 3 && this.dataTx.length === 3) {
         tempType = 1

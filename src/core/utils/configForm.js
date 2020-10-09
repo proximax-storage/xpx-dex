@@ -6,7 +6,7 @@ const generalConfig = {
   img: {
     width: 35,
     height: 35,
-    size: 2000,
+    size: 4000,
     typeForm: 'image/png'
   },
   amount: {
@@ -249,14 +249,14 @@ function divisibility (label = 'Divisibility') {
  *
  * @param {*} label
  */
-function iconMosaic (label = `Select image icon (Max. ${generalConfig.img.width}x${generalConfig.img.height})`) {
+function iconMosaic (label = `Select image icon`) {
   const size = generalConfig.img.size
   const typeForm = generalConfig.img.typeForm
   const width = generalConfig.img.width
   const height = generalConfig.img.height
   const rules = {
     required: v => !!v || `${label} is required.`,
-    size: v => !v || v.size < size || 'Icon size must be at least 2 kB!',
+    size: v => !v || v.size < size || 'Icon size must be at least 4 kB!',
     typeForm: v => !v || v.type === typeForm || `Allowed format (${typeForm}).`
   }
   return assemblyConfigFile(width, height, size, typeForm, assemblyConfig(label, '', 'file', null, null, rules))
