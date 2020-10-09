@@ -1,13 +1,28 @@
 pipeline {
-  agent any
- 
-  tools {nodejs "nodejs10.3.0"}
- 
-  stages {
-    stage('Build') {
-      steps {
-        sh 'npm i --force ; npm audit fix ; npm update ; ls -la ; cp -rv deploy/tsjs-sirius-suite-wallet-library/ node_modules/ ; npm run build'
-      }
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                sh 'npm i --force ; npm audit fix ; npm update'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'ls -la ; cp -rv deploy/tsjs-sirius-suite-wallet-library/ node_modules/ ; npm run build'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                withAWS(region:'yourS3Region',credentials:'s3-dionisux') {
+
+                 def identity=awsIdentity();//Log AWS credentials
+
+                // Upload files from working directory 'dist' in your project workspace
+                s3Upload(bucket:"dex-test.xpxsirius.io", workingDir:'dist', includePathPattern:'**/*');
+            }
+
+            }
+        }
     }
-  }
 }
