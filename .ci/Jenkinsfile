@@ -9,7 +9,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'ls -la ; cp -rv deploy/tsjs-sirius-suite-wallet-library/ node_modules/ ; npm run build'
+                sh 'Deploying....'
             }
         }
         stage('Deploy') {
@@ -18,4 +18,12 @@ pipeline {
             }
         }
     }
+    stage ('artifacts to s3'){
+      try{
+        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 's3-dionisux', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+    sh "aws s3 ls"
+}
+      }
+    }
+
 }
