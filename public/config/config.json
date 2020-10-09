@@ -25,6 +25,9 @@
       "coingecko": {
         "url": "https://api.coingecko.com/api/v3/coins/"
       },
+      "explorerHash" :{
+        "url": "http://bctestnetexplorer.xpxsirius.io/#/result/hash/"
+      },
       "coin": "xpx",
       "mosaic": {
         "id": "13bfc518e40549d7",
@@ -77,6 +80,9 @@
       },
       "coingecko": {
         "url": "https://api.coingecko.com/api/v3/coins/"
+      },
+      "explorerHash" :{
+        "url": "http://bctestnetexplorer.xpxsirius.io/#/result/hash/"
       },
       "coin": "xpx",
       "mosaic": {
@@ -137,6 +143,9 @@
       },
       "coingecko": {
         "url": "https://api.coingecko.com/api/v3/coins/"
+      },
+      "explorerHash" :{
+        "url": "http://bctestnetexplorer.xpxsirius.io/#/result/hash/"
       },
       "coin": "xpx",
       "mosaic": {
