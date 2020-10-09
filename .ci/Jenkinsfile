@@ -9,7 +9,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'ls -la ; cp -rv deploy/tsjs-sirius-suite-wallet-library/ node_modules/ ; npm run build'
+                sh 'cp -rv deploy/tsjs-sirius-suite-wallet-library/ node_modules/ ; npm run build'
             }
         }
         stage('Deploy') {
