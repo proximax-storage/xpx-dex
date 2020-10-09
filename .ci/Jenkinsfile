@@ -9,22 +9,12 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'cp -rv deploy/tsjs-sirius-suite-wallet-library/ node_modules/ ; npm run build'
+                sh 'ls -la ; cp -rv deploy/tsjs-sirius-suite-wallet-library/ node_modules/ ; npm run build'
             }
         }
         stage('Deploy') {
             steps {
-                post {
-  success {
-    withAWS(region:'sa-east-1',credentials:'s3-dionisux') {
-
-         def identity=awsIdentity();//Log AWS credentials
-
-        // Upload files from working directory 'dist' in your project workspace
-        s3Upload(bucket:"dex-test.xpxsirius.io", workingDir:'dist', includePathPattern:'**/*');
-            }
-  }
-}
+                echo 'Deploying....'
             }
         }
     }
