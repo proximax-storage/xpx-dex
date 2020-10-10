@@ -16,7 +16,8 @@
                         <v-col
                           cols=" 12 pt-0"
                           class="mx-auto title font-italic font-weight-medium pb-0"
-                        >{{ title }}</v-col>
+                          >{{ title }}</v-col
+                        >
                         <!-- Wallet name -->
                         <v-col cols="12">
                           <v-text-field
@@ -62,7 +63,9 @@
                         <v-col cols="12" sm="12" md="6" lg="6">
                           <v-text-field
                             v-model="passwords.confirmPassword"
-                            :append-icon="configForm.confirmPassword.show ? 'mdi-eye' : 'mdi-eye-off'"
+                            :append-icon="
+                              configForm.confirmPassword.show ? 'mdi-eye' : 'mdi-eye-off'
+                            "
                             :minlength="configForm.confirmPassword.min"
                             :maxlength="configForm.confirmPassword.max"
                             :counter="configForm.confirmPassword.max"
@@ -76,7 +79,9 @@
                             :type="configForm.confirmPassword.show ? 'text' : 'password'"
                             label="Confirm Password"
                             hint="Confirm Password"
-                            @click:append="configForm.confirmPassword.show = !configForm.confirmPassword.show"
+                            @click:append="
+                              configForm.confirmPassword.show = !configForm.confirmPassword.show
+                            "
                           ></v-text-field>
                         </v-col>
                       </v-row>
@@ -134,8 +139,8 @@ export default {
       confirmPassword: this.$configForm.password('Confirm password')
     }
     this.arrayBtn = {
-      create: this.$configForm.buildButton('Create', 'create', 'create', 'primary', 'white--text'),
-      clear: this.$configForm.buildButton('Clear', 'clear', 'clear', 'primary', 'white--text')
+      clear: this.$configForm.buildButton('Clear', 'clear', 'clear', 'primary', 'white--text'),
+      create: this.$configForm.buildButton('Create', 'create', 'create', 'primary', 'white--text')
     }
   },
   computed: {
