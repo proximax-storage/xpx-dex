@@ -363,7 +363,8 @@ export default {
     },
     getArrayBtn () {
       const arrayBtn = this.arrayBtn
-      arrayBtn['place'].disabled = !this.valid || this.isValidateBalance || !this.validOne
+      arrayBtn['place'].disabled =
+        !this.form.totalCost > 0 || !this.valid || this.isValidateBalance || !this.validOne
       arrayBtn['place'].loading = this.sendingForm
       arrayBtn['place'].color = this.type === null ? 'white' : this.typeOfferColor
       arrayBtn['place'].textColor = 'white--text'
@@ -428,6 +429,17 @@ export default {
               }
             }
           }
+          break
+        case 'cancel':
+          this.isValidateAssets = true
+          this.isValidateBalance = null
+          this.isValidateBidPrice = false
+          this.$refs.amountF.$el.getElementsByTagName('input')[0].value = '0'
+          this.$refs.bidPriceF.$el.getElementsByTagName('input')[0].value = '0'
+          this.$refs.form.reset('assest')
+          this.form.totalCost = 0
+          this.clear()
+          break
       }
     },
     actionMerching (data) {

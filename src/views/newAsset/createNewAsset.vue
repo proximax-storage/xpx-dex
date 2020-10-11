@@ -114,7 +114,6 @@
                           @validIconMosaic="validIconMosaic"
                           @arrayToBase64Img="actionArrayToBase64Img"
                         ></file-icon-mosaic>
-
                       </v-row>
                     </v-col>
                   </v-row>
@@ -679,7 +678,10 @@ export default {
             validBalance(this.rentalFee + this.maxFee) &&
             this.$generalService.showMsgStatusNode()
           ) {
-            this.typeCreatetxs(this.typeAction())
+            let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
+            if (common) {
+              this.typeCreatetxs(this.typeAction())
+            }
           }
       }
     },

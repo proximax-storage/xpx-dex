@@ -38,7 +38,7 @@
               <v-row class =" ml-2">
                 <v-col class="d-flex justify-start darkness--text">  I already have an account</v-col>
                 <v-col class="d-flex justify-end">
-                  <v-btn text small color="primary" class="font-weight-bold pt-1 pb-1 mr-4">Sign In</v-btn>
+                  <v-btn router text small color="primary" to="/" class="font-weight-bold pt-1 pb-1 mr-4">Sign In</v-btn>
                 </v-col>
               </v-row>
             </v-card-actions>

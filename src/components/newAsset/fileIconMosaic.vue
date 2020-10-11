@@ -30,11 +30,11 @@
             >
               <!-- <span>dos</span>
                               <span>tres</span>-->
-              <span class="primary--text">Size,</span>
-              <span class="mr-2">35x35</span>
-              <span class="primary--text">Max,</span>
-              <span class="mr-2">4KB</span>
-              <span class="primary--text">Type,</span>
+              <span class="primary--text">Size:</span>
+              <span class="mr-2">35x35,</span>
+              <span class="primary--text">Max:</span>
+              <span class="mr-2">4KB,</span>
+              <span class="primary--text">Type:</span>
               <span class="mr-2">PNG.</span>
             </div>
           </div>
