@@ -195,6 +195,7 @@ export default {
                   dataRequiredMosaic: {
                     moisaicsInfo: [
                       {
+                        action: 'delete',
                         mosaicId: this.exchangeDelete.exchange.mosaicId,
                         mosaicIdHex: this.exchangeDelete.exchange.mosaicId.toHex()
                       }
@@ -224,7 +225,6 @@ export default {
           }
           break
         case 'cancel':
-
           this.$router.push({ path: `/myWallet`, query: { item: 2 } }).catch(e => {})
           break
       }

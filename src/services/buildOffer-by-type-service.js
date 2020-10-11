@@ -24,6 +24,7 @@ function buildAddExchangeOffer (mosaicIdHex, mosaicAmount, priceForAmount, type,
   const dataRequired = {
     moisaicsInfo: [
       {
+        action: 'add',
         mosaicId: mosaicId,
         mosaicIdHex: mosaicIdHex
       }
@@ -69,6 +70,7 @@ function buildExchangeOffer (mosaicId, mosaicAmount, priceForAmount, type, owner
     dataRequiredMosaic: {
       moisaicsInfo: [
         {
+          action: 'execute',
           mosaicId: mosaicId,
           mosaicIdHex: mosaicId.toHex()
         }

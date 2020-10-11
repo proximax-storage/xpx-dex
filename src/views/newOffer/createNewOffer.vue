@@ -98,6 +98,7 @@
                     <!-- Montos  -->
                     <v-row>
                       <!-- ammount -->
+                      <!-- :disabled="loadingInfo" -->
                       <v-col sm="12" md="4" col="4" lg="4">
                         <v-text-field
                           name="amountF"
@@ -107,7 +108,6 @@
                           @keyup="isValidateQuantityAmount = validateQuantity($event)"
                           v-model="form.amount"
                           v-money="configMoneyAsset"
-                          :disabled="loadingInfo"
                           :label="configForm.amount.label"
                           :minlength="configForm.amount.min"
                           :maxlength="configForm.amount.max"
@@ -666,10 +666,10 @@ export default {
       let duration = null
       duration = Number(value)
       if (duration !== 0) {
-        if (duration <= 2) {
+        if (duration <= 1) {
           return true
         } else {
-          return 'You cannot enter the duration greater than 2 '
+          return 'You cannot enter the duration greater than 1 '
         }
       } else {
         return 'Cannot enter duration zero'
