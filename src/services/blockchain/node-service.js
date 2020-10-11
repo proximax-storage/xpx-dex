@@ -148,8 +148,8 @@ export class NodeService {
    */
   static initObjWebsocketConnection () {
     this._objWebsocketConnection = new WebsocketConnection()
-    WebsocketConnection.nodesConfig.timeOutNewBlocks = 300
-    WebsocketConnection.nodesConfig.timeValidateSynchronization = 300
+    // WebsocketConnection.nodesConfig.timeOutNewBlocks = 300
+    // WebsocketConnection.nodesConfig.timeValidateSynchronization = 300
   }
 
   /**

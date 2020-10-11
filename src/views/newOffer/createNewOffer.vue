@@ -244,7 +244,6 @@
               :arrayBtn="getArrayBtn"
             ></custom-button>
           </v-col>
-          {{ this.valid }}
         </v-row>
       </v-col>
       <v-col sm="5" md="5" lg="3" col="3" class="pt-0">
@@ -400,7 +399,6 @@ export default {
                 this.configMoneyAsset.precision
               )
               const costTotal = this.form.totalCost
-              // console.log('costTotal', costTotal)
               let returnBuild = null
               this.offerMerching = this.filterMerching(
                 this.offerAll,
@@ -485,13 +483,11 @@ export default {
     },
 
     changeAssetIdBuy (event) {
-      console.log('by ', event)
       this.clearForm()
       this.idHex = event
       if (this.idHex) {
         let data = []
         data = this.mosaicsInfOfferFromIdHex(this.idHex)
-        console.log('data', data)
         if (data.length > 0) {
           this.nameMosaic = data[0].text
           const divisibility = data[0].mosaicInfo
@@ -505,11 +501,9 @@ export default {
       }
     },
     changeAssetIdSell (event) {
-      console.log('event', event)
       this.clearForm()
       this.idHex = event
       const mosaic = this.mosaicBuild.find(item => item.mosaicIdHex === this.idHex)
-      console.log('mosaic', mosaic)
       if (mosaic) {
         this.nameMosaic = mosaic.nameMosaic
         this.balanceAssets = mosaic.balanceValidate
@@ -677,7 +671,11 @@ export default {
       } catch (error) {
         amount = Number(amountValue)
       }
-      this.form.totalCost = this.calTotalCost(this.form.amount, this.form.bidPrice)
+      this.form.totalCost = this.calTotalCost(
+        this.form.amount,
+        this.form.bidPrice,
+        this.configMoneyAsset.precision
+      )
       if (this.type === 'sell') {
         if (e.target.name === 'amountF') this.validateBalanceAssets(amount)
       } else {
@@ -689,8 +687,8 @@ export default {
         return true
       }
     },
-    calTotalCost (amount, perUnit) {
-      const mosaicAmount = this.$generalService.formValue(amount, 1)
+    calTotalCost (amount, perUnit, disivility = 1) {
+      const mosaicAmount = this.$generalService.formValue(amount, disivility)
       const priceUnit = this.$generalService.formValue(perUnit, 6)
       return this.$generalService.formValueParse(priceUnit, mosaicAmount)
     },
