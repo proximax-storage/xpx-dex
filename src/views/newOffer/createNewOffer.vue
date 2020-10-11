@@ -98,6 +98,7 @@
                     <!-- Montos  -->
                     <v-row>
                       <!-- ammount -->
+                      <!-- :disabled="loadingInfo" -->
                       <v-col sm="12" md="4" col="4" lg="4">
                         <v-text-field
                           name="amountF"
@@ -107,7 +108,6 @@
                           @keyup="isValidateQuantityAmount = validateQuantity($event)"
                           v-model="form.amount"
                           v-money="configMoneyAsset"
-                          :disabled="loadingInfo"
                           :label="configForm.amount.label"
                           :minlength="configForm.amount.min"
                           :maxlength="configForm.amount.max"
@@ -244,7 +244,6 @@
               :arrayBtn="getArrayBtn"
             ></custom-button>
           </v-col>
-          {{ this.valid }}
         </v-row>
       </v-col>
       <v-col sm="5" md="5" lg="3" col="3" class="pt-0">
@@ -364,7 +363,8 @@ export default {
     },
     getArrayBtn () {
       const arrayBtn = this.arrayBtn
-      arrayBtn['place'].disabled = !this.valid || this.isValidateBalance || !this.validOne
+      arrayBtn['place'].disabled =
+        !this.form.totalCost > 0 || !this.valid || this.isValidateBalance || !this.validOne
       arrayBtn['place'].loading = this.sendingForm
       arrayBtn['place'].color = this.type === null ? 'white' : this.typeOfferColor
       arrayBtn['place'].textColor = 'white--text'
@@ -400,7 +400,6 @@ export default {
                 this.configMoneyAsset.precision
               )
               const costTotal = this.form.totalCost
-              // console.log('costTotal', costTotal)
               let returnBuild = null
               this.offerMerching = this.filterMerching(
                 this.offerAll,
@@ -430,6 +429,17 @@ export default {
               }
             }
           }
+          break
+        case 'cancel':
+          this.isValidateAssets = true
+          this.isValidateBalance = null
+          this.isValidateBidPrice = false
+          this.$refs.amountF.$el.getElementsByTagName('input')[0].value = '0'
+          this.$refs.bidPriceF.$el.getElementsByTagName('input')[0].value = '0'
+          this.$refs.form.reset('assest')
+          this.form.totalCost = 0
+          this.clear()
+          break
       }
     },
     actionMerching (data) {
@@ -485,13 +495,11 @@ export default {
     },
 
     changeAssetIdBuy (event) {
-      console.log('by ', event)
       this.clearForm()
       this.idHex = event
       if (this.idHex) {
         let data = []
         data = this.mosaicsInfOfferFromIdHex(this.idHex)
-        console.log('data', data)
         if (data.length > 0) {
           this.nameMosaic = data[0].text
           const divisibility = data[0].mosaicInfo
@@ -505,11 +513,9 @@ export default {
       }
     },
     changeAssetIdSell (event) {
-      console.log('event', event)
       this.clearForm()
       this.idHex = event
       const mosaic = this.mosaicBuild.find(item => item.mosaicIdHex === this.idHex)
-      console.log('mosaic', mosaic)
       if (mosaic) {
         this.nameMosaic = mosaic.nameMosaic
         this.balanceAssets = mosaic.balanceValidate
@@ -660,10 +666,10 @@ export default {
       let duration = null
       duration = Number(value)
       if (duration !== 0) {
-        if (duration <= 2) {
+        if (duration <= 1) {
           return true
         } else {
-          return 'You cannot enter the duration greater than 2 '
+          return 'You cannot enter the duration greater than 1 '
         }
       } else {
         return 'Cannot enter duration zero'
@@ -677,7 +683,11 @@ export default {
       } catch (error) {
         amount = Number(amountValue)
       }
-      this.form.totalCost = this.calTotalCost(this.form.amount, this.form.bidPrice)
+      this.form.totalCost = this.calTotalCost(
+        this.form.amount,
+        this.form.bidPrice,
+        this.configMoneyAsset.precision
+      )
       if (this.type === 'sell') {
         if (e.target.name === 'amountF') this.validateBalanceAssets(amount)
       } else {
@@ -689,8 +699,8 @@ export default {
         return true
       }
     },
-    calTotalCost (amount, perUnit) {
-      const mosaicAmount = this.$generalService.formValue(amount, 1)
+    calTotalCost (amount, perUnit, disivility = 1) {
+      const mosaicAmount = this.$generalService.formValue(amount, disivility)
       const priceUnit = this.$generalService.formValue(perUnit, 6)
       return this.$generalService.formValueParse(priceUnit, mosaicAmount)
     },

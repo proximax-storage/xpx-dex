@@ -13,7 +13,7 @@
                   <br />
                   <span
                     class="subtitle-1 font-italic font-weight-medium"
-                  >Has been created succesfully</span>
+                  >Has been created successfully</span>
                 </v-col>
                 <v-col cols="10" class="mx-auto">
                   <span class="body-1 font-weight-black">Adress:</span>

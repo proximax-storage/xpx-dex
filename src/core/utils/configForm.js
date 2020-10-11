@@ -10,7 +10,7 @@ const generalConfig = {
     typeForm: 'image/png'
   },
   amount: {
-    min: 3,
+    min: 1,
     max: 30
   },
   divisibility: {

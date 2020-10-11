@@ -58,16 +58,19 @@ export const socketDbStore = {
       state.unchanged = null
       state.inserted = null
       const dataDb = data.dataDb
+      console.log('dataasas', data)
+      console.log('changeschangeschanges', dataDb['changes'])
       // changes
       if (dataDb['inserted'] > 0) {
         for (let index = 0; index < dataDb['inserted']; index++) {
           const element = dataDb['changes'][index]
           if (element['new_val']) {
-            // console.log('UPDATE inserted', element['new_val'])
+            console.log('UPDATE inserted', element['new_val'])
             update(element['new_val'])
           }
         }
-      } else if (dataDb['unchanged'] > 0) {
+      } else if (dataDb['changes'].length > 0) {
+        console.log('changes udapte', data.dataOffer)
         update(data.dataOffer)
         // state.unchanged = data.dataOffer
       }
