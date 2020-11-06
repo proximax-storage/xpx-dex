@@ -58,8 +58,7 @@ export const socketDbStore = {
       state.unchanged = null
       state.inserted = null
       const dataDb = data.dataDb
-      console.log('dataasas', data)
-      console.log('changeschangeschanges', dataDb['changes'])
+      console.log('SOCKET_RETURN_INSERT_MOSAIC_INFO', data)
       // changes
       if (dataDb['inserted'] > 0) {
         for (let index = 0; index < dataDb['inserted']; index++) {
