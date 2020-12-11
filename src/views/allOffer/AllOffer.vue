@@ -12,22 +12,11 @@
                     <v-row class="mx-auto mr-0 pr-0">
                       <v-col class="mr-0 pr-0" justify="center" align="center">
                         <v-btn color="dim" min-width="200" @click="toggle()" text block>
-                          <span
-                            class="text-capitalize mr-1 font-italic font-weight-bold title  title-size"
-                            >Buy
-                          </span>
-                          <span
-                            class="text-lowercase font-italic font-weight-bold title title-size"
-                          >
-                            offers</span
-                          >
+                          <span class="text-capitalize mr-1 font-italic font-weight-bold title title-size">Buy </span>
+                          <span class="text-lowercase font-italic font-weight-bold title title-size"> offers</span>
                         </v-btn>
                         <v-scroll-y-transition>
-                          <v-sheet
-                            height="4"
-                            tile
-                            :color="active ? 'dim' : 'grey lighten-2'"
-                          ></v-sheet>
+                          <v-sheet height="4" tile :color="active ? 'dim' : 'grey lighten-2'"></v-sheet>
                         </v-scroll-y-transition>
                       </v-col>
                     </v-row>
@@ -38,22 +27,11 @@
                     <v-row class="mx-auto">
                       <v-col class="ml-0 pl-0" justify="center" align="center">
                         <v-btn color="pin" min-width="200" @click="toggle()" text block mall>
-                          <span
-                            class="text-capitalize mr-1 font-italic font-weight-bold title title-size"
-                            >Sell
-                          </span>
-                          <span
-                            class="text-lowercase font-italic font-weight-bold title title-size"
-                          >
-                            offers</span
-                          >
+                          <span class="text-capitalize mr-1 font-italic font-weight-bold title title-size">Sell </span>
+                          <span class="text-lowercase font-italic font-weight-bold title title-size"> offers</span>
                         </v-btn>
                         <v-scroll-y-transition>
-                          <v-sheet
-                            height="4"
-                            tile
-                            :color="active ? 'pin' : 'grey lighten-2'"
-                          ></v-sheet>
+                          <v-sheet height="4" tile :color="active ? 'pin' : 'grey lighten-2'"></v-sheet>
                         </v-scroll-y-transition>
                       </v-col>
                     </v-row>
@@ -63,15 +41,11 @@
             </v-item-group>
           </v-col>
         </v-row>
+        <filter-by-quantify @clicked="clickedFilterByQuantify" :resultsOfferFilter="resultsData" :divisibility="propertiesMosaic.divisibility"></filter-by-quantify>
         <v-row>
           <v-col col="12 mt-0">
             <v-progress-linear v-if="progress" indeterminate color="primary"></v-progress-linear>
-            <simple-table
-              :type="form.active"
-              :resultsOfferFilter="data[form.active]"
-              :divisibility="propertiesMosaic.divisibility"
-              @sendOffer="sendOffer"
-            ></simple-table>
+            <simple-table :type="form.active" :resultsOfferFilter="resultsData" :divisibility="propertiesMosaic.divisibility" @sendOffer="sendOffer"></simple-table>
           </v-col>
         </v-row>
       </v-col>
@@ -95,7 +69,7 @@ export default {
       progress: false,
       propertiesMosaic: null,
       mosaic: null,
-      form: { active: 'sell' },
+      form: { active: 'sell', filterByQuantity: 0 },
       dataAssets: {
         form: { asset: null, amount: null, bidPrice: null, active: 'sell' },
         mosaicInfo: null,
@@ -114,6 +88,7 @@ export default {
     'info-Mosaic': () => import('@/components/offerBoard/InfoMosaic'),
     'card-new-offert': () => import('@/components/shared/CardNewOffert'),
     'card-other-assets': () => import('@/components/shared/CardOtherAssets'),
+    'filter-by-quantify': () => import('@/components/shared/FilterByQuantify'),
     'simple-table': () => import('@/components/AllOfferBoard/SimpleTable')
   },
   computed: {
@@ -124,8 +99,7 @@ export default {
       return this.offerSelected.tableData.text
     },
     resultsData () {
-      const key = this.form.active
-      return this.data[key]
+      return this.sortByKey(this.data[this.form.active], 'price').filter(x => x.amount.compact() >= this.form.filterByQuantity)
     }
   },
   methods: {
@@ -140,11 +114,6 @@ export default {
       if (mosaic) properties = mosaic[0].mosaicInfo.properties
       return properties
     },
-    // calcPrice (price, amount) {
-    //   const power = Math.pow(10, 6)
-    //   const value = Math.round(price * power) / power
-    //   return Math.ceil(value * amount)
-    // },
     calcPrice (price, amount) {
       return price * amount
     },
@@ -218,6 +187,15 @@ export default {
       } else {
         this.$router.push({ path: '/searchOfferts' })
       }
+    },
+    sortByKey (array, key) {
+      return array.sort(function (a, b) {
+        var x = a[key]; var y = b[key]
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0))
+      })
+    },
+    clickedFilterByQuantify (value) {
+      this.form.filterByQuantity = value
     }
   },
   beforeMount () {

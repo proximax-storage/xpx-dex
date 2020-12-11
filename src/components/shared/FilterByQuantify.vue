@@ -1,0 +1,52 @@
+<template>
+  <v-row class="ml-1 pb-0 pt-0 mx-auto">
+    <v-col cols="12" xs="12" sm="8" md="5" lg="3" xl="3" class="pt-0 pb-0">
+      <div class="font-italic font-weight-light pb-2">Quantity</div>
+      <v-text-field
+        :rules="[configForm.quantity.rules.required, configForm.quantity.rules.min, configForm.quantity.rules.max]"
+        v-money="configMoney"
+        :minlength="configForm.quantity.min"
+        :maxlength="configForm.quantity.max"
+        :counter="configForm.quantity.max"
+        append-icon="mdi-magnify"
+        @click:append="filterByQuantityF"
+        v-model="form.filterByQuantity"
+        :label="configForm.quantity.label"
+        outlined
+        dense
+      >
+      </v-text-field>
+    </v-col>
+    <v-col cols="12">
+      <v-divider class="ma-0"></v-divider>
+    </v-col>
+  </v-row>
+</template>
+
+<script>
+export default {
+  props: ['resultsOfferFilter', 'divisibility'],
+  data () {
+    return {
+      form: {
+        filterByQuantity: null
+      },
+      configMoney: null,
+      configForm: null
+    }
+  },
+  beforeMount () {
+    this.configMoney = this.$configForm.getConfigMoney('.', ',', '', '', this.divisibility, true)
+    this.configForm = {
+      quantity: this.$configForm.amount('Increase Quantity')
+    }
+  },
+
+  methods: {
+    filterByQuantityF () {
+      console.log('this.$generalService.quantityStringToInt(this.form.filterByQuantity, this.divisibility)', this.$generalService.quantityStringToInt(this.form.filterByQuantity, this.divisibility))
+      this.$emit('clicked', this.$generalService.quantityStringToInt(this.form.filterByQuantity, this.divisibility))
+    }
+  }
+}
+</script>
