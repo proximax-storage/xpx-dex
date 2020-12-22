@@ -15,7 +15,9 @@ export const nodesStoreNew = {
     nodesList: [],
     customNodes: [],
     nodeStatus: TypeStatusNode.NODE_OFF,
-    reconnect: false
+    reconnect: false,
+    stoppedByUser: false,
+    retryConnection: 0
   },
   getters: {
     configHttp: (state, getters, rootState, rootGetters) => {
@@ -35,9 +37,18 @@ export const nodesStoreNew = {
     blockchainNodes: (state, getters) => {
       return getters.nodesList.filter(n => n.node && n.identification_type === 1)
     },
-    reconnect: state => state.reconnect
+    reconnect: state => state.reconnect,
+    stoppedByUser: state => state.stoppedByUser,
+    retryConnection: state => state.retryConnection
   },
   mutations: {
+    ADD_RETRY_CONNECTION (state, value) {
+      console.log('value', value)
+      state.retryConnection = value
+    },
+    STOPPED_BY_USER (state, status) {
+      state.stoppedByUser = status
+    },
     ADD_NODES (state, data, toServer) {
       // console.log('data', data)
       const n = state.nodesList.slice()
