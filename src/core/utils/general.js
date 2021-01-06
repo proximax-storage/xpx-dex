@@ -14,6 +14,17 @@ function amountFormatter (amount, divisibility = 6) {
     minimumFractionDigits: divisibility
   })
 }
+/**
+ *
+ * @param {*} array
+ * @param {*} key
+ */
+function sortByKey (array, key) {
+  return array.sort(function (a, b) {
+    var x = a[key]; var y = b[key]
+    return ((x < y) ? -1 : ((x > y) ? 1 : 0))
+  })
+}
 
 function formValue (cant, divisibility = 6) {
   return parseFloat(cant.toString().replace(/,/g, '')).toFixed(divisibility)
@@ -390,6 +401,7 @@ export {
   buildTableHeader,
   buildMonitorHash,
   calculateDurationforDay,
+  sortByKey,
   calculateDurationExpire,
   differString,
   sumObject,

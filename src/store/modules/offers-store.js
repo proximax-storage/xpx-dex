@@ -42,6 +42,28 @@ export const offersStore = {
       }
       // console.log('state.offerAll', JSON.stringify(state.offerAll))
     },
+    UPDATE_OFFER_GRAPHIC_CHANGE (state, data) {
+      if (data.mosaicIdHex) {
+        for (var i = 0; i < state.offerAll.length; i++) {
+          if (state.offerAll[i].tableData.info.mosaicIdHex === data.mosaicIdHex) {
+            state.offerAll[i].tableData.graphic = data.valueGraphic
+            break
+          }
+        }
+      }
+      // console.log('state.offerAll', JSON.stringify(state.offerAll))
+    },
+    UPDATE_OFFER_TWENTY_FOUR_CHANGE (state, data) {
+      if (data.mosaicIdHex) {
+        for (var i = 0; i < state.offerAll.length; i++) {
+          if (state.offerAll[i].tableData.info.mosaicIdHex === data.mosaicIdHex) {
+            state.offerAll[i].tableData.twentyFourChange = data
+            break
+          }
+        }
+      }
+      // console.log('state.offerAll', JSON.stringify(state.offerAll))
+    },
     DELETE_OFFER_ALL (state, idMosaic) {
       for (var i = 0; i < state.offerAll.length; i++) {
         if (state.offerAll[i].tableData.info.mosaicIdHex === idMosaic) {

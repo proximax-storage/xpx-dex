@@ -3,7 +3,9 @@ import {
   searchInfoMosaics
 } from '@/services/mosaics-service'
 import {
-  update
+  update,
+  twentyFourChange,
+  graphicChange
 } from '@/services/offert-service'
 export const socketDbStore = {
   namespaced: true,
@@ -55,7 +57,8 @@ export const socketDbStore = {
       // console.log('RETURN_INSERT_EXECUTE_OFFERS', data)
     },
     SOCKET_RETURN_GET_OFFERT_TX_ID_HEX (state, data) {
-      console.log('SOCKET_RETURN_GET_OFFERT_TX_ID_HEX', data)
+      twentyFourChange(data)
+      graphicChange(data)
     },
     SOCKET_RETURN_INSERT_MOSAIC_INFO (state, data) {
       state.unchanged = null
