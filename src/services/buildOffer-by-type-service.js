@@ -64,7 +64,7 @@ function buildExchangeOffer (mosaicId, mosaicAmount, priceForAmount, type, owner
     type,
     owner
   )
-
+  transactionDb.mosaicIdHex = mosaicId.toHex()
   const dataRequired = {
     dataRequiredDb: transactionDb,
     dataRequiredMosaic: {

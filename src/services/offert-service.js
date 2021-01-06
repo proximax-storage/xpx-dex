@@ -5,6 +5,7 @@ import {
 } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/TransactionType'
 
 function getAllOffer (data, mosaicUpdate = null) {
+  console.log('getAllOffer', data)
   let allOffers = {
     sell: [],
     buy: []
@@ -30,22 +31,32 @@ function getAllOffer (data, mosaicUpdate = null) {
       averagePrice: price,
       info: data.info,
       priceArray: priceArray,
-      twentyFourChange: `${(
-        (Math.floor(Math.random() * 20) + Math.floor(Math.random() * 1000)) /
-        100
-      ).toFixed(2)}`
+      twentyFourChange: ``
     },
     allOffers: allOffers
   }
   const pass = store.getters['offersStore/offerAll']
   if (!pass.find(x => x.tableData.text === data.info.text)) {
-    // console.debug('PUSH')
+    console.debug('PUSH')
     store.commit('offersStore/PUSH_OFFER_ALL', pas)
   } else {
-    // console.debug('UPDATE')
+    console.debug('UPDATE')
     store.commit('offersStore/UPDATE_OFFER_ALL', pas)
   }
   store.commit('offersStore/UPDATE_OFFER_BOOLEAN')
+  store.dispatch('socketDbStore/getOffertTxFromIdHexMosaic',
+    {
+      io: Vue.prototype.$socket,
+      data: {
+        mosaicIdHex: data.info.mosaicIdHex,
+        minutesFilter: 720
+      }
+    })
+
+  // this.$store.dispatch('socketDbStore/getMoisaicsInfo', {
+  //   io: this.$socket,
+  //   data: null
+  // })
 }
 function calAverage (data, divisibility = 1) {
   let total = 0

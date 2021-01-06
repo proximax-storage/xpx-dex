@@ -54,6 +54,9 @@ export const socketDbStore = {
     SOCKET_RETURN_INSERT_EXECUTE_OFFERS (state, data) {
       // console.log('RETURN_INSERT_EXECUTE_OFFERS', data)
     },
+    SOCKET_RETURN_GET_OFFERT_TX_ID_HEX (state, data) {
+      console.log('SOCKET_RETURN_GET_OFFERT_TX_ID_HEX', data)
+    },
     SOCKET_RETURN_INSERT_MOSAIC_INFO (state, data) {
       state.unchanged = null
       state.inserted = null
@@ -100,6 +103,7 @@ export const socketDbStore = {
       (async () => {
         const mosaicsInfOffer = state.mosaicsInfOffer.find(x => x.mosaicIdHex === data.mosaicIdHex)
         if (mosaicsInfOffer) {
+          console.log('GET_EXCHANGE_OFFER 1')
           dispatch('offersStore/GET_EXCHANGE_OFFER', mosaicsInfOffer, { root: true })
         } else {
           dispatch('GET_MOSAICS_INFO', [data])
@@ -132,6 +136,7 @@ export const socketDbStore = {
         for (var i in state.mosaicsInfOffer) {
           if (state.mosaicsInfOffer[i].mosaicIdHex === mosaicHex) {
             state.mosaicsInfOffer[i].mosaicInfo = data
+            console.log('GET_EXCHANGE_OFFER 2')
             dispatch('offersStore/GET_EXCHANGE_OFFER', state.mosaicsInfOffer[i], { root: true })
             break // Stop this loop, we found it!
           }
@@ -141,6 +146,7 @@ export const socketDbStore = {
       } else {
         state.loadingInfo = false
         const mosaicsInf = { mosaicIdHex: mosaicHex, mosaicInfo: data }
+        console.log('GET_EXCHANGE_OFFER 3')
         dispatch('offersStore/GET_EXCHANGE_OFFER', mosaicsInf, { root: true })
         state.mosaicsInfOffer.push(mosaicsInf)
       }
@@ -152,11 +158,14 @@ export const socketDbStore = {
       commit('EVENT_LOADING_MOSAIC_INFO', true)
       params.io.emit('getMoisaicsInfo', params.data)
     },
+
+    getOffertTxFromIdHexMosaic: ({ commit, state }, params) => {
+      params.io.emit('getOffertTxFromIdHexMosaic', params.data)
+    },
     insertNewOffers: ({ commit, state }, params) => {
       params.io.emit('insertNewOffers', params.data)
     },
     insertExecuteOffers: ({ commit, state }, params) => {
-      // console.log('insertExecuteOffers params', params)
       params.io.emit('insertExecuteOffers', params.data)
     },
     insertMoisaicsInfo: ({ commit, state }, params) => {
