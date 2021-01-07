@@ -1,5 +1,6 @@
 <template>
   <v-sparkline
+   :labels="labels"
     :fill="fill"
     :value="value"
     line-width="1"
@@ -11,7 +12,7 @@
 </template>
 <script>
 export default {
-  props: ['value', 'height'],
+  props: ['value', 'height', 'labels'],
   data: () => {
     return {
       fill: true,
