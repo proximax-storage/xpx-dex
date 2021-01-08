@@ -60,7 +60,12 @@ Object.keys(directives).forEach(key => {
   })
 })
 
-axios.get('../config/config.json').then(response => {
+axios.get('../config/config.json', {
+  headers:
+  {
+    'Cache-Control': 'no-cache'
+  }
+}).then(response => {
   store.commit('ADD_CONFIG_APP', response.data)
   store.commit('ADD_ENVIRONMENT_APP', response.data.networkSelected)
 })
