@@ -6,11 +6,11 @@ const generalConfig = {
   img: {
     width: 35,
     height: 35,
-    size: 2000,
+    size: 4000,
     typeForm: 'image/png'
   },
   amount: {
-    min: 3,
+    min: 1,
     max: 30
   },
   divisibility: {
@@ -177,8 +177,8 @@ function namespaceName (label = 'namespaceName') {
   const max = generalConfig.namespaceName.max
   const rules = {
     required: value => !!value || `${label} is required.`,
-    min: v => (v && v.length >= min) || `${label} min length ${min} alphanumerico characters.`,
-    max: v => (v && v.length <= max) || `${label} max length ${max} alphanumerico characters.`
+    min: v => (v && v.length >= min) || `${label} min length ${min} alphanumeric characters.`,
+    max: v => (v && v.length <= max) || `${label} max length ${max} alphanumeric characters.`
   }
   return assemblyConfig(label, '', '', min, max, rules)
 }
@@ -193,8 +193,8 @@ function descriptionAsset (label = 'Description asset') {
   const max = generalConfig.descriptionAsset.max
   const rules = {
     required: value => !!value || `${label} is required.`,
-    min: v => (v && v.length >= min) || `${label} min length ${min} alphanumerico characters.`,
-    max: v => (v && v.length <= max) || `${label} max length ${max} alphanumerico characters.`
+    min: v => (v && v.length >= min) || `${label} min length ${min} alphanumeric characters.`,
+    max: v => (v && v.length <= max) || `${label} max length ${max} alphanumeric characters.`
   }
   return assemblyConfig(label, '', '', min, max, rules)
 }
@@ -249,14 +249,14 @@ function divisibility (label = 'Divisibility') {
  *
  * @param {*} label
  */
-function iconMosaic (label = `Select image icon (Max. ${generalConfig.img.width}x${generalConfig.img.height})`) {
+function iconMosaic (label = `Select image icon`) {
   const size = generalConfig.img.size
   const typeForm = generalConfig.img.typeForm
   const width = generalConfig.img.width
   const height = generalConfig.img.height
   const rules = {
     required: v => !!v || `${label} is required.`,
-    size: v => !v || v.size < size || 'Icon size must be at least 2 kB!',
+    size: v => !v || v.size < size || 'Icon size must be at least 4 kB!',
     typeForm: v => !v || v.type === typeForm || `Allowed format (${typeForm}).`
   }
   return assemblyConfigFile(width, height, size, typeForm, assemblyConfig(label, '', 'file', null, null, rules))

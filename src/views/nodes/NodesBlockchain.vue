@@ -89,7 +89,7 @@ export default {
     // searching: false
   }),
   methods: {
-    ...mapMutations('nodesStoreNew', ['ADD_NODES']),
+    ...mapMutations('nodesStoreNew', ['ADD_NODES', 'RECONNECT', 'STOPPED_BY_USER']),
     // addNode () {
     //   if (this.nodeForm.node !== '') {
     //     this.searching = true
@@ -112,12 +112,15 @@ export default {
       this.statusNode = statusNode
     },
     reconnect (node = this.currentNode) {
+      this.STOPPED_BY_USER(true)
       NodeService.connect(node)
+      this.RECONNECT(true)
     },
     // deleteNodes (node) {
     //   NodeService.deleteNodes(node)
     // },
     stopConnection () {
+      this.STOPPED_BY_USER(true)
       NodeService.closeConnection()
     }
   },

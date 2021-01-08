@@ -12,7 +12,9 @@
       </div>
       <div class="ma-2 pt-4 ml-4 mx-auto">
         <span class="body-1 font-weight-black">Hash :</span>
-        <span class>{{ txOfferInfo.hash }}</span>
+           <span
+            ><a :href="hrefAdd(txOfferInfo.hash)" target="_blank">{{ txOfferInfo.hash }}</a></span
+          >
       </div>
       <!-- <div class="ma-2 pt-4 ml-4 mx-auto">
         <p class="caption">
@@ -48,34 +50,28 @@ export default {
   methods: {
     action (action) {
       switch (action) {
-        case 'viewOnExplorer':
+        case 'viewOfferts':
           this.$router.push({ path: '/searchOfferts' })
           break
         case 'print':
           break
       }
+    },
+    hrefAdd (hash) {
+      return `${this.$store.getters.environment.explorerHash.url}${hash}`
     }
   },
   beforeMount () {
     this.arrayBtn = [
       {
-        print: {
-          key: 'print',
-          action: 'print',
-          disabled: false,
-          color: 'white',
-          textColor: 'primary--text',
-          loading: false,
-          text: 'Print'
-        },
-        viewOnExplorer: {
-          key: 'viewOnExplorer',
-          action: 'viewOnExplorer',
+        viewOfferts: {
+          key: 'viewOfferts',
+          action: 'viewOfferts',
           disabled: false,
           color: 'primary',
           textColor: 'white--text',
           loading: false,
-          text: 'view on explorer'
+          text: 'Go to dashboard'
         }
       }
     ]

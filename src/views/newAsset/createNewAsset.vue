@@ -277,7 +277,7 @@
                               style="line-height: 0.80rem;"
                               class="v-messages__message text-left subtitle-1 font-italic font-weight-bold text--secondary"
                             >
-                              <span>{{supplyFormV}}</span>
+                              <span>{{ supplyFormV }}</span>
                               <!-- <span>dos</span>
                               <span>tres</span>-->
                             </div>
@@ -348,7 +348,12 @@
                       class="leve d-flex justify-center align-center"
                     >
                       <span class="font-weight-bold mr-1">Supply:</span>
-                      <span class>{{ $generalService.amountFormatter(form.mosaic.supply,form.mosaic.divisibility)}}</span>
+                      <span class>{{
+                        $generalService.amountFormatter(
+                          form.mosaic.supply,
+                          form.mosaic.divisibility
+                        )
+                      }}</span>
                     </v-col>
                     <v-col
                       xs="10"
@@ -580,7 +585,10 @@ export default {
     ...mapGetters('accountStore', ['currentAccount']),
     ...mapGetters('transactionsStore', ['confirmed', 'unconfirmedAdded', 'status']),
     supplyFormV () {
-      return this.$generalService.amountFormatter(this.form.mosaic.supply, this.form.mosaic.divisibility)
+      return this.$generalService.amountFormatter(
+        this.form.mosaic.supply,
+        this.form.mosaic.divisibility
+      )
     },
     namespaceName: {
       get () {
@@ -670,7 +678,10 @@ export default {
             validBalance(this.rentalFee + this.maxFee) &&
             this.$generalService.showMsgStatusNode()
           ) {
-            this.typeCreatetxs(this.typeAction())
+            let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
+            if (common) {
+              this.typeCreatetxs(this.typeAction())
+            }
           }
       }
     },
@@ -925,27 +936,31 @@ export default {
         setTimeout(() => {
           this.sendingForm = false
           this.typeCreatetxs(1)
-        }, 2000)
+        }, 800)
         this.typeCreatetxs(3)
       }
     },
     validateTxHashMosaicAliasMosaicMetadata (transactions) {
       if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicAlias)) {
         this.validateLoadingTX(true, false, true)
-        setTimeout(() => {
+        // setTimeout(() => {
+        if (this.hashMosaicAlias) {
           this.dataTx.push({ hash: this.hashMosaicAlias, name: 'Mosaic Alias' })
           this.hashMosaicAlias = null
-        }, 1000)
-        // console.log('hash Mosaic Alias...')
-        this.sendingForm = false
+          // }, 800)
+          // console.log('hash Mosaic Alias...')
+          this.sendingForm = false
+        }
       }
       if (transactions.map(t => t.transactionInfo.hash).find(h => h === this.hashMosaicMetadata)) {
-        setTimeout(() => {
+        // setTimeout(() => {
+        if (this.hashMosaicMetadata) {
           this.dataTx.push({ hash: this.hashMosaicMetadata, name: 'Mosaic Metadata' })
           this.hashMosaicMetadata = null
-        }, 1000)
-        // console.log('hash Mosaic Metadata...')
-        this.sendingForm = false
+          // })
+          // console.log('hash Mosaic Metadata...')
+          this.sendingForm = false
+        }
       }
     },
     validIconMosaic (event) {

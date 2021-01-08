@@ -4,6 +4,11 @@ import {
   TransactionType
 } from 'tsjs-xpx-chain-sdk/dist/src/model/transaction/TransactionType'
 
+/**
+ *
+ * @param {*} data
+ * @param {*} mosaicUpdate
+ */
 function getAllOffer (data, mosaicUpdate = null) {
   let allOffers = {
     sell: [],
@@ -25,15 +30,16 @@ function getAllOffer (data, mosaicUpdate = null) {
   const price = calAverage(priceArray, data.info.mosaicInfo[0].mosaicInfo.properties.divisibility)
   const pas = {
     tableData: {
+      graphic: [],
       text: data.info.text,
       type: 'sell',
       averagePrice: price,
       info: data.info,
       priceArray: priceArray,
-      twentyFourChange: `${(
-        (Math.floor(Math.random() * 20) + Math.floor(Math.random() * 1000)) /
-        100
-      ).toFixed(2)}`
+      twentyFourChange: {
+        percentChange: 0,
+        act: null
+      }
     },
     allOffers: allOffers
   }
@@ -46,7 +52,79 @@ function getAllOffer (data, mosaicUpdate = null) {
     store.commit('offersStore/UPDATE_OFFER_ALL', pas)
   }
   store.commit('offersStore/UPDATE_OFFER_BOOLEAN')
+  store.dispatch('socketDbStore/getOffertTxFromIdHexMosaic',
+    {
+      io: Vue.prototype.$socket,
+      data: {
+        mosaicIdHex: data.info.mosaicIdHex,
+        minutesFilter: 720
+      }
+    })
+
+  // this.$store.dispatch('socketDbStore/getMoisaicsInfo', {
+  //   io: this.$socket,
+  //   data: null
+  // })
 }
+
+function graphicChange (offers) {
+  const data = {
+    mosaicIdHex: null,
+    valueGraphic: []
+  }
+  data.mosaicIdHex = offers[0].mosaicIdHex
+  data.valueGraphic = offers.map(x => int64compact(x.cost) / int64compact(x.mosaicAmount))
+  store.commit('offersStore/UPDATE_OFFER_GRAPHIC_CHANGE', data)
+}
+/**
+ *
+ * @param {*} offers
+ */
+function twentyFourChange (offers) {
+  const data = {
+    mosaicIdHex: null,
+    percentChange: 0,
+    act: null
+  }
+  if (offers.length > 1) {
+    // Order by
+    const offerOrder = Vue.prototype.$generalService.sortByKey(offers, 'timestamp')
+    // Calc range date
+    const firstOffer = offerOrder[0]
+    const lastOffer = offerOrder[offerOrder.length - 1]
+    const startTime = new Date(firstOffer.timestamp)
+    const endTime = new Date(lastOffer.timestamp)
+    const difference = endTime.getTime() - startTime.getTime() // This will give difference in milliseconds
+    const resultInMinutes = Math.round(difference / 60000)
+    if (resultInMinutes >= 720) {
+      const firstOfferCost = int64compact(firstOffer.cost)
+      const firstOfferAmount = int64compact(firstOffer.mosaicAmount)
+      const firstOfferPrice = firstOfferCost / firstOfferAmount
+      const lastOfferCost = int64compact(lastOffer.cost)
+      const lastOfferAmount = int64compact(lastOffer.mosaicAmount)
+      const lastOfferPrice = lastOfferCost / lastOfferAmount
+      const diff = firstOfferPrice - lastOfferPrice
+      const percent = diff / firstOfferPrice
+      data.mosaicIdHex = firstOffer.mosaicIdHex
+      data.percentChange = Math.abs(percent * 100)
+      data.act = (percent <= 0) ? 'positive' : 'negative'
+    }
+  }
+  store.commit('offersStore/UPDATE_OFFER_TWENTY_FOUR_CHANGE', data)
+  // return data
+}
+function int64compact (value) {
+  return Vue.prototype.$blockchainProvider.getUint64([
+    value['lower'],
+    value['higher']
+  ]).compact()
+}
+
+/**
+ *
+ * @param {*} data
+ * @param {*} divisibility
+ */
 function calAverage (data, divisibility = 1) {
   let total = 0
   const amount = Vue.prototype.$generalService.addZerosQuantity(divisibility, 1)
@@ -56,48 +134,7 @@ function calAverage (data, divisibility = 1) {
   })
   return Vue.prototype.$generalService.amountFormatter(total / data.length)
 }
-// function removeOffer (offer, mosaicFilterUpEvent) {
-//   const dataValue = validateDeleteOffer(offer)
-//   dataValue.forEach(x => {
-//     if (x.deleteV) {
-//       store.commit('offersStore/DELETE_OFFER_ALL', x.mosaicIdHex)
-//     }
-//   })
-// }
-// function validateDeleteOffer (oferts) {
-//   let newArray = []
-//   let arrayTemporal = []
-//   for (var i = 0; i < oferts.length; i++) {
-//     arrayTemporal = newArray.filter(resp => resp['mosaicIdHex'] === oferts[i]['info']['mosaicIdHex'])
-//     if (arrayTemporal.length > 0) {
-//       newArray[newArray.indexOf(arrayTemporal[0])]['validateDelete'].push(oferts[i]['type'])
-//     } else {
-//       newArray.push({
-//         'mosaicIdHex': oferts[i]['info']['mosaicIdHex'],
-//         'validateDelete': [oferts[i]['type']]
-//       })
-//     }
-//   }
-//   return newArray.map(x => {
-//     return {
-//       mosaicIdHex: x.mosaicIdHex,
-//       deleteV: Boolean(x.validateDelete.length === 2)
-//     }
-//   })
-// }
 
-/**
- *
- * @param {*} data
- */
-// function sumAllAmount (data) {
-//   let total = 0
-//   data.forEach(element => {
-//     total = total + element
-//   })
-
-//   return total
-// }
 /**
  *
  * @param {*} data
@@ -120,6 +157,10 @@ function filtersAssetsFunc (data) {
   }
   return valor
 }
+/**
+ *
+ * @param {*} data
+ */
 function filterAssets (data) {
   if (data) {
     data.text = data.mosaicIdHex
@@ -218,6 +259,8 @@ export {
   filtersAssetsFunc,
   filterAssets,
   validateExpireOffer,
-  update
+  update,
+  twentyFourChange,
+  graphicChange
 
 }

@@ -10,18 +10,34 @@
             show-size
             counter
             :rules="[
-                      configForm.iconMosaic.rules.size,
-                      configForm.iconMosaic.rules.typeForm,
-                      isValidImg]"
+              configForm.iconMosaic.rules.size,
+              configForm.iconMosaic.rules.typeForm,
+              isValidImg
+            ]"
             :accept="'image/png'"
             dense
             :color="inputStyle"
             :label="configForm.iconMosaic.label"
           >
-            <template v-slot:selection="{ index, text}">
+            <template v-slot:selection="{ index, text }">
               <v-chip :color="inputStyle" dark label small>{{ text }}</v-chip>
             </template>
           </v-file-input>
+          <div class="v-messages">
+            <div
+              style="line-height: 0.80rem;"
+              class="v-messages__message text-left subtitle-1 font-italic font-weight-bold text--secondary pt-1"
+            >
+              <!-- <span>dos</span>
+                              <span>tres</span>-->
+              <span class="primary--text">Size:</span>
+              <span class="mr-2">35x35,</span>
+              <span class="primary--text">Max:</span>
+              <span class="mr-2">4KB,</span>
+              <span class="primary--text">Type:</span>
+              <span class="mr-2">PNG.</span>
+            </div>
+          </div>
         </v-col>
         <v-col
           sm="12"

@@ -16,7 +16,8 @@
                         <v-col
                           cols=" pt-0"
                           class="mx-auto title font-italic font-weight-medium pb-0"
-                        >{{ title }}</v-col>
+                          >{{ title }}</v-col
+                        >
                         <!-- Wallet name -->
                         <v-col cols="12">
                           <v-text-field
@@ -93,7 +94,11 @@
                               configForm.password.rules.min,
                               configForm.password.rules.max,
                               configForm.password.rules.max,
-                              $configForm.isMatch(passwords.password, passwords.confirmPassword, 'Password')
+                              $configForm.isMatch(
+                                passwords.password,
+                                passwords.confirmPassword,
+                                'Password'
+                              )
                             ]"
                             :type="configForm.password.show ? 'text' : 'password'"
                             label="Confirm Password"
@@ -159,8 +164,8 @@ export default {
       confirmPassword: this.$configForm.password('Confirm password')
     }
     this.arrayBtn = {
-      create: this.$configForm.buildButton('Create', 'create', 'create', 'primary', 'white--text'),
-      clear: this.$configForm.buildButton('Clear', 'clear', 'clear', 'primary', 'white--text')
+      clear: this.$configForm.buildButton('Clear', 'clear', 'clear', 'primary', 'white--text'),
+      create: this.$configForm.buildButton('Create', 'create', 'create', 'primary', 'white--text')
     }
   },
   computed: {

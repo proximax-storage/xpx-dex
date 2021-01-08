@@ -13,7 +13,8 @@ export default {
   },
   computed: {
     // ...mapGetters('nodeStore', ['nodeStatus', 'networkType']),
-    ...mapGetters('nodesStoreNew', ['nodeStatus', 'currentNode']),
+    ...mapMutations('nodesStoreNew', ['RECONNECT']),
+    ...mapGetters('nodesStoreNew', ['nodeStatus', 'currentNode', 'reconnect']),
     ...mapGetters('transactionsStore', ['confirmed', 'status', 'unconfirmedAdded'])
   },
   watch: {
@@ -26,10 +27,12 @@ export default {
         this.connectionStablished = true
         const allAccounts = this.$store.getters['walletStore/currentWallet'].accounts
         getAccountsInfo(allAccounts)
-        this.$store.dispatch('socketDbStore/getMoisaicsInfo', {
-          io: this.$socket,
-          data: null
-        })
+        if (!this.reconnect) {
+          this.$store.dispatch('socketDbStore/getMoisaicsInfo', {
+            io: this.$socket,
+            data: null
+          })
+        }
       }
     },
     confirmed (transactions) {

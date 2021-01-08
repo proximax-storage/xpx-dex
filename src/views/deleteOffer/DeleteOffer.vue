@@ -1,11 +1,13 @@
 <template>
   <v-col class="pa-3">
     <v-row>
-      <v-col cols="12" class="headline font-weight-regular text-left primary--text">Delete offer</v-col>
+      <v-col cols="12" class="headline font-weight-regular text-left primary--text"
+        >Delete offer</v-col
+      >
     </v-row>
     <v-row>
       <!-- <v-col sm="7" md="7" lg="9" col="9" class="pt-0"> -->
-        <v-col sm="7" md="7" lg="9" col="9" class="pt-0">
+      <v-col sm="7" md="7" lg="9" col="9" class="pt-0">
         <v-divider class="pb-5"></v-divider>
         <!-- {{exchangeDelete}} -->
         <template v-if="!dataTxOfferInfo">
@@ -16,16 +18,19 @@
                   <v-col
                     cols="12"
                     class="subtitle-1 pt-0 font-weight-regular text-left primary--text"
-                  >Quantities</v-col>
+                    >Quantities</v-col
+                  >
                   <div class="ma-2 ml-7 mx-auto">
                     <div class="caption font-italic font-weight-light">Initial</div>
-                    <div class="caption font-weight-black">{{exchangeDelete.initialQuantity}}</div>
+                    <div class="caption font-weight-black">
+                      {{ exchangeDelete.initialQuantity }}
+                    </div>
                   </div>
                   <div class="ma-2 ml-7 mx-auto">
                     <div class="caption font-italic font-weight-light mx-auto">Available</div>
-                    <div
-                      class="caption font-weight-black mx-auto"
-                    >{{exchangeDelete.quantityAvailable}}</div>
+                    <div class="caption font-weight-black mx-auto">
+                      {{ exchangeDelete.quantityAvailable }}
+                    </div>
                   </div>
                 </v-row>
               </v-col>
@@ -35,14 +40,15 @@
                   <v-col
                     cols="12"
                     class="subtitle-1 pt-0 font-weight-regular text-left primary--text"
-                  >Costs</v-col>
+                    >Costs</v-col
+                  >
                   <div class="ma-2 ml-7 mx-auto">
                     <div class="caption font-italic font-weight-light">Price (XPX)</div>
-                    <div class="caption font-weight-black">{{exchangeDelete.price}}</div>
+                    <div class="caption font-weight-black">{{ exchangeDelete.price }}</div>
                   </div>
                   <div class="ma-2 ml-7 mx-auto">
                     <div class="caption font-italic font-weight-light">Total (XPX)</div>
-                    <div class="caption font-weight-black">{{exchangeDelete.initialCost}}</div>
+                    <div class="caption font-weight-black">{{ exchangeDelete.initialCost }}</div>
                   </div>
                 </v-row>
               </v-col>
@@ -55,10 +61,9 @@
                   fermentum sed felis. Duis portito. purus a suscipit consequat
                 </p>
               </v-col> -->
-              <v-col
-                cols="10"
-                class="ma-0 mx-auto caption d-flex justify-center align-center"
-              >Transaction fee: 0.002020 XPX</v-col>
+              <v-col cols="10" class="ma-0 mx-auto caption d-flex justify-center align-center"
+                >Transaction fee: 0.002020 XPX</v-col
+              >
             </v-row>
 
             <v-row>
@@ -92,11 +97,18 @@
           </v-form>
         </template>
         <template v-if="dataTxOfferInfo">
-          <congratulations-offer :colorText="'error--text'" :txOfferInfo="dataTxOfferInfo"></congratulations-offer>
+          <congratulations-offer
+            :colorText="'error--text'"
+            :txOfferInfo="dataTxOfferInfo"
+          ></congratulations-offer>
         </template>
         <v-row v-if="!dataTxOfferInfo">
           <v-col cols="5" class="ma-0 mx-auto caption d-flex justify-center align-center">
-            <custom-button @action="action" :align="'center'" :arrayBtn="getArrayBtn"></custom-button>
+            <custom-button
+              @action="action"
+              :align="'center'"
+              :arrayBtn="getArrayBtn"
+            ></custom-button>
           </v-col>
         </v-row>
       </v-col>
@@ -183,6 +195,7 @@ export default {
                   dataRequiredMosaic: {
                     moisaicsInfo: [
                       {
+                        action: 'delete',
                         mosaicId: this.exchangeDelete.exchange.mosaicId,
                         mosaicIdHex: this.exchangeDelete.exchange.mosaicId.toHex()
                       }
@@ -210,6 +223,10 @@ export default {
               }
             }
           }
+          break
+        case 'cancel':
+          this.$router.push({ path: `/myWallet`, query: { item: 2 } }).catch(e => {})
+          break
       }
     },
     validateTxHash (transactions) {

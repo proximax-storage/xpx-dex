@@ -13,10 +13,10 @@
                   <br />
                   <span
                     class="subtitle-1 font-italic font-weight-medium"
-                  >Has been created succesfully</span>
+                  >Has been created successfully</span>
                 </v-col>
                 <v-col cols="10" class="mx-auto">
-                  <span class="body-1 font-weight-black">Adress:</span>
+                  <span class="body-1 font-weight-black">Address:</span>
                   <br />
                   <span class="body-2 d-flex">{{ address }}</span>
                 </v-col>

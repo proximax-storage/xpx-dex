@@ -1,7 +1,7 @@
 {
   "networkSelected": "TEST_NET",
   "infoApp": {
-    "version": "0.1.06",
+    "version": "0.1.12",
     "nameApp": "ProximaX Dex Wallet",
     "pseudonymApp": "dex-wallet"
   },
@@ -25,6 +25,9 @@
       "coingecko": {
         "url": "https://api.coingecko.com/api/v3/coins/"
       },
+      "explorerHash" :{
+        "url": "http://bctestnetexplorer.xpxsirius.io/#/result/hash/"
+      },
       "coin": "xpx",
       "mosaic": {
         "id": "13bfc518e40549d7",
@@ -41,8 +44,7 @@
         "protocolWs": "wss",
         "nodes": [
           "bctestnet1.brimstone.xpxsirius.io",
-          "bctestnet2.brimstone.xpxsirius.io",
-          "bctestnet3.brimstone.xpxsirius.io"
+          "bctestnet2.brimstone.xpxsirius.io"
         ]
       },
       "rentalFeeSink": {
@@ -77,6 +79,9 @@
       },
       "coingecko": {
         "url": "https://api.coingecko.com/api/v3/coins/"
+      },
+      "explorerHash" :{
+        "url": "http://bctestnetexplorer.xpxsirius.io/#/result/hash/"
       },
       "coin": "xpx",
       "mosaic": {
@@ -137,6 +142,9 @@
       },
       "coingecko": {
         "url": "https://api.coingecko.com/api/v3/coins/"
+      },
+      "explorerHash" :{
+        "url": "http://bctestnetexplorer.xpxsirius.io/#/result/hash/"
       },
       "coin": "xpx",
       "mosaic": {

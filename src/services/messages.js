@@ -4,7 +4,7 @@ export default {
     aggregateBondedRemoved: 'Transaction Aggregate Bonded Removed',
     cosignatureAdded: 'Cosignature Added',
     confirmed: 'Transaction confirmed',
-    unconfirmed: 'Transaction send',
+    unconfirmed: 'Please wait a moment while the transaction is confirmed',
     unconfirmedRemoved: 'Transaction unconfirmed removed'
   },
   login: {

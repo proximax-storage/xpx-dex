@@ -266,7 +266,7 @@ function decryptPrivateKey (common, account) {
       if (!isValidPrivateKey(common.privateKey)) {
         return {
           status: false,
-          msg: 'Invalid Private Key'
+          msg: 'Invalid password'
         }
       }
       if (common.privateKey !== '') {

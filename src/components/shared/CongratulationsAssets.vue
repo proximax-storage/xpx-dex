@@ -1,19 +1,20 @@
 <template>
   <v-row>
     <v-col cols="12">
-      <div
-        class="display-1 font-weight-regular text-left primary--text"
-        v-bind:class="[colorText]"
-      >Congratulations</div>
+      <div class="display-1 font-weight-regular text-left primary--text" v-bind:class="[colorText]">
+        Congratulations
+      </div>
       <div class="ma-2 ml-4 mx-auto">
-        <div
-          class="caption font-weight-black pt-3"
-        >Your transaction has been successfully registered into blockchain.</div>
+        <div class="caption font-weight-black pt-3">
+          Your transaction has been successfully registered into blockchain.
+        </div>
       </div>
       <template>
         <div class="ma-2 pt-4 ml-4 mx-auto" v-for="i in txInfo" v-bind:key="i.hash">
-          <span class="body-1 font-weight-black">{{i.name}} Hash :</span>
-          <span class>{{ i.hash }}</span>
+          <span class="body-1 font-weight-black">{{ i.name }} Hash :</span>
+          <span
+            ><a :href="hrefAdd(i.hash)" target="_blank">{{ i.hash }}</a></span
+          >
         </div>
       </template>
       <!-- <div class="ma-2 pt-4 ml-4 mx-auto">
@@ -50,34 +51,38 @@ export default {
   methods: {
     action (action) {
       switch (action) {
-        case 'viewOnExplorer':
-          this.$router.push({ path: '/searchOfferts' })
+        case 'viewOnAssets':
+          // this.$router.push({ path: '/searchOfferts' })
+          this.$router.push({ path: `/myWallet`, query: { item: 0 } }).catch(e => {})
           break
         case 'print':
           break
       }
+    },
+    hrefAdd (hash) {
+      return `${this.$store.getters.environment.explorerHash.url}${hash}`
     }
   },
   beforeMount () {
     this.arrayBtn = [
       {
-        print: {
-          key: 'print',
-          action: 'print',
-          disabled: false,
-          color: 'white',
-          textColor: 'primary--text',
-          loading: false,
-          text: 'Print'
-        },
+        //   print: {
+        //     key: 'print',
+        //     action: 'print',
+        //     disabled: false,
+        //     color: 'white',
+        //     textColor: 'primary--text',
+        //     loading: false,
+        //     text: 'Print'
+        //   },
         viewOnExplorer: {
           key: 'viewOnExplorer',
-          action: 'viewOnExplorer',
+          action: 'viewOnAssets',
           disabled: false,
           color: 'primary',
           textColor: 'white--text',
           loading: false,
-          text: 'view on explorer'
+          text: ' Go to assets'
         }
       }
     ]
