@@ -29,7 +29,6 @@ import {
   offersStore
 } from './modules/offers-store'
 import {
-  nodeStore,
   transactionsStore,
   coingeckoStore,
   onLineStore,
@@ -116,7 +115,6 @@ export default new Vuex.Store({
     accountStore,
     walletStore,
     appCoreStore,
-    nodeStore,
     transactionsStore,
     coingeckoStore,
     namespaceStore,

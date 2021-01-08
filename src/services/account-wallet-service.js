@@ -206,7 +206,7 @@ function createWallet (data) {
       const wallets = getWallets()
       wallets.push(walletBuilded)
       const pseudonymApp = store.getters.pseudonymApp
-      Vue.prototype.$browserStorage.set(`wallets-${pseudonymApp}`, JSON.stringify(wallets))
+      Vue.prototype.$browserStorage.set(`${store.getters.environment.keyLocalStore.key}-wallets-${pseudonymApp}`, JSON.stringify(wallets))
       store.commit('walletStore/SET_CURRENT_WALLET', walletBuilded)
       return {
         status: true,
@@ -335,7 +335,7 @@ function changeName (oldName, newName) {
       x.username = newName
     }
   })
-  Vue.prototype.$browserStorage.set(`wallets-${store.getters.pseudonymApp}`, JSON.stringify(wallets))
+  Vue.prototype.$browserStorage.set(`${store.getters.environment.keyLocalStore.key}-wallets-${store.getters.pseudonymApp}`, JSON.stringify(wallets))
 }
 /**
  *
@@ -358,9 +358,9 @@ function getWalletByName (name) {
 function getWallets () {
   const pseudonymApp = store.getters.pseudonymApp
   if (pseudonymApp !== '') {
-    const wallets = Vue.prototype.$browserStorage.get(`wallets-${pseudonymApp}`)
+    const wallets = Vue.prototype.$browserStorage.get(`${store.getters.environment.keyLocalStore.key}-wallets-${pseudonymApp}`)
     if (!wallets) {
-      Vue.prototype.$browserStorage.set(`wallets-${pseudonymApp}`, [])
+      Vue.prototype.$browserStorage.set(`${store.getters.environment.keyLocalStore.key}-wallets-${pseudonymApp}`, [])
       return []
     }
 

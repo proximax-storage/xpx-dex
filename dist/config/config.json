@@ -1,7 +1,7 @@
 {
   "networkSelected": "TEST_NET",
   "infoApp": {
-    "version": "0.1.14",
+    "version": "0.1.13",
     "nameApp": "ProximaX Dex Wallet",
     "pseudonymApp": "dex-wallet"
   },
@@ -19,6 +19,7 @@
         "port": 28015
       },
       "keyLocalStore": {
+        "key":"TEST_NET",
         "nodeStorage": "dex-nodes",
         "selectedNode": "dex-selected-node"
       },
@@ -74,6 +75,7 @@
         "port": "32773"
       },
       "keyLocalStore": {
+        "key":"MAIN_NET",
         "nodeStorage": "dex-nodes",
         "selectedNode": "dex-selected-node"
       },
@@ -137,6 +139,7 @@
         "port": "32773"
       },
       "keyLocalStore": {
+        "key":"PRIVATE",
         "nodeStorage": "dex-nodes",
         "selectedNode": "dex-selected-node"
       },
