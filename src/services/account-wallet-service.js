@@ -356,18 +356,21 @@ function getWalletByName (name) {
  * @returns
  */
 function getWallets () {
+  // setTimeout(() => {
   const pseudonymApp = store.getters.pseudonymApp
+  console.log('pseudonymApp', pseudonymApp)
   if (pseudonymApp !== '') {
     const wallets = Vue.prototype.$browserStorage.get(`${store.getters.environment.keyLocalStore.key}-wallets-${pseudonymApp}`)
     if (!wallets) {
       Vue.prototype.$browserStorage.set(`${store.getters.environment.keyLocalStore.key}-wallets-${pseudonymApp}`, [])
       return []
     }
-
+    store.commit('walletStore/SET_WALLETS', JSON.parse(wallets))
     return JSON.parse(wallets)
   }
-
+  store.commit('walletStore/SET_WALLETS', [])
   return []
+  // })
 }
 /**
  *

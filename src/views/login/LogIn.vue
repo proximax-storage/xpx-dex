@@ -81,7 +81,7 @@
   </v-container>
 </template>
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 import { getWalletByName, getWallets, logIn } from '@/services/account-wallet-service'
 export default {
   data: () => {
@@ -93,11 +93,12 @@ export default {
       outline: false,
       inputStyle: 'inputStyle',
       valid: false,
-      sendingForm: false,
-      wallets: getWallets()
+      sendingForm: false
+    // wallets: getWallets()
     }
   },
   beforeMount () {
+    getWallets()
     this.configForm = {
       wallet: this.$configForm.walletAccountName(),
       password: this.$configForm.password()
@@ -154,6 +155,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('walletStore', ['wallets']),
     getArrayBtn () {
       const arrayBtn = this.arrayBtn
       arrayBtn[0]['login'].disabled = !this.valid || this.sendingForm
