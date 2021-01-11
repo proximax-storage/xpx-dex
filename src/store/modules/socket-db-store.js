@@ -28,7 +28,7 @@ export const socketDbStore = {
       state.offersTx.push(data)
     },
     SOCKET_SET_MOSAIC_INFO (state, data) {
-      // console.log('SOCKET_SET_MOSAIC_INFO', data)
+      console.log('SOCKET_SET_MOSAIC_INFO', data)
       // state.mosaicsInfOffer = data
       store.dispatch('socketDbStore/GET_MOSAICS_INFO', data)
     },

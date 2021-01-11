@@ -87,7 +87,9 @@ function buildExchangeOffer (mosaicId, mosaicAmount, priceForAmount, type, owner
     action
   }
 }
+// function mosaicDefaultGetValidate (mosaicIdHex){
 
+// }
 export {
   buildAddExchangeOffer,
   buildExchangeOffer

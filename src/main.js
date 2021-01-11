@@ -62,15 +62,15 @@ axios.get('../config/config.json', {
 Vue.use(
   new VueSocketIO({
     debug: false,
-    // connection: 'http://ec2-18-230-77-77.sa-east-1.compute.amazonaws.com:900',
-    connection: 'http://18.230.157.11:900',
+    // connection: 'http://18.230.157.11:900',
+    connection: 'https://dex-demo.xpxsirius.io',
     vuex: {
       store,
       actionPrefix: 'SOCKET_',
       mutationPrefix: 'SOCKET_'
     },
     options: {
-      path: '',
+      path: '/api',
       transports: ['websocket']
     },
     transports: ['websocket']

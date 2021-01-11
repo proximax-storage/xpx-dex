@@ -251,8 +251,9 @@ function findOffer (tx, txCompare, typeOffer) {
   }
   return pushOffer
 }
-function update (mosaicInfodb) {
-  store.dispatch('socketDbStore/UPDATE_MOSAICS_INFO', mosaicInfodb)
+function update (mosaicInfoDb) {
+  console.log('-------------------mosaicInfodb', mosaicInfoDb)
+  store.dispatch('socketDbStore/UPDATE_MOSAICS_INFO', mosaicInfoDb)
 }
 export {
   getAllOffer,

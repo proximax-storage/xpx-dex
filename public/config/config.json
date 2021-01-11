@@ -35,6 +35,13 @@
         "name": "xpx",
         "divisibility": 6
       },
+      "mosaicDefaultGet": [
+        {
+          "id": "42876D8578ECB9FB",
+          "name": "dex",
+          "divisibility": 1
+        }
+      ],
       "namespace": {
         "id": "bffb42a19116bdf6",
         "name": "prx.xpx"
@@ -91,6 +98,7 @@
         "name": "xpx",
         "divisibility": 6
       },
+      "mosaicDefaultGet": [],
       "namespace": {
         "id": "bffb42a19116bdf6",
         "name": "prx.xpx"
@@ -155,6 +163,7 @@
         "name": "xpx",
         "divisibility": 6
       },
+      "mosaicDefaultGet": [],
       "namespace": {
         "id": "bffb42a19116bdf6",
         "name": "prx.xpx"
