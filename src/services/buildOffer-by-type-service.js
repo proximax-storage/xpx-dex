@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import store from '@/store'
 // import store from '@/store'
 /**
  * Build exchange offert type add
@@ -20,11 +21,12 @@ function buildAddExchangeOffer (mosaicIdHex, mosaicAmount, priceForAmount, type,
     type,
     parseFloat(durationsend)
   )
-
+  console.log('mosaicDefaultGetValidate', mosaicDefaultGetValidate(mosaicId.toHex()))
+  const actionF = (mosaicDefaultGetValidate(mosaicId.toHex())) ? 'default' : 'add'
   const dataRequired = {
     moisaicsInfo: [
       {
-        action: 'add',
+        action: actionF,
         mosaicId: mosaicId,
         mosaicIdHex: mosaicIdHex
       }
@@ -64,13 +66,15 @@ function buildExchangeOffer (mosaicId, mosaicAmount, priceForAmount, type, owner
     type,
     owner
   )
+  console.log('mosaicDefaultGetValidate', mosaicDefaultGetValidate(mosaicId.toHex()))
+  const actionF = (mosaicDefaultGetValidate(mosaicId.toHex())) ? 'default' : 'execute'
   transactionDb.mosaicIdHex = mosaicId.toHex()
   const dataRequired = {
     dataRequiredDb: transactionDb,
     dataRequiredMosaic: {
       moisaicsInfo: [
         {
-          action: 'execute',
+          action: actionF,
           mosaicId: mosaicId,
           mosaicIdHex: mosaicId.toHex()
         }
@@ -87,10 +91,15 @@ function buildExchangeOffer (mosaicId, mosaicAmount, priceForAmount, type, owner
     action
   }
 }
-// function mosaicDefaultGetValidate (mosaicIdHex){
-
-// }
+function mosaicDefaultGetValidate (mosaicIdHex) {
+  console.log('mosaicIdHex', mosaicIdHex)
+  console.log('mosaicDefaultGets', store.getters.environment.mosaicDefaultGet)
+  const mosaicDefaultGet = store.getters.environment.mosaicDefaultGet
+  const mosaicFind = mosaicDefaultGet.find(x => x.id === mosaicIdHex)
+  return Boolean(mosaicFind)
+}
 export {
   buildAddExchangeOffer,
-  buildExchangeOffer
+  buildExchangeOffer,
+  mosaicDefaultGetValidate
 }

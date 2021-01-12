@@ -118,6 +118,7 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import { decrypt } from '@/services/account-wallet-service'
+import { mosaicDefaultGetValidate } from '@/services/buildOffer-by-type-service'
 export default {
   data () {
     return {
@@ -190,12 +191,13 @@ export default {
                 this.hash = signedTransaction.hash
                 this.sendingForm = true
                 common = null
+                const actionF = (mosaicDefaultGetValidate(this.exchangeDelete.exchange.mosaicId.toHex())) ? 'default' : 'delete'
                 const dataRequired = {
                   dataRequiredDb: [],
                   dataRequiredMosaic: {
                     moisaicsInfo: [
                       {
-                        action: 'delete',
+                        action: actionF,
                         mosaicId: this.exchangeDelete.exchange.mosaicId,
                         mosaicIdHex: this.exchangeDelete.exchange.mosaicId.toHex()
                       }
