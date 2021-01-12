@@ -72,43 +72,76 @@ function graphicChange (offers) {
     mosaicIdHex: null,
     valueGraphic: []
   }
+  // console.log('offers', offers)
   data.mosaicIdHex = offers[0].mosaicIdHex
   data.valueGraphic = offers.map(x => int64compact(x.cost) / int64compact(x.mosaicAmount))
+  console.log('graphicChange', data)
   store.commit('offersStore/UPDATE_OFFER_GRAPHIC_CHANGE', data)
 }
+
+// function filterTimestampOffers (offers, min) {
+//   const date = new Date()
+//   return offers.filter(x => {
+//     const timestamp = new Date(x.timestamp).getTime()
+//     const difference = date.getTime() - timestamp // This will give difference in milliseconds
+//     const resultInMinutes = Math.round(difference / 60000)
+//     return resultInMinutes <= min
+//   })
+// }
+
 /**
  *
  * @param {*} offers
  */
 function twentyFourChange (offers) {
+  // console.log('offers:', offers)
+  // console.log('offerfilters:', filterTimestampOffers(offers))
+  // const date = new Date()
+  // console.log('Date::', date)
+  // const ner = filterTimestampOffers(offers)
+  // ner.forEach(x => {
+  //   const timestamp = new Date(x.timestamp).getTime()
+  //   console.log('timestamp', timestamp)
+  //   const difference = date.getTime() - timestamp// This will give difference in milliseconds
+  //   const resultInMinutes = Math.round(difference / 60000)
+  //   console.log('resultInMinutes forEach', resultInMinutes)
+  // })
   const data = {
     mosaicIdHex: null,
     percentChange: 0,
     act: null
   }
+  // const offersFilter = filterTimestampOffers(offers, 720)
   if (offers.length > 1) {
     // Order by
     const offerOrder = Vue.prototype.$generalService.sortByKey(offers, 'timestamp')
     // Calc range date
     const firstOffer = offerOrder[0]
     const lastOffer = offerOrder[offerOrder.length - 1]
-    const startTime = new Date(firstOffer.timestamp)
-    const endTime = new Date(lastOffer.timestamp)
-    const difference = endTime.getTime() - startTime.getTime() // This will give difference in milliseconds
-    const resultInMinutes = Math.round(difference / 60000)
-    if (resultInMinutes >= 720) {
-      const firstOfferCost = int64compact(firstOffer.cost)
-      const firstOfferAmount = int64compact(firstOffer.mosaicAmount)
-      const firstOfferPrice = firstOfferCost / firstOfferAmount
-      const lastOfferCost = int64compact(lastOffer.cost)
-      const lastOfferAmount = int64compact(lastOffer.mosaicAmount)
-      const lastOfferPrice = lastOfferCost / lastOfferAmount
-      const diff = firstOfferPrice - lastOfferPrice
-      const percent = diff / firstOfferPrice
-      data.mosaicIdHex = firstOffer.mosaicIdHex
-      data.percentChange = Math.abs(percent * 100)
-      data.act = (percent <= 0) ? 'positive' : 'negative'
-    }
+    // const startTime = new Date(firstOffer.timestamp)
+    // const endTime = new Date(lastOffer.timestamp)
+    // const difference = endTime.getTime() - startTime.getTime() // This will give difference in milliseconds
+    // const resultInMinutes = Math.round(difference / 60000)
+    // console.log('resultInMinutes', resultInMinutes)
+    // if (resultInMinutes >= 720) {
+    const firstOfferCost = int64compact(firstOffer.cost)
+    const firstOfferAmount = int64compact(firstOffer.mosaicAmount)
+    // console.log('firstOfferCost', firstOfferCost)
+    // console.log('firstOfferAmount', firstOfferAmount)
+    const firstOfferPrice = firstOfferCost / firstOfferAmount
+    const lastOfferCost = int64compact(lastOffer.cost)
+    const lastOfferAmount = int64compact(lastOffer.mosaicAmount)
+    const lastOfferPrice = lastOfferCost / lastOfferAmount
+    // console.log('firstOffer', firstOffer)
+    // console.log('lastOffer', lastOffer)
+    // console.log('firstOfferPrice', firstOfferPrice)
+    // console.log('lastOfferPrice', lastOfferPrice)
+    const diff = firstOfferPrice - lastOfferPrice
+    const percent = diff / firstOfferPrice
+    data.mosaicIdHex = firstOffer.mosaicIdHex
+    data.percentChange = Math.abs(percent * 100)
+    data.act = (percent <= 0) ? 'positive' : 'negative'
+    // }
   }
   store.commit('offersStore/UPDATE_OFFER_TWENTY_FOUR_CHANGE', data)
   // return data

@@ -61,7 +61,7 @@ axios.get('../config/config.json', {
 // ---------------------- FIN REFACTOR ----------------------
 Vue.use(
   new VueSocketIO({
-    debug: true,
+    debug: false,
     // connection: 'http://18.230.157.11:900',
     // connection: 'https://dex-demo.xpxsirius.io',
     connection: 'https://dex-demo.xpxsirius.io',

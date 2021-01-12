@@ -57,8 +57,9 @@ export const socketDbStore = {
       // console.log('RETURN_INSERT_EXECUTE_OFFERS', data)
     },
     SOCKET_RETURN_GET_OFFERT_TX_ID_HEX (state, data) {
+      // console.log('SOCKET_RETURN_GET_OFFERT_TX_ID_HEX', data)
       twentyFourChange(data)
-      graphicChange(data)
+      if (data.length > 0) { graphicChange(data) }
     },
     SOCKET_RETURN_INSERT_MOSAIC_INFO (state, data) {
       state.unchanged = null
@@ -106,7 +107,7 @@ export const socketDbStore = {
       (async () => {
         const mosaicsInfOffer = state.mosaicsInfOffer.find(x => x.mosaicIdHex === data.mosaicIdHex)
         if (mosaicsInfOffer) {
-          console.log('GET_EXCHANGE_OFFER 1')
+          // console.log('GET_EXCHANGE_OFFER 1')
           dispatch('offersStore/GET_EXCHANGE_OFFER', mosaicsInfOffer, { root: true })
         } else {
           dispatch('GET_MOSAICS_INFO', [data])
@@ -139,7 +140,7 @@ export const socketDbStore = {
         for (var i in state.mosaicsInfOffer) {
           if (state.mosaicsInfOffer[i].mosaicIdHex === mosaicHex) {
             state.mosaicsInfOffer[i].mosaicInfo = data
-            console.log('GET_EXCHANGE_OFFER 2')
+            // console.log('GET_EXCHANGE_OFFER 2')
             dispatch('offersStore/GET_EXCHANGE_OFFER', state.mosaicsInfOffer[i], { root: true })
             break // Stop this loop, we found it!
           }
@@ -149,7 +150,7 @@ export const socketDbStore = {
       } else {
         state.loadingInfo = false
         const mosaicsInf = { mosaicIdHex: mosaicHex, mosaicInfo: data }
-        console.log('GET_EXCHANGE_OFFER 3')
+        // console.log('GET_EXCHANGE_OFFER 3')
         dispatch('offersStore/GET_EXCHANGE_OFFER', mosaicsInf, { root: true })
         state.mosaicsInfOffer.push(mosaicsInf)
       }
