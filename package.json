@@ -3,8 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --port 3000",
-    "build": "vue-cli-service build",
+    "serve-testnet": "vue-cli-service serve  --port 3000 --mode testnet",
+    "serve-mainnet": "vue-cli-service serve  --port 3000 --fix --mode mainnet",
+    "serve-private": "vue-cli-service serve  --port 3000 --fix --mode private",
+    "build-testnet": "vue-cli-service build --mode testnet",
+    "build-mainnet": "vue-cli-service build --mode mainnet",
+    "build-private": "vue-cli-service build --mode private",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
