@@ -64,7 +64,7 @@ Vue.use(
     debug: true,
     // connection: 'http://18.230.157.11:900',
     // connection: 'https://dex-demo.xpxsirius.io',
-    connection: 'https://localhost:900',
+    connection: 'https://dex-demo.xpxsirius.io',
     vuex: {
       store,
       actionPrefix: 'SOCKET_',
@@ -96,4 +96,3 @@ const configIntegration = async function () {
   }
 }
 configIntegration()
-// process.env.VUE_APP_PUBLIC_KEY_SYSTEM
