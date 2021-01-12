@@ -21,7 +21,6 @@ function buildAddExchangeOffer (mosaicIdHex, mosaicAmount, priceForAmount, type,
     type,
     parseFloat(durationsend)
   )
-  console.log('mosaicDefaultGetValidate', mosaicDefaultGetValidate(mosaicId.toHex()))
   const actionF = (mosaicDefaultGetValidate(mosaicId.toHex())) ? 'default' : 'add'
   const dataRequired = {
     moisaicsInfo: [
@@ -66,7 +65,6 @@ function buildExchangeOffer (mosaicId, mosaicAmount, priceForAmount, type, owner
     type,
     owner
   )
-  console.log('mosaicDefaultGetValidate', mosaicDefaultGetValidate(mosaicId.toHex()))
   const actionF = (mosaicDefaultGetValidate(mosaicId.toHex())) ? 'default' : 'execute'
   transactionDb.mosaicIdHex = mosaicId.toHex()
   const dataRequired = {
@@ -92,8 +90,6 @@ function buildExchangeOffer (mosaicId, mosaicAmount, priceForAmount, type, owner
   }
 }
 function mosaicDefaultGetValidate (mosaicIdHex) {
-  console.log('mosaicIdHex', mosaicIdHex)
-  console.log('mosaicDefaultGets', store.getters.environment.mosaicDefaultGet)
   const mosaicDefaultGet = store.getters.environment.mosaicDefaultGet
   const mosaicFind = mosaicDefaultGet.find(x => x.id === mosaicIdHex)
   return Boolean(mosaicFind)
