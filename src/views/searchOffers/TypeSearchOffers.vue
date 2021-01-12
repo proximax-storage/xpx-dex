@@ -57,7 +57,7 @@ export default {
     headers: [
       { text: 'Asset', value: 'tableData.text' },
       { text: 'Average Price (XPX)', value: 'tableData.averagePrice' },
-      { text: '12h Change', value: 'tableData.twentyFourChange' },
+      { text: '24h Change', value: 'tableData.twentyFourChange' },
       { text: 'Price Graph', value: 'tableData.graphic' }
     ],
     value: [24, 150, 675, 320, 500, 200, 170, 250, 700],

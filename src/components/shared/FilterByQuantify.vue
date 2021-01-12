@@ -3,10 +3,10 @@
   <v-col
     cols="12"
     xs="12"
-    sm="8"
-    md="5"
-    lg="3"
-    xl="3"
+    sm="10"
+    md="6"
+    lg="4"
+    xl="4"
     class="pt-0 pb-0"
   >
     <div class="font-italic font-weight-light pb-2">Quantity</div>

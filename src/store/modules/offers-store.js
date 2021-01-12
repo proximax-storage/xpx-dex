@@ -54,6 +54,7 @@ export const offersStore = {
       // console.log('state.offerAll', JSON.stringify(state.offerAll))
     },
     UPDATE_OFFER_TWENTY_FOUR_CHANGE (state, data) {
+      console.log('UPDATE_OFFER_TWENTY_FOUR_CHANGE', data)
       if (data.mosaicIdHex) {
         for (var i = 0; i < state.offerAll.length; i++) {
           if (state.offerAll[i].tableData.info.mosaicIdHex === data.mosaicIdHex) {
