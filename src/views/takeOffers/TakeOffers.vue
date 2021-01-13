@@ -137,6 +137,7 @@
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { decrypt } from '@/services/account-wallet-service'
 import { buildExchangeOffer } from '@/services/buildOffer-by-type-service'
+import { NodeService } from '@/services/blockchain/node-service'
 export default {
   data: () => ({
     form: {
@@ -190,7 +191,7 @@ export default {
     action (action) {
       switch (action) {
         case 'place':
-          if (this.valid && !this.sendingForm && this.$generalService.showMsgStatusNode()) {
+          if (NodeService.checksBlockTime() && this.valid && !this.sendingForm && this.$generalService.showMsgStatusNode()) {
             // this.exchangeOffer = null
             const mosaicAmount = this.$generalService.quantityStringToInt(
               this.form.amount,

@@ -119,6 +119,7 @@
 import { mapGetters, mapMutations } from 'vuex'
 import { decrypt } from '@/services/account-wallet-service'
 import { mosaicDefaultGetValidate } from '@/services/buildOffer-by-type-service'
+import { NodeService } from '@/services/blockchain/node-service'
 export default {
   data () {
     return {
@@ -172,7 +173,7 @@ export default {
     action (action) {
       switch (action) {
         case 'delete':
-          if (this.valid && !this.sendingForm && this.$generalService.showMsgStatusNode()) {
+          if (NodeService.checksBlockTime() && this.valid && !this.sendingForm && this.$generalService.showMsgStatusNode()) {
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
               if (this.exchangeDelete) {

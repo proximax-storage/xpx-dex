@@ -75,7 +75,7 @@ function graphicChange (offers) {
   // console.log('offers', offers)
   data.mosaicIdHex = offers[0].mosaicIdHex
   data.valueGraphic = offers.map(x => int64compact(x.cost) / int64compact(x.mosaicAmount))
-  console.log('graphicChange', data)
+  // console.log('graphicChange', data)
   store.commit('offersStore/UPDATE_OFFER_GRAPHIC_CHANGE', data)
 }
 

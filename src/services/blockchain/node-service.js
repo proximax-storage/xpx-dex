@@ -192,6 +192,20 @@ export class NodeService {
     // WebsocketConnection.nodesConfig.timeValidateSynchronization = 300
   }
 
+  static checksBlockTime () {
+    const rest = WebsocketConnection.nodesConfig.timeOutNewBlocks - this._objWebsocketConnection.blockTime
+    console.log('rest', rest)
+    if (rest <= 35) {
+      store.commit('SHOW_SNACKBAR', {
+        snackbar: true,
+        text: Msg.nodes.error.slow,
+        color: 'warning'
+      })
+      return false
+    }
+    return true
+  }
+
   /**
    *
    *
@@ -274,5 +288,16 @@ export class NodeService {
    */
   static get objWebsocketConnection () {
     return this._objWebsocketConnection
+  }
+
+  /**
+   **
+   *
+   * @readonly
+   * @static
+   * @memberof NodeService
+   */
+  static get blockTimeInMinute () {
+    return this._objWebsocketConnection.blockTime
   }
 }

@@ -44,7 +44,8 @@ export default {
       sync: 'El nodo se está sincronizando',
       off: 'Se ha cerrado la conexión de nodos',
       valid: 'El nodo no es valido',
-      exist: 'El nodo ya esta en la lista'
+      exist: 'El nodo ya esta en la lista',
+      slow: 'Node connection is very slow'
     }
   },
   company: {

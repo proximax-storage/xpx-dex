@@ -304,6 +304,7 @@
 import { buildCurrentAccountInfo, decrypt } from '@/services/account-wallet-service'
 import { buildAddExchangeOffer, buildExchangeOffer, mosaicDefaultGetValidate } from '@/services/buildOffer-by-type-service'
 import { mapGetters, mapMutations } from 'vuex'
+import { NodeService } from '@/services/blockchain/node-service'
 export default {
   data: () => {
     return {
@@ -439,7 +440,7 @@ export default {
     action (action) {
       switch (action) {
         case 'place':
-          if (this.valid && !this.sendingForm && this.$generalService.showMsgStatusNode()) {
+          if (NodeService.checksBlockTime() && this.valid && !this.sendingForm && this.$generalService.showMsgStatusNode()) {
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
               common = null
