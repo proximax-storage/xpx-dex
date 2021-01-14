@@ -215,7 +215,7 @@ export default {
                   '',
                   dataRequired
                 )
-                this.sendingForm = false
+                // this.sendingForm = false
                 this.SET_MONITOR_HASH(dataMonitorHash)
                 this.$blockchainProvider.announceTx(signedTransaction).subscribe(
                   response => {},
