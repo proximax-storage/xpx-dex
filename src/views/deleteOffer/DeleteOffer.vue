@@ -215,6 +215,7 @@ export default {
                   '',
                   dataRequired
                 )
+                this.sendingForm = false
                 this.SET_MONITOR_HASH(dataMonitorHash)
                 this.$blockchainProvider.announceTx(signedTransaction).subscribe(
                   response => {},
@@ -253,6 +254,16 @@ export default {
     },
     unconfirmedAdded (transactions) {
       this.validateTxHash(transactions)
+    },
+    confirmedStatus (transactions) {
+      const newTransactions = transactions.map(x => {
+        return {
+          transactionInfo: {
+            hash: x
+          }
+        }
+      })
+      this.validateTxHash(newTransactions)
     },
     status (hashs) {
       this.sendingForm = false
