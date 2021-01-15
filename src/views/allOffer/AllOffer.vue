@@ -179,7 +179,7 @@ export default {
   computed: {
     ...mapGetters('accountStore', ['currentAccount']),
     ...mapGetters('socketDbStore', ['mosaicsInfOffer', 'mosaicsInfOfferFromIdHex']),
-    ...mapGetters('offersStore', ['offerSelected', 'updateBoolean', 'offerAll']),
+    ...mapGetters('offersStore', ['offerSelected', 'offerUpdate', 'offerDeleteIdMosaic', 'updateBoolean', 'offerAll']),
     nameMosaicInfo () {
       return this.offerSelected.tableData.text
     },
@@ -207,6 +207,41 @@ export default {
     },
     calcPrice (price, amount) {
       return price * amount
+    },
+    updateOffer (dataNew) {
+      // console.log('dataNew', dataNew)
+      if (this.data.sell.length > 0) {
+        // console.log('this.data.sell', this.data.sell)
+        for (let i = 0; i < this.data.sell.length; i++) {
+          //    for(let i  of this.data.sell) {
+          console.log('i', this.data.sell[i].owner.publicKey)
+          const findOfferSell = dataNew.sell.find(x => x.owner.publicKey === this.data.sell[i].owner.publicKey)
+          if (findOfferSell) {
+            // console.log('findOfferSell', findOfferSell)
+            this.data.sell[i].amount = findOfferSell.amount
+          } else {
+            this.data.sell.splice(i, 1)
+          }
+        }
+      }
+      if (this.data.buy.length > 0) {
+        // console.log('buy', this.data.buy)
+        for (let i = 0; i < this.data.buy.length; i++) {
+          //    for(let i  of this.data.buy) {
+          // console.log('i', this.data.buy[i].owner.publicKey)
+          const findOfferbuy = dataNew.buy.find(x => x.owner.publicKey === this.data.buy[i].owner.publicKey)
+          // console.log('findOfferbuy', findOfferbuy)
+          if (findOfferbuy) {
+            this.data.buy[i].amount = findOfferbuy.amount
+          } else {
+            this.data.buy.splice(i, 1)
+          }
+        }
+      }
+      // console.log('this.data', this.data)
+      // console.log('dataOld', JSON.stringify(dataOld))
+      // console.log('dataNew', JSON.stringify(dataNew))
+      // console.log('this.data.buy', this.data.buy)
     },
     resultsOffer (data = [], type = null) {
       setTimeout(() => {
@@ -310,6 +345,23 @@ export default {
     }
   },
   watch: {
+    offerUpdate (offer) {
+      console.log('offerUpdate', offer)
+      if (offer) {
+        if (offer.tableData.info.mosaicIdHex === this.offerSelected.tableData.info.mosaicIdHex) {
+          this.updateOffer(offer.allOffers)
+        }
+      }
+    },
+    offerDeleteIdMosaic (data) {
+      // console.log('offerDeleteIdMosaic', data.idMosaic)
+      // console.log('this.offerSelected.tableData.info.mosaicIdHex ', this.offerSelected.tableData.info.mosaicIdHex)
+      if (this.offerSelected.tableData.info.mosaicIdHex === data.idMosaic) {
+        this.data.sell = []
+        this.data.buy = []
+      }
+    }
+
     // updateBoolean (newValue) {
     //   console.log('loadingInfo', newValue)
     //   const offerSelected = this.offerAll.find(
