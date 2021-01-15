@@ -640,7 +640,7 @@ export default {
       return arrayBtn
     },
     announceTx (transaction, type) {
-      if (NodeService.checksBlockTime() && this.valid && !this.sendingForm) {
+      if (this.valid && !this.sendingForm) {
         let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
         const signedTransaction = this.$blockchainProvider.signedTransaction(
           common.privateKey,
@@ -681,7 +681,7 @@ export default {
             this.$generalService.showMsgStatusNode()
           ) {
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
-            if (common) {
+            if (common && NodeService.checksBlockTime()) {
               this.typeCreatetxs(this.typeAction())
             }
           }
