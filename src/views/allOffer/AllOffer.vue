@@ -208,16 +208,30 @@ export default {
     calcPrice (price, amount) {
       return price * amount
     },
+    pushOffer (dataNew) {
+      let data = {
+        buy: [],
+        sell: []
+      }
+      for (let i = 0; i < dataNew.sell.length; i++) {
+        const v = this.data.sell.find(x => x.owner.publicKey === dataNew.sell[i].owner.publicKey)
+        if (!v) {
+          data.sell.push(dataNew.sell[i])
+        }
+      }
+      for (let i = 0; i < dataNew.buy.length; i++) {
+        const v = this.data.buy.find(x => x.owner.publicKey === dataNew.buy[i].owner.publicKey)
+        if (!v) {
+          data.buy.push(dataNew.buy[i])
+        }
+      }
+      if (data.buy.length > 0 || data.sell.length > 0) { this.resultsOffer(data) }
+    },
     updateOffer (dataNew) {
-      // console.log('dataNew', dataNew)
       if (this.data.sell.length > 0) {
-        // console.log('this.data.sell', this.data.sell)
         for (let i = 0; i < this.data.sell.length; i++) {
-          //    for(let i  of this.data.sell) {
-          console.log('i', this.data.sell[i].owner.publicKey)
           const findOfferSell = dataNew.sell.find(x => x.owner.publicKey === this.data.sell[i].owner.publicKey)
           if (findOfferSell) {
-            // console.log('findOfferSell', findOfferSell)
             this.data.sell[i].amount = findOfferSell.amount
           } else {
             this.data.sell.splice(i, 1)
@@ -225,12 +239,8 @@ export default {
         }
       }
       if (this.data.buy.length > 0) {
-        // console.log('buy', this.data.buy)
         for (let i = 0; i < this.data.buy.length; i++) {
-          //    for(let i  of this.data.buy) {
-          // console.log('i', this.data.buy[i].owner.publicKey)
           const findOfferbuy = dataNew.buy.find(x => x.owner.publicKey === this.data.buy[i].owner.publicKey)
-          // console.log('findOfferbuy', findOfferbuy)
           if (findOfferbuy) {
             this.data.buy[i].amount = findOfferbuy.amount
           } else {
@@ -238,10 +248,6 @@ export default {
           }
         }
       }
-      // console.log('this.data', this.data)
-      // console.log('dataOld', JSON.stringify(dataOld))
-      // console.log('dataNew', JSON.stringify(dataNew))
-      // console.log('this.data.buy', this.data.buy)
     },
     resultsOffer (data = [], type = null) {
       setTimeout(() => {
@@ -259,9 +265,10 @@ export default {
             this.data.sell.push(item)
             // }
           }
-        } else {
-          this.data.sell = []
         }
+        // else {
+        //   this.data.sell = []
+        // }
         if (data.buy.length > 0) {
           for (let item of data.buy) {
             item.priceForAmount = this.priceForAmount(
@@ -272,9 +279,10 @@ export default {
             this.data.buy.push(item)
             // }
           }
-        } else {
-          this.data.buy = []
         }
+        // else {
+        //   this.data.buy = []
+        // }
       })
     },
     priceForAmount (amount, priceV) {
@@ -346,16 +354,14 @@ export default {
   },
   watch: {
     offerUpdate (offer) {
-      console.log('offerUpdate', offer)
       if (offer) {
         if (offer.tableData.info.mosaicIdHex === this.offerSelected.tableData.info.mosaicIdHex) {
           this.updateOffer(offer.allOffers)
+          this.pushOffer(offer.allOffers)
         }
       }
     },
     offerDeleteIdMosaic (data) {
-      // console.log('offerDeleteIdMosaic', data.idMosaic)
-      // console.log('this.offerSelected.tableData.info.mosaicIdHex ', this.offerSelected.tableData.info.mosaicIdHex)
       if (this.offerSelected.tableData.info.mosaicIdHex === data.idMosaic) {
         this.data.sell = []
         this.data.buy = []
