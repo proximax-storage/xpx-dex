@@ -15,7 +15,7 @@
       </div> -->
     </v-col>
     <v-col clos="6">
-      <sparkline :value="value" :height="height" />
+      <sparkline :value="graphic" :height="height" />
       <!-- <v-sparkline
         :fill="fill"
         :value="value"
@@ -30,7 +30,7 @@
 </template>
 <script>
 export default {
-  props: ['name'],
+  props: ['name', 'graphic'],
   data: () => {
     return {
       theme: 'light',

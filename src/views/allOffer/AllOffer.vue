@@ -1,6 +1,9 @@
 <template>
   <div class="pa-3">
-    <info-Mosaic :name="nameMosaicInfo" />
+    <info-Mosaic
+      :name="nameMosaicInfo"
+      :graphic="offerSelected.tableData.graphic"
+    />
     <v-row>
       <v-col
         sm="7"
@@ -135,7 +138,8 @@
           :type="form.active"
           @ownOffer="ownOffer"
         />
-        <card-other-assets :dataAssets="dataAssets" />
+        <card-other-assets :dataAssets="otherAssetsSet" />
+        <!-- {{otherAssetsSet}} -->
       </v-col>
     </v-row>
   </div>
@@ -191,10 +195,31 @@ export default {
           return (x.amount.compact() >= this.form.filterByQuantity) && (x.bitPrice <= this.form.filterByPrice)
         }
       })
+    },
+    otherAssetsSet () {
+      const offerAllMap = this.offerAll.filter(x => x.tableData.info.mosaicIdHex !== this.offerSelected.tableData.info.mosaicIdHex).map(i => {
+        return {
+          'text': i.tableData.text,
+          'graphic': i.tableData.graphic,
+          'averagePrice': i.tableData.averagePrice
+        }
+      })
+      return offerAllMap
     }
   },
   methods: {
     ...mapMutations(['SHOW_LOADING', 'SHOW_SNACKBAR']),
+    // TODO move to js
+    calcPrice (price, amount) {
+      return price * amount
+    },
+    clickedFilterByPrice (value) {
+      this.form.filterByPrice = value
+    },
+    clickedFilterByQuantify (value) {
+      this.form.filterByQuantity = value
+    },
+    // TODO move to js
     mosaicInfoProperties (mosaic = null) {
       let properties = {
         divisibility: 6,
@@ -204,9 +229,6 @@ export default {
       }
       if (mosaic) properties = mosaic[0].mosaicInfo.properties
       return properties
-    },
-    calcPrice (price, amount) {
-      return price * amount
     },
     pushOffer (dataNew) {
       let data = {
@@ -263,12 +285,8 @@ export default {
             )
             item.bitPrice = this.calcPrice(item.price, Number(amount))
             this.data.sell.push(item)
-            // }
           }
         }
-        // else {
-        //   this.data.sell = []
-        // }
         if (data.buy.length > 0) {
           for (let item of data.buy) {
             item.priceForAmount = this.priceForAmount(
@@ -277,14 +295,11 @@ export default {
             )
             item.bitPrice = this.calcPrice(item.price, Number(amount))
             this.data.buy.push(item)
-            // }
           }
         }
-        // else {
-        //   this.data.buy = []
-        // }
       })
     },
+    // TODO move to js
     priceForAmount (amount, priceV) {
       const initialAmount = this.$generalService.amountFormatter(
         amount,
@@ -322,18 +337,12 @@ export default {
         this.$router.push({ path: '/searchOfferts' })
       }
     },
+    // TODO move to js
     sortByKey (array, key) {
       return array.sort(function (a, b) {
         var x = a[key]; var y = b[key]
         return ((x < y) ? -1 : ((x > y) ? 1 : 0))
       })
-    },
-    clickedFilterByPrice (value) {
-      this.form.filterByPrice = value
-      console.log('this.form', this.form)
-    },
-    clickedFilterByQuantify (value) {
-      this.form.filterByQuantity = value
     }
   },
   beforeMount () {
@@ -367,21 +376,6 @@ export default {
         this.data.buy = []
       }
     }
-
-    // updateBoolean (newValue) {
-    //   console.log('loadingInfo', newValue)
-    //   const offerSelected = this.offerAll.find(
-    //     l => l.tableData.info.mosaicIdHex === this.offerSelected.tableData.info.mosaicIdHex
-    //   )
-    //   console.log('offerSelected', offerSelected)
-    //   if (offerSelected) {
-    //     this.resultsOffer(offerSelected.allOffers, this.form.active)
-    //     // this.data.buy = offerSelected.allOffers.buy
-    //     // this.data.sell = offerSelected.allOffers.sell
-    //   } else {
-    //     this.resultsOffer({ buy: [], sell: [] }, this.form.active)
-    //   }
-    // }
   }
 }
 </script>

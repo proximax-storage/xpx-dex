@@ -294,7 +294,7 @@
         col="3"
         class="pt-0"
       >
-        <card-assets-market :dataAssets="dataAssets" />
+        <card-assets-market :dataAssets="assetsMarketSet" />
       </v-col>
     </v-row>
   </v-col>
@@ -433,6 +433,16 @@ export default {
         asset = this.filtersAssets(this.mosaicsInfOffer)
       }
       return asset
+    },
+    assetsMarketSet () {
+      const offerAllMap = this.offerAll.map(i => {
+        return {
+          'text': i.tableData.text,
+          'graphic': i.tableData.graphic,
+          'averagePrice': i.tableData.averagePrice
+        }
+      })
+      return offerAllMap
     }
   },
   methods: {
@@ -533,6 +543,7 @@ export default {
         }
       )
     },
+    // TODO move to js
     calcPrice (price, amount) {
       return price * amount
     },
@@ -627,6 +638,7 @@ export default {
     clear () {
       this.$refs.form.reset('password')
     },
+    // TODO move to js
     filtersAssets (data) {
       let valor = []
       if (JSON.parse(JSON.stringify(data)).length > 0) {
@@ -645,6 +657,7 @@ export default {
       }
       return valor
     },
+    // TODO move to js
     calcRangeOffert (priceCalc = 0, priceProm = 0, range = 40) {
       let val = false
       const x = (priceCalc * range) / 100
@@ -657,6 +670,7 @@ export default {
       }
       return val
     },
+    // TODO move to js
     filterMerching (data, type = null, mosaicMerge = null, mosaicAmount = null) {
       let offerts = []
       const typeInvert = type === 0 ? 1 : 0
