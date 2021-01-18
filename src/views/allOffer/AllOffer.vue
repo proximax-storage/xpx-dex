@@ -2,6 +2,7 @@
   <div class="pa-3">
     <info-Mosaic
       :name="nameMosaicInfo"
+      :mosaicIdHex="offerSelected.tableData.info.mosaicIdHex"
       :graphic="offerSelected.tableData.graphic"
     />
     <v-row>
