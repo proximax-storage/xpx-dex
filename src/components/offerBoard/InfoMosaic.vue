@@ -16,16 +16,9 @@
             width="20"
             height="20"
           />
-          <!-- v-if="getIcon(mosaicIdHex,iconMosaic)" -->
         </template>
-        <!-- <img
-          style="vertical-align: middle"
-          :src="require(`@/assets/img/${theme}/icon-mosaic.svg`)"
-          width="25"
-          height="25"
-        /> -->
+
         {{ name }}
-        <!-- {{ getIcon(mosaicIdHex,iconMosaic )}} -->
       </div>
     </v-col>
     <v-col clos="6">
