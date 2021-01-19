@@ -100,11 +100,12 @@ export default {
           icon: 'icon-private-key.svg',
           route: '/create-from-privateKey'
         }
+        // ,
         // {
-        //   title: 'From a Private Key',
+        //   title: 'From a Wallet Backup',
         //   nameButton: 'Create',
-        //   icon: 'icon-private-key.svg',
-        //   route: '/create-from-privateKey'
+        //   icon: 'icon-wallet-import.svg',
+        //   route: '/create-from-wallet-backup'
         // }
       ]
     }

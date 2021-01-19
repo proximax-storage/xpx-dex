@@ -31,6 +31,23 @@ export default {
       copy: 'Copy failed'
     }
   },
+  file: {
+    success: {
+      save: 'El archivo se adjuntó',
+      attach: 'El archivo se adjuntó con éxito',
+      load: 'Archivo/s adjuntó con éxito'
+    },
+    error: {
+      error: 'Error al intentar cargar el archivo',
+      empty: 'Archivo vacío',
+      load: 'Ocurrió un error en la carga del archivo',
+      format: 'Formato no permitido',
+      header: 'Encabezado del archivo no es válido',
+      length: 'Cantidad de archivo permitido',
+      size: 'El tamaño permitido para un archivo es de ',
+      conection: 'Error de conexión'
+    }
+  },
   nodes: {
     success: {
       statusNode: {

@@ -26,6 +26,16 @@ function sortByKey (array, key) {
   })
 }
 
+function sizeValidFile (files, size = 5000000) {
+  let valid = true
+  for (let i = 0; i < files.length; i++) {
+    if (files[i].size > size) {
+      valid = false
+      break
+    }
+  }
+  return valid
+}
 function formValue (cant, divisibility = 6) {
   return parseFloat(cant.toString().replace(/,/g, '')).toFixed(divisibility)
 }
@@ -401,6 +411,7 @@ export {
   buildTableHeader,
   buildMonitorHash,
   calculateDurationforDay,
+  sizeValidFile,
   sortByKey,
   calculateDurationExpire,
   differString,
