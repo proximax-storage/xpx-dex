@@ -292,6 +292,16 @@ function decryptPrivateKey (common, account) {
 }
 
 /**
+   *
+   *
+   * @param {string} hash
+   * @returns {Observable<TransactionStatus>}
+   */
+function getTransactionsStatuses (hashes) {
+  return connection.transactionHttp.getTransactionsStatuses(hashes)
+}
+
+/**
  *
  * @param {*} isValidPrivateKey
  */
@@ -874,6 +884,7 @@ export {
   getIncomingTransactions,
   getEnvironmentByNetworkType,
   getExchangeOffersfromId,
+  getTransactionsStatuses,
   getUint64,
   getOutgoingTransactions,
   mosaicNonceFromPublicKey,

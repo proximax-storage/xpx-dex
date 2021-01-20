@@ -9,26 +9,49 @@ export default {
   },
   login: {
     success: {
-      welcomeToProxiEDI: 'Bienvenido al sistema ProxiEDI'
+      welcomeToProxiEDI: 'Welcome to ProxiEDI System'
     },
     error: {
-      invalidUserOrPassword: 'La combinación de correo electrónico y contraseña no es válida'
+      invalidUserOrPassword: 'Invalid email and password combination'
     }
   },
   accountActivation: {
     success: {
-      accountSent: 'Solicitud enviada. Cuenta pendiente por activación.'
+      accountSent: 'Request sent. Account pending for activation'
     },
     error: {
-      accountSent: 'Error al activar la cuenta'
+      accountSent: 'Error activating account'
     }
   },
   general: {
     success: {
-      copy: 'Copiado'
+      copy: 'Copied'
     },
     error: {
-      copy: 'Error al copiar'
+      copy: 'Copy failed'
+    }
+  },
+  wallet: {
+    error: {
+      exist: 'Wallet name already exists, try another name',
+      decrypt: 'Error to decrypt wallet'
+    }
+  },
+  file: {
+    success: {
+      save: 'El archivo se adjuntó',
+      attach: 'El archivo se adjuntó con éxito',
+      load: 'Archivo/s adjuntó con éxito'
+    },
+    error: {
+      error: 'Error al intentar cargar el archivo',
+      empty: 'Archivo vacío',
+      load: 'Ocurrió un error en la carga del archivo',
+      format: 'Formato no permitido',
+      header: 'Encabezado del archivo no es válido',
+      length: 'Cantidad de archivo permitido',
+      size: 'El tamaño permitido para un archivo es de ',
+      conection: 'Error de conexión'
     }
   },
   nodes: {
@@ -40,36 +63,36 @@ export default {
       }
     },
     error: {
-      stuck: 'El nodo está estancado',
-      sync: 'El nodo se está sincronizando',
-      off: 'Se ha cerrado la conexión de nodos',
-      valid: 'El nodo no es valido',
-      exist: 'El nodo ya esta en la lista',
+      stuck: 'Node is stagnant',
+      sync: 'Node is synchronizing',
+      off: 'Node connection has been closed',
+      valid: 'Node is not valid',
+      exist: 'Node is already in the list',
       slow: 'Node connection is very slow'
     }
   },
   company: {
     success: {
-      activate: 'Compañia activada con exito...',
-      deleted: 'Compañia eliminada con exito...',
-      edited: 'Compañia editada con exito...'
+      activate: 'Company successfully activated',
+      deleted: 'Company successfully eliminated',
+      edited: 'Company edited successfully'
     },
     error: {
-      activate: 'Error al intentar activar la compañia',
-      deleted: 'Error al intentar eliminar la compañia',
-      edited: 'Error al intentar editar la compañia'
+      activate: 'Error when trying to activate the company',
+      deleted: 'Error trying to delete the company',
+      edited: 'Error when trying to edit the company'
     }
   },
   users: {
     success: {
-      create: 'Usuario creado con exito !!!',
-      update: 'Usuario editado con exito !!!',
-      delete: 'Usuario eliminado con exito !!!'
+      create: 'User created successfully',
+      update: 'User edited successfully',
+      delete: 'User deleted successfully'
     },
     error: {
-      create: 'Ocurrio un error al intentar crear el usuario',
-      update: 'Ocurrio un error al intentar editar el usuario',
-      delete: 'Ocurrio un error al intentar eliminar el usuario'
+      create: 'An error occurred while trying to create the user',
+      update: 'An error occurred while trying to edit the user',
+      delete: 'An error occurred while trying to delete the user'
     }
   }
 }

@@ -108,6 +108,16 @@ const routes = [
     }
   },
   {
+    path: '/create-from-wallet-backup',
+    name: 'Create from wallet backup',
+    component: () =>
+      import(/* webpackChunkName: "SelectTypeSignup" */ '../views/signup/CreateFromWalletBackup.vue'),
+    meta: {
+      requiresNotAuth: true,
+      hideMenu: false
+    }
+  },
+  {
     path: '/login',
     name: 'Log In',
     component: () => import(/* webpackChunkName: "SelectTypeSignup" */ '../views/login/LogIn.vue'),

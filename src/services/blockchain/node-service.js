@@ -5,6 +5,7 @@ import { ApiConnection } from 'tsjs-sirius-suite-wallet-library/dist/model/nodes
 import { WebsocketConnection, TypeStatusNode } from 'tsjs-sirius-suite-wallet-library/dist/model/nodes/blockchain/Websocket'
 import { Address } from 'tsjs-xpx-chain-sdk/dist/src/model/account/Address'
 import { WebsocketService } from '@/services/blockchain/websocket-service'
+import { ServiceTransactions } from '@/services/transactions'
 import Msg from '@/services/messages'
 
 export class NodeService {
@@ -33,6 +34,7 @@ export class NodeService {
    * @memberof NodeService
    */
   static connect (node = null) {
+    console.warn('CONNECT NODE....')
     store.commit('nodesStoreNew/STOPPED_BY_USER', false)
     if (!store.getters['walletStore/currentWallet'].accounts) this.closeConnection()
     if (store.getters['nodesStoreNew/nodeStatus'] !== TypeStatusNode.NODE_CONNECTING) {
@@ -74,6 +76,7 @@ export class NodeService {
             this.objWebsocketConnection.monitorAllChannels(address)
             WebsocketService.subscribeAllChannels(this.objWebsocketConnection)
             store.commit('nodesStoreNew/SET_STATUS_NODE', TypeStatusNode.NODE_ACTIVE)
+            ServiceTransactions.statusTransactions()
           })
           .catch(e => {
             console.error('Error to connect', e)
@@ -195,7 +198,7 @@ export class NodeService {
   static checksBlockTime () {
     const rest = WebsocketConnection.nodesConfig.timeOutNewBlocks - this._objWebsocketConnection.blockTime
     console.log('rest', rest)
-    if (rest <= 35) {
+    if (rest <= 117) {
       store.commit('SHOW_SNACKBAR', {
         snackbar: true,
         text: Msg.nodes.error.slow,

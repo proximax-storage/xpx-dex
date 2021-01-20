@@ -6,6 +6,8 @@ export const offersStore = {
   namespaced: true,
   state: {
     offerSelected: [],
+    offerUpdate: null,
+    offerDeleteIdMosaic: null,
     offerAll: [],
     type: ['buy', 'sell'],
     allOfferGet: [],
@@ -13,6 +15,8 @@ export const offersStore = {
   },
   getters: {
     offerSelected: state => state.offerSelected,
+    offerUpdate: state => state.offerUpdate,
+    offerDeleteIdMosaic: state => state.offerDeleteIdMosaic,
     offerAll: state => state.offerAll,
     offersForPublicKey: state => state.offersForPublicKey,
     type: state => state.type,
@@ -29,10 +33,13 @@ export const offersStore = {
       state.offerAll = data
     },
     PUSH_OFFER_ALL (state, data) {
+      // console.log('OFER PUSH', data)
       // const push = twentyFourChange()
       state.offerAll.push(data)
     },
     UPDATE_OFFER_ALL (state, data) {
+      console.log('OFER UPDATE', data)
+      state.offerUpdate = data
       for (var i = 0; i < state.offerAll.length; i++) {
         if (state.offerAll[i].tableData.info.mosaicIdHex === data.tableData.info.mosaicIdHex) {
           state.offerAll[i].allOffers = data.allOffers
@@ -66,6 +73,10 @@ export const offersStore = {
       // console.log('state.offerAll', JSON.stringify(state.offerAll))
     },
     DELETE_OFFER_ALL (state, idMosaic) {
+      console.log('DELETE_OFFER_ALL', idMosaic)
+      state.offerDeleteIdMosaic = Object.assign({
+        idMosaic: idMosaic
+      })
       for (var i = 0; i < state.offerAll.length; i++) {
         if (state.offerAll[i].tableData.info.mosaicIdHex === idMosaic) {
           state.offerAll.splice(i, 1)

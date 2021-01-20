@@ -195,7 +195,7 @@ export default {
     }
   },
   beforeMount () {
-    console.log('NodeService', NodeService.checksBlockTime())
+    // console.log('NodeService', NodeService.checksBlockTime())
   }
 
 }

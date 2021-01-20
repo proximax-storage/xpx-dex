@@ -54,7 +54,7 @@ export default {
   beforeMount () {
     this.configMoney = this.$configForm.getConfigMoney('.', ',', '', '', this.divisibility, true)
     this.configForm = {
-      quantity: this.$configForm.amount('Increase Price')
+      quantity: this.$configForm.amount('Enter Price')
     }
   },
 

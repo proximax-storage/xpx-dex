@@ -8,13 +8,25 @@
       >Take this offer - {{ $generalService.typeInvert(dataAssets.form.active) }} transaction</v-col>
     </v-row>
     <v-row>
-      <v-col sm="7" md="7" lg="9" col="9" class="pt-0">
+      <v-col
+        sm="7"
+        md="7"
+        lg="9"
+        col="9"
+        class="pt-0"
+      >
         <v-divider class="pb-5"></v-divider>
 
         <template v-if="!dataTxOfferInfo">
-          <v-form v-model="valid" ref="form">
+          <v-form
+            v-model="valid"
+            ref="form"
+          >
             <v-row>
-              <v-col cols="5" class>
+              <v-col
+                cols="5"
+                class
+              >
                 <v-row>
                   <v-col
                     cols="12"
@@ -22,23 +34,24 @@
                   >My debit transaction</v-col>
                   <div class="ma-2 ml-7 mx-auto">
                     <div class="caption font-italic font-weight-light mx-auto">BID Price</div>
-                    <div
-                      class="caption font-weight-black mx-auto"
-                    >{{ $generalService.amountFormatter(exchange.bitPrice, 6) }} XPX</div>
+                    <div class="caption font-weight-black mx-auto">{{ $generalService.amountFormatter(exchange.bitPrice, 6) }} XPX</div>
                     <!-- <div class="caption font-weight-black mx-auto">{{ exchange.price }}</div> -->
                   </div>
                   <div class="ma-2 ml-7 mx-auto">
-                    <div
-                      class="caption font-italic font-weight-light"
-                    >Quantity you will send to seller</div>
-                    <div
-                      class="caption font-weight-black"
-                    >{{ $generalService.amountFormatter(form.priceForAmount, 6) }} XPX</div>
+                    <div class="caption font-italic font-weight-light">Quantity you will send to seller</div>
+                    <div class="caption font-weight-black">{{ $generalService.amountFormatter(form.priceForAmount, 6) }} XPX</div>
                   </div>
                 </v-row>
               </v-col>
-              <v-divider class="mx-2" inset vertical></v-divider>
-              <v-col cols="5" class>
+              <v-divider
+                class="mx-2"
+                inset
+                vertical
+              ></v-divider>
+              <v-col
+                cols="5"
+                class
+              >
                 <v-row>
                   <v-col
                     cols="12"
@@ -49,9 +62,7 @@
                     <div class="caption font-weight-black">{{ nameMosaicInfo }}</div>
                   </div>
                   <div class="ma-2 ml-7">
-                    <div
-                      class="caption font-italic font-weight-light"
-                    >Amount you will recieved from seller</div>
+                    <div class="caption font-italic font-weight-light">Amount you will recieved from seller</div>
                     <div class="caption font-weight-black">
                       <v-text-field
                         @keyup="validateQuantityAmount()"
@@ -73,7 +84,10 @@
                   </div>
                 </v-row>
               </v-col>
-              <v-col cols="12" class="caption font-italic font-weight-light">
+              <v-col
+                cols="12"
+                class="caption font-italic font-weight-light"
+              >
                 <!-- <div > -->
                 <span class="font-weight-black">Offer expire in :</span>
                 {{expireOffer}}
@@ -94,7 +108,10 @@
               >This transaction will have a fee: 0.002020 XPX</v-col>
             </v-row>
             <v-row>
-              <v-col cols="5" class="ma-0 mx-auto caption d-flex justify-center align-center">
+              <v-col
+                cols="5"
+                class="ma-0 mx-auto caption d-flex justify-center align-center"
+              >
                 <v-text-field
                   dense
                   v-model="form.password"
@@ -119,15 +136,31 @@
           </v-form>
         </template>
         <template v-if="dataTxOfferInfo">
-          <congratulations-offer :colorText="typeOfferColorText" :txOfferInfo="dataTxOfferInfo"></congratulations-offer>
+          <congratulations-offer
+            :colorText="typeOfferColorText"
+            :txOfferInfo="dataTxOfferInfo"
+          ></congratulations-offer>
         </template>
         <v-row v-if="!dataTxOfferInfo">
-          <v-col cols="5" class="ma-0 mx-auto caption d-flex justify-center align-center">
-            <custom-buttons @action="action" :align="'center'" :arrayBtn="getArrayBtn"></custom-buttons>
+          <v-col
+            cols="5"
+            class="ma-0 mx-auto caption d-flex justify-center align-center"
+          >
+            <custom-buttons
+              @action="action"
+              :align="'center'"
+              :arrayBtn="getArrayBtn"
+            ></custom-buttons>
           </v-col>
         </v-row>
       </v-col>
-      <v-col sm="5" md="5" lg="3" col="3" class="pt-0">
+      <v-col
+        sm="5"
+        md="5"
+        lg="3"
+        col="3"
+        class="pt-0"
+      >
         <card-assets-market :dataAssets="dataAssets" />
       </v-col>
     </v-row>
@@ -221,9 +254,10 @@ export default {
                 '',
                 returnBuild.dataRequired
               )
+              // this.sendingForm = false
               this.SET_MONITOR_HASH(dataMonitorHash)
               this.$blockchainProvider.announceTx(signedTransaction).subscribe(
-                x => {},
+                x => { },
                 err => {
                   if (err) {
                     this.sendingForm = false
@@ -319,6 +353,16 @@ export default {
     },
     unconfirmedAdded (transactions) {
       this.validateTxHash(transactions)
+    },
+    confirmedStatus (transactions) {
+      const newTransactions = transactions.map(x => {
+        return {
+          transactionInfo: {
+            hash: x
+          }
+        }
+      })
+      this.validateTxHash(newTransactions)
     },
     status (hashs) {
       this.sendingForm = false
