@@ -109,6 +109,7 @@ export default {
       }
     },
     clean () {
+      this.file = []
       this.$refs.inputFile.value = null
       this.emitFile(null)
     },
@@ -138,7 +139,7 @@ export default {
 <style scoped>
 .dropZone {
   width: 100%;
-  min-height: 120px;
+  min-height: 170px;
   position: relative;
   border: 0.5rem solid #fff;
   border-radius: 15px;

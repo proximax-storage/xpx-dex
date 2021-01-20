@@ -31,6 +31,12 @@ export default {
       copy: 'Copy failed'
     }
   },
+  wallet: {
+    error: {
+      exist: 'Wallet name already exists, try another name',
+      decrypt: 'Error to decrypt wallet'
+    }
+  },
   file: {
     success: {
       save: 'El archivo se adjuntó',
