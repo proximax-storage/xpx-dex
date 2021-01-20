@@ -8,7 +8,6 @@ export const transactionsStore = {
     blockInfo: [],
     cosignatureAdded: [],
     confirmed: [],
-    confirmedStatus: [],
     unconfirmedAdded: [],
     unconfirmedRemoved: [],
     status: [],
@@ -22,7 +21,6 @@ export const transactionsStore = {
     },
     cosignatureAdded: state => state.cosignatureAdded,
     confirmed: state => state.confirmed,
-    confirmedStatus: state => state.confirmedStatus,
     unconfirmedAdded: state => state.unconfirmedAdded,
     unconfirmedRemoved: state => state.unconfirmedRemoved,
     status: state => state.status,
@@ -66,14 +64,6 @@ export const transactionsStore = {
         const d = state.confirmed
         d.unshift(transaction)
         state.confirmed = d
-      }
-    },
-    SET_CONFIRMED_STATUS (state, transaction) {
-      // console.log('SET_CONFIRMED_STATUS', transaction)
-      if (!state.confirmed.find(t => transaction.hash === t.transactionInfo.hash)) {
-        const d = state.confirmedStatus
-        d.unshift(transaction)
-        state.confirmedStatus = d
       }
     },
     SET_UNCONFIRMED_ADDED (state, transaction) {

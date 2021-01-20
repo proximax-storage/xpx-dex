@@ -5,17 +5,12 @@
         cols="12"
         class="headline font-weight-regular text-left"
         v-bind:class="[typeOfferColorText]"
-      >Place your {{ type }} offer</v-col>
+        >Place your {{ type }} offer</v-col
+      >
     </v-row>
     <!-- mosaicInfo -->
     <v-row>
-      <v-col
-        sm="7"
-        md="7"
-        lg="9"
-        col="9"
-        class="pt-0"
-      >
+      <v-col sm="7" md="7" lg="9" col="9" class="pt-0">
         <template v-if="isMerchingoffer">
           <merching-offert
             :offerMerching="offerMerching"
@@ -30,15 +25,9 @@
         </template>
         <template v-if="!dataTxOfferInfo && !isMerchingoffer">
           <v-divider class="pb-2"></v-divider>
-          <v-form
-            v-model="validOne"
-            ref="formOne"
-          >
+          <v-form v-model="validOne" ref="formOne">
             <v-row>
-              <v-col
-                cols="12"
-                class="pl-12"
-              >
+              <v-col cols="12" class="pl-12">
                 <v-row>
                   <v-col cols="12">
                     <template v-if="!type || !isAsset">
@@ -110,12 +99,7 @@
                     <v-row>
                       <!-- ammount -->
                       <!-- :disabled="loadingInfo" -->
-                      <v-col
-                        sm="12"
-                        md="4"
-                        col="4"
-                        lg="4"
-                      >
+                      <v-col sm="12" md="4" col="4" lg="4">
                         <v-text-field
                           name="amountF"
                           ref="amountF"
@@ -139,12 +123,7 @@
                         ></v-text-field>
                       </v-col>
                       <!-- total consto -->
-                      <v-col
-                        sm="12"
-                        md="4"
-                        col="4"
-                        lg="4"
-                      >
+                      <v-col sm="12" md="4" col="4" lg="4">
                         <v-text-field
                           class="pt-0 text-align-field-right"
                           name="bidPriceF"
@@ -167,18 +146,9 @@
                         ></v-text-field>
                       </v-col>
                       <!-- Per unit -->
-                      <v-col
-                        sm="12"
-                        md="4"
-                        col="4"
-                        lg="4"
-                        class="pa-0"
-                      >
+                      <v-col sm="12" md="4" col="4" lg="4" class="pa-0">
                         <div class="ml-7">
-                          <div
-                            class="caption "
-                            style="color: rgba(0, 0, 0, 0.6);"
-                          >
+                          <div class="caption " style="color: rgba(0, 0, 0, 0.6);">
                             Total (XPX):
                           </div>
                           <div class="subtitle-1 font-weight-black">
@@ -199,8 +169,6 @@
                   <v-col cols="12">
                     <v-text-field
                       name="duration"
-                      ref="duration"
-                      id="duration"
                       class="pt-0 text-right"
                       @keyup="isValidateDuration = validateDuration($event)"
                       v-model="form.duration"
@@ -214,10 +182,7 @@
               </v-col>
             </v-row>
           </v-form>
-          <v-form
-            v-model="valid"
-            ref="form"
-          >
+          <v-form v-model="valid" ref="form">
             <!-- <v-row>
               <v-col
                 sm="10"
@@ -235,10 +200,7 @@
             </v-row> -->
             <tx-fee />
             <v-row>
-              <v-col
-                cols="9"
-                class="ma-0 pb-0 mx-auto caption d-flex justify-center align-center"
-              >
+              <v-col cols="9" class="ma-0 pb-0 mx-auto caption d-flex justify-center align-center">
                 <v-text-field
                   dense
                   v-model="form.password"
@@ -275,10 +237,7 @@
           ></congratulations-offer>
         </template>
         <v-row v-if="!dataTxOfferInfo && !isMerchingoffer">
-          <v-col
-            cols="5"
-            class="ma-0 mx-auto caption d-flex justify-center align-center"
-          >
+          <v-col cols="5" class="ma-0 mx-auto caption d-flex justify-center align-center">
             <custom-button
               @action="action"
               :align="'center'"
@@ -287,14 +246,8 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col
-        sm="5"
-        md="5"
-        lg="3"
-        col="3"
-        class="pt-0"
-      >
-        <card-assets-market :dataAssets="assetsMarketSet" />
+      <v-col sm="5" md="5" lg="3" col="3" class="pt-0">
+        <card-assets-market :dataAssets="dataAssets" />
       </v-col>
     </v-row>
   </v-col>
@@ -302,9 +255,8 @@
 
 <script>
 import { buildCurrentAccountInfo, decrypt } from '@/services/account-wallet-service'
-import { buildAddExchangeOffer, buildExchangeOffer, mosaicDefaultGetValidate } from '@/services/buildOffer-by-type-service'
+import { buildAddExchangeOffer, buildExchangeOffer } from '@/services/buildOffer-by-type-service'
 import { mapGetters, mapMutations } from 'vuex'
-import { NodeService } from '@/services/blockchain/node-service'
 export default {
   data: () => {
     return {
@@ -352,8 +304,7 @@ export default {
       typeOffer: null,
       sendingForm: false,
       configMoneyAsset: null,
-      hash: null,
-      durationValidate: 1
+      hash: null
     }
   },
   components: {
@@ -433,16 +384,6 @@ export default {
         asset = this.filtersAssets(this.mosaicsInfOffer)
       }
       return asset
-    },
-    assetsMarketSet () {
-      const offerAllMap = this.offerAll.map(i => {
-        return {
-          'text': i.tableData.text,
-          'graphic': i.tableData.graphic,
-          'averagePrice': i.tableData.averagePrice
-        }
-      })
-      return offerAllMap
     }
   },
   methods: {
@@ -450,7 +391,7 @@ export default {
     action (action) {
       switch (action) {
         case 'place':
-          if (NodeService.checksBlockTime() && this.valid && !this.sendingForm && this.$generalService.showMsgStatusNode()) {
+          if (this.valid && !this.sendingForm && this.$generalService.showMsgStatusNode()) {
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
               common = null
@@ -533,17 +474,15 @@ export default {
         '',
         buildTx.dataRequired
       )
-      // this.sendingForm = false
       this.SET_MONITOR_HASH(dataMonitorHash)
       this.$blockchainProvider.announceTx(signedTransaction).subscribe(
-        response => { },
+        response => {},
         () => {
           this.sendingForm = false
           this.REMOVE_MONITOR_HASH(dataMonitorHash)
         }
       )
     },
-    // TODO move to js
     calcPrice (price, amount) {
       return price * amount
     },
@@ -631,14 +570,11 @@ export default {
       this.$refs.amountF.$el.getElementsByTagName('input')[0].value = ''
       this.$refs.bidPriceF.$el.getElementsByTagName('input')[0].value = ''
       this.$refs.form.reset('assest')
-
-      this.$refs.duration.$el.getElementsByTagName('input')[0].value = 1
       this.form.totalCost = 0
     },
     clear () {
       this.$refs.form.reset('password')
     },
-    // TODO move to js
     filtersAssets (data) {
       let valor = []
       if (JSON.parse(JSON.stringify(data)).length > 0) {
@@ -657,7 +593,6 @@ export default {
       }
       return valor
     },
-    // TODO move to js
     calcRangeOffert (priceCalc = 0, priceProm = 0, range = 40) {
       let val = false
       const x = (priceCalc * range) / 100
@@ -670,7 +605,6 @@ export default {
       }
       return val
     },
-    // TODO move to js
     filterMerching (data, type = null, mosaicMerge = null, mosaicAmount = null) {
       let offerts = []
       const typeInvert = type === 0 ? 1 : 0
@@ -723,7 +657,7 @@ export default {
     validateBalanceAssets (amount) {
       this.isValidateAssets =
         this.$generalService.quantityStringToInt(amount, this.configMoneyAsset.precision) >
-          this.balanceAssets
+        this.balanceAssets
           ? 'Insufficient balance for this asset'
           : true
     },
@@ -731,17 +665,11 @@ export default {
       const value = e.target.value
       let duration = null
       duration = Number(value)
-
-      if (this.idHex) {
-        if (mosaicDefaultGetValidate(this.idHex)) {
-          this.durationValidate = 10
-        }
-      }
       if (duration !== 0) {
-        if (duration <= this.durationValidate) {
+        if (duration <= 1) {
           return true
         } else {
-          return `You cannot enter the duration greater than ${this.durationValidate}`
+          return 'You cannot enter the duration greater than 1 '
         }
       } else {
         return 'Cannot enter duration zero'
@@ -796,16 +724,6 @@ export default {
     },
     unconfirmedAdded (transactions) {
       this.validateTxHash(transactions)
-    },
-    confirmedStatus (transactions) {
-      const newTransactions = transactions.map(x => {
-        return {
-          transactionInfo: {
-            hash: x
-          }
-        }
-      })
-      this.validateTxHash(newTransactions)
     },
     accountsInfo (newAccountsInfo) {
       this.mountBuildCurrentAccountInfo(this.type)

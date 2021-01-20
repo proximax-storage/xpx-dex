@@ -1,8 +1,9 @@
 {
   "networkSelected": "TEST_NET",
   "infoApp": {
-    "version": "0.1.19",
-    "nameApp": "ProximaX Dex Wallet"
+    "version": "0.1.11",
+    "nameApp": "ProximaX Dex Wallet",
+    "pseudonymApp": "dex-wallet"
   },
   "environment": {
     "TEST_NET": {
@@ -18,7 +19,6 @@
         "port": 28015
       },
       "keyLocalStore": {
-        "key":"TEST_NET",
         "nodeStorage": "dex-nodes",
         "selectedNode": "dex-selected-node"
       },
@@ -34,13 +34,6 @@
         "name": "xpx",
         "divisibility": 6
       },
-      "mosaicDefaultGet": [
-        {
-          "id": "39a10e9ef8d70d7f",
-          "name": "lida",
-          "divisibility": 1
-        }
-      ],
       "namespace": {
         "id": "bffb42a19116bdf6",
         "name": "prx.xpx"
@@ -51,7 +44,8 @@
         "protocolWs": "wss",
         "nodes": [
           "bctestnet1.brimstone.xpxsirius.io",
-          "bctestnet2.brimstone.xpxsirius.io"
+          "bctestnet2.brimstone.xpxsirius.io",
+          "bctestnet3.brimstone.xpxsirius.io"
         ]
       },
       "rentalFeeSink": {
@@ -81,7 +75,6 @@
         "port": "32773"
       },
       "keyLocalStore": {
-        "key":"MAIN_NET",
         "nodeStorage": "dex-nodes",
         "selectedNode": "dex-selected-node"
       },
@@ -97,7 +90,6 @@
         "name": "xpx",
         "divisibility": 6
       },
-      "mosaicDefaultGet": [],
       "namespace": {
         "id": "bffb42a19116bdf6",
         "name": "prx.xpx"
@@ -146,7 +138,6 @@
         "port": "32773"
       },
       "keyLocalStore": {
-        "key":"PRIVATE",
         "nodeStorage": "dex-nodes",
         "selectedNode": "dex-selected-node"
       },
@@ -162,7 +153,6 @@
         "name": "xpx",
         "divisibility": 6
       },
-      "mosaicDefaultGet": [],
       "namespace": {
         "id": "bffb42a19116bdf6",
         "name": "prx.xpx"

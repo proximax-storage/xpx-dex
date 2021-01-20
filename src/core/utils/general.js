@@ -14,28 +14,7 @@ function amountFormatter (amount, divisibility = 6) {
     minimumFractionDigits: divisibility
   })
 }
-/**
- *
- * @param {*} array
- * @param {*} key
- */
-function sortByKey (array, key) {
-  return array.sort(function (a, b) {
-    var x = a[key]; var y = b[key]
-    return ((x < y) ? -1 : ((x > y) ? 1 : 0))
-  })
-}
 
-function sizeValidFile (files, size = 5000000) {
-  let valid = true
-  for (let i = 0; i < files.length; i++) {
-    if (files[i].size > size) {
-      valid = false
-      break
-    }
-  }
-  return valid
-}
 function formValue (cant, divisibility = 6) {
   return parseFloat(cant.toString().replace(/,/g, '')).toFixed(divisibility)
 }
@@ -411,8 +390,6 @@ export {
   buildTableHeader,
   buildMonitorHash,
   calculateDurationforDay,
-  sizeValidFile,
-  sortByKey,
   calculateDurationExpire,
   differString,
   sumObject,

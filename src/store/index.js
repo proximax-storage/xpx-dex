@@ -29,6 +29,7 @@ import {
   offersStore
 } from './modules/offers-store'
 import {
+  nodeStore,
   transactionsStore,
   coingeckoStore,
   onLineStore,
@@ -65,10 +66,8 @@ export default new Vuex.Store({
       else return ''
     },
     pseudonymApp: state => {
-      return process.env.VUE_APP_PSEUDONYMAPP
-    },
-    keyLocalStore: state => {
-      return process.env.VUE_APP_KEYLOCALSTORE
+      if (state.configApp) return state.configApp.infoApp.pseudonymApp
+      else return ''
     },
     version: state => {
       if (state.configApp) return state.configApp.infoApp.version
@@ -117,6 +116,7 @@ export default new Vuex.Store({
     accountStore,
     walletStore,
     appCoreStore,
+    nodeStore,
     transactionsStore,
     coingeckoStore,
     namespaceStore,

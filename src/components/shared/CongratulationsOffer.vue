@@ -71,7 +71,7 @@ export default {
           color: 'primary',
           textColor: 'white--text',
           loading: false,
-          text: 'Go to dashboard'
+          text: 'view  offerts'
         }
       }
     ]

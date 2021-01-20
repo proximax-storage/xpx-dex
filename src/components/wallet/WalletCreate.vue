@@ -7,12 +7,16 @@
             <v-col cols="11" class="mx-auto">
               <v-row>
                 <v-col cols="12" class="mx-auto title font-italic font-weight-medium pb-0">
-                  <span class="title font-italic font-weight-medium primary--text">{{ title }} {{ walletName }}</span>
+                  <span
+                    class="title font-italic font-weight-medium primary--text"
+                  >{{ title }} {{ walletName }}</span>
                   <br />
-                  <span class="subtitle-1 font-italic font-weight-medium">Has been created successfully</span>
+                  <span
+                    class="subtitle-1 font-italic font-weight-medium"
+                  >Has been created successfully</span>
                 </v-col>
                 <v-col cols="10" class="mx-auto">
-                  <span class="body-1 font-weight-black">Address:</span>
+                  <span class="body-1 font-weight-black">Adress:</span>
                   <br />
                   <span class="body-2 d-flex">{{ address }}</span>
                 </v-col>
@@ -38,7 +42,10 @@
               </v-row>
               <v-row justify="center">
                 <v-col cols="12" class="mx-auto">
-                  <v-alert v-if="walletInfo.pvk" outlined type="warning" prominent> Make sure you store your private key in a safe place. Access to your digital assets cannot be recovered without it. </v-alert>
+                  <v-alert outlined type="warning" prominent>
+                    Make sure you store your private key in a safe place.
+                    Access to your digital assets cannot be recovered without it.
+                  </v-alert>
                 </v-col>
               </v-row>
               <v-row v-if="showPrivateKey">
@@ -72,7 +79,24 @@ export default {
     return {
       address: '',
       publicKey: '',
-      arrayBtn: {},
+      arrayBtn: {
+        showPvk: {
+          key: 'showPvk',
+          action: 'showPrivateKey',
+          disabled: false,
+          color: 'primary',
+          loading: false,
+          text: 'Show Private Key'
+        },
+        continue: {
+          key: 'continue',
+          action: 'signin',
+          disabled: false,
+          color: 'primary',
+          loading: false,
+          text: 'Sign in'
+        }
+      },
       privateKey: '',
       title: 'My account,',
       walletName: '',
@@ -86,7 +110,7 @@ export default {
           this.showPrivateKey = !this.showPrivateKey
           break
         case 'signin':
-          this.$router.push('login').catch(e => { })
+          this.$router.push('login').catch(e => {})
           break
       }
     }
@@ -107,26 +131,6 @@ export default {
     this.publicKey = walletInfo.accounts[0].publicKey
     this.privateKey = this.walletInfo.pvk
     this.walletName = walletInfo.username
-  },
-  created () {
-    if (this.walletInfo.pvk) {
-      this.arrayBtn['showPvk'] = {
-        key: 'showPvk',
-        action: 'showPrivateKey',
-        disabled: false,
-        color: 'primary',
-        loading: false,
-        text: 'Show Private Key'
-      }
-    }
-    this.arrayBtn['continue'] = {
-      key: 'continue',
-      action: 'signin',
-      disabled: false,
-      color: 'primary',
-      loading: false,
-      text: 'Sign in'
-    }
   }
 }
 </script>

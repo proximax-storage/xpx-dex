@@ -29,15 +29,13 @@
           @click:row="searchResult"
         >
           <template v-slot:item.tableData.twentyFourChange="{ item }">
-             <span v-if="!item.tableData.twentyFourChange.act"  class="darken-1">{{ item.tableData.twentyFourChange.percentChange}}%</span>
-            <span v-if="item.tableData.twentyFourChange.act === 'negative'" class="red--text accent-4"
-              >{{ item.tableData.twentyFourChange.percentChange }}%</span
+            <span v-if="item.tableData.twentyFourChange > 8" class="red--text accent-4"
+              >{{ item.tableData.twentyFourChange }}%</span
             >
-            <span v-if="item.tableData.twentyFourChange.act === 'positive'"  class="green--text darken-1">{{ item.tableData.twentyFourChange.percentChange}}%</span>
+            <span v-else class="green--text darken-1">{{ item.tableData.twentyFourChange }}%</span>
           </template>
-          <template v-slot:item.tableData.graphic="{item}">
-            <!-- {{item.tableData.graphic}} -->
-            <sparkline :value="item.tableData.graphic" :height="height" />
+          <template v-slot:item.tableData.graphic="{}">
+            <sparkline :value="value" :height="height" />
           </template>
         </v-data-table>
       </v-col>

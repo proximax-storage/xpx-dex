@@ -5,8 +5,8 @@ const DB = {
   conn: null,
   connStruc: null,
   name: 'dexWallet',
-  host: '192.168.1.7',
-  port: 49154,
+  host: 'localhost',
+  port: 32769,
   tables: [
     { table: 'executeOffers', options: {} },
     { table: 'mosaicInfo', options: { primaryKey: 'mosaicIdHex' } }

@@ -475,7 +475,6 @@
 // import { dataComponent } from './dataViews.js'
 import { PublicAccount } from 'tsjs-xpx-chain-sdk/dist/src/model/account/PublicAccount'
 import { decrypt, validBalance } from '@/services/account-wallet-service'
-import { NodeService } from '@/services/blockchain/node-service'
 import {
   buildMosaicDefinitionTransaction,
   buildMosaicSupplyChangeTransaction,
@@ -662,7 +661,6 @@ export default {
           '',
           {}
         )
-        // this.sendingForm = false
         this.SET_MONITOR_HASH(dataMonitorHash)
         this.$blockchainProvider.announceTx(signedTransaction).subscribe(
           response => {},
@@ -681,7 +679,7 @@ export default {
             this.$generalService.showMsgStatusNode()
           ) {
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
-            if (common && NodeService.checksBlockTime()) {
+            if (common) {
               this.typeCreatetxs(this.typeAction())
             }
           }

@@ -15,7 +15,7 @@ export default {
     // ...mapGetters('nodeStore', ['nodeStatus', 'networkType']),
     ...mapMutations('nodesStoreNew', ['RECONNECT']),
     ...mapGetters('nodesStoreNew', ['nodeStatus', 'currentNode', 'reconnect']),
-    ...mapGetters('transactionsStore', ['confirmed', 'status', 'unconfirmedAdded', 'confirmedStatus'])
+    ...mapGetters('transactionsStore', ['confirmed', 'status', 'unconfirmedAdded'])
   },
   watch: {
     nodeStatus (newValue) {
@@ -38,25 +38,9 @@ export default {
     confirmed (transactions) {
       const allAccounts = this.$store.getters['walletStore/currentWallet'].accounts
       getAccountsInfo(allAccounts)
+      // console.log('----- WATCH CONFIRMED ------', transactions)
       const hashs = transactions.map(t => t.transactionInfo.hash)
       const monitorHashs = this.$store.getters['transactionsStore/getMonitorHashs']
-
-      // console.log('----- WATCH CONFIRMED ------', monitorHashs)
-      monitorHashs.forEach(element => {
-        if (hashs.find(x => x === element.hash)) {
-          // console.log('MONITOR HASH FOUND --->', element)
-          this.REMOVE_MONITOR_HASH(element.hash)
-          this.actions(element)
-        }
-      })
-    },
-    confirmedStatus (transactions) {
-      const allAccounts = this.$store.getters['walletStore/currentWallet'].accounts
-      getAccountsInfo(allAccounts)
-      const hashs = transactions.map(t => t.hash)
-      const monitorHashs = this.$store.getters['transactionsStore/getMonitorHashs']
-
-      console.log('----- WATCH CONFIRMED STATUS------', monitorHashs)
       monitorHashs.forEach(element => {
         if (hashs.find(x => x === element.hash)) {
           // console.log('MONITOR HASH FOUND --->', element)
@@ -66,7 +50,7 @@ export default {
       })
     },
     status (hashs) {
-      console.log('----- WATCH STATUS ------', hashs)
+      // console.log('----- WATCH STATUS ------', hashs)
       const monitorHashs = this.$store.getters['transactionsStore/getMonitorHashs']
       monitorHashs.forEach(element => {
         if (hashs.find(x => x === element.hash)) {

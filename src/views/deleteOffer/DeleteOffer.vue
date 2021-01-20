@@ -118,8 +118,6 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import { decrypt } from '@/services/account-wallet-service'
-import { mosaicDefaultGetValidate } from '@/services/buildOffer-by-type-service'
-import { NodeService } from '@/services/blockchain/node-service'
 export default {
   data () {
     return {
@@ -173,7 +171,7 @@ export default {
     action (action) {
       switch (action) {
         case 'delete':
-          if (NodeService.checksBlockTime() && this.valid && !this.sendingForm && this.$generalService.showMsgStatusNode()) {
+          if (this.valid && !this.sendingForm && this.$generalService.showMsgStatusNode()) {
             let common = decrypt(this.currentAccount.simpleWallet, this.form.password)
             if (common) {
               if (this.exchangeDelete) {
@@ -192,13 +190,12 @@ export default {
                 this.hash = signedTransaction.hash
                 this.sendingForm = true
                 common = null
-                const actionF = (mosaicDefaultGetValidate(this.exchangeDelete.exchange.mosaicId.toHex())) ? 'default' : 'delete'
                 const dataRequired = {
                   dataRequiredDb: [],
                   dataRequiredMosaic: {
                     moisaicsInfo: [
                       {
-                        action: actionF,
+                        action: 'delete',
                         mosaicId: this.exchangeDelete.exchange.mosaicId,
                         mosaicIdHex: this.exchangeDelete.exchange.mosaicId.toHex()
                       }
@@ -215,7 +212,6 @@ export default {
                   '',
                   dataRequired
                 )
-                // this.sendingForm = false
                 this.SET_MONITOR_HASH(dataMonitorHash)
                 this.$blockchainProvider.announceTx(signedTransaction).subscribe(
                   response => {},
@@ -254,16 +250,6 @@ export default {
     },
     unconfirmedAdded (transactions) {
       this.validateTxHash(transactions)
-    },
-    confirmedStatus (transactions) {
-      const newTransactions = transactions.map(x => {
-        return {
-          transactionInfo: {
-            hash: x
-          }
-        }
-      })
-      this.validateTxHash(newTransactions)
     },
     status (hashs) {
       this.sendingForm = false

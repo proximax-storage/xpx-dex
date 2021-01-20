@@ -2,40 +2,22 @@
   <v-container class="fill-height">
     <v-container>
       <v-row class="d-flex justify-center align-center mb-8 mt-1">
-        <img
-          :src="require('@/assets/img/logo-dex-blanco.svg')"
-          alt="logo"
-          height="70"
-        />
+        <img :src="require('@/assets/img/logo-dex-blanco.svg')" alt="logo" height="70" />
       </v-row>
       <template v-if="!dataWalletCreated">
         <v-row class="d-flex justify-center align-center">
-          <v-col
-            xl="7"
-            lg="7"
-            md="7"
-            sm="8"
-            xs="12"
-          >
-            <v-card
-              elevation="1"
-              class="pb-5 leve"
-            >
-              <v-form
-                v-model="valid"
-                ref="form"
-              >
+          <v-col xl="7" lg="7" md="7" sm="8" xs="12">
+            <v-card elevation="1" class="pb-5 leve">
+              <v-form v-model="valid" ref="form">
                 <v-card-text>
                   <v-row>
-                    <v-col
-                      cols="11"
-                      class="mx-auto pt-0 pb-0"
-                    >
+                    <v-col cols="11" class="mx-auto pt-0 pb-0">
                       <v-row>
                         <v-col
                           cols=" pt-0"
                           class="mx-auto title font-italic font-weight-medium pb-0"
-                        >{{ title }}</v-col>
+                          >{{ title }}</v-col
+                        >
                         <!-- Wallet name -->
                         <v-col cols="12">
                           <v-text-field
@@ -55,10 +37,7 @@
                           ></v-text-field>
                         </v-col>
                         <!-- Private Key -->
-                        <v-col
-                          cols="12"
-                          class="pb-0 pt-0"
-                        >
+                        <v-col cols="12" class="pb-0 pt-0">
                           <v-text-field
                             v-model="privateKey"
                             :append-icon="configForm.privateKey.show ? 'mdi-eye' : 'mdi-eye-off'"
@@ -80,12 +59,7 @@
                           ></v-text-field>
                         </v-col>
                         <!-- Password -->
-                        <v-col
-                          cols="12"
-                          sm="6"
-                          md="6"
-                          lg="6"
-                        >
+                        <v-col cols="12" sm="6" md="6" lg="6">
                           <v-text-field
                             v-model="passwords.password"
                             :append-icon="configForm.password.show ? 'mdi-eye' : 'mdi-eye-off'"
@@ -107,12 +81,7 @@
                         </v-col>
 
                         <!-- Password confirm-->
-                        <v-col
-                          cols="12"
-                          sm="6"
-                          md="6"
-                          lg="6"
-                        >
+                        <v-col cols="12" sm="6" md="6" lg="6">
                           <v-text-field
                             v-model="passwords.confirmPassword"
                             :append-icon="configForm.password.show ? 'mdi-eye' : 'mdi-eye-off'"
@@ -159,10 +128,7 @@
         <wallet-create :walletInfo="dataWalletCreated"></wallet-create>
       </template>
       <v-row class="d-flex justify-center align-center ma-4">
-        <router-link
-          class="font-italic font-weight-medium"
-          to="/"
-        >Go to home page</router-link>
+        <router-link class="font-italic font-weight-medium" to="/">Go to home page</router-link>
       </v-row>
     </v-container>
   </v-container>
@@ -189,7 +155,8 @@ export default {
     }
   },
   beforeMount () {
-    this.networkSelected = this.$blockchainProvider.filterNetworkTypeFromString(this.$store.getters.environment.connectionNodes.networkType)
+    const networks = this.$blockchainProvider.getNetworkTypes()
+    this.networkSelected = networks[0]
     this.configForm = {
       accountName: this.$configForm.walletAccountName('Account name'),
       privateKey: this.$configForm.privateKey(),
@@ -238,7 +205,7 @@ export default {
             default: true,
             firstAccount: true,
             walletName: this.accountName,
-            network: this.networkSelected,
+            network: this.networkSelected.value,
             password: this.passwords.password,
             privateKey: this.privateKey
           })

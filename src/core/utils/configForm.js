@@ -177,8 +177,8 @@ function namespaceName (label = 'namespaceName') {
   const max = generalConfig.namespaceName.max
   const rules = {
     required: value => !!value || `${label} is required.`,
-    min: v => (v && v.length >= min) || `${label} min length ${min} alphanumeric characters.`,
-    max: v => (v && v.length <= max) || `${label} max length ${max} alphanumeric characters.`
+    min: v => (v && v.length >= min) || `${label} min length ${min} alphanumerico characters.`,
+    max: v => (v && v.length <= max) || `${label} max length ${max} alphanumerico characters.`
   }
   return assemblyConfig(label, '', '', min, max, rules)
 }
@@ -193,8 +193,8 @@ function descriptionAsset (label = 'Description asset') {
   const max = generalConfig.descriptionAsset.max
   const rules = {
     required: value => !!value || `${label} is required.`,
-    min: v => (v && v.length >= min) || `${label} min length ${min} alphanumeric characters.`,
-    max: v => (v && v.length <= max) || `${label} max length ${max} alphanumeric characters.`
+    min: v => (v && v.length >= min) || `${label} min length ${min} alphanumerico characters.`,
+    max: v => (v && v.length <= max) || `${label} max length ${max} alphanumerico characters.`
   }
   return assemblyConfig(label, '', '', min, max, rules)
 }

@@ -30,7 +30,7 @@ export default {
       nodeInfo: {
         protocol: 'http',
         protocolWs: 'ws',
-        nodes: ['bctestnet1.brimstone.xpxsirius.io', 'bctestnet2.brimstone.xpxsirius.io']
+        nodes: ['bctestnet1.brimstone.xpxsirius.io', 'bctestnet2.brimstone.xpxsirius.io', 'bctestnet3.brimstone.xpxsirius.io']
       }
     }
   },
