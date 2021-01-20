@@ -9,6 +9,7 @@ import {
 } from '@/services/namespace-service'
 import * as CryptoJS from 'crypto-js'
 import { NodeService } from '@/services/blockchain/node-service'
+import Messages from '@/services/messages'
 /**
  *
  *
@@ -206,7 +207,7 @@ function createWallet (data) {
       const wallets = getWallets()
       wallets.push(walletBuilded)
       const pseudonymApp = store.getters.pseudonymApp
-      Vue.prototype.$browserStorage.set(`wallets-${pseudonymApp}`, JSON.stringify(wallets))
+      Vue.prototype.$browserStorage.set(`${store.getters.keyLocalStore}-wallets-${pseudonymApp}`, JSON.stringify(wallets))
       store.commit('walletStore/SET_CURRENT_WALLET', walletBuilded)
       return {
         status: true,
@@ -216,12 +217,71 @@ function createWallet (data) {
     }
     return {
       status: false,
-      msg: 'Error to decrypt wallet'
+      msg: Messages.wallet.error.decrypt
     }
   }
   return {
     status: false,
-    msg: 'Wallet name already exists, try another name'
+    msg: Messages.wallet.error.exist
+  }
+}
+
+/**
+ *
+ */
+function importWalletWlt (data) {
+  let dataSave = {
+    username: null,
+    accounts: []
+  }
+  try {
+    dataSave.username = data.name
+    dataSave.accounts = data.accounts.filter(x => x.default)
+      .map(i => {
+        return {
+          'default': i.default,
+          'firstAccount': i.firstAccount,
+          'name': i.name,
+          'publicKey': i.publicAccount.publicKey,
+          'simpleWallet': {
+            'name': i.name,
+            'schema': 'simple_v1',
+            'network': i.network,
+            'creationDate': new Date(),
+            'address': Vue.prototype.$blockchainProvider.createRawAddress(i.publicAccount.address['address']),
+            'encryptedPrivateKey': {
+              'encryptedKey': i.encrypted,
+              'iv': i.iv
+            }
+          }
+
+        }
+      })
+    const existWallet = getWalletByName(dataSave.username, dataSave.network)
+    if (existWallet === undefined || existWallet === null) {
+      const walletBuilded = dataSave
+      const wallets = getWallets()
+      wallets.push(walletBuilded)
+      const pseudonymApp = store.getters.pseudonymApp
+      Vue.prototype.$browserStorage.set(`${store.getters.keyLocalStore}-wallets-${pseudonymApp}`, JSON.stringify(wallets))
+      store.commit('walletStore/SET_CURRENT_WALLET', walletBuilded)
+      return {
+        status: true,
+        data: walletBuilded,
+        pvk: null
+      }
+    } else {
+      return {
+        status: false,
+        // msg: 'Wallet name already exists, try another name'
+        msg: Messages.wallet.error.exist
+      }
+    }
+  } catch {
+    return {
+      status: false,
+      msg: Messages.wallet.error.decrypt
+    }
   }
 }
 /**
@@ -335,7 +395,7 @@ function changeName (oldName, newName) {
       x.username = newName
     }
   })
-  Vue.prototype.$browserStorage.set(`wallets-${store.getters.pseudonymApp}`, JSON.stringify(wallets))
+  Vue.prototype.$browserStorage.set(`${store.getters.keyLocalStore}-wallets-${store.getters.pseudonymApp}`, JSON.stringify(wallets))
 }
 /**
  *
@@ -356,18 +416,21 @@ function getWalletByName (name) {
  * @returns
  */
 function getWallets () {
+  // setTimeout(() => {
   const pseudonymApp = store.getters.pseudonymApp
+  console.log('pseudonymApp', pseudonymApp)
   if (pseudonymApp !== '') {
-    const wallets = Vue.prototype.$browserStorage.get(`wallets-${pseudonymApp}`)
+    const wallets = Vue.prototype.$browserStorage.get(`${store.getters.keyLocalStore}-wallets-${pseudonymApp}`)
     if (!wallets) {
-      Vue.prototype.$browserStorage.set(`wallets-${pseudonymApp}`, [])
+      Vue.prototype.$browserStorage.set(`${store.getters.keyLocalStore}-wallets-${pseudonymApp}`, [])
       return []
     }
-
+    store.commit('walletStore/SET_WALLETS', JSON.parse(wallets))
     return JSON.parse(wallets)
   }
-
+  store.commit('walletStore/SET_WALLETS', [])
   return []
+  // })
 }
 /**
  *
@@ -498,6 +561,7 @@ function updateBalance () {
 export {
   buildCurrentAccountInfo,
   createWallet,
+  importWalletWlt,
   decrypt,
   exportAccount,
   getAccountsInfo,

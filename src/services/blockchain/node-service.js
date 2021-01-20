@@ -5,9 +5,11 @@ import { ApiConnection } from 'tsjs-sirius-suite-wallet-library/dist/model/nodes
 import { WebsocketConnection, TypeStatusNode } from 'tsjs-sirius-suite-wallet-library/dist/model/nodes/blockchain/Websocket'
 import { Address } from 'tsjs-xpx-chain-sdk/dist/src/model/account/Address'
 import { WebsocketService } from '@/services/blockchain/websocket-service'
+import { ServiceTransactions } from '@/services/transactions'
 import Msg from '@/services/messages'
 
 export class NodeService {
+  static timeoutLimitConnection = null
   static _objApiConnection = null
   static _objWebsocketConnection = null
   static statusNodeSubscription = null
@@ -32,8 +34,11 @@ export class NodeService {
    * @memberof NodeService
    */
   static connect (node = null) {
+    console.warn('CONNECT NODE....')
+    store.commit('nodesStoreNew/STOPPED_BY_USER', false)
     if (!store.getters['walletStore/currentWallet'].accounts) this.closeConnection()
     if (store.getters['nodesStoreNew/nodeStatus'] !== TypeStatusNode.NODE_CONNECTING) {
+      this.initTimeoutLimitConnection()
       this.closeConnection(TypeStatusNode.NODE_CONNECTING)
       store.commit('nodesStoreNew/SET_CURRENT_NODE', node)
       this.connectionSocket()
@@ -65,11 +70,13 @@ export class NodeService {
         this.objWebsocketConnection
           .connect(true)
           .then(() => {
+            store.commit('nodesStoreNew/ADD_RETRY_CONNECTION', 0)
             this.objApiConnection.apiInstances()
             const address = store.getters['walletStore/currentWallet'].accounts.map(x => new Address(x.simpleWallet.address.address, x.simpleWallet.address.networkType))
             this.objWebsocketConnection.monitorAllChannels(address)
             WebsocketService.subscribeAllChannels(this.objWebsocketConnection)
             store.commit('nodesStoreNew/SET_STATUS_NODE', TypeStatusNode.NODE_ACTIVE)
+            ServiceTransactions.statusTransactions()
           })
           .catch(e => {
             console.error('Error to connect', e)
@@ -80,6 +87,42 @@ export class NodeService {
       .catch(error => console.error('Ha ocurrido un error:', error))
   }
 
+  /**
+   *
+   *
+   * @static
+   * @memberof NodeService
+   */
+  static initTimeoutLimitConnection () {
+    console.log('\n initTimeoutLimitConnection \n')
+    console.log('check is open ', (this.objWebsocketConnection && this.objWebsocketConnection.checkIsOpenConnection()))
+    const _self = this
+    this.timeoutLimitConnection = setTimeout(function () {
+      console.log('validate time out.....')
+      try {
+        _self.clearTimeoutLimitConnection()
+        console.log('check is open ', (_self.objWebsocketConnection && _self.objWebsocketConnection.checkIsOpenConnection()))
+        if (!(_self.objWebsocketConnection && _self.objWebsocketConnection.checkIsOpenConnection())) {
+          console.log('close connection, connection lazy!')
+          _self.closeConnection()
+        }
+      } catch (error) {
+        _self.closeConnection()
+      }
+    }, 18000)
+  }
+  /**
+   *
+   *
+   * @static
+   * @memberof NodeService
+   */
+  static clearTimeoutLimitConnection () {
+    if (this.timeoutLimitConnection) {
+      clearTimeout(this.timeoutLimitConnection)
+      this.timeoutLimitConnection = null
+    }
+  }
   /**
    *
    *
@@ -150,6 +193,20 @@ export class NodeService {
     this._objWebsocketConnection = new WebsocketConnection()
     // WebsocketConnection.nodesConfig.timeOutNewBlocks = 300
     // WebsocketConnection.nodesConfig.timeValidateSynchronization = 300
+  }
+
+  static checksBlockTime () {
+    const rest = WebsocketConnection.nodesConfig.timeOutNewBlocks - this._objWebsocketConnection.blockTime
+    console.log('rest', rest)
+    if (rest <= 117) {
+      store.commit('SHOW_SNACKBAR', {
+        snackbar: true,
+        text: Msg.nodes.error.slow,
+        color: 'warning'
+      })
+      return false
+    }
+    return true
   }
 
   /**
@@ -234,5 +291,16 @@ export class NodeService {
    */
   static get objWebsocketConnection () {
     return this._objWebsocketConnection
+  }
+
+  /**
+   **
+   *
+   * @readonly
+   * @static
+   * @memberof NodeService
+   */
+  static get blockTimeInMinute () {
+    return this._objWebsocketConnection.blockTime
   }
 }

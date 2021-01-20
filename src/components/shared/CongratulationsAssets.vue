@@ -82,7 +82,7 @@ export default {
           color: 'primary',
           textColor: 'white--text',
           loading: false,
-          text: 'View assets'
+          text: ' Go to assets'
         }
       }
     ]

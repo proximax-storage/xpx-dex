@@ -266,7 +266,7 @@ function decryptPrivateKey (common, account) {
       if (!isValidPrivateKey(common.privateKey)) {
         return {
           status: false,
-          msg: 'Invalid Private Key'
+          msg: 'Invalid password'
         }
       }
       if (common.privateKey !== '') {
@@ -289,6 +289,16 @@ function decryptPrivateKey (common, account) {
       msg: 'Has ocurred a error to decrypt your account.'
     }
   }
+}
+
+/**
+   *
+   *
+   * @param {string} hash
+   * @returns {Observable<TransactionStatus>}
+   */
+function getTransactionsStatuses (hashes) {
+  return connection.transactionHttp.getTransactionsStatuses(hashes)
 }
 
 /**
@@ -874,6 +884,7 @@ export {
   getIncomingTransactions,
   getEnvironmentByNetworkType,
   getExchangeOffersfromId,
+  getTransactionsStatuses,
   getUint64,
   getOutgoingTransactions,
   mosaicNonceFromPublicKey,

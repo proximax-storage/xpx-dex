@@ -1,22 +1,88 @@
 <template>
-  <v-row class="ml-3">
-    <v-col xs="12" sm="12" md="10" lg="6" xl="6" class="d-flex mx-auto">
-      <v-row>
-        <v-col xs="3" sm="3" md="3" lg="2" xl="2" class="align-center">
-          <qrcode-vue :value="address.plain()" :size="size" level="L"></qrcode-vue>
-        </v-col>
-        <v-col xs="7" sm="7" md="7" lg="8" xl="8" class="align-center">
-          <div class="subtitle-1 font-weight-black">Address</div>
-          <div>{{address.pretty()}}</div>
-        </v-col>
-        <v-col xs="2" sm="2" md="2" lg="2" xl="2" class="d-flex align-center">
-          <v-btn text icon large @click="$generalService.doCopy('Address', address.plain())">
-            <v-icon>mdi-content-copy</v-icon>
-          </v-btn>
-        </v-col>
+  <v-row class=" ma-2">
+    <v-col
+      xs="12"
+      sm="12"
+      md="12"
+      lg="12"
+      xl="6"
+      col="12"
+    >
+      <v-row class="d-flex  flex-row">
+        <div class="ma-2 d-flex align-sm-center" >
+          <qrcode-vue
+            :value="address.plain()"
+            :size="size"
+            level="L"
+          ></qrcode-vue>
+        </div>
+        <div class="d-flex  flex-row ma-2" >
+          <div>
+            <div class="subtitle-1 font-weight-black">Address</div>
+            <div>{{address.pretty()}}</div>
+          </div>
+          <div class="d-flex align-center">
+            <v-btn
+              text
+              icon
+              large
+              @click="$generalService.doCopy('Address', address.plain())"
+            >
+              <v-icon>mdi-content-copy</v-icon>
+            </v-btn>
+          </div>
+        </div>
       </v-row>
     </v-col>
-    <v-col xs="12" sm="12" md="10" lg="6" xl="6" class="d-flex mx-auto">
+    <v-col
+      xs="12"
+      sm="12"
+      md="12"
+      lg="12"
+      xl="6"
+      col="12"
+    >
+      <v-row class="d-flex  flex-row" >
+        <div class="d-flex  flex-row ma-2">
+          <div style="min-width: 40%;   flex-wrap:nowrap;">
+            <div class="subtitle-1 font-weight-black">Public key</div>
+            <div style="word-wrap: anywhere">{{publicKey}}</div>
+          </div>
+          <div class="d-flex align-center ma-4">
+            <v-btn
+              text
+              icon
+              large
+              @click="$generalService.doCopy('Public Key', publicKey)"
+            >
+              <v-icon>mdi-content-copy</v-icon>
+            </v-btn>
+          </div>
+
+        </div>
+        <!-- <v-col
+          cols="10"
+          class="align-center"
+        >
+          <div class="subtitle-1 font-weight-black">Public key</div>
+          <div style="word-wrap: break-word">{{publicKey}}</div>
+        </v-col>
+        <v-col
+          cols="2"
+          class="d-flex align-center"
+        >
+          <v-btn
+            text
+            icon
+            large
+            @click="$generalService.doCopy('Public Key', publicKey)"
+          >
+            <v-icon>mdi-content-copy</v-icon>
+          </v-btn>
+        </v-col> -->
+      </v-row>
+    </v-col>
+    <!-- <v-col xs="12" sm="12" md="10" lg="6" xl="6" class="d-flex mx-auto">
       <v-row>
         <v-col cols="10" class="align-center">
           <div class="subtitle-1 font-weight-black">Public key</div>
@@ -28,7 +94,7 @@
           </v-btn>
         </v-col>
       </v-row>
-    </v-col>
+    </v-col> -->
   </v-row>
 </template>
 <script>

@@ -10,33 +10,21 @@
             <v-card-text>
               <v-row>
                 <template v-for="(item, key) of items">
-                  <v-col :key="key" cols="10" sm="6" md="6" lg="6" class="text-center mx-auto">
+                  <v-col :key="key" cols="12" sm="4" md="4" lg="4" class="text-center mx-auto">
                     <div class="d-flex justify-center pb-2 pt-8">
-                      <v-img
-                        :src="require(`@/assets/img/${theme}/${item.icon}`)"
-                        max-width="80"
-                        max-height="80"
-                      ></v-img>
+                      <v-img :src="require(`@/assets/img/${theme}/${item.icon}`)" max-width="80" max-height="80"></v-img>
                     </div>
                     <div class="text-center pb-1">
                       <span class="subtitle-1">{{ item.title }}</span>
                     </div>
-                    <v-btn
-                      block
-                      text
-                      large
-                      color="primary"
-                      class="pl-8 pr-8 subtitle-1 font-weight-bold white--text"
-                      router
-                      :to="item.route"
-                    >{{ item.nameButton }}</v-btn>
+                    <v-btn block text large color="primary" class="pl-8 pr-8 subtitle-1 font-weight-bold white--text" router :to="item.route">{{ item.nameButton }}</v-btn>
                   </v-col>
                 </template>
               </v-row>
             </v-card-text>
             <v-card-actions class="white pa-0">
-              <v-row class =" ml-2">
-                <v-col class="d-flex justify-start darkness--text">  I already have an account</v-col>
+              <v-row class="ml-2">
+                <v-col class="d-flex justify-start darkness--text"> I already have an account</v-col>
                 <v-col class="d-flex justify-end">
                   <v-btn router text small color="primary" to="/" class="font-weight-bold pt-1 pb-1 mr-4">Sign In</v-btn>
                 </v-col>
@@ -69,6 +57,12 @@ export default {
           nameButton: 'Create',
           icon: 'icon-private-key.svg',
           route: '/create-from-privateKey'
+        },
+        {
+          title: 'From a Wallet Backup',
+          nameButton: 'Create',
+          icon: 'icon-wallet-import.svg',
+          route: '/create-from-wallet-backup'
         }
       ]
     }

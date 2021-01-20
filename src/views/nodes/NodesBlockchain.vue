@@ -1,17 +1,34 @@
 <template>
-  <v-col cols="10" class="mx-auto">
+  <v-col
+    cols="10"
+    class="mx-auto"
+  >
     <v-row>
       <!-- Blockchain Nodes -->
-      <v-col cols="12" sm="12">
+      <v-col
+        cols="12"
+        sm="12"
+      >
         <v-row>
-          <v-col cols="12" class="headline font-weight-regular text-left primary--text">
+          <v-col
+            cols="12"
+            class="headline font-weight-regular text-left primary--text"
+          >
             Nodes Blockchain
           </v-col>
 
           <!-- Server -->
-          <v-col cols="8" md="8" class="mx-auto pt-10">
+          <v-col
+            cols="8"
+            md="8"
+            class="mx-auto pt-10"
+          >
             <div class="d-flex flex-wrap align-center">
-              <v-icon size="40" :color="serverStatus" :title="statusNode">mdi-server</v-icon>
+              <v-icon
+                size="40"
+                :color="serverStatus"
+                :title="statusNode"
+              >mdi-server</v-icon>
               <div class="d-flex flex-column pl-2">
                 <div>
                   <span class="text-caption">{{ filterCurrentNodeBlockchain.domainIp }}</span>
@@ -21,7 +38,10 @@
                     <span class="subtitle-2 font-weight-black">Status:</span>
                     {{ statusNode }}
                   </div>
-                  <div class="text-caption" v-if="currentNode">
+                  <div
+                    class="text-caption"
+                    v-if="currentNode"
+                  >
                     <span class="pl-4 subtitle-2 font-weight-black">Height:</span>
                     {{ currentHeight }}
                   </div>
@@ -33,18 +53,33 @@
             </div>
           </v-col>
           <!-- ********************** TEST ************************* -->
-          <v-col cols="8" md="8" class="mx-auto pt-2">
+          <v-col
+            cols="8"
+            md="8"
+            class="mx-auto pt-2"
+          >
             <ul>
               <!-- {{nodesList}} -->
-              <li v-for="(items, key) of nodesList" :key="key" class="cursor-p">
-                <span class="cursor-p" @click="reconnect(items)">{{ items }}</span>
+              <li
+                v-for="(items, key) of nodesList"
+                :key="key"
+                class="cursor-p"
+              >
+                <span
+                  class="cursor-p"
+                  @click="reconnect(items)"
+                >{{ items }}</span>
                 <!-- <span class="cursor-p" @click="deleteNodes(item.node)" v-if="item.type_node === 2">
                   <b>- (x)</b>
                 </span> -->
               </li>
             </ul>
           </v-col>
-          <v-col cols="12" md="11" class="mx-auto pt-2">
+          <v-col
+            cols="12"
+            md="11"
+            class="mx-auto pt-2"
+          >
             <!-- <v-row class="d-flex align-center">
               <v-col xs="8" sm="8" md="6" lg="8" xl="8">
                 <v-text-field
@@ -59,9 +94,18 @@
               </v-col>
             </v-row> -->
             <v-row>
-              <v-col class="mt-1 d-flex justify-center mx-auto" cols="8">
-                <v-btn class="ma-2" @click="stopConnection()">STOP</v-btn>
-                <v-btn class="ma-2" @click="reconnect()">RECONNECT</v-btn>
+              <v-col
+                class="mt-1 d-flex justify-center mx-auto"
+                cols="8"
+              >
+                <v-btn
+                  class="ma-2"
+                  @click="stopConnection()"
+                >STOP</v-btn>
+                <v-btn
+                  class="ma-2"
+                  @click="reconnect()"
+                >RECONNECT</v-btn>
               </v-col>
             </v-row>
           </v-col>
@@ -89,7 +133,7 @@ export default {
     // searching: false
   }),
   methods: {
-    ...mapMutations('nodesStoreNew', ['ADD_NODES', 'RECONNECT']),
+    ...mapMutations('nodesStoreNew', ['ADD_NODES', 'RECONNECT', 'STOPPED_BY_USER']),
     // addNode () {
     //   if (this.nodeForm.node !== '') {
     //     this.searching = true
@@ -112,6 +156,7 @@ export default {
       this.statusNode = statusNode
     },
     reconnect (node = this.currentNode) {
+      this.STOPPED_BY_USER(true)
       NodeService.connect(node)
       this.RECONNECT(true)
     },
@@ -119,6 +164,7 @@ export default {
     //   NodeService.deleteNodes(node)
     // },
     stopConnection () {
+      this.STOPPED_BY_USER(true)
       NodeService.closeConnection()
     }
   },
@@ -147,6 +193,10 @@ export default {
       const split = Utilities.splitURL(this.currentNode || '')
       return split
     }
+  },
+  beforeMount () {
+    // console.log('NodeService', NodeService.checksBlockTime())
   }
+
 }
 </script>
